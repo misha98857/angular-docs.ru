@@ -18,6 +18,7 @@ import {
   TmplAstDirective,
   TmplAstElement,
   TmplAstHostElement,
+  TmplAstNode,
   TmplAstTemplate,
 } from '@angular/compiler';
 import ts from 'typescript';
@@ -79,7 +80,6 @@ export class TcbNativeFieldDirectiveTypeOp extends TcbOp {
     ...formControlInputFields,
     'value',
     'checked',
-    'type',
     'maxlength',
     'minlength',
   ]);
@@ -314,6 +314,43 @@ export function getCustomFieldDirectiveType(
   return null;
 }
 
+/** Determines if a directive usage is on a native field. */
+export function isNativeField(
+  dir: TypeCheckableDirectiveMeta,
+  node: TmplAstNode,
+  allDirectiveMatches: TypeCheckableDirectiveMeta[],
+): boolean {
+  // Only applies to the `Field` directive.
+  if (!isFieldDirective(dir)) {
+    return false;
+  }
+
+  // Only applies to input, select and textarea elements.
+  if (
+    !(node instanceof TmplAstElement) ||
+    (node.name !== 'input' && node.name !== 'select' && node.name !== 'textarea')
+  ) {
+    return false;
+  }
+
+  // Only applies if there are no custom fields or ControlValueAccessors.
+  return allDirectiveMatches.every((meta) => {
+    return getCustomFieldDirectiveType(meta) === null && !isControlValueAccessorLike(meta);
+  });
+}
+
+/**
+ * Determines if a directive is shaped like a `ControlValueAccessor`. Note that this isn't
+ * 100% reliable, because we don't know if the directive was actually provided at runtime.
+ */
+function isControlValueAccessorLike(meta: TypeCheckableDirectiveMeta): boolean {
+  return (
+    meta.publicMethods.has('writeValue') &&
+    meta.publicMethods.has('registerOnChange') &&
+    meta.publicMethods.has('registerOnTouched')
+  );
+}
+
 /** Checks whether a node has bindings that aren't supported on fields. */
 export function checkUnsupportedFieldBindings(
   node: DirectiveOwner,
@@ -335,10 +372,7 @@ export function checkUnsupportedFieldBindings(
 
   if (!(node instanceof TmplAstHostElement)) {
     for (const attr of node.attributes) {
-      const name = attr.name.toLowerCase();
-
-      // `type` is allowed to be a static attribute.
-      if (name !== 'type' && unsupportedBindingFields.has(name)) {
+      if (unsupportedBindingFields.has(attr.name.toLowerCase())) {
         tcb.oobRecorder.formFieldUnsupportedBinding(tcb.id, attr);
       }
     }
