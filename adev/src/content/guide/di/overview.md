@@ -1,49 +1,68 @@
-<docs-decorative-header title="Dependency injection in Angular" imgSrc="adev/src/assets/images/dependency_injection.svg"> <!-- markdownlint-disable-line -->
+<docs-decorative-header title="Внедрение зависимостей (DI) в Angular" imgSrc="adev/src/assets/images/dependency_injection.svg"> <!-- markdownlint-disable-line -->
 
-Dependency Injection (DI) is a design pattern used to organize and share code across an application.
+Внедрение зависимостей (Dependency Injection - DI) — это шаблон проектирования, используемый для организации и
+совместного использования кода в приложении.
 </docs-decorative-header>
 
-TIP: Check out Angular's [Essentials](essentials/dependency-injection) before diving into this comprehensive guide.
+TIP: Ознакомьтесь с разделом [Основы](essentials/dependency-injection) перед изучением этого подробного руководства.
 
-As an application grows, developers often need to reuse and share features across different parts of the codebase. [Dependency Injection (DI)](https://en.wikipedia.org/wiki/Dependency_injection) is a design pattern used to organize and share code across an application by allowing you to "inject" features into different parts.
+По мере роста приложения разработчикам часто требуется повторно использовать и совместно использовать функции в разных
+частях кодовой базы. [Внедрение зависимостей (DI)](https://en.wikipedia.org/wiki/Dependency_injection) — это шаблон
+проектирования, используемый для организации и совместного использования кода в приложении, позволяя вам "внедрять"
+функции в различные части.
 
-Dependency injection is a popular pattern because it allows developers to address common challenges such as:
+Внедрение зависимостей — популярный шаблон, поскольку он позволяет разработчикам решать распространенные задачи, такие
+как:
 
-- **Improved code maintainability**: Dependency injection allows cleaner separation of concerns which enables easier refactoring and reducing code duplication.
-- **Scalability**: Modular functionality can be reused across multiple contexts and allows for easier scaling.
-- **Better testing**: DI allows unit tests to easily use [test doubles](https://en.wikipedia.org/wiki/Test_double) for situations when using a real implementation is not practical.
+- **Улучшенная поддерживаемость кода**: Внедрение зависимостей обеспечивает более чистое разделение ответственности, что
+  упрощает рефакторинг и уменьшает дублирование кода.
+- **Масштабируемость**: Модульную функциональность можно повторно использовать в различных контекстах, что обеспечивает
+  более легкое масштабирование.
+- **Лучшее тестирование**: DI позволяет юнит-тестам легко
+  использовать [тестовые дублеры (test doubles)](https://en.wikipedia.org/wiki/Test_double) для ситуаций, когда
+  использование реальной реализации непрактично.
 
-## How does dependency injection work in Angular?
+## Как работает внедрение зависимостей в Angular?
 
-A dependency is any object, value, function or service that a class needs to work but does not create itself. In other words, it creates a relationship between different parts of your application since it wouldn't work without the dependency.
+Зависимость — это любой объект, значение, функция или сервис, которые необходимы классу для работы, но которые он не
+создает сам. Другими словами, это создает связь между различными частями вашего приложения, поскольку оно не работало бы
+без зависимости.
 
-There are two ways that code interacts with any dependency injection system:
+Существует два способа взаимодействия кода с любой системой внедрения зависимостей:
 
-- Code can _provide_, or make available, values.
-- Code can _inject_, or ask for, those values as dependencies.
+- Код может _предоставлять (provide)_ или делать доступными значения.
+- Код может _внедрять (inject)_ или запрашивать эти значения как зависимости.
 
-"Values," in this context, can be any JavaScript value, including objects and functions. Common types of injected dependencies include:
+"Значения" в данном контексте могут быть любым значением JavaScript, включая объекты и функции. Распространенные типы
+внедряемых зависимостей включают:
 
-- **Configuration values**: Environment-specific constants, API URLs, feature flags, etc.
-- **Factories**: Functions that create objects or values based on runtime conditions
-- **Services**: Classes that provide common functionality, business logic, or state
+- **Значения конфигурации**: Константы, специфичные для среды, URL-адреса API, флаги функций и т.д.
+- **Фабрики**: Функции, которые создают объекты или значения на основе условий выполнения.
+- **Сервисы**: Классы, которые предоставляют общую функциональность, бизнес-логику или состояние.
 
-Angular components and directives automatically participate in DI, meaning that they can inject dependencies _and_ they are available to be injected.
+Компоненты и директивы Angular автоматически участвуют в DI, что означает, что они могут внедрять зависимости _и_ они
+доступны для внедрения.
 
-## What are services?
+## Что такое сервисы?
 
-An Angular _service_ is a TypeScript class decorated with `@Injectable`, which makes an instance of the class available to be injected as a dependency. Services are the most common way of sharing data and functionality across an application.
+_Сервис_ Angular — это класс TypeScript, декорированный с помощью `@Injectable`, что делает экземпляр класса доступным
+для внедрения в качестве зависимости. Сервисы — это наиболее распространенный способ совместного использования данных и
+функциональности во всем приложении.
 
-Common types of services include:
+Распространенные типы сервисов включают:
 
-- **Data clients:** Abstracts the details of making requests to a server for data retrieval and mutation
-- **State management:** Defines state shared across multiple components or pages
-- **Authentication and authorization:** Manages user authentication, token storage, and access control
-- **Logging and error handling:** Establishes a common API for logging or communicating error states to the user
-- **Event handling and dispatch:** Handles events or notifications that are not associated with a specific component, or for dispatching events and notifications to components, following the [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern)
-- **Utility functions:** Offers reusable utility functions like data formatting, validation, or calculations
+- **Клиенты данных:** Абстрагируют детали выполнения запросов к серверу для получения и изменения данных.
+- **Управление состоянием:** Определяет состояние, общее для нескольких компонентов или страниц.
+- **Аутентификация и авторизация:** Управляет аутентификацией пользователя, хранением токенов и контролем доступа.
+- **Логирование и обработка ошибок:** Устанавливает общий API для логирования или сообщения состояний ошибок
+  пользователю.
+- **Обработка событий и диспетчеризация:** Обрабатывает события или уведомления, не связанные с конкретным компонентом,
+  или диспетчеризирует события и уведомления компонентам,
+  следуя [шаблону наблюдателя (observer pattern)](https://en.wikipedia.org/wiki/Observer_pattern).
+- **Утилитные функции:** Предлагает повторно используемые утилитные функции, такие как форматирование данных, валидация
+  или вычисления.
 
-The following example declares a service named `AnalyticsLogger`:
+Следующий пример объявляет сервис с именем `AnalyticsLogger`:
 
 ```ts
 import { Injectable } from '@angular/core';
@@ -60,13 +79,15 @@ export class AnalyticsLogger {
 }
 ```
 
-NOTE: The `providedIn: 'root'` option makes this service available throughout your entire application as a singleton. This is the recommended approach for most services.
+NOTE: Опция `providedIn: 'root'` делает этот сервис доступным во всем вашем приложении как синглтон. Это рекомендуемый
+подход для большинства сервисов.
 
-## Injecting dependencies with `inject()`
+## Внедрение зависимостей с помощью `inject()`
 
-You can inject dependencies using Angular's `inject()` function.
+Вы можете внедрять зависимости, используя функцию Angular `inject()`.
 
-Here is an example of a navigation bar that injects `AnalyticsLogger` and Angular `Router` service to allow users to navigate to a different page while tracking the event.
+Вот пример навигационной панели, которая внедряет `AnalyticsLogger` и сервис Angular `Router`, чтобы позволить
+пользователям переходить на другую страницу, отслеживая событие.
 
 ```angular-ts
 import { Component, inject } from '@angular/core';
@@ -91,9 +112,10 @@ export class NavbarComponent {
 }
 ```
 
-### Where can `inject()` be used?
+### Где можно использовать `inject()`?
 
-You can inject dependencies during construction of a component, directive, or service. The call to `inject` can appear in either the `constructor` or in a field initializer. Here are some common examples:
+Вы можете внедрять зависимости во время создания компонента, директивы или сервиса. Вызов `inject` может находиться либо
+в `constructor`, либо в инициализаторе поля. Вот несколько распространенных примеров:
 
 ```ts
 @Component({...})
@@ -137,18 +159,21 @@ export const authGuard = () => {
 }
 ```
 
-Angular uses the term "injection context" to describe any place in your code where you can call `inject`. While component, directive, and service construction is the most common, see [injection contexts](/guide/di/dependency-injection-context) for more details.
+Angular использует термин "контекст внедрения" (injection context) для описания любого места в вашем коде, где вы можете
+вызвать `inject`. Хотя создание компонента, директивы и сервиса является наиболее распространенным,
+см. [контексты внедрения](/guide/di/dependency-injection-context) для получения дополнительных сведений.
 
-For more information, see the [inject API docs](api/core/inject#usage-notes).
+Для получения дополнительной информации см. [документацию по API inject](api/core/inject#usage-notes).
 
-## Next steps
+## Следующие шаги
 
-Now that you understand the fundamentals of dependency injection in Angular, you're ready to learn how to create your own services.
+Теперь, когда вы понимаете основы внедрения зависимостей в Angular, вы готовы узнать, как создавать свои собственные
+сервисы.
 
-The next guide, [Creating and using services](guide/di/creating-and-using-services), will show you:
+Следующее руководство, [Создание и использование сервисов](guide/di/creating-and-using-services), покажет вам:
 
-- How to create a service with the Angular CLI or manually
-- How the `providedIn: 'root'` pattern works
-- How to inject services into components and other services
+- Как создать сервис с помощью Angular CLI или вручную.
+- Как работает шаблон `providedIn: 'root'`.
+- Как внедрять сервисы в компоненты и другие сервисы.
 
-This covers the most common use case for services in Angular applications.
+Это охватывает наиболее распространенный вариант использования сервисов в приложениях Angular.

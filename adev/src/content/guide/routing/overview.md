@@ -1,32 +1,40 @@
-<docs-decorative-header title="Angular Routing" imgSrc="adev/src/assets/images/routing.svg"> <!-- markdownlint-disable-line -->
-Routing helps you change what the user sees in a single-page app.
+<docs-decorative-header title="Маршрутизация в Angular" imgSrc="adev/src/assets/images/routing.svg"> <!-- markdownlint-disable-line -->
+Маршрутизация помогает изменять то, что видит пользователь в одностраничном приложении (SPA).
 </docs-decorative-header>
 
-Angular Router (`@angular/router`) is the official library for managing navigation in Angular applications and a core part of the framework. It is included by default in all projects created by Angular CLI.
+Angular Router (`@angular/router`) — это официальная библиотека для управления навигацией в приложениях Angular и
+основная часть фреймворка. Она включена по умолчанию во все проекты, созданные с помощью Angular CLI.
 
-## Why is routing necessary in a SPA?
+## Зачем нужна маршрутизация в SPA?
 
-When you navigate to a URL in your web browser, the browser normally makes a network request to a web server and displays the returned HTML page. When you navigate to a different URL, such as clicking a link, the browser makes another network request and replaces the entire page with a new one.
+Когда вы переходите по URL-адресу в веб-браузере, браузер обычно делает сетевой запрос к веб-серверу и отображает
+возвращенную HTML-страницу. Когда вы переходите по другому URL-адресу, например, нажимая на ссылку, браузер делает еще
+один сетевой запрос и заменяет всю страницу новой.
 
-A single-page application (SPA) differs in that the browser only makes a request to a web server for the first page, the `index.html`. After that, a client-side router takes over, controlling which content displays based on the URL. When a user navigates to a different URL, the router updates the page's content in place without triggering a full-page reload.
+Одностраничное приложение (SPA) отличается тем, что браузер делает запрос к веб-серверу только для первой страницы,
+`index.html`. После этого клиентский роутер берет управление на себя, контролируя, какой контент отображается на основе
+URL-адреса. Когда пользователь переходит по другому URL-адресу, роутер обновляет контент страницы на месте, не вызывая
+полной перезагрузки страницы.
 
-## How Angular manages routing
+## Как Angular управляет маршрутизацией
 
-Routing in Angular is comprised of three primary parts:
+Маршрутизация в Angular состоит из трех основных частей:
 
-1. **Routes** define which component displays when a user visits a specific URL.
-2. **Outlets** are placeholders in your templates that dynamically load and render components based on the active route.
-3. **Links** provide a way for users to navigate between different routes in your application without triggering a full page reload.
+1. **Routes (Маршруты)** определяют, какой компонент отображается, когда пользователь посещает определенный URL.
+2. **Outlets (Аутлеты)** — это заполнители в ваших шаблонах, которые динамически загружают и рендерят компоненты на
+   основе активного маршрута.
+3. **Links (Ссылки)** предоставляют пользователям возможность перемещаться между различными маршрутами в вашем
+   приложении без вызова полной перезагрузки страницы.
 
-In addition, the Angular Routing library offers additional functionality such as:
+Кроме того, библиотека маршрутизации Angular предлагает дополнительные функции, такие как:
 
-- Nested routes
-- Programmatic navigation
-- Route params, queries and wildcards
-- Activated route information with `ActivatedRoute`
-- View transition effects
-- Navigation guards
+- Вложенные маршруты
+- Программная навигация
+- Параметры маршрута, запросы и подстановочные знаки (wildcards)
+- Информация об активированном маршруте с помощью `ActivatedRoute`
+- Эффекты перехода представления (View transition effects)
+- Навигационные гарды (Navigation guards)
 
-## Next steps
+## Следующие шаги
 
-Learn about how you can [define routes using Angular router](/guide/routing/define-routes).
+Узнайте, как вы можете [определить маршруты с помощью роутера Angular](/guide/routing/define-routes).

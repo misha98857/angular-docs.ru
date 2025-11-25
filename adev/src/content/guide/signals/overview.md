@@ -1,20 +1,22 @@
-<docs-decorative-header title="Angular Signals" imgSrc="adev/src/assets/images/signals.svg"> <!-- markdownlint-disable-line -->
-Angular Signals is a system that granularly tracks how and where your state is used throughout an application, allowing the framework to optimize rendering updates.
+<docs-decorative-header title="Сигналы Angular" imgSrc="adev/src/assets/images/signals.svg"> <!-- markdownlint-disable-line -->
+Angular Signals — это система, которая детально отслеживает, как и где используется ваше состояние во всем приложении, позволяя фреймворку оптимизировать обновления рендеринга.
 </docs-decorative-header>
 
-TIP: Check out Angular's [Essentials](essentials/signals) before diving into this comprehensive guide.
+TIP: Ознакомьтесь с разделом [Основы](essentials/signals) перед изучением этого подробного руководства.
 
-## What are signals?
+## Что такое сигналы?
 
-A **signal** is a wrapper around a value that notifies interested consumers when that value changes. Signals can contain any value, from primitives to complex data structures.
+**Сигнал (signal)** — это обертка вокруг значения, которая уведомляет заинтересованных потребителей, когда это значение
+изменяется. Сигналы могут содержать любое значение, от примитивов до сложных структур данных.
 
-You read a signal's value by calling its getter function, which allows Angular to track where the signal is used.
+Вы читаете значение сигнала, вызывая его функцию-геттер, что позволяет Angular отслеживать, где используется сигнал.
 
-Signals may be either _writable_ or _read-only_.
+Сигналы могут быть либо _записываемыми (writable)_, либо _только для чтения (read-only)_.
 
-### Writable signals
+### Записываемые сигналы (Writable signals)
 
-Writable signals provide an API for updating their values directly. You create writable signals by calling the `signal` function with the signal's initial value:
+Записываемые сигналы предоставляют API для обновления их значений напрямую. Вы создаете записываемые сигналы, вызывая
+функцию `signal` с начальным значением сигнала:
 
 ```ts
 const count = signal(0);
@@ -23,53 +25,60 @@ const count = signal(0);
 console.log('The count is: ' + count());
 ```
 
-To change the value of a writable signal, either `.set()` it directly:
+Чтобы изменить значение записываемого сигнала, либо установите его напрямую через `.set()`:
 
 ```ts
 count.set(3);
 ```
 
-or use the `.update()` operation to compute a new value from the previous one:
+либо используйте операцию `.update()` для вычисления нового значения на основе предыдущего:
 
 ```ts
 // Increment the count by 1.
 count.update(value => value + 1);
 ```
 
-Writable signals have the type `WritableSignal`.
+Записываемые сигналы имеют тип `WritableSignal`.
 
-### Computed signals
+### Вычисляемые сигналы (Computed signals)
 
-**Computed signal** are read-only signals that derive their value from other signals. You define computed signals using the `computed` function and specifying a derivation:
+**Вычисляемые сигналы (Computed signals)** — это сигналы только для чтения, которые получают свое значение из других
+сигналов. Вы определяете вычисляемые сигналы, используя функцию `computed` и указывая функцию вывода:
 
 ```typescript
 const count: WritableSignal<number> = signal(0);
 const doubleCount: Signal<number> = computed(() => count() * 2);
 ```
 
-The `doubleCount` signal depends on the `count` signal. Whenever `count` updates, Angular knows that `doubleCount` needs to update as well.
+Сигнал `doubleCount` зависит от сигнала `count`. Всякий раз, когда обновляется `count`, Angular знает, что `doubleCount`
+также необходимо обновить.
 
-#### Computed signals are both lazily evaluated and memoized
+#### Вычисляемые сигналы вычисляются лениво и мемоизируются
 
-`doubleCount`'s derivation function does not run to calculate its value until the first time you read `doubleCount`. The calculated value is then cached, and if you read `doubleCount` again, it will return the cached value without recalculating.
+Функция вывода `doubleCount` не запускается для вычисления его значения до тех пор, пока вы не прочитаете `doubleCount`
+в первый раз. Вычисленное значение затем кэшируется, и если вы прочитаете `doubleCount` снова, он вернет кэшированное
+значение без пересчета.
 
-If you then change `count`, Angular knows that `doubleCount`'s cached value is no longer valid, and the next time you read `doubleCount` its new value will be calculated.
+Если вы затем измените `count`, Angular узнает, что кэшированное значение `doubleCount` больше не действительно, и при
+следующем чтении `doubleCount` его новое значение будет вычислено.
 
-As a result, you can safely perform computationally expensive derivations in computed signals, such as filtering arrays.
+В результате вы можете безопасно выполнять вычислительно дорогие операции в вычисляемых сигналах, такие как фильтрация
+массивов.
 
-#### Computed signals are not writable signals
+#### Вычисляемые сигналы не являются записываемыми
 
-You cannot directly assign values to a computed signal. That is,
+Вы не можете напрямую присваивать значения вычисляемому сигналу. То есть,
 
 ```ts
 doubleCount.set(3);
 ```
 
-produces a compilation error, because `doubleCount` is not a `WritableSignal`.
+вызовет ошибку компиляции, потому что `doubleCount` не является `WritableSignal`.
 
-#### Computed signal dependencies are dynamic
+#### Зависимости вычисляемых сигналов динамичны
 
-Only the signals actually read during the derivation are tracked. For example, in this `computed` the `count` signal is only read if the `showCount` signal is true:
+Отслеживаются только сигналы, фактически прочитанные во время выполнения функции вывода. Например, в этом `computed`
+сигнал `count` читается только в том случае, если сигнал `showCount` истинен:
 
 ```ts
 const showCount = signal(false);
@@ -83,19 +92,31 @@ const conditionalCount = computed(() => {
 });
 ```
 
-When you read `conditionalCount`, if `showCount` is `false` the "Nothing to see here!" message is returned _without_ reading the `count` signal. This means that if you later update `count` it will _not_ result in a recomputation of `conditionalCount`.
+Когда вы читаете `conditionalCount`, если `showCount` равен `false`, возвращается сообщение "Nothing to see here!" _без_
+чтения сигнала `count`. Это означает, что если вы позже обновите `count`, это _не_ приведет к пересчету
+`conditionalCount`.
 
-If you set `showCount` to `true` and then read `conditionalCount` again, the derivation will re-execute and take the branch where `showCount` is `true`, returning the message which shows the value of `count`. Changing `count` will then invalidate `conditionalCount`'s cached value.
+Если вы установите `showCount` в `true`, а затем снова прочитаете `conditionalCount`, функция вывода выполнится заново и
+пойдет по ветке, где `showCount` равен `true`, возвращая сообщение, которое показывает значение `count`. Изменение
+`count` затем сделает недействительным кэшированное значение `conditionalCount`.
 
-Note that dependencies can be removed during a derivation as well as added. If you later set `showCount` back to `false`, then `count` will no longer be considered a dependency of `conditionalCount`.
+Обратите внимание, что зависимости могут быть удалены во время вычисления, а также добавлены. Если вы позже установите
+`showCount` обратно в `false`, то `count` больше не будет считаться зависимостью `conditionalCount`.
 
-## Reading signals in `OnPush` components
+## Чтение сигналов в компонентах `OnPush`
 
-When you read a signal within an `OnPush` component's template, Angular tracks the signal as a dependency of that component. When the value of that signal changes, Angular automatically [marks](api/core/ChangeDetectorRef#markforcheck) the component to ensure it gets updated the next time change detection runs. Refer to the [Skipping component subtrees](best-practices/skipping-subtrees) guide for more information about `OnPush` components.
+Когда вы читаете сигнал внутри шаблона компонента с `OnPush`, Angular отслеживает сигнал как зависимость этого
+компонента. Когда значение этого сигнала изменяется, Angular
+автоматически [помечает](api/core/ChangeDetectorRef#markforcheck) компонент, чтобы гарантировать его обновление при
+следующем запуске обнаружения изменений. Обратитесь к
+руководству [Пропуск поддеревьев компонентов](best-practices/skipping-subtrees) для получения дополнительной информации
+о компонентах `OnPush`.
 
-## Effects
+## Эффекты (Effects)
 
-Signals are useful because they notify interested consumers when they change. An **effect** is an operation that runs whenever one or more signal values change. You can create an effect with the `effect` function:
+Сигналы полезны, потому что они уведомляют заинтересованных потребителей об изменении. **Эффект (effect)** — это
+операция, которая выполняется всякий раз, когда изменяется одно или несколько значений сигналов. Вы можете создать
+эффект с помощью функции `effect`:
 
 ```ts
 effect(() => {
@@ -103,28 +124,34 @@ effect(() => {
 });
 ```
 
-Effects always run **at least once.** When an effect runs, it tracks any signal value reads. Whenever any of these signal values change, the effect runs again. Similar to computed signals, effects keep track of their dependencies dynamically, and only track signals which were read in the most recent execution.
+Эффекты всегда выполняются **хотя бы один раз.** Когда эффект выполняется, он отслеживает любые чтения значений
+сигналов. Всякий раз, когда любое из этих значений сигналов изменяется, эффект выполняется снова. Подобно вычисляемым
+сигналам, эффекты отслеживают свои зависимости динамически и отслеживают только те сигналы, которые были прочитаны при
+последнем выполнении.
 
-Effects always execute **asynchronously**, during the change detection process.
+Эффекты всегда выполняются **асинхронно**, во время процесса обнаружения изменений.
 
-### Use cases for effects
+### Случаи использования эффектов
 
-Effects are rarely needed in most application code, but may be useful in specific circumstances. Here are some examples of situations where an `effect` might be a good solution:
+Эффекты редко нужны в большинстве кодовой базы приложения, но могут быть полезны в конкретных обстоятельствах. Вот
+несколько примеров ситуаций, когда `effect` может быть хорошим решением:
 
-- Logging data being displayed and when it changes, either for analytics or as a debugging tool.
-- Keeping data in sync with `window.localStorage`.
-- Adding custom DOM behavior that can't be expressed with template syntax.
-- Performing custom rendering to a `<canvas>`, charting library, or other third party UI library.
+- Логирование отображаемых данных и их изменений, либо для аналитики, либо в качестве инструмента отладки.
+- Синхронизация данных с `window.localStorage`.
+- Добавление пользовательского поведения DOM, которое нельзя выразить с помощью синтаксиса шаблона.
+- Выполнение пользовательского рендеринга в `<canvas>`, библиотеку диаграмм или другую стороннюю библиотеку UI.
 
-<docs-callout critical title="When not to use effects">
-Avoid using effects for propagation of state changes. This can result in `ExpressionChangedAfterItHasBeenChecked` errors, infinite circular updates, or unnecessary change detection cycles.
+<docs-callout critical title="Когда не использовать эффекты">
+Избегайте использования эффектов для распространения изменений состояния. Это может привести к ошибкам `ExpressionChangedAfterItHasBeenChecked`, бесконечным циклическим обновлениям или ненужным циклам обнаружения изменений.
 
-Instead, use `computed` signals to model state that depends on other state.
+Вместо этого используйте `computed` сигналы для моделирования состояния, которое зависит от другого состояния.
 </docs-callout>
 
-### Injection context
+### Контекст внедрения (Injection context)
 
-By default, you can only create an `effect()` within an [injection context](guide/di/dependency-injection-context) (where you have access to the `inject` function). The easiest way to satisfy this requirement is to call `effect` within a component, directive, or service `constructor`:
+По умолчанию вы можете создать `effect()` только внутри [контекста внедрения](guide/di/dependency-injection-context) (
+где у вас есть доступ к функции `inject`). Самый простой способ выполнить это требование — вызвать `effect` внутри
+`constructor` компонента, директивы или сервиса:
 
 ```ts
 @Component({...})
@@ -139,7 +166,7 @@ export class EffectiveCounterComponent {
 }
 ```
 
-Alternatively, you can assign the effect to a field (which also gives it a descriptive name).
+В качестве альтернативы вы можете присвоить эффект полю (что также дает ему описательное имя).
 
 ```ts
 @Component({...})
@@ -152,7 +179,7 @@ export class EffectiveCounterComponent {
 }
 ```
 
-To create an effect outside the constructor, you can pass an `Injector` to `effect` via its options:
+Чтобы создать эффект вне конструктора, вы можете передать `Injector` в `effect` через его опции:
 
 ```ts
 @Component({...})
@@ -168,17 +195,22 @@ export class EffectiveCounterComponent {
 }
 ```
 
-### Destroying effects
+### Уничтожение эффектов
 
-When you create an effect, it is automatically destroyed when its enclosing context is destroyed. This means that effects created within components are destroyed when the component is destroyed. The same goes for effects within directives, services, etc.
+Когда вы создаете эффект, он автоматически уничтожается, когда уничтожается его содержащий контекст. Это означает, что
+эффекты, созданные внутри компонентов, уничтожаются при уничтожении компонента. То же самое касается эффектов внутри
+директив, сервисов и т.д.
 
-Effects return an `EffectRef` that you can use to destroy them manually, by calling the `.destroy()` method. You can combine this with the `manualCleanup` option to create an effect that lasts until it is manually destroyed. Be careful to actually clean up such effects when they're no longer required.
+Эффекты возвращают `EffectRef`, который вы можете использовать для их ручного уничтожения, вызвав метод `.destroy()`. Вы
+можете комбинировать это с опцией `manualCleanup`, чтобы создать эффект, который длится до тех пор, пока он не будет
+уничтожен вручную. Будьте осторожны и действительно очищайте такие эффекты, когда они больше не нужны.
 
-## Advanced topics
+## Продвинутые темы
 
-### Signal equality functions
+### Функции равенства сигналов
 
-When creating a signal, you can optionally provide an equality function, which will be used to check whether the new value is actually different than the previous one.
+При создании сигнала вы можете опционально предоставить функцию равенства, которая будет использоваться для проверки
+того, действительно ли новое значение отличается от предыдущего.
 
 ```ts
 import _ from 'lodash';
@@ -191,13 +223,14 @@ const data = signal(['test'], {equal: _.isEqual});
 data.set(['test']);
 ```
 
-Equality functions can be provided to both writable and computed signals.
+Функции равенства могут быть предоставлены как для записываемых, так и для вычисляемых сигналов.
 
-HELPFUL: By default, signals use referential equality ([`Object.is()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/is) comparison).
+HELPFUL: По умолчанию сигналы используют ссылочное равенство (сравнение [
+`Object.is()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/is)).
 
-### Type checking signals
+### Проверка типов сигналов
 
-You can use `isSignal` to check if a value is a `Signal`:
+Вы можете использовать `isSignal`, чтобы проверить, является ли значение `Signal`:
 
 ```ts
 const count = signal(0);
@@ -208,7 +241,7 @@ isSignal(doubled); // true
 isSignal(42); // false
 ```
 
-To specifically check if a signal is writable, use `isWritableSignal`:
+Чтобы конкретно проверить, является ли сигнал записываемым, используйте `isWritableSignal`:
 
 ```ts
 const count = signal(0);
@@ -218,11 +251,13 @@ isWritableSignal(count); // true
 isWritableSignal(doubled); // false
 ```
 
-### Reading without tracking dependencies
+### Чтение без отслеживания зависимостей
 
-Rarely, you may want to execute code which may read signals within a reactive function such as `computed` or `effect` _without_ creating a dependency.
+Редко, но вам может понадобиться выполнить код, который может читать сигналы внутри реактивной функции, такой как
+`computed` или `effect`, _без_ создания зависимости.
 
-For example, suppose that when `currentUser` changes, the value of a `counter` should be logged. You could create an `effect` which reads both signals:
+Например, предположим, что при изменении `currentUser` должно логироваться значение `counter`. Вы можете создать
+`effect`, который читает оба сигнала:
 
 ```ts
 effect(() => {
@@ -230,9 +265,11 @@ effect(() => {
 });
 ```
 
-This example will log a message when _either_ `currentUser` or `counter` changes. However, if the effect should only run when `currentUser` changes, then the read of `counter` is only incidental and changes to `counter` shouldn't log a new message.
+Этот пример будет логировать сообщение, когда изменяется _либо_ `currentUser`, _либо_ `counter`. Однако, если эффект
+должен запускаться только при изменении `currentUser`, то чтение `counter` является лишь попутным, и изменения `counter`
+не должны вызывать логирование нового сообщения.
 
-You can prevent a signal read from being tracked by calling its getter with `untracked`:
+Вы можете предотвратить отслеживание чтения сигнала, вызвав его геттер с `untracked`:
 
 ```ts
 effect(() => {
@@ -240,7 +277,8 @@ effect(() => {
 });
 ```
 
-`untracked` is also useful when an effect needs to invoke some external code which shouldn't be treated as a dependency:
+`untracked` также полезен, когда эффекту необходимо вызвать некоторый внешний код, который не должен рассматриваться как
+зависимость:
 
 ```ts
 effect(() => {
@@ -253,9 +291,12 @@ effect(() => {
 });
 ```
 
-### Effect cleanup functions
+### Функции очистки эффектов
 
-Effects might start long-running operations, which you should cancel if the effect is destroyed or runs again before the first operation finished. When you create an effect, your function can optionally accept an `onCleanup` function as its first parameter. This `onCleanup` function lets you register a callback that is invoked before the next run of the effect begins, or when the effect is destroyed.
+Эффекты могут запускать длительные операции, которые вы должны отменить, если эффект будет уничтожен или запустится
+снова до завершения первой операции. Когда вы создаете эффект, ваша функция может опционально принимать функцию
+`onCleanup` в качестве первого параметра. Эта функция `onCleanup` позволяет вам зарегистрировать колбэк, который
+вызывается перед началом следующего запуска эффекта или при уничтожении эффекта.
 
 ```ts
 effect((onCleanup) => {
@@ -271,6 +312,7 @@ effect((onCleanup) => {
 });
 ```
 
-## Using signals with RxJS
+## Использование сигналов с RxJS
 
-See [RxJS interop with Angular signals](ecosystem/rxjs-interop) for details on interoperability between signals and RxJS.
+Смотрите [Взаимодействие RxJS с сигналами Angular](ecosystem/rxjs-interop) для подробностей о совместимости между
+сигналами и RxJS.
