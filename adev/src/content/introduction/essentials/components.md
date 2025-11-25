@@ -12,8 +12,8 @@
 
 1. `@Component` [декоратор](https://www.typescriptlang.org/docs/handbook/decorators.html), который содержит некоторую
    конфигурацию, используемую Angular.
-2. HTML шаблон, который управляет тем, что рендерится в DOM.
-3. [CSS селектор](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors), который определяет, как
+2. HTML-шаблон, который управляет тем, что рендерится в DOM.
+3. [CSS-селектор](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors), который определяет, как
    компонент используется в HTML.
 4. Класс TypeScript с поведением, таким как обработка пользовательского ввода или выполнение запросов к серверу.
 
@@ -28,7 +28,7 @@
     <p>This is the user profile page</p>
   `,
 })
-export class UserProfile { /* Your component code goes here */ }
+export class UserProfile { /* Ваш код компонента здесь */ }
 ```
 
 Декоратор `@Component` также опционально принимает свойство `styles` для любого CSS, который вы хотите применить к
@@ -44,7 +44,7 @@ export class UserProfile { /* Your component code goes here */ }
   `,
   styles: `h1 { font-size: 3em; } `,
 })
-export class UserProfile { /* Your component code goes here */ }
+export class UserProfile { /* Ваш код компонента здесь */ }
 ```
 
 ### Разделение HTML и CSS по отдельным файлам
@@ -59,7 +59,7 @@ export class UserProfile { /* Your component code goes here */ }
   styleUrl: 'user-profile.css',
 })
 export class UserProfile {
-  // Component behavior is defined in here
+  // Поведение компонента определяется здесь
 }
 ```
 
@@ -94,7 +94,7 @@ flowchart TD
 
 Чтобы импортировать и использовать компонент, вам нужно:
 
-1. В TypeScript файле вашего компонента добавьте инструкцию `import` для компонента, который вы хотите использовать.
+1. В TypeScript-файле вашего компонента добавьте инструкцию `import` для компонента, который вы хотите использовать.
 2. В вашем декораторе `@Component` добавьте запись в массив `imports` для компонента, который вы хотите использовать.
 3. В шаблоне вашего компонента добавьте элемент, соответствующий селектору компонента, который вы хотите использовать.
 
@@ -114,7 +114,7 @@ import {ProfilePhoto} from 'profile-photo.ts';
   `,
 })
 export class UserProfile {
-  // Component behavior is defined in here
+  // Поведение компонента определяется здесь
 }
 ```
 

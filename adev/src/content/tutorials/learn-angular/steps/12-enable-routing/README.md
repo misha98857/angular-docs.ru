@@ -1,21 +1,22 @@
-# Routing Overview
+# Обзор маршрутизации
 
-For most apps, there comes a point where the app requires more than a single page. When that time inevitably comes, routing becomes a big part of the performance story for users.
+Для большинства приложений наступает момент, когда требуется больше одной страницы. Когда это время неизбежно наступает,
+маршрутизация становится важной частью производительности для пользователей.
 
-Note: Learn more about [routing in the in-depth guide](/guide/routing).
+Примечание: Узнайте больше о [маршрутизации в подробном руководстве](/guide/routing).
 
-In this activity, you'll learn how to set up and configure your app to use Angular Router.
+В этом упражнении вы узнаете, как настроить ваше приложение для использования Angular Router.
 
 <hr>
 
 <docs-workflow>
 
-<docs-step title="Create an app.routes.ts file">
+<docs-step title="Создание файла app.routes.ts">
 
-Inside `app.routes.ts`, make the following changes:
+Внутри `app.routes.ts` внесите следующие изменения:
 
-1. Import `Routes` from the `@angular/router` package.
-2. Export a constant called `routes` of type `Routes`, assign it `[]` as the value.
+1. Импортируйте `Routes` из пакета `@angular/router`.
+2. Экспортируйте константу с именем `routes` типа `Routes` и присвойте ей значение `[]`.
 
 ```ts
 import {Routes} from '@angular/router';
@@ -25,13 +26,13 @@ export const routes: Routes = [];
 
 </docs-step>
 
-<docs-step title="Add routing to provider">
+<docs-step title="Добавление маршрутизации в провайдер">
 
-In `app.config.ts`, configure the app to Angular Router with the following steps:
+В `app.config.ts` настройте приложение для Angular Router, выполнив следующие шаги:
 
-1. Import the `provideRouter` function from `@angular/router`.
-1. Import `routes` from the `./app.routes.ts`.
-1. Call the `provideRouter` function with `routes` passed in as an argument in the `providers` array.
+1. Импортируйте функцию `provideRouter` из `@angular/router`.
+1. Импортируйте `routes` из `./app.routes.ts`.
+1. Вызовите функцию `provideRouter`, передав `routes` в качестве аргумента, внутри массива `providers`.
 
 <docs-code language="ts" highlight="[2,3,6]">
 import {ApplicationConfig} from '@angular/core';
@@ -45,11 +46,12 @@ providers: [provideRouter(routes)],
 
 </docs-step>
 
-<docs-step title="Import `RouterOutlet` in the component">
+<docs-step title="Импорт `RouterOutlet` в компонент">
 
-Finally, to make sure your app is ready to use the Angular Router, you need to tell the app where you expect the router to display the desired content. Accomplish that by using the `RouterOutlet` directive from `@angular/router`.
+Наконец, чтобы убедиться, что ваше приложение готово к использованию Angular Router, нужно сообщить приложению, где
+роутер должен отображать желаемый контент. Сделайте это с помощью директивы `RouterOutlet` из `@angular/router`.
 
-Update the template for `App` by adding `<router-outlet />`
+Обновите шаблон для `App`, добавив `<router-outlet />`
 
 <docs-code language="angular-ts" highlight="[11]">
 import {RouterOutlet} from '@angular/router';
@@ -72,6 +74,6 @@ export class App {}
 
 </docs-workflow>
 
-Your app is now set up to use Angular Router. Nice work! 🙌
+Теперь ваше приложение настроено для использования Angular Router. Отличная работа! 🙌
 
-Keep the momentum going to learn the next step of defining the routes for our app.
+Продолжайте в том же духе, чтобы изучить следующий шаг — определение маршрутов для нашего приложения.

@@ -1,21 +1,22 @@
-# Add validation to your form
+# Добавление валидации в форму
 
-Adding validation to your form is critical to ensure users enter valid data. Signal Forms uses validators in a schema function that you pass to the `form()` function.
+Добавление валидации в форму критически важно для того, чтобы пользователи вводили корректные данные. Signal Forms
+использует валидаторы внутри функции схемы, которую вы передаете в функцию `form()`.
 
-In this activity, you'll learn how to:
+В этом уроке вы узнаете, как:
 
-- Import built-in validators
-- Define a schema function for your form
-- Apply validators to specific fields with custom error messages
+- Импортировать встроенные валидаторы
+- Определить функцию схемы для вашей формы
+- Применить валидаторы к конкретным полям с пользовательскими сообщениями об ошибках
 
-Let's add validation!
+Давайте добавим валидацию!
 
 <hr />
 
 <docs-workflow>
 
-<docs-step title="Import the validators">
-Import the `required` and `email` validators from `@angular/forms/signals`:
+<docs-step title="Импорт валидаторов">
+Импортируйте валидаторы `required` и `email` из `@angular/forms/signals`:
 
 ```ts
 import { form, Field, required, email } from '@angular/forms/signals';
@@ -23,8 +24,8 @@ import { form, Field, required, email } from '@angular/forms/signals';
 
 </docs-step>
 
-<docs-step title="Add a schema function to your form">
-Update your `form()` call to include a schema function as the second parameter. The schema function receives a `fieldPath` parameter that lets you access each field:
+<docs-step title="Добавление функции схемы в форму">
+Обновите вызов `form()`, добавив функцию схемы в качестве второго параметра. Функция схемы принимает параметр `fieldPath`, который позволяет получить доступ к каждому полю:
 
 ```ts
 loginForm = form(this.loginModel, (fieldPath) => {
@@ -34,8 +35,8 @@ loginForm = form(this.loginModel, (fieldPath) => {
 
 </docs-step>
 
-<docs-step title="Add validation to the email field">
-Inside the schema function, add validation for the email field. Use both `required()` and `email()` validators:
+<docs-step title="Добавление валидации для поля email">
+Внутри функции схемы добавьте валидацию для поля email. Используйте валидаторы `required()` и `email()`:
 
 ```ts
 loginForm = form(this.loginModel, (fieldPath) => {
@@ -44,11 +45,11 @@ loginForm = form(this.loginModel, (fieldPath) => {
 });
 ```
 
-The `message` option provides custom error messages for users.
+Опция `message` предоставляет пользовательские сообщения об ошибках.
 </docs-step>
 
-<docs-step title="Add validation to the password field">
-Add validation for the password field using the `required()` validator:
+<docs-step title="Добавление валидации для поля пароля">
+Добавьте валидацию для поля пароля, используя валидатор `required()`:
 
 ```ts
 loginForm = form(this.loginModel, (fieldPath) => {
@@ -62,6 +63,7 @@ loginForm = form(this.loginModel, (fieldPath) => {
 
 </docs-workflow>
 
-Perfect! You've added validation to your form. The validators run automatically as users interact with the form. When validation fails, the field's state will reflect the errors.
+Отлично! Вы добавили валидацию в свою форму. Валидаторы запускаются автоматически, когда пользователи взаимодействуют с
+формой. Если валидация не проходит, состояние поля будет отражать ошибки.
 
-Next, you'll learn [how to display validation errors in the template](/tutorials/signal-forms/4-display-errors)!
+Далее вы узнаете, [как отображать ошибки валидации в шаблоне](/tutorials/signal-forms/4-display-errors)!

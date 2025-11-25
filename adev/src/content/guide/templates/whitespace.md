@@ -1,10 +1,12 @@
-# Whitespace in templates
+# Пробельные символы в шаблонах
 
-By default, Angular templates do not preserve whitespace that the framework considers unnecessary. This commonly occurs in two situations: whitespace between elements, and collapsible whitespace inside of text.
+По умолчанию шаблоны Angular не сохраняют пробельные символы, которые фреймворк считает ненужными. Обычно это происходит
+в двух ситуациях: пробелы между элементами и сворачиваемые пробелы внутри текста.
 
-## Whitespace between elements
+## Пробелы между элементами
 
-Most developers prefer to format their templates with newlines and indentation to make the template readable:
+Большинство разработчиков предпочитают форматировать свои шаблоны с использованием переносов строк и отступов, чтобы
+сделать шаблон читаемым:
 
 ```angular-html
 <section>
@@ -16,38 +18,46 @@ Most developers prefer to format their templates with newlines and indentation t
 </section>
 ```
 
-This template contains whitespace between all of the elements. The following snippet shows the same HTML with each whitespace character replaced with the hash (`#`) character to highlight how much whitespace is present:
+Этот шаблон содержит пробельные символы между всеми элементами. Следующий фрагмент показывает тот же HTML, где каждый
+пробельный символ заменен символом решетки (`#`), чтобы подчеркнуть количество присутствующих пробелов:
 
 ```angular-html
 <!-- Total Whitespace: 20 -->
 <section>###<h3>User profile</h3>###<label>#####User name#####<input>###</label>#</section>
 ```
 
-Preserving the whitespace as written in the template would result in many unnecessary [text nodes](https://developer.mozilla.org/en-US/docs/Web/API/Text) and increase page rendering overhead. By ignoring this whitespace between elements, Angular performs less work when rendering the template on the page, improving overall performance.
+Сохранение пробелов в том виде, в котором они написаны в шаблоне, привело бы к появлению множества
+ненужных [текстовых узлов](https://developer.mozilla.org/en-US/docs/Web/API/Text) и увеличению накладных расходов на
+рендеринг страницы. Игнорируя эти пробелы между элементами, Angular выполняет меньше работы при рендеринге шаблона на
+странице, улучшая общую производительность.
 
-## Collapsible whitespace inside text
+## Сворачиваемые пробелы внутри текста
 
-When your web browser renders HTML on a page, it collapses multiple consecutive whitespace characters to a single character:
+Когда веб-браузер рендерит HTML на странице, он сворачивает несколько последовательных пробельных символов в один
+символ:
 
 ```angular-html
 <!-- What it looks like in the template -->
 <p>Hello         world</p>
 ```
 
-In this example, the browser displays only a single space between "Hello" and "world".
+В этом примере браузер отображает только один пробел между "Hello" и "world".
 
 ```angular-html
 <!-- What shows up in the browser -->
 <p>Hello world</p>
 ```
 
-See [How whitespace is handled by HTML, CSS, and in the DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Whitespace) for more context on how this works.
+Для получения дополнительной информации о том, как это работает, ознакомьтесь со
+статьей [Как обрабатываются пробелы в HTML, CSS и DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Whitespace).
 
-Angular avoids sending these unnecessary whitespace characters to the browser in the first place by collapsing them to a single character when it compiles the template.
+Angular избегает отправки этих ненужных пробельных символов в браузер, сворачивая их в один символ на этапе компиляции
+шаблона.
 
-## Preserving whitespace
+## Сохранение пробелов
 
-You can tell Angular to preserve whitespace in a template by specifying `preserveWhitespaces: true` in the `@Component` decorator for a template.
+Вы можете указать Angular сохранять пробельные символы в шаблоне, задав `preserveWhitespaces: true` в декораторе
+`@Component` для шаблона.
 
 ```angular-ts
 @Component({
@@ -59,6 +69,8 @@ You can tell Angular to preserve whitespace in a template by specifying `preserv
 })
 ```
 
-Avoid setting this option unless absolutely necessary. Preserving whitespace can cause Angular to produce significantly more nodes while rendering, slowing down your application.
+Избегайте установки этой опции без крайней необходимости. Сохранение пробелов может заставить Angular создавать
+значительно больше узлов при рендеринге, что замедлит работу вашего приложения.
 
-You can additionally use a special HTML entity unique to Angular, `&ngsp;`. This entity produces a single space character that's preserved in the compiled output.
+Дополнительно вы можете использовать специальную HTML-сущность, уникальную для Angular — `&ngsp;`. Эта сущность создает
+один символ пробела, который сохраняется в скомпилированном выводе.

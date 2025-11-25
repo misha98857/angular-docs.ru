@@ -1,18 +1,21 @@
-# Validating forms
+# Валидация форм
 
-Another common scenario when working with forms is the need to validate the inputs to ensure the correct data is submitted.
+Еще один распространенный сценарий при работе с формами — необходимость валидации (проверки) введенных данных, чтобы
+гарантировать отправку корректной информации.
 
-Note: Learn more about [validating form input in the in-depth guide](/guide/forms/reactive-forms#validating-form-input).
+Примечание: Узнайте больше
+о [валидации ввода формы в подробном руководстве](/guide/forms/reactive-forms#validating-form-input).
 
-In this activity, you'll learn how to validate forms with reactive forms.
+В этом упражнении вы узнаете, как валидировать формы с помощью реактивных форм.
 
 <hr>
 
 <docs-workflow>
 
-<docs-step title="Import Validators">
+<docs-step title="Импорт валидаторов">
 
-Angular provides a set of validation tools. To use them, first update the component to import `Validators` from `@angular/forms`.
+Angular предоставляет набор инструментов для валидации. Чтобы воспользоваться ими, сначала обновите компонент,
+импортировав `Validators` из `@angular/forms`.
 
 <docs-code language="ts" highlight="[1]">
 import {ReactiveFormsModule, Validators} from '@angular/forms';
@@ -23,11 +26,13 @@ export class App {}
 
 </docs-step>
 
-<docs-step title="Add validation to form">
+<docs-step title="Добавление валидации в форму">
 
-Every `FormControl` can be passed the `Validators` you want to use for validating the `FormControl` values. For example, if you want to make the `name` field in `profileForm` required then use `Validators.required`.
-For the `email` field in our Angular form, we want to ensure it's not left empty and follows a valid email address structure. We can achieve this by combining the `Validators.required` and `Validators.email` validators in an array.
-Update the `name` and `email` `FormControl`:
+В каждый `FormControl` можно передать `Validators`, которые вы хотите использовать для проверки значений этого контрола.
+Например, если вы хотите сделать поле `name` в `profileForm` обязательным, используйте `Validators.required`.
+Для поля `email` в нашей форме мы хотим убедиться, что оно не пустое и соответствует формату адреса электронной почты.
+Этого можно достичь, объединив валидаторы `Validators.required` и `Validators.email` в массив.
+Обновите `FormControl` для `name` и `email`:
 
 ```ts
 profileForm = new FormGroup({
@@ -38,10 +43,11 @@ profileForm = new FormGroup({
 
 </docs-step>
 
-<docs-step title="Check form validation in template">
+<docs-step title="Проверка валидации формы в шаблоне">
 
-To determine if a form is valid, the `FormGroup` class has a `valid` property.
-You can use this property to dynamically bind attributes. Update the submit `button` to be enabled based on the validity of the form.
+Чтобы определить, валидна ли форма, класс `FormGroup` предоставляет свойство `valid`.
+Вы можете использовать это свойство для динамической привязки атрибутов. Обновите кнопку отправки (`button`), чтобы она
+была активна только при валидной форме.
 
 ```angular-html
 <button type="submit" [disabled]="!profileForm.valid">Submit</button>
@@ -51,6 +57,7 @@ You can use this property to dynamically bind attributes. Update the submit `but
 
 </docs-workflow>
 
-You now know the basics around how validation works with reactive forms.
+Теперь вы знаете основы того, как работает валидация с реактивными формами.
 
-Great job learning these core concepts of working with forms in Angular. If you want to learn more, be sure to refer to the [Angular forms documentation](guide/forms/form-validation).
+Отличная работа по изучению этих ключевых концепций работы с формами в Angular. Если вы хотите узнать больше,
+обязательно обратитесь к [документации по формам Angular](guide/forms/form-validation).

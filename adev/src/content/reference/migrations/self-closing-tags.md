@@ -1,16 +1,17 @@
-# Migration to self-closing tags
+# Миграция на самозакрывающиеся теги
 
-Self-closing tags are supported in Angular templates since [v16](https://blog.angular.dev/angular-v16-is-here-4d7a28ec680d#7065). .
+Самозакрывающиеся теги поддерживаются в шаблонах Angular начиная
+с [v16](https://blog.angular.dev/angular-v16-is-here-4d7a28ec680d#7065).
 
-This schematic migrates the templates in your application to use self-closing tags.
+Этот схематик переводит шаблоны вашего приложения на использование самозакрывающихся тегов.
 
-Run the schematic using the following command:
+Запустите схематик с помощью следующей команды:
 
 ```shell
 ng generate @angular/core:self-closing-tag
 ```
 
-#### Before
+#### До
 
 <docs-code language="angular-html">
 
@@ -18,7 +19,7 @@ ng generate @angular/core:self-closing-tag
 
 </docs-code>
 
-#### After
+#### После
 
 <docs-code language="angular-html">
 

@@ -1,86 +1,95 @@
-# Build your first Angular app
+# Создание вашего первого приложения Angular
 
-This tutorial consists of lessons that introduce the Angular concepts you need to know to start coding in Angular.
+Это руководство состоит из уроков, которые знакомят с концепциями Angular, необходимыми для начала программирования на
+Angular.
 
-You can do as many or as few as you would like and you can do them in any order.
+Вы можете пройти столько уроков, сколько захотите, и в любом порядке.
 
-HELPFUL: Prefer video? We also have a full [YouTube course](https://youtube.com/playlist?list=PL1w1q3fL4pmj9k1FrJ3Pe91EPub2_h4jF&si=1q9889ulHp8VZ0e7) for this tutorial!
+ПОЛЕЗНО: Предпочитаете видео? У нас также есть
+полный [курс на YouTube](https://youtube.com/playlist?list=PL1w1q3fL4pmj9k1FrJ3Pe91EPub2_h4jF&si=1q9889ulHp8VZ0e7) для
+этого руководства!
 
 <docs-video src="https://www.youtube.com/embed/xAT0lHYhHMY?si=cKUW_MGn3MesFT7o"/>
 
-## Before you start
+## Перед началом
 
-For the best experience with this tutorial, review these requirements to make sure you have what you need to be successful.
+Для наилучшего результата ознакомьтесь с этими требованиями, чтобы убедиться, что у вас есть всё необходимое для
+успешного прохождения руководства.
 
-### Your experience
+### Ваш опыт
 
-The lessons in this tutorial assume that you have experience with the following:
+Уроки в этом руководстве предполагают, что у вас есть опыт в следующем:
 
-1. Created an HTML web page by editing the HTML directly.
-1. Programmed web site content in JavaScript.
-1. Read Cascading Style Sheet (CSS) content and understand how selectors are used.
-1. Used command-line instructions to perform tasks on your computer.
+1. Создание веб-страниц HTML путем прямого редактирования HTML.
+1. Программирование контента веб-сайта на JavaScript.
+1. Чтение каскадных таблиц стилей (CSS) и понимание того, как используются селекторы.
+1. Использование инструкций командной строки для выполнения задач на компьютере.
 
-### Your equipment
+### Ваше оборудование
 
-These lessons can be completed using a local installation of the Angular tools or in our embedded editor. Local Angular development can be completed on Windows, MacOS or Linux based systems.
+Эти уроки можно пройти, используя локальную установку инструментов Angular или в нашем встроенном редакторе. Локальная
+разработка на Angular возможна в системах Windows, MacOS или Linux.
 
-NOTE: Look for alerts like this one, which call out steps that may only be for your local editor.
+ПРИМЕЧАНИЕ: Обращайте внимание на подобные предупреждения, в которых указываются шаги, предназначенные только для
+локального редактора.
 
-## Conceptual preview of your first Angular app
+## Концептуальный обзор вашего первого приложения Angular
 
-The lessons in this tutorial create an Angular app that lists houses for rent and shows the details of individual houses.
-This app uses features that are common to many Angular apps.
+В уроках этого руководства создается приложение Angular, которое отображает список домов для аренды и показывает
+подробную информацию об отдельных домах.
+Это приложение использует функции, общие для многих приложений Angular.
 
-<img alt="Output of homes landing page" src="assets/images/tutorials/first-app/homes-app-landing-page.png">
+<img alt="Результат работы целевой страницы с домами" src="assets/images/tutorials/first-app/homes-app-landing-page.png">
 
-## Local development environment
+## Локальная среда разработки
 
-NOTE: This step is only for your local environment!
+ПРИМЕЧАНИЕ: Этот шаг предназначен только для вашей локальной среды!
 
-Perform these steps in a command-line tool on the computer you want to use for this tutorial.
+Выполните эти шаги в инструменте командной строки на компьютере, который вы хотите использовать для этого руководства.
 
 <docs-workflow>
 
-<docs-step title="Identify the version of `node.js` that Angular requires">
-Angular requires an active LTS or maintenance LTS version of Node. Let's confirm your version of `node.js`. For information about specific version requirements, see the engines property in the [package.json file](https://unpkg.com/browse/@angular/core@15.1.5/package.json).
+<docs-step title="Определите версию `node.js`, необходимую для Angular">
+Angular требует активную LTS или поддерживаемую LTS версию Node. Давайте проверим вашу версию `node.js`. Информацию о требованиях к конкретным версиям см. в свойстве engines в [файле package.json](https://unpkg.com/browse/@angular/core@15.1.5/package.json).
 
-From a **Terminal** window:
+В окне **Терминала**:
 
-1. Run the following command: `node --version`
-1. Confirm that the version number displayed meets the requirements.
+1. Выполните следующую команду: `node --version`
+1. Убедитесь, что отображаемый номер версии соответствует требованиям.
    </docs-step>
 
-<docs-step title="Install the correct version of `node.js` for Angular">
-If you do not have a version of `node.js` installed, please follow the [directions for installation on nodejs.org](https://nodejs.org/en/download/)
+<docs-step title="Установите правильную версию `node.js` для Angular">
+Если у вас не установлена версия `node.js`, следуйте [инструкциям по установке на nodejs.org](https://nodejs.org/en/download/)
 </docs-step>
 
-<docs-step title="Install the latest version of Angular">
-With `node.js` and `npm` installed, the next step is to install the [Angular CLI](tools/cli) which provides tooling for effective Angular development.
+<docs-step title="Установите последнюю версию Angular">
+После установки `node.js` и `npm` следующим шагом будет установка [Angular CLI](tools/cli), который предоставляет инструменты для эффективной разработки на Angular.
 
-From a **Terminal** window run the following command: `npm install -g @angular/cli`.
+В окне **Терминала** выполните следующую команду: `npm install -g @angular/cli`.
 </docs-step>
 
-<docs-step title="Install integrated development environment (IDE)">
-You are free to use any tool you prefer to build apps with Angular. We recommend the following:
+<docs-step title="Установите интегрированную среду разработки (IDE)">
+Вы можете использовать любой инструмент для создания приложений на Angular. Мы рекомендуем следующее:
 
 1. [Visual Studio Code](https://code.visualstudio.com/)
-2. As an optional, but recommended step you can further improve your developer experience by installing the [Angular Language Service](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template)
+2. В качестве необязательного, но рекомендуемого шага вы можете улучшить свой опыт разработки,
+   установив [Angular Language Service](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template)
 3. [WebStorm](https://www.jetbrains.com/webstorm/)
    </docs-step>
 
-<docs-step title="Optional: set-up your AI powered IDE">
+<docs-step title="Необязательно: настройте IDE с поддержкой ИИ">
 
-In case you're following this tutorial in your preferred AI powered IDE, [check out Angular prompt rules and best practices](/ai/develop-with-ai).
+Если вы проходите это руководство в предпочитаемой IDE с поддержкой
+ИИ, [ознакомьтесь с правилами подсказок и лучшими практиками Angular](/ai/develop-with-ai).
 
 </docs-step>
 
 </docs-workflow>
 
-For more information about the topics covered in this lesson, visit:
+Для получения дополнительной информации по темам, затронутым в этом уроке, посетите:
 
 <docs-pill-row>
-  <docs-pill href="/overview" title="What is Angular"/>
-  <docs-pill href="/tools/cli/setup-local" title="Setting up the local environment and workspace"/>
-  <docs-pill href="/cli" title="Angular CLI Reference"/>
+  <docs-pill href="/overview" title="Что такое Angular"/>
+  <docs-pill href="/tools/cli/setup-local" title="Настройка локальной среды и рабочего пространства"/>
+  <docs-pill href="/cli" title="Справочник Angular CLI"/>
 </docs-pill-row>

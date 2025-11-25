@@ -1,111 +1,146 @@
-# Security
+# Безопасность
 
-This topic describes Angular's built-in protections against common web application vulnerabilities and attacks such as cross-site scripting attacks.
-It doesn't cover application-level security, such as authentication and authorization.
+В этом разделе описываются встроенные средства защиты Angular от распространенных уязвимостей веб-приложений и атак,
+таких как межсайтовый скриптинг (XSS).
+Здесь не рассматривается безопасность на уровне приложения, такая как аутентификация и авторизация.
 
-For more information about the attacks and mitigations described below, see the [Open Web Application Security Project (OWASP) Guide](https://www.owasp.org/index.php/Category:OWASP_Guide_Project).
+Для получения дополнительной информации об атаках и способах их предотвращения, описанных ниже,
+см. [Руководство Open Web Application Security Project (OWASP)](https://www.owasp.org/index.php/Category:OWASP_Guide_Project).
 
 <a id="report-issues"></a>
 
-<docs-callout title="Reporting vulnerabilities">
+<docs-callout title="Сообщение об уязвимостях">
 
-Angular is part of Google [Open Source Software Vulnerability Reward Program](https://bughunters.google.com/about/rules/6521337925468160/google-open-source-software-vulnerability-reward-program-rules). For vulnerabilities in Angular, please submit your report at [https://bughunters.google.com](https://bughunters.google.com/report).
+Angular является частью программы
+Google [Open Source Software Vulnerability Reward Program](https://bughunters.google.com/about/rules/6521337925468160/google-open-source-software-vulnerability-reward-program-rules).
+Чтобы сообщить об уязвимостях в Angular, отправьте отчет
+на [https://bughunters.google.com](https://bughunters.google.com/report).
 
-For more information about how Google handles security issues, see [Google's security philosophy](https://www.google.com/about/appsecurity).
+Для получения дополнительной информации о том, как Google обрабатывает проблемы безопасности,
+см. [философию безопасности Google](https://www.google.com/about/appsecurity).
 
 </docs-callout>
 
-## Best practices
+## Лучшие практики
 
-These are some best practices to ensure that your Angular application is secure.
+Ниже приведены некоторые рекомендации, обеспечивающие безопасность вашего приложения Angular.
 
-1. **Keep current with the latest Angular library releases** - The Angular libraries get regular updates, and these updates might fix security defects discovered in previous versions. Check the Angular [change log](https://github.com/angular/angular/blob/main/CHANGELOG.md) for security-related updates.
-2. **Don't alter your copy of Angular** - Private, customized versions of Angular tend to fall behind the current version and might not include important security fixes and enhancements. Instead, share your Angular improvements with the community and make a pull request.
-3. **Avoid Angular APIs marked in the documentation as "_Security Risk_"** - For more information, see the [Trusting safe values](#trusting-safe-values) section of this page.
+1. **Следите за актуальностью версий библиотек Angular** — Библиотеки Angular регулярно обновляются, и эти обновления
+   могут содержать исправления дефектов безопасности, обнаруженных в предыдущих версиях.
+   Проверяйте [журнал изменений](https://github.com/angular/angular/blob/main/CHANGELOG.md) Angular на наличие
+   обновлений, связанных с безопасностью.
+2. **Не изменяйте свою копию Angular** — Приватные, кастомизированные версии Angular, как правило, отстают от текущей
+   версии и могут не включать важные исправления безопасности и улучшения. Вместо этого поделитесь своими улучшениями
+   Angular с сообществом и создайте pull request.
+3. **Избегайте API Angular, помеченных в документации как "_Security Risk_"** — Для получения дополнительной информации
+   см. раздел [Доверие безопасным значениям](#trusting-safe-values) на этой странице.
 
-## Preventing cross-site scripting (XSS)
+## Предотвращение межсайтового скриптинга (XSS)
 
-[Cross-site scripting (XSS)](https://en.wikipedia.org/wiki/Cross-site_scripting) enables attackers to inject malicious code into web pages.
-Such code can then, for example, steal user and login data, or perform actions that impersonate the user.
-This is one of the most common attacks on the web.
+[Межсайтовый скриптинг (XSS)](https://en.wikipedia.org/wiki/Cross-site_scripting) позволяет злоумышленникам внедрять
+вредоносный код на веб-страницы.
+Такой код может, например, украсть данные пользователя и данные для входа или выполнить действия от имени пользователя.
+Это одна из самых распространенных атак в Интернете.
 
-To block XSS attacks, you must prevent malicious code from entering the Document Object Model (DOM).
-For example, if attackers can trick you into inserting a `<script>` tag in the DOM, they can run arbitrary code on your website.
-The attack isn't limited to `<script>` tags —many elements and properties in the DOM allow code execution, for example, `<img alt="" onerror="...">` and `<a href="javascript:...">`.
-If attacker-controlled data enters the DOM, expect security vulnerabilities.
+Чтобы заблокировать XSS-атаки, необходимо предотвратить попадание вредоносного кода в объектную модель документа (DOM).
+Например, если злоумышленник сможет обманом заставить вас вставить тег `<script>` в DOM, он сможет запустить
+произвольный код на вашем веб-сайте.
+Атака не ограничивается тегами `<script>` — многие элементы и свойства в DOM позволяют выполнять код, например,
+`<img alt="" onerror="...">` и `<a href="javascript:...">`.
+Если контролируемые злоумышленником данные попадают в DOM, ожидайте появления уязвимостей безопасности.
 
-### Angular's cross-site scripting security model
+### Модель безопасности Angular против межсайтового скриптинга
 
-To systematically block XSS bugs, Angular treats all values as untrusted by default.
-When a value is inserted into the DOM from a template binding, or interpolation, Angular sanitizes and escapes untrusted values.
-If a value was already sanitized outside of Angular and is considered safe, communicate this to Angular by marking the [value as trusted](#trusting-safe-values).
+Чтобы систематически блокировать ошибки XSS, Angular по умолчанию рассматривает все значения как ненадежные.
+Когда значение вставляется в DOM через привязку в шаблоне или интерполяцию, Angular выполняет санитизацию (очистку) и
+экранирование ненадежных значений.
+Если значение уже было очищено вне Angular и считается безопасным, сообщите об этом Angular,
+пометив [значение как доверенное](#trusting-safe-values).
 
-Unlike values to be used for rendering, Angular templates are considered trusted by default, and should be treated as executable code.
-Never create templates by concatenating user input and template syntax.
-Doing this would enable attackers to [inject arbitrary code](https://en.wikipedia.org/wiki/Code_injection) into your application.
-To prevent these vulnerabilities, always use the default [Ahead-Of-Time (AOT) template compiler](#use-the-aot-template-compiler) in production deployments.
+В отличие от значений, используемых для рендеринга, шаблоны Angular по умолчанию считаются доверенными и должны
+рассматриваться как исполняемый код.
+Никогда не создавайте шаблоны путем конкатенации пользовательского ввода и синтаксиса шаблона.
+Это позволит злоумышленникам [внедрить произвольный код](https://en.wikipedia.org/wiki/Code_injection) в ваше
+приложение.
+Чтобы предотвратить эти уязвимости, всегда
+используйте [AOT-компилятор шаблонов (Ahead-Of-Time)](#use-the-aot-template-compiler) по умолчанию в продакшн-сборках.
 
-An extra layer of protection can be provided through the use of Content security policy and Trusted Types.
-These web platform features operate at the DOM level which is the most effective place to prevent XSS issues. Here they can't be bypassed using other, lower-level APIs.
-For this reason, it is strongly encouraged to take advantage of these features. To do this, configure the [content security policy](#content-security-policy) for the application and enable [trusted types enforcement](#enforcing-trusted-types).
+Дополнительный уровень защиты может быть обеспечен за счет использования Content Security Policy (CSP) и Trusted Types.
+Эти функции веб-платформы работают на уровне DOM, что является наиболее эффективным местом для предотвращения проблем
+XSS. Здесь их нельзя обойти с помощью других, более низкоуровневых API.
+По этой причине настоятельно рекомендуется использовать эти функции. Для этого
+настройте [Content Security Policy](#content-security-policy) для приложения и
+включите [принудительное использование Trusted Types](#enforcing-trusted-types).
 
-### Sanitization and security contexts
+### Санитизация и контексты безопасности
 
-_Sanitization_ is the inspection of an untrusted value, turning it into a value that's safe to insert into the DOM.
-In many cases, sanitization doesn't change a value at all.
-Sanitization depends on a context.
-For example, a value that's harmless in CSS is potentially dangerous in a URL.
+_Санитизация_ — это проверка ненадежного значения и преобразование его в значение, безопасное для вставки в DOM.
+Во многих случаях санитизация вообще не меняет значение.
+Санитизация зависит от контекста.
+Например, значение, безвредное в CSS, может быть потенциально опасным в URL.
 
-Angular defines the following security contexts:
+Angular определяет следующие контексты безопасности:
 
-| Security contexts | Details                                                                           |
-| :---------------- | :-------------------------------------------------------------------------------- |
-| HTML              | Used when interpreting a value as HTML, for example, when binding to `innerHtml`. |
-| Style             | Used when binding CSS into the `style` property.                                  |
-| URL               | Used for URL properties, such as `<a href>`.                                      |
-| Resource URL      | A URL that is loaded and executed as code, for example, in `<script src>`.        |
+| Контексты безопасности | Подробности                                                                             |
+| :--------------------- | :-------------------------------------------------------------------------------------- |
+| HTML                   | Используется при интерпретации значения как HTML, например, при привязке к `innerHtml`. |
+| Style                  | Используется при привязке CSS к свойству `style`.                                       |
+| URL                    | Используется для свойств URL, таких как `<a href>`.                                     |
+| Resource URL           | URL, который загружается и выполняется как код, например, в `<script src>`.             |
 
-Angular sanitizes untrusted values for HTML and URLs. Sanitizing resource URLs isn't possible because they contain arbitrary code.
-In development mode, Angular prints a console warning when it has to change a value during sanitization.
+Angular выполняет санитизацию ненадежных значений для HTML и URL. Санитизация Resource URL невозможна, так как они
+содержат произвольный код.
+В режиме разработки Angular выводит предупреждение в консоль, когда ему приходится изменять значение в процессе
+санитизации.
 
-### Sanitization example
+### Пример санитизации
 
-The following template binds the value of `htmlSnippet`. Once by interpolating it into an element's content, and once by binding it to the `innerHTML` property of an element:
+Следующий шаблон привязывает значение `htmlSnippet`. Один раз путем интерполяции его в содержимое элемента, и один раз
+путем привязки к свойству `innerHTML` элемента:
 
 <docs-code header="inner-html-binding.component.html" path="adev/src/content/examples/security/src/app/inner-html-binding.component.html"/>
 
-Interpolated content is always escaped —the HTML isn't interpreted and the browser displays angle brackets in the element's text content.
+Интерполированный контент всегда экранируется — HTML не интерпретируется, и браузер отображает угловые скобки в
+текстовом содержимом элемента.
 
-For the HTML to be interpreted, bind it to an HTML property such as `innerHTML`.
-Be aware that binding a value that an attacker might control into `innerHTML` normally causes an XSS vulnerability.
-For example, one could run JavaScript in a following way:
+Чтобы HTML интерпретировался, привяжите его к HTML-свойству, такому как `innerHTML`.
+Помните, что привязка значения, которое может контролировать злоумышленник, к `innerHTML` обычно приводит к
+XSS-уязвимости.
+Например, можно запустить JavaScript следующим образом:
 
 <docs-code header="inner-html-binding.component.ts (class)" path="adev/src/content/examples/security/src/app/inner-html-binding.component.ts" visibleRegion="class"/>
 
-Angular recognizes the value as unsafe and automatically sanitizes it, which removes the `script` element but keeps safe content such as the `<b>` element.
+Angular распознает значение как небезопасное и автоматически выполняет его санитизацию, удаляя элемент `script`, но
+сохраняя безопасный контент, такой как элемент `<b>`.
 
-<img alt="A screenshot showing interpolated and bound HTML values" src="assets/images/guide/security/binding-inner-html.png#small">
+<img alt="Скриншот, показывающий интерполированные и привязанные значения HTML" src="assets/images/guide/security/binding-inner-html.png#small">
 
-### Direct use of the DOM APIs and explicit sanitization calls
+### Прямое использование DOM API и явные вызовы санитизации
 
-Unless you enforce Trusted Types, the built-in browser DOM APIs don't automatically protect you from security vulnerabilities.
-For example, `document`, the node available through `ElementRef`, and many third-party APIs contain unsafe methods.
-Likewise, if you interact with other libraries that manipulate the DOM, you likely won't have the same automatic sanitization as with Angular interpolations.
-Avoid directly interacting with the DOM and instead use Angular templates where possible.
+Если вы не используете принудительно Trusted Types, встроенные в браузер DOM API не защищают вас автоматически от
+уязвимостей безопасности.
+Например, `document`, узел, доступный через `ElementRef`, и многие сторонние API содержат небезопасные методы.
+Аналогично, если вы взаимодействуете с другими библиотеками, которые манипулируют DOM, у вас, скорее всего, не будет
+такой же автоматической санитизации, как при интерполяции в Angular.
+Избегайте прямого взаимодействия с DOM и вместо этого используйте шаблоны Angular, где это возможно.
 
-For cases where this is unavoidable, use the built-in Angular sanitization functions.
-Sanitize untrusted values with the [DomSanitizer.sanitize](api/platform-browser/DomSanitizer#sanitize) method and the appropriate `SecurityContext`.
-That function also accepts values that were marked as trusted using the `bypassSecurityTrust` functions, and does not sanitize them, as [described below](#trusting-safe-values).
+В случаях, когда это неизбежно, используйте встроенные функции санитизации Angular.
+Выполняйте санитизацию ненадежных значений с помощью
+метода [DomSanitizer.sanitize](api/platform-browser/DomSanitizer#sanitize) и соответствующего `SecurityContext`.
+Эта функция также принимает значения, помеченные как доверенные с помощью функций `bypassSecurityTrust`, и не выполняет
+их санитизацию, как [описано ниже](#trusting-safe-values).
 
-### Trusting safe values
+### Доверие безопасным значениям
 
-Sometimes applications genuinely need to include executable code, display an `<iframe>` from some URL, or construct potentially dangerous URLs.
-To prevent automatic sanitization in these situations, tell Angular that you inspected a value, checked how it was created, and made sure it is secure.
-Do _be careful_.
-If you trust a value that might be malicious, you are introducing a security vulnerability into your application.
-If in doubt, find a professional security reviewer.
+Иногда приложениям действительно необходимо включить исполняемый код, отобразить `<iframe>` с определенного URL или
+создать потенциально опасные URL.
+Чтобы предотвратить автоматическую санитизацию в этих ситуациях, сообщите Angular, что вы проверили значение, выяснили,
+как оно было создано, и убедились в его безопасности.
+Будьте _осторожны_.
+Если вы доверитесь значению, которое может быть вредоносным, вы создадите уязвимость безопасности в своем приложении.
+Если есть сомнения, обратитесь к профессиональному специалисту по безопасности.
 
-To mark a value as trusted, inject `DomSanitizer` and call one of the following methods:
+Чтобы пометить значение как доверенное, внедрите `DomSanitizer` и вызовите один из следующих методов:
 
 - `bypassSecurityTrustHtml`
 - `bypassSecurityTrustScript`
@@ -113,46 +148,57 @@ To mark a value as trusted, inject `DomSanitizer` and call one of the following 
 - `bypassSecurityTrustUrl`
 - `bypassSecurityTrustResourceUrl`
 
-Remember, whether a value is safe depends on context, so choose the right context for your intended use of the value.
-Imagine that the following template needs to bind a URL to a `javascript:alert(...)` call:
+Помните, что безопасность значения зависит от контекста, поэтому выбирайте правильный контекст для предполагаемого
+использования значения.
+Представьте, что следующему шаблону нужно привязать URL к вызову `javascript:alert(...)`:
 
 <docs-code header="bypass-security.component.html (URL)" path="adev/src/content/examples/security/src/app/bypass-security.component.html" visibleRegion="URL"/>
 
-Normally, Angular automatically sanitizes the URL, disables the dangerous code, and in development mode, logs this action to the console.
-To prevent this, mark the URL value as a trusted URL using the `bypassSecurityTrustUrl` call:
+Обычно Angular автоматически выполняет санитизацию URL, отключает опасный код и в режиме разработки регистрирует это
+действие в консоли.
+Чтобы предотвратить это, пометьте значение URL как доверенный URL с помощью вызова `bypassSecurityTrustUrl`:
 
 <docs-code header="bypass-security.component.ts (trust-url)" path="adev/src/content/examples/security/src/app/bypass-security.component.ts" visibleRegion="trust-url"/>
 
-<img alt="A screenshot showing an alert box created from a trusted URL" src="assets/images/guide/security/bypass-security-component.png#medium">
+<img alt="Скриншот, показывающий окно предупреждения, созданное из доверенного URL" src="assets/images/guide/security/bypass-security-component.png#medium">
 
-If you need to convert user input into a trusted value, use a component method.
-The following template lets users enter a YouTube video ID and load the corresponding video in an `<iframe>`.
-The `<iframe src>` attribute is a resource URL security context, because an untrusted source can, for example, smuggle in file downloads that unsuspecting users could run.
-To prevent this, call a method on the component to construct a trusted video URL, which causes Angular to let binding into `<iframe src>`:
+Если вам нужно преобразовать пользовательский ввод в доверенное значение, используйте метод компонента.
+Следующий шаблон позволяет пользователям вводить ID видео YouTube и загружать соответствующее видео в `<iframe>`.
+Атрибут `<iframe src>` является контекстом безопасности Resource URL, поскольку ненадежный источник может, например,
+скрытно загружать файлы, которые ничего не подозревающие пользователи могут запустить.
+Чтобы предотвратить это, вызовите метод компонента для создания доверенного URL видео, что позволит Angular выполнить
+привязку в `<iframe src>`:
 
 <docs-code header="bypass-security.component.html (iframe)" path="adev/src/content/examples/security/src/app/bypass-security.component.html" visibleRegion="iframe"/>
 
 <docs-code header="bypass-security.component.ts (trust-video-url)" path="adev/src/content/examples/security/src/app/bypass-security.component.ts" visibleRegion="trust-video-url"/>
 
-### Content security policy
+### Content Security Policy
 
-Content Security Policy \(CSP\) is a defense-in-depth technique to prevent XSS.
-To enable CSP, configure your web server to return an appropriate `Content-Security-Policy` HTTP header.
-Read more about content security policy at the [Web Fundamentals guide](https://developers.google.com/web/fundamentals/security/csp) on the Google Developers website.
+Content Security Policy (CSP) — это техника глубокой защиты для предотвращения XSS.
+Чтобы включить CSP, настройте свой веб-сервер на возврат соответствующего HTTP-заголовка `Content-Security-Policy`.
+Подробнее о Content Security Policy читайте
+в [руководстве Web Fundamentals](https://developers.google.com/web/fundamentals/security/csp) на сайте Google
+Developers.
 
-The minimal policy required for a brand-new Angular application is:
+Минимальная политика, необходимая для нового приложения Angular:
 
 ```txt
 default-src 'self'; style-src 'self' 'nonce-randomNonceGoesHere'; script-src 'self' 'nonce-randomNonceGoesHere';
 ```
 
-When serving your Angular application, the server should include a randomly-generated nonce in the HTTP header for each request.
-You must provide this nonce to Angular so that the framework can render `<style>` elements.
-You can set the nonce for Angular in one of two ways:
+При обслуживании вашего приложения Angular сервер должен включать случайно сгенерированный nonce (одноразовый код) в
+HTTP-заголовок для каждого запроса.
+Вы должны предоставить этот nonce Angular, чтобы фреймворк мог рендерить элементы `<style>`.
+Вы можете установить nonce для Angular одним из двух способов:
 
-1. Set the `autoCsp` option to `true` the [workspace configuration](reference/configs/workspace-config#extra-build-and-test-options).
-1. Set the `ngCspNonce` attribute on the root application element as `<app ngCspNonce="randomNonceGoesHere"></app>`. Use this approach if you have access to server-side templating that can add the nonce both to the header and the `index.html` when constructing the response.
-1. Provide the nonce using the `CSP_NONCE` injection token. Use this approach if you have access to the nonce at runtime and you want to be able to cache the `index.html`.
+1. Установите опцию `autoCsp` в `true`
+   в [конфигурации рабочего пространства](reference/configs/workspace-config#extra-build-and-test-options).
+2. Установите атрибут `ngCspNonce` на корневом элементе приложения как `<app ngCspNonce="randomNonceGoesHere"></app>`.
+   Используйте этот подход, если у вас есть доступ к серверной шаблонизации, которая может добавить nonce как в
+   заголовок, так и в `index.html` при формировании ответа.
+3. Предоставьте nonce с помощью токена внедрения `CSP_NONCE`. Используйте этот подход, если у вас есть доступ к nonce во
+   время выполнения, и вы хотите иметь возможность кэшировать `index.html`.
 
 ```ts
 import {bootstrapApplication, CSP_NONCE} from '@angular/core';
@@ -166,158 +212,197 @@ bootstrapApplication(AppComponent, {
 });
 ```
 
-<docs-callout title="Unique nonces">
+<docs-callout title="Уникальные nonce">
 
-Always ensure that the nonces you provide are <strong>unique per request</strong> and that they are not predictable or guessable.
-If an attacker can predict future nonces, they can circumvent the protections offered by CSP.
-
-</docs-callout>
-
-NOTE: If you want to [inline the critical CSS](/tools/cli/build#critical-css-inlining) of your application, you can not use the `CSP_NONCE` token, and should prefer the `autoCsp` option or set the `ngCspNonce` attribute on the root application element.
-
-If you cannot generate nonces in your project, you can allow inline styles by adding `'unsafe-inline'` to the `style-src` section of the CSP header.
-
-| Sections                                         | Details                                                                                                                                                                                                         |
-| :----------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `default-src 'self';`                            | Allows the page to load all its required resources from the same origin.                                                                                                                                        |
-| `style-src 'self' 'nonce-randomNonceGoesHere';`  | Allows the page to load global styles from the same origin \(`'self'`\) and styles inserted by Angular with the `nonce-randomNonceGoesHere`.                                                                    |
-| `script-src 'self' 'nonce-randomNonceGoesHere';` | Allows the page to load JavaScript from the same origin \(`'self'`\) and scripts inserted by the Angular CLI with the `nonce-randomNonceGoesHere`. This is only required if you're using critical CSS inlining. |
-
-Angular itself requires only these settings to function correctly.
-As your project grows, you may need to expand your CSP settings to accommodate extra features specific to your application.
-
-### Enforcing Trusted Types
-
-It is recommended that you use [Trusted Types](https://w3c.github.io/trusted-types/dist/spec/) as a way to help secure your applications from cross-site scripting attacks.
-Trusted Types is a [web platform](https://en.wikipedia.org/wiki/Web_platform) feature that can help you prevent cross-site scripting attacks by enforcing safer coding practices.
-Trusted Types can also help simplify the auditing of application code.
-
-<docs-callout title="Trusted types">
-
-Trusted Types might not yet be available in all browsers your application targets.
-In the case your Trusted-Types-enabled application runs in a browser that doesn't support Trusted Types, the features of the application are preserved. Your application is guarded against XSS by way of Angular's DomSanitizer.
-See [caniuse.com/trusted-types](https://caniuse.com/trusted-types) for the current browser support.
+Всегда следите за тем, чтобы предоставляемые вами nonce были <strong>уникальными для каждого запроса</strong>, и чтобы
+их нельзя было предсказать или угадать.
+Если злоумышленник сможет предсказать будущие nonce, он сможет обойти защиту, предлагаемую CSP.
 
 </docs-callout>
 
-To enforce Trusted Types for your application, you must configure your application's web server to emit HTTP headers with one of the following Angular policies:
+ПРИМЕЧАНИЕ: Если вы хотите [встроить критический CSS](/tools/cli/build#critical-css-inlining) вашего приложения, вы не
+можете использовать токен `CSP_NONCE`, и вам следует предпочесть опцию `autoCsp` или установить атрибут `ngCspNonce` на
+корневом элементе приложения.
 
-| Policies                 | Detail                                                                                                                                                                                                                                                                                     |
-| :----------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `angular`                | This policy is used in security-reviewed code that is internal to Angular, and is required for Angular to function when Trusted Types are enforced. Any inline template values or content sanitized by Angular is treated as safe by this policy.                                          |
-| `angular#bundler`        | This policy is used by the Angular CLI bundler when creating lazy chunk files.                                                                                                                                                                                                             |
-| `angular#unsafe-bypass`  | This policy is used for applications that use any of the methods in Angular's [DomSanitizer](api/platform-browser/DomSanitizer) that bypass security, such as `bypassSecurityTrustHtml`. Any application that uses these methods must enable this policy.                                  |
-| `angular#unsafe-jit`     | This policy is used by the [Just-In-Time (JIT) compiler](api/core/Compiler). You must enable this policy if your application interacts directly with the JIT compiler or is running in JIT mode using the [platform browser dynamic](api/platform-browser-dynamic/platformBrowserDynamic). |
-| `angular#unsafe-upgrade` | This policy is used by the [@angular/upgrade](api/upgrade/static/UpgradeModule) package. You must enable this policy if your application is an AngularJS hybrid.                                                                                                                           |
+Если вы не можете генерировать nonce в своем проекте, вы можете разрешить встроенные стили, добавив `'unsafe-inline'` в
+раздел `style-src` заголовка CSP.
 
-You should configure the HTTP headers for Trusted Types in the following locations:
+| Разделы                                          | Подробности                                                                                                                                                                                                                               |
+| :----------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default-src 'self';`                            | Позволяет странице загружать все необходимые ресурсы из того же источника.                                                                                                                                                                |
+| `style-src 'self' 'nonce-randomNonceGoesHere';`  | Позволяет странице загружать глобальные стили из того же источника (`'self'`) и стили, вставленные Angular с `nonce-randomNonceGoesHere`.                                                                                                 |
+| `script-src 'self' 'nonce-randomNonceGoesHere';` | Позволяет странице загружать JavaScript из того же источника (`'self'`) и скрипты, вставленные Angular CLI с `nonce-randomNonceGoesHere`. Это требуется только в том случае, если вы используете встраивание (inlining) критического CSS. |
 
-- Production serving infrastructure
-- Angular CLI \(`ng serve`\), using the `headers` property in the `angular.json` file, for local development and end-to-end testing
-- Karma \(`ng test`\), using the `customHeaders` property in the `karma.config.js` file, for unit testing
+Самому Angular для корректной работы требуются только эти настройки.
+По мере роста вашего проекта вам может потребоваться расширить настройки CSP для поддержки дополнительных функций,
+специфичных для вашего приложения.
 
-The following is an example of a header specifically configured for Trusted Types and Angular:
+### Принудительное использование Trusted Types
+
+Рекомендуется использовать [Trusted Types](https://w3c.github.io/trusted-types/dist/spec/) как способ защиты ваших
+приложений от атак межсайтового скриптинга.
+Trusted Types — это функция [веб-платформы](https://en.wikipedia.org/wiki/Web_platform), которая может помочь
+предотвратить атаки межсайтового скриптинга путем принудительного использования более безопасных методов кодирования.
+Trusted Types также могут помочь упростить аудит кода приложения.
+
+<docs-callout title="Trusted Types">
+
+Trusted Types могут быть еще недоступны во всех браузерах, на которые ориентировано ваше приложение.
+В случае, если ваше приложение с включенными Trusted Types запускается в браузере, который не поддерживает Trusted
+Types, функции приложения сохраняются. Ваше приложение защищено от XSS с помощью DomSanitizer Angular.
+Текущую поддержку браузерами см. на [caniuse.com/trusted-types](https://caniuse.com/trusted-types).
+
+</docs-callout>
+
+Чтобы принудительно использовать Trusted Types для вашего приложения, вы должны настроить веб-сервер вашего приложения
+на отправку HTTP-заголовков с одной из следующих политик Angular:
+
+| Политики                 | Подробности                                                                                                                                                                                                                                                                                                                   |
+| :----------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `angular`                | Эта политика используется в коде, прошедшем проверку безопасности и являющемся внутренним для Angular, и необходима для функционирования Angular при принудительном использовании Trusted Types. Любые значения встроенных шаблонов или контент, прошедший санитизацию Angular, считаются безопасными в рамках этой политики. |
+| `angular#bundler`        | Эта политика используется сборщиком Angular CLI при создании файлов ленивых чанков (lazy chunks).                                                                                                                                                                                                                             |
+| `angular#unsafe-bypass`  | Эта политика используется для приложений, использующих любые методы в [DomSanitizer](api/platform-browser/DomSanitizer) Angular, которые обходят безопасность, такие как `bypassSecurityTrustHtml`. Любое приложение, использующее эти методы, должно включить эту политику.                                                  |
+| `angular#unsafe-jit`     | Эта политика используется [JIT-компилятором (Just-In-Time)](api/core/Compiler). Вы должны включить эту политику, если ваше приложение взаимодействует напрямую с JIT-компилятором или работает в режиме JIT, используя [platform browser dynamic](api/platform-browser-dynamic/platformBrowserDynamic).                       |
+| `angular#unsafe-upgrade` | Эта политика используется пакетом [@angular/upgrade](api/upgrade/static/UpgradeModule). Вы должны включить эту политику, если ваше приложение является гибридным приложением AngularJS.                                                                                                                                       |
+
+Вам следует настроить HTTP-заголовки для Trusted Types в следующих местах:
+
+- Инфраструктура продакшн-сервера
+- Angular CLI (`ng serve`), используя свойство `headers` в файле `angular.json`, для локальной разработки и сквозного (
+  E2E) тестирования
+- Karma (`ng test`), используя свойство `customHeaders` в файле `karma.config.js`, для модульного тестирования
+
+Ниже приведен пример заголовка, специально настроенного для Trusted Types и Angular:
 
 ```html
 Content-Security-Policy: trusted-types angular; require-trusted-types-for 'script';
 ```
 
-An example of a header specifically configured for Trusted Types and Angular applications that use any of Angular's methods in [DomSanitizer](api/platform-browser/DomSanitizer) that bypasses security:
+Пример заголовка, специально настроенного для Trusted Types и приложений Angular, использующих любые методы Angular
+в [DomSanitizer](api/platform-browser/DomSanitizer), которые обходят безопасность:
 
 ```html
 Content-Security-Policy: trusted-types angular angular#unsafe-bypass; require-trusted-types-for 'script';
 ```
 
-The following is an example of a header specifically configured for Trusted Types and Angular applications using JIT:
+Ниже приведен пример заголовка, специально настроенного для Trusted Types и приложений Angular, использующих JIT:
 
 ```html
 Content-Security-Policy: trusted-types angular angular#unsafe-jit; require-trusted-types-for 'script';
 ```
 
-The following is an example of a header specifically configured for Trusted Types and Angular applications that use lazy loading of modules:
+Ниже приведен пример заголовка, специально настроенного для Trusted Types и приложений Angular, использующих ленивую
+загрузку модулей:
 
 ```html
 Content-Security-Policy: trusted-types angular angular#bundler; require-trusted-types-for 'script';
 ```
 
-<docs-callout title="Community contributions">
+<docs-callout title="Вклад сообщества">
 
-To learn more about troubleshooting Trusted Type configurations, the following resource might be helpful:
+Чтобы узнать больше об устранении неполадок конфигураций Trusted Type, может быть полезен следующий ресурс:
 
 [Prevent DOM-based cross-site scripting vulnerabilities with Trusted Types](https://web.dev/trusted-types/#how-to-use-trusted-types)
 
 </docs-callout>
 
-### Use the AOT template compiler
+### Используйте AOT-компилятор шаблонов
 
-The AOT template compiler prevents a whole class of vulnerabilities called template injection, and greatly improves application performance.
-The AOT template compiler is the default compiler used by Angular CLI applications, and you should use it in all production deployments.
+AOT-компилятор шаблонов предотвращает целый класс уязвимостей, называемых инъекцией шаблона, и значительно повышает
+производительность приложения.
+AOT-компилятор шаблонов является компилятором по умолчанию, используемым приложениями Angular CLI, и его следует
+использовать во всех продакшн-сборках.
 
-An alternative to the AOT compiler is the JIT compiler which compiles templates to executable template code within the browser at runtime.
-Angular trusts template code, so dynamically generating templates and compiling them, in particular templates containing user data, circumvents Angular's built-in protections. This is a security anti-pattern.
-For information about dynamically constructing forms in a safe way, see the [Dynamic Forms](guide/forms/dynamic-forms) guide.
+Альтернативой AOT-компилятору является JIT-компилятор, который компилирует шаблоны в исполняемый код шаблона в браузере
+во время выполнения.
+Angular доверяет коду шаблона, поэтому динамическая генерация шаблонов и их компиляция, в частности шаблонов, содержащих
+пользовательские данные, обходит встроенные средства защиты Angular. Это антипаттерн безопасности.
+Информацию о безопасном динамическом создании форм см. в руководстве [Динамические формы](guide/forms/dynamic-forms).
 
-### Server-side XSS protection
+### Защита от XSS на стороне сервера
 
-HTML constructed on the server is vulnerable to injection attacks.
-Injecting template code into an Angular application is the same as injecting executable code into the application:
-It gives the attacker full control over the application.
-To prevent this, use a templating language that automatically escapes values to prevent XSS vulnerabilities on the server.
-Don't create Angular templates on the server side using a templating language. This carries a high risk of introducing template-injection vulnerabilities.
+HTML, созданный на сервере, уязвим для атак инъекции.
+Внедрение кода шаблона в приложение Angular равносильно внедрению исполняемого кода в приложение:
+Это дает злоумышленнику полный контроль над приложением.
+Чтобы предотвратить это, используйте язык шаблонов, который автоматически экранирует значения для предотвращения
+XSS-уязвимостей на сервере.
+Не создавайте шаблоны Angular на стороне сервера с использованием языка шаблонов. Это несет высокий риск возникновения
+уязвимостей инъекции шаблона.
 
-## HTTP-level vulnerabilities
+## Уязвимости уровня HTTP
 
-Angular has built-in support to help prevent two common HTTP vulnerabilities, cross-site request forgery \(CSRF or XSRF\) and cross-site script inclusion \(XSSI\).
-Both of these must be mitigated primarily on the server side, but Angular provides helpers to make integration on the client side easier.
+Angular имеет встроенную поддержку для предотвращения двух распространенных HTTP-уязвимостей: межсайтовой подделки
+запроса (CSRF или XSRF) и межсайтового включения скриптов (XSSI).
+Обе эти уязвимости должны устраняться в первую очередь на стороне сервера, но Angular предоставляет вспомогательные
+средства для упрощения интеграции на стороне клиента.
 
-### Cross-site request forgery
+### Межсайтовая подделка запроса (CSRF)
 
-In a cross-site request forgery \(CSRF or XSRF\), an attacker tricks the user into visiting a different web page \(such as `evil.com`\) with malignant code. This web page secretly sends a malicious request to the application's web server \(such as `example-bank.com`\).
+При межсайтовой подделке запроса (CSRF или XSRF) злоумышленник обманом заставляет пользователя посетить другую
+веб-страницу (например, `evil.com`) с вредоносным кодом. Эта веб-страница тайно отправляет вредоносный запрос на
+веб-сервер приложения (например, `example-bank.com`).
 
-Assume the user is logged into the application at `example-bank.com`.
-The user opens an email and clicks a link to `evil.com`, which opens in a new tab.
+Предположим, что пользователь вошел в приложение на `example-bank.com`.
+Пользователь открывает электронное письмо и нажимает ссылку на `evil.com`, которая открывается в новой вкладке.
 
-The `evil.com` page immediately sends a malicious request to `example-bank.com`.
-Perhaps it's a request to transfer money from the user's account to the attacker's account.
-The browser automatically sends the `example-bank.com` cookies, including the authentication cookie, with this request.
+Страница `evil.com` немедленно отправляет вредоносный запрос на `example-bank.com`.
+Возможно, это запрос на перевод денег со счета пользователя на счет злоумышленника.
+Браузер автоматически отправляет файлы cookie `example-bank.com`, включая cookie аутентификации, с этим запросом.
 
-If the `example-bank.com` server lacks XSRF protection, it can't tell the difference between a legitimate request from the application and the forged request from `evil.com`.
+Если сервер `example-bank.com` не имеет защиты от XSRF, он не сможет отличить легитимный запрос от приложения и
+поддельный запрос от `evil.com`.
 
-To prevent this, the application must ensure that a user request originates from the real application, not from a different site.
-The server and client must cooperate to thwart this attack.
+Чтобы предотвратить это, приложение должно гарантировать, что запрос пользователя исходит из реального приложения, а не
+с другого сайта.
+Сервер и клиент должны сотрудничать, чтобы предотвратить эту атаку.
 
-In a common anti-XSRF technique, the application server sends a randomly created authentication token in a cookie.
-The client code reads the cookie and adds a custom request header with the token in all following requests.
-The server compares the received cookie value to the request header value and rejects the request if the values are missing or don't match.
+В распространенной технике защиты от XSRF сервер приложения отправляет случайно созданный токен аутентификации в cookie.
+Клиентский код считывает cookie и добавляет пользовательский заголовок запроса с токеном во все последующие запросы.
+Сервер сравнивает полученное значение cookie со значением заголовка запроса и отклоняет запрос, если значения
+отсутствуют или не совпадают.
 
-This technique is effective because all browsers implement the _same origin policy_.
-Only code from the website on which cookies are set can read the cookies from that site and set custom headers on requests to that site.
-That means only your application can read this cookie token and set the custom header.
-The malicious code on `evil.com` can't.
+Эта техника эффективна, потому что все браузеры реализуют _политику одинакового источника_ (same origin policy).
+Только код с веб-сайта, на котором установлены файлы cookie, может читать файлы cookie с этого сайта и устанавливать
+пользовательские заголовки для запросов к этому сайту.
+Это означает, что только ваше приложение может прочитать этот токен из cookie и установить пользовательский заголовок.
+Вредоносный код на `evil.com` этого сделать не может.
 
-### `HttpClient` XSRF/CSRF security
+### Безопасность XSRF/CSRF в `HttpClient`
 
-`HttpClient` supports a [common mechanism](https://en.wikipedia.org/wiki/Cross-site_request_forgery#Cookie-to-header_token) used to prevent XSRF attacks. When performing HTTP requests, an interceptor reads a token from a cookie, by default `XSRF-TOKEN`, and sets it as an HTTP header, `X-XSRF-TOKEN`. Because only code that runs on your domain could read the cookie, the backend can be certain that the HTTP request came from your client application and not an attacker.
+`HttpClient`
+поддерживает [распространенный механизм](https://en.wikipedia.org/wiki/Cross-site_request_forgery#Cookie-to-header_token),
+используемый для предотвращения атак XSRF. При выполнении HTTP-запросов Interceptor считывает токен из cookie (по
+умолчанию `XSRF-TOKEN`) и устанавливает его в качестве HTTP-заголовка `X-XSRF-TOKEN`. Поскольку только код, работающий в
+вашем домене, может прочитать cookie, бэкенд может быть уверен, что HTTP-запрос пришел из вашего клиентского приложения,
+а не от злоумышленника.
 
-By default, an interceptor sends this header on all mutating requests (such as `POST`) to relative URLs, but not on GET/HEAD requests or on requests with an absolute URL.
+По умолчанию Interceptor отправляет этот заголовок во всех изменяющих запросах (таких как `POST`) к относительным URL,
+но не в запросах GET/HEAD или запросах с абсолютным URL.
 
-<docs-callout helpful title="Why not protect GET requests?">
-CSRF protection is only needed for requests that can change state on the backend. By their nature, CSRF attacks cross domain boundaries, and the web's [same-origin policy](https://developer.mozilla.org/docs/Web/Security/Same-origin_policy) will prevent an attacking page from retrieving the results of authenticated GET requests.
+<docs-callout helpful title="Почему не защищаются GET-запросы?">
+Защита от CSRF необходима только для запросов, которые могут изменить состояние на бэкенде. По своей природе атаки CSRF пересекают границы доменов, и [политика одинакового источника](https://developer.mozilla.org/docs/Web/Security/Same-origin_policy) в вебе не позволит атакующей странице получить результаты аутентифицированных GET-запросов.
 </docs-callout>
 
-To take advantage of this, your server needs to set a token in a JavaScript readable session cookie called `XSRF-TOKEN` on either the page load or the first GET request. On subsequent requests the server can verify that the cookie matches the `X-XSRF-TOKEN` HTTP header, and therefore be sure that only code running on your domain could have sent the request. The token must be unique for each user and must be verifiable by the server; this prevents the client from making up its own tokens. Set the token to a digest of your site's authentication cookie with a salt for added security.
+Чтобы воспользоваться этим, ваш сервер должен установить токен в читаемом JavaScript cookie сессии с именем `XSRF-TOKEN`
+либо при загрузке страницы, либо при первом GET-запросе. При последующих запросах сервер может проверить, совпадает ли
+cookie с HTTP-заголовком `X-XSRF-TOKEN`, и, следовательно, быть уверенным, что только код, работающий в вашем домене,
+мог отправить запрос. Токен должен быть уникальным для каждого пользователя и должен проверяться сервером; это
+предотвращает создание клиентом собственных токенов. Установите токен как дайджест аутентификационного cookie вашего
+сайта с солью для дополнительной безопасности.
 
-To prevent collisions in environments where multiple Angular apps share the same domain or subdomain, give each application a unique cookie name.
+Чтобы предотвратить коллизии в средах, где несколько приложений Angular используют один и тот же домен или поддомен,
+дайте каждому приложению уникальное имя cookie.
 
-<docs-callout important title="HttpClient supports only the client half of the XSRF protection scheme">
-  Your backend service must be configured to set the cookie for your page, and to verify that the header is present on all eligible requests. Failing to do so renders Angular's default protection ineffective.
+<docs-callout important title="HttpClient поддерживает только клиентскую часть схемы защиты от XSRF">
+  Ваш бэкенд-сервис должен быть настроен на установку cookie для вашей страницы и проверку наличия заголовка во всех подходящих запросах. Невыполнение этого требования делает защиту Angular по умолчанию неэффективной.
 </docs-callout>
 
-### Configure custom cookie/header names
+### Настройка пользовательских имен cookie/заголовка
 
-If your backend service uses different names for the XSRF token cookie or header, use `withXsrfConfiguration` to override the defaults.
+Если ваш бэкенд-сервис использует другие имена для cookie или заголовка токена XSRF, используйте `withXsrfConfiguration`
+для переопределения значений по умолчанию.
 
-Add it to the `provideHttpClient` call as follows:
+Добавьте его в вызов `provideHttpClient` следующим образом:
 
 ```ts
 export const appConfig: ApplicationConfig = {
@@ -332,9 +417,10 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-### Disabling XSRF protection
+### Отключение защиты от XSRF
 
-If the built-in XSRF protection mechanism doesn't work for your application, you can disable it using the `withNoXsrfProtection` feature:
+Если встроенный механизм защиты от XSRF не подходит для вашего приложения, вы можете отключить его с помощью функции
+`withNoXsrfProtection`:
 
 ```ts
 export const appConfig: ApplicationConfig = {
@@ -346,24 +432,36 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-For information about CSRF at the Open Web Application Security Project \(OWASP\), see [Cross-Site Request Forgery (CSRF)](https://owasp.org/www-community/attacks/csrf) and [Cross-Site Request Forgery (CSRF) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html).
-The Stanford University paper [Robust Defenses for Cross-Site Request Forgery](https://seclab.stanford.edu/websec/csrf/csrf.pdf) is a rich source of detail.
+Информацию о CSRF в Open Web Application Security Project (OWASP) см. в
+разделах [Cross-Site Request Forgery (CSRF)](https://owasp.org/www-community/attacks/csrf)
+и [Cross-Site Request Forgery (CSRF) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html).
+Статья Стэнфордского
+университета [Robust Defenses for Cross-Site Request Forgery](https://seclab.stanford.edu/websec/csrf/csrf.pdf) является
+богатым источником подробностей.
 
-See also Dave Smith's [talk on XSRF at AngularConnect 2016](https://www.youtube.com/watch?v=9inczw6qtpY 'Cross Site Request Funkery Securing Your Angular Apps From Evil Doers').
+См. также доклад Дэйва
+Смита [об XSRF на AngularConnect 2016](https://www.youtube.com/watch?v=9inczw6qtpY 'Cross Site Request Funkery Securing Your Angular Apps From Evil Doers').
 
-### Cross-site script inclusion (XSSI)
+### Межсайтовое включение скриптов (XSSI)
 
-Cross-site script inclusion, also known as JSON vulnerability, can allow an attacker's website to read data from a JSON API.
-The attack works on older browsers by overriding built-in JavaScript object constructors, and then including an API URL using a `<script>` tag.
+Межсайтовое включение скриптов, также известное как уязвимость JSON, может позволить веб-сайту злоумышленника считывать
+данные из JSON API.
+Атака работает в старых браузерах путем переопределения встроенных конструкторов объектов JavaScript и последующего
+включения URL API с использованием тега `<script>`.
 
-This attack is only successful if the returned JSON is executable as JavaScript.
-Servers can prevent an attack by prefixing all JSON responses to make them non-executable, by convention, using the well-known string `")]}',\n"`.
+Эта атака успешна только в том случае, если возвращаемый JSON исполняется как JavaScript.
+Серверы могут предотвратить атаку, добавляя префикс ко всем ответам JSON, чтобы сделать их неисполняемыми, по соглашению
+используя известную строку `")]}',\n"`.
 
-Angular's `HttpClient` library recognizes this convention and automatically strips the string `")]}',\n"` from all responses before further parsing.
+Библиотека `HttpClient` Angular распознает это соглашение и автоматически удаляет строку `")]}',\n"` из всех ответов
+перед дальнейшим парсингом.
 
-For more information, see the XSSI section of this [Google web security blog post](https://security.googleblog.com/2011/05/website-security-for-webmasters.html).
+Для получения дополнительной информации см. раздел XSSI в
+этом [посте блога Google по веб-безопасности](https://security.googleblog.com/2011/05/website-security-for-webmasters.html).
 
-## Auditing Angular applications
+## Аудит приложений Angular
 
-Angular applications must follow the same security principles as regular web applications, and must be audited as such.
-Angular-specific APIs that should be audited in a security review, such as the [_bypassSecurityTrust_](#trusting-safe-values) methods, are marked in the documentation as security sensitive.
+Приложения Angular должны следовать тем же принципам безопасности, что и обычные веб-приложения, и должны проходить
+аудит соответствующим образом.
+Специфичные для Angular API, которые должны проверяться в ходе аудита безопасности, такие как методы [
+_bypassSecurityTrust_](#trusting-safe-values), помечены в документации как чувствительные к безопасности.

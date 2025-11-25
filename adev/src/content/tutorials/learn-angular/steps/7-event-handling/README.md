@@ -1,14 +1,18 @@
-# Event handling
+# Обработка событий
 
-Event handling enables interactive features on web apps. It gives you the ability as a developer to respond to user actions like button presses, form submissions and more.
+Обработка событий обеспечивает интерактивность веб-приложений. Она дает вам, как разработчику, возможность реагировать
+на действия пользователя, такие как нажатия кнопок, отправка форм и многое другое.
 
-Note: Learn more about [handling user interaction in the essentials guide](/essentials/templates#handling-user-interaction).
+Note: Подробнее
+об [обработке взаимодействия с пользователем читайте в руководстве по основам](/essentials/templates#handling-user-interaction).
 
-In this activity, you'll learn how to add an event handler.
+В этом упражнении вы узнаете, как добавить обработчик событий.
 
 <hr />
 
-In Angular you bind to events with the parentheses syntax `()`. On a given element, wrap the event you want to bind to with parentheses and set an event handler. Consider this `button` example:
+В Angular привязка к событиям осуществляется с помощью синтаксиса круглых скобок `()`. Оберните название события, к
+которому хотите привязаться, в круглые скобки на нужном элементе и укажите обработчик события. Рассмотрим этот пример с
+`button`:
 
 ```angular-ts
 @Component({
@@ -22,14 +26,15 @@ export class App {
 }
 ```
 
-In this example, the `greet()` function will run every time the button is clicked. Take note that the `greet()` syntax includes the trailing parenthesis.
+В этом примере функция `greet()` будет запускаться каждый раз при нажатии на кнопку. Обратите внимание, что синтаксис
+`greet()` включает скобки вызова функции.
 
-Alright, your turn to give this a try:
+Хорошо, теперь ваша очередь попробовать:
 
 <docs-workflow>
 
-<docs-step title="Add an event handler">
-Add the `showSecretMessage()` event handler function in the `App` class. Use the following code as the implementation:
+<docs-step title="Добавление обработчика событий">
+Добавьте функцию-обработчик событий `showSecretMessage()` в класс `App`. Используйте следующий код для реализации:
 
 ```ts
 showSecretMessage() {
@@ -39,8 +44,8 @@ showSecretMessage() {
 
 </docs-step>
 
-<docs-step title="Bind to the template event">
-Update the template code in `app.ts` to bind to the `mouseover` event of the `section` element.
+<docs-step title="Привязка к событию в шаблоне">
+Обновите код шаблона в `app.ts`, чтобы выполнить привязку к событию `mouseover` элемента `section`.
 
 ```angular-html
 <section (mouseover)="showSecretMessage()">
@@ -50,4 +55,5 @@ Update the template code in `app.ts` to bind to the `mouseover` event of the `se
 
 </docs-workflow>
 
-And with a few steps in the code you've created your first event handler in Angular. Seems like you are getting pretty good at this, keep up the good work.
+Всего за несколько шагов в коде вы создали свой первый обработчик событий в Angular. Похоже, у вас отлично получается,
+так держать.

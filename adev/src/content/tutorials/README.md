@@ -1,101 +1,116 @@
-# Angular embedded docs tutorial
+# Руководство по встроенным учебным материалам Angular
 
-- [Tutorial files](#tutorial-files)
-- [Tutorials directory structure](#tutorials-directory-structure)
-- [Reserved tutorials directories](#reserved-tutorials-directories)
+- [Файлы руководства](#tutorial-files)
+- [Структура директорий руководств](#tutorials-directory-structure)
+- [Зарезервированные директории руководств](#reserved-tutorials-directories)
 
-## Tutorial files
+## Файлы руководства
 
-The tutorials content consists of the tutorial content, source code and configuration.
+Содержимое учебных материалов (туториалов) состоит из контента, исходного кода и конфигурации.
 
-### Content: `README.md`
+### Контент: `README.md`
 
-The tutorial content must be located in a `README.md` file in the tutorial directory.
+Контент руководства должен находиться в файле `README.md` в директории руководства.
 
-Taking the `learn-angular` tutorial as an example, see: [`src/content/tutorials/learn-angular/intro/README.md`](/src/content/tutorials/learn-angular/intro/README.md)
+На примере руководства `learn-angular`, см.: [
+`src/content/tutorials/learn-angular/intro/README.md`](/src/content/tutorials/learn-angular/intro/README.md)
 
-### Configuration: `config.json`
+### Конфигурация: `config.json`
 
-Each tutorial is defined by a `config.json`, which can have the following options:
+Каждое руководство определяется файлом `config.json`, который может содержать следующие опции:
 
-- `title`: defines the tutorial title used in the tutorial nav
-- `nextTutorial`: the path of the next tutorial (only in `intro/` step)
-- `src`: the relative path to an external directory, which defines the tutorial source code used in the embedded editor
-- `answerSrc`: the relative path to an external directory, which defines the tutorial answer used in the embedded editor
-- `openFiles`: an array of files to be open in the editor
-- `type`: the type denotes how the tutorial will be presented and which components are necessary for that tutorial
-  - `cli`: a tutorial with a `cli` type will contain only the content and an interactive terminal with the Angular CLI
-  - `editor`: used for the complete embedded editor, containing the code editor, the preview, an interactive terminal and the console with outputs from the dev server
-  - `local`: disables the embedded editor and shows only the content
-  - `editor-only`: a special config used for the tutorial playground and the homepage playground, which disables the content and shows only the embedded editor
+- `title`: определяет заголовок руководства, используемый в навигации.
+- `nextTutorial`: путь к следующему руководству (только на этапе `intro/`).
+- `src`: относительный путь к внешней директории, определяющей исходный код руководства, используемый во встроенном
+  редакторе.
+- `answerSrc`: относительный путь к внешней директории, определяющей решение (ответ) руководства, используемое во
+  встроенном редакторе.
+- `openFiles`: массив файлов, которые должны быть открыты в редакторе.
+- `type`: тип определяет, как будет представлено руководство и какие компоненты для него необходимы:
+  - `cli`: руководство с типом `cli` будет содержать только контент и интерактивный терминал с Angular CLI.
+  - `editor`: используется для полноценного встроенного редактора, содержащего редактор кода, превью, интерактивный
+    терминал и консоль с выводом dev-сервера.
+  - `local`: отключает встроенный редактор и показывает только контент.
+  - `editor-only`: специальная конфигурация, используемая для песочницы (playground) руководств и песочницы главной
+    страницы, которая отключает контент и показывает только встроенный редактор.
 
-### Source code
+### Исходный код
 
-The tutorial source code includes every file in the tutorial directory, except `README.md` and `config.json`.
+Исходный код руководства включает все файлы в директории руководства, за исключением `README.md` и `config.json`.
 
-The tutorial source code has precedence over the [`common`](#common) project file, so if a file exists in both [`common`](#common) and in the tutorial directory, containing the same relative path, the tutorial file will override the [`common`](#common) file.
+Исходный код руководства имеет приоритет над файлами проекта [`common`](#common). Поэтому, если файл существует и в [
+`common`](#common), и в директории руководства с одинаковым относительным путем, файл руководства переопределит файл
+из [`common`](#common).
 
-## Tutorials directory structure
+## Структура директорий руководств
 
-A tutorial is composed of an introduction and steps. Both the intro and each step contains its own content, config and source code.
+Руководство состоит из введения и шагов. И введение, и каждый шаг содержат свой собственный контент, конфигурацию и
+исходный код.
 
-Taking the `learn-angular` tutorial as an example:
+На примере руководства `learn-angular`:
 
-### Introduction
+### Введение
 
 [`src/content/tutorials/learn-angular/intro`](/src/content/tutorials/learn-angular/intro)
 
-is the introduction of the tutorial, which will live in the `/tutorials/learn-angular` route.
+это введение руководства, которое будет размещаться по маршруту `/tutorials/learn-angular`.
 
-### Steps
+### Шаги
 
-[`src/content/tutorials/learn-angular/steps`](/src/content/tutorials/learn-angular/steps) is the directory that contains the tutorial steps.
+[`src/content/tutorials/learn-angular/steps`](/src/content/tutorials/learn-angular/steps) — это директория, содержащая
+шаги руководства.
 
-These are some examples from the `learn-angular` tutorial:
+Вот несколько примеров из руководства `learn-angular`:
 
-- [`learn-angular/steps/1-components-in-angular`](/src/content/tutorials/learn-angular/steps/1-components-in-angular): The route will be `/tutorials/learn-angular/components-in-angular`
-- [`learn-angular/steps/2-updating-the-component-class`](/src/content/tutorials/learn-angular/steps/2-updating-the-component-class): The route will be `/tutorials/learn-angular/updating-the-component-class`
+- [`learn-angular/steps/1-components-in-angular`](/src/content/tutorials/learn-angular/steps/1-components-in-angular):
+  Маршрут будет `/tutorials/learn-angular/components-in-angular`
+- [
+  `learn-angular/steps/2-updating-the-component-class`](/src/content/tutorials/learn-angular/steps/2-updating-the-component-class):
+  Маршрут будет `/tutorials/learn-angular/updating-the-component-class`
 
-Each step directory must start with a number followed by a hyphen, then followed by the step pathname.
+Имя директории каждого шага должно начинаться с цифры, за которой следует дефис, а затем название пути шага.
 
-- The number denotes the step, defining which will be the previous and next step within a tutorial.
-- The hyphen is a delimiter :).
-- The pathname taken from the directory name defines the step URL.
+- Цифра обозначает шаг, определяя, каким будет предыдущий и следующий шаг внутри руководства.
+- Дефис — это разделитель :).
+- Название пути, взятое из имени директории, определяет URL шага.
 
-## Reserved tutorials directories
+## Зарезервированные директории руководств
 
 ### `common`
 
-The common project is a complete Angular project that is reused by all tutorials. It contains all
-dependencies(`package.json`, `package-lock.json`), project configuration(`tsconfig.json`, `angular.json`) and main files to bootstrap the application(`index.html`, `main.ts`, `app.module.ts`).
+Проект `common` — это полноценный Angular-проект, который повторно используется всеми руководствами. Он содержит все
+зависимости (`package.json`, `package-lock.json`), конфигурацию проекта (`tsconfig.json`, `angular.json`) и основные
+файлы для начальной загрузки приложения (`index.html`, `main.ts`, `app.module.ts`).
 
-A common project is used for a variety of reasons:
+Общий проект используется по ряду причин:
 
-- Avoid duplication of files in tutorials.
-- Optimize in-app performance by requesting the common project files and dependencies only once, benefiting from the
-  browser cache on subsequent requests.
-- Require a single `npm install` for all tutorials, therefore reducing the time to interactive with the tutorial
-  when navigating different tutorials and steps.
-- Provide a consistent environment for all tutorials.
-- Allow each tutorial to focus on the specific source code for what's being taught and not on the project setup.
+- Избежание дублирования файлов в руководствах.
+- Оптимизация производительности внутри приложения за счет запроса файлов общего проекта и зависимостей только один раз,
+  используя преимущества кэша браузера при последующих запросах.
+- Требуется единственный `npm install` для всех руководств, что сокращает время до интерактивности при переходе между
+  различными руководствами и шагами.
+- Обеспечение единообразного окружения для всех руководств.
+- Возможность для каждого руководства сосредоточиться на конкретном исходном коде изучаемой темы, а не на настройке
+  проекта.
 
-See [`src/content/tutorials/common`](/src/content/tutorials/common)
+См. [`src/content/tutorials/common`](/src/content/tutorials/common)
 
 ### `playground`
 
-The playground contains the source code for the tutorials playground at `/playground`. It should not contain any content.
+Директория `playground` содержит исходный код для песочницы руководств по адресу `/playground`. Она не должна содержать
+никакого контента.
 
-See [`src/content/tutorials/playground`](/src/content/tutorials/playground)
+См. [`src/content/tutorials/playground`](/src/content/tutorials/playground)
 
 ### `homepage`
 
-The homepage contains the source code for the homepage playground. It should not contain any content.
+Директория `homepage` содержит исходный код для песочницы главной страницы. Она не должна содержать никакого контента.
 
-See [`src/content/tutorials/homepage`](/src/content/tutorials/homepage)
+См. [`src/content/tutorials/homepage`](/src/content/tutorials/homepage)
 
-## Update dependencies
+## Обновление зависимостей
 
-To update the dependencies of all tutorials you can run the following script
+Чтобы обновить зависимости всех руководств, вы можете запустить следующий скрипт:
 
 ```bash
 rm ./adev/src/content/tutorials/homepage/package-lock.json  ./adev/src/content/tutorials/first-app/common/package-lock.json ./adev/src/content/tutorials/learn-angular/common/package-lock.json ./adev/src/content/tutorials/playground/common/package-lock.json ./adev/src/content/tutorials/deferrable-views/common/package-lock.json

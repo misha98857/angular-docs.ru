@@ -1,24 +1,25 @@
-# Tutorials
+# Учебные руководства
 
-Welcome to the Angular tutorials! These tutorials will guide you through the core concepts of the framework, and get you started building performant, scalable apps.
+Добро пожаловать в учебные руководства Angular! Эти материалы познакомят вас с основными концепциями фреймворка и
+помогут начать создание производительных и масштабируемых приложений.
 
 <docs-card-container>
-  <docs-card title="Learn Angular in your browser" link="Start coding" href="tutorials/learn-angular" imgSrc="adev/src/assets/images/learn-angular-browser.svg">
-    via the Playground
+  <docs-card title="Изучите Angular в браузере" link="Начать писать код" href="tutorials/learn-angular" imgSrc="adev/src/assets/images/learn-angular-browser.svg">
+    через Playground
   </docs-card>
-  <docs-card title="Angular AI Tutor" link="Installation and usage instructions" href="ai/ai-tutor" imgSrc="adev/src/assets/images/learn-angular-local.svg">
-    via MCP Server
+  <docs-card title="ИИ-наставник Angular" link="Инструкции по установке и использованию" href="ai/ai-tutor" imgSrc="adev/src/assets/images/learn-angular-local.svg">
+    через MCP-сервер
   </docs-card>
-  <docs-card title="Build your first Angular app locally" link="Start coding" href="tutorials/first-app" imgSrc="adev/src/assets/images/learn-angular-local.svg">
-    via npm
+  <docs-card title="Создайте свое первое приложение Angular локально" link="Начать писать код" href="tutorials/first-app" imgSrc="adev/src/assets/images/learn-angular-local.svg">
+    с помощью npm
   </docs-card>
-  <docs-card title="Learn signals" link="Start coding" href="tutorials/signals" imgSrc="adev/src/assets/images/learn-angular-local.svg">
-    via the Playground
+  <docs-card title="Изучите сигналы" link="Начать писать код" href="tutorials/signals" imgSrc="adev/src/assets/images/learn-angular-local.svg">
+    через Playground
   </docs-card>
-  <docs-card title="Deferrable views" link="Start coding" href="tutorials/deferrable-views" imgSrc="adev/src/assets/images/ang_illustrations-04.svg">
-    via the Playground
+  <docs-card title="Откладываемые представления" link="Начать писать код" href="tutorials/deferrable-views" imgSrc="adev/src/assets/images/ang_illustrations-04.svg">
+    через Playground
   </docs-card>
-  <docs-card title="Learn signals forms" link="Start coding" href="tutorials/signal-forms" imgSrc="adev/src/assets/images/learn-angular-local.svg">
-    via the Playground
+  <docs-card title="Изучите формы на сигналах" link="Начать писать код" href="tutorials/signal-forms" imgSrc="adev/src/assets/images/learn-angular-local.svg">
+    через Playground
   </docs-card>
 </docs-card-container>

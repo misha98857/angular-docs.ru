@@ -1,14 +1,19 @@
-# Structural directives
+# Структурные директивы
 
-Structural directives are directives applied to an `<ng-template>` element that conditionally or repeatedly render the content of that `<ng-template>`.
+Структурные директивы — это директивы, применяемые к элементу `<ng-template>`, которые условно или многократно рендерят
+содержимое этого `<ng-template>`.
 
-## Example use case
+## Пример использования
 
-In this guide you'll build a structural directive which fetches data from a given data source and renders its template when that data is available. This directive is called `SelectDirective`, after the SQL keyword `SELECT`, and match it with an attribute selector `[select]`.
+В этом руководстве вы создадите структурную директиву, которая получает данные из заданного источника данных и рендерит
+свой шаблон, когда эти данные доступны. Эта директива называется `SelectDirective` (в честь SQL-ключевого слова
+`SELECT`) и соответствует селектору атрибута `[select]`.
 
-`SelectDirective` will have an input naming the data source to be used, which you will call `selectFrom`. The `select` prefix for this input is important for the [shorthand syntax](#structural-directive-shorthand). The directive will instantiate its `<ng-template>` with a template context providing the selected data.
+У `SelectDirective` будет input, указывающий используемый источник данных, который вы назовете `selectFrom`. Префикс
+`select` для этого input'а важен для [сокращенного синтаксиса](#structural-directive-shorthand). Директива создаст
+экземпляр своего `<ng-template>` с контекстом шаблона, предоставляющим выбранные данные.
 
-The following is an example of using this directive directly on an `<ng-template>` would look like:
+Ниже приведен пример того, как использование этой директивы непосредственно на `<ng-template>` будет выглядеть:
 
 ```angular-html
 <ng-template select let-data [selectFrom]="source">
@@ -16,27 +21,34 @@ The following is an example of using this directive directly on an `<ng-template
 </ng-template>
 ```
 
-The structural directive can wait for the data to become available and then render its `<ng-template>`.
+Структурная директива может подождать, пока данные станут доступны, а затем отрендерить свой `<ng-template>`.
 
-HELPFUL: Note that Angular's `<ng-template>` element defines a template that doesn't render anything by default, if you just wrap elements in an `<ng-template>` without applying a structural directive those elements will not be rendered.
+HELPFUL: Обратите внимание, что элемент Angular `<ng-template>` определяет шаблон, который по умолчанию ничего не
+рендерит. Если вы просто обернете элементы в `<ng-template>` без применения структурной директивы, эти элементы не будут
+отрендерены.
 
-For more information, see the [ng-template API](api/core/ng-template) documentation.
+Для получения дополнительной информации см. документацию по [API ng-template](api/core/ng-template).
 
-## Structural directive shorthand
+## Сокращенный синтаксис структурных директив
 
-Angular supports a shorthand syntax for structural directives which avoids the need to explicitly author an `<ng-template>` element.
+Angular поддерживает сокращенный синтаксис для структурных директив, который позволяет избежать необходимости явного
+создания элемента `<ng-template>`.
 
-Structural directives can be applied directly on an element by prefixing the directive attribute selector with an asterisk (`*`), such as `*select`. Angular transforms the asterisk in front of a structural directive into an `<ng-template>` that hosts the directive and surrounds the element and its descendants.
+Структурные директивы можно применять непосредственно к элементу, добавив перед селектором атрибута директивы
+звездочку (`*`), например `*select`. Angular преобразует звездочку перед структурной директивой в `<ng-template>`,
+который содержит директиву и оборачивает элемент и его потомков.
 
-You can use this with `SelectDirective` as follows:
+Вы можете использовать это с `SelectDirective` следующим образом:
 
 ```angular-html
 <p *select="let data from source">The data is: {{data}}</p>
 ```
 
-This example shows the flexibility of structural directive shorthand syntax, which is sometimes called _microsyntax_.
+Этот пример показывает гибкость сокращенного синтаксиса структурных директив, который иногда называют
+_микросинтаксисом_.
 
-When used in this way, only the structural directive and its bindings are applied to the `<ng-template>`. Any other attributes or bindings on the `<p>` tag are left alone. For example, these two forms are equivalent:
+При таком использовании к `<ng-template>` применяются только структурная директива и ее привязки. Любые другие атрибуты
+или привязки тега `<p>` остаются нетронутыми. Например, эти две формы эквивалентны:
 
 ```angular-html
 <!-- Shorthand syntax: -->
@@ -48,32 +60,45 @@ When used in this way, only the structural directive and its bindings are applie
 </ng-template>
 ```
 
-Shorthand syntax is expanded through a set of conventions. A more thorough [grammar](#structural-directive-syntax-reference) is defined below, but in the above example, this transformation can be explained as follows:
+Сокращенный синтаксис разворачивается с помощью набора соглашений. Более
+подробная [грамматика](#structural-directive-syntax-reference) определена ниже, но в приведенном выше примере это
+преобразование можно объяснить следующим образом:
 
-The first part of the `*select` expression is `let data`, which declares a template variable `data`. Since no assignment follows, the template variable is bound to the template context property `$implicit`.
+Первая часть выражения `*select` — это `let data`, которая объявляет переменную шаблона `data`. Поскольку присваивание
+не следует, переменная шаблона привязывается к свойству контекста шаблона `$implicit`.
 
-The second piece of syntax is a key-expression pair, `from source`. `from` is a binding key and `source` is a regular template expression. Binding keys are mapped to properties by transforming them to PascalCase and prepending the structural directive selector. The `from` key is mapped to `selectFrom`, which is then bound to the expression `source`. This is why many structural directives will have inputs that are all prefixed with the structural directive's selector.
+Вторая часть синтаксиса — это пара ключ-выражение, `from source`. `from` — это ключ привязки, а `source` — обычное
+выражение шаблона. Ключи привязки сопоставляются со свойствами путем их преобразования в PascalCase и добавления
+префикса селектора структурной директивы. Ключ `from` сопоставляется с `selectFrom`, который затем привязывается к
+выражению `source`. Именно поэтому многие структурные директивы имеют input'ы, которые начинаются с селектора
+структурной директивы.
 
-## One structural directive per element
+## Одна структурная директива на элемент
 
-You can only apply one structural directive per element when using the shorthand syntax. This is because there is only one `<ng-template>` element onto which that directive gets unwrapped. Multiple directives would require multiple nested `<ng-template>`, and it's unclear which directive should be first. `<ng-container>` can be used when to create wrapper layers when multiple structural directives need to be applied around the same physical DOM element or component, which allows the user to define the nested structure.
+При использовании сокращенного синтаксиса к одному элементу можно применить только одну структурную директиву. Это
+связано с тем, что существует только один элемент `<ng-template>`, в который разворачивается эта директива. Несколько
+директив потребовали бы нескольких вложенных `<ng-template>`, и неясно, какая директива должна быть первой.
+`<ng-container>` можно использовать для создания слоев-оберток, когда необходимо применить несколько структурных
+директив вокруг одного и того же физического DOM-элемента или компонента, что позволяет пользователю определить
+вложенную структуру.
 
-## Creating a structural directive
+## Создание структурной директивы
 
-This section guides you through creating the `SelectDirective`.
+В этом разделе описывается создание `SelectDirective`.
 
 <docs-workflow>
-<docs-step title="Generate the directive">
-Using the Angular CLI, run the following command, where `select` is the name of the directive:
+<docs-step title="Сгенерируйте директиву">
+Используя Angular CLI, выполните следующую команду, где `select` — имя директивы:
 
 ```shell
 ng generate directive select
 ```
 
-Angular creates the directive class and specifies the CSS selector, `[select]`, that identifies the directive in a template.
+Angular создает класс директивы и указывает CSS-селектор `[select]`, который идентифицирует директиву в шаблоне.
 </docs-step>
-<docs-step title="Make the directive structural">
-Import `TemplateRef`, and `ViewContainerRef`. Inject `TemplateRef` and `ViewContainerRef` in the directive as private properties.
+<docs-step title="Сделайте директиву структурной">
+Импортируйте `TemplateRef` и `ViewContainerRef`. Внедрите `TemplateRef` и `ViewContainerRef` в директиву как приватные
+свойства.
 
 ```ts
 import {Directive, TemplateRef, ViewContainerRef} from '@angular/core';
@@ -89,8 +114,8 @@ export class SelectDirective {
 ```
 
 </docs-step>
-<docs-step title="Add the 'selectFrom' input">
-Add a `selectFrom` `input()` property.
+<docs-step title="Добавьте input 'selectFrom'">
+Добавьте свойство `input()` `selectFrom`.
 
 ```ts
 export class SelectDirective {
@@ -101,8 +126,8 @@ export class SelectDirective {
 ```
 
 </docs-step>
-<docs-step title="Add the business logic">
-With `SelectDirective` now scaffolded as a structural directive with its input, you can now add the logic to fetch the data and render the template with it:
+<docs-step title="Добавьте бизнес-логику">
+Теперь, когда `SelectDirective` создана как структурная директива со своим input'ом, вы можете добавить логику для получения данных и рендеринга шаблона с ними:
 
 ```ts
 export class SelectDirective {
@@ -122,11 +147,12 @@ export class SelectDirective {
 </docs-step>
 </docs-workflow>
 
-That's it - `SelectDirective` is up and running. A follow-up step might be to [add template type-checking support](#typing-the-directives-context).
+Вот и всё — `SelectDirective` готова к работе. Следующим шагом может
+быть [добавление поддержки проверки типов в шаблоне](#typing-the-directives-context).
 
-## Structural directive syntax reference
+## Справочник по синтаксису структурных директив
 
-When you write your own structural directives, use the following syntax:
+При написании собственных структурных директив используйте следующий синтаксис:
 
 <docs-code hideCopy language="typescript">
 
@@ -134,7 +160,7 @@ _:prefix="( :let | :expression ) (';' | ',')? ( :let | :as | :keyExp )_"
 
 </docs-code>
 
-The following patterns describe each portion of the structural directive grammar:
+Следующие шаблоны описывают каждую часть грамматики структурной директивы:
 
 ```ts
 as = :export "as" :local ";"?
@@ -142,29 +168,29 @@ keyExp = :key ":"? :expression ("as" :local)? ";"?
 let = "let" :local "=" :export ";"?
 ```
 
-| Keyword      | Details                                            |
-| :----------- | :------------------------------------------------- |
-| `prefix`     | HTML attribute key                                 |
-| `key`        | HTML attribute key                                 |
-| `local`      | Local variable name used in the template           |
-| `export`     | Value exported by the directive under a given name |
-| `expression` | Standard Angular expression                        |
+| Ключевое слово | Подробности                                             |
+| :------------- | :------------------------------------------------------ |
+| `prefix`       | Ключ атрибута HTML                                      |
+| `key`          | Ключ атрибута HTML                                      |
+| `local`        | Имя локальной переменной, используемой в шаблоне        |
+| `export`       | Значение, экспортируемое директивой под заданным именем |
+| `expression`   | Стандартное выражение Angular                           |
 
-### How Angular translates shorthand
+### Как Angular транслирует сокращенный синтаксис
 
-Angular translates structural directive shorthand into the normal binding syntax as follows:
+Angular транслирует сокращенный синтаксис структурных директив в обычный синтаксис привязки следующим образом:
 
-| Shorthand                       | Translation                                                     |
-| :------------------------------ | :-------------------------------------------------------------- |
-| `prefix` and naked `expression` | `[prefix]="expression"`                                         |
-| `keyExp`                        | `[prefixKey]="expression"` (The `prefix` is added to the `key`) |
-| `let local`                     | `let-local="export"`                                            |
+| Сокращение                      | Трансляция                                                |
+| :------------------------------ | :-------------------------------------------------------- |
+| `prefix` и "голое" `expression` | `[prefix]="expression"`                                   |
+| `keyExp`                        | `[prefixKey]="expression"` (`prefix` добавляется к `key`) |
+| `let local`                     | `let-local="export"`                                      |
 
-### Shorthand examples
+### Примеры сокращений
 
-The following table provides shorthand examples:
+В следующей таблице приведены примеры сокращений:
 
-| Shorthand                                                             | How Angular interprets the syntax                                                                             |
+| Сокращение                                                            | Как Angular интерпретирует синтаксис                                                                          |
 | :-------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------ |
 | `*myDir="let item of [1,2,3]"`                                        | `<ng-template myDir let-item [myDirOf]="[1, 2, 3]">`                                                          |
 | `*myDir="let item of [1,2,3] as items; trackBy: myTrack; index as i"` | `<ng-template myDir let-item [myDirOf]="[1,2,3]" let-items="myDirOf" [myDirTrackBy]="myTrack" let-i="index">` |
@@ -172,28 +198,34 @@ The following table provides shorthand examples:
 | `*ngComponentOutlet="componentClass; inputs: myInputs";`              | `<ng-template [ngComponentOutlet]="componentClass" [ngComponentOutletInputs]="myInputs">`                     |
 | `*myDir="exp as value"`                                               | `<ng-template [myDir]="exp" let-value="myDir">`                                                               |
 
-## Improving template type checking for custom directives
+## Улучшение проверки типов шаблонов для пользовательских директив
 
-You can improve template type checking for custom directives by adding template guards to your directive definition.
-These guards help the Angular template type checker find mistakes in the template at compile time, which can avoid runtime errors.
-Two different types of guards are possible:
+Вы можете улучшить проверку типов шаблонов для пользовательских директив, добавив "защитников" шаблона (template guards)
+в определение директивы.
+Эти защитники помогают средству проверки типов шаблонов Angular находить ошибки в шаблоне во время компиляции, что
+позволяет избежать ошибок во время выполнения.
+Возможны два различных типа защитников:
 
-- `ngTemplateGuard_(input)` lets you control how an input expression should be narrowed based on the type of a specific input.
-- `ngTemplateContextGuard` is used to determine the type of the context object for the template, based on the type of the directive itself.
+- `ngTemplateGuard_(input)` позволяет контролировать, как выражение input'а должно быть сужено (narrowed) на основе типа
+  конкретного input'а.
+- `ngTemplateContextGuard` используется для определения типа объекта контекста для шаблона на основе типа самой
+  директивы.
 
-This section provides examples of both kinds of guards.
-For more information, see [Template type checking](tools/cli/template-typecheck 'Template type-checking guide').
+В этом разделе приведены примеры обоих видов защитников.
+Для получения дополнительной информации
+см. [Проверка типов шаблонов](tools/cli/template-typecheck 'Руководство по проверке типов шаблонов').
 
-### Type narrowing with template guards
+### Сужение типов с помощью защитников шаблона
 
-A structural directive in a template controls whether that template is rendered at run time. Some structural directives want to perform type narrowing based on the type of input expression.
+Структурная директива в шаблоне управляет тем, рендерится ли этот шаблон во время выполнения. Некоторые структурные
+директивы хотят выполнять сужение типов на основе типа входного выражения.
 
-There are two narrowings which are possible with input guards:
+С помощью защитников input'ов возможны два вида сужения:
 
-- Narrowing the input expression based on a TypeScript type assertion function.
-- Narrowing the input expression based on its truthiness.
+- Сужение входного выражения на основе функции утверждения типа (type assertion function) TypeScript.
+- Сужение входного выражения на основе его истинности (truthiness).
 
-To narrow the input expression by defining a type assertion function:
+Чтобы сузить входное выражение путем определения функции утверждения типа:
 
 ```ts
 // This directive only renders its template if the actor is a user.
@@ -211,9 +243,13 @@ class ActorIsUser {
 }
 ```
 
-Type-checking will behave within the template as if the `ngTemplateGuard_actor` has been asserted on the expression bound to the input.
+Проверка типов внутри шаблона будет вести себя так, как будто `ngTemplateGuard_actor` был применен к выражению,
+привязанному к input'у.
 
-Some directives only render their templates when an input is truthy. It's not possible to capture the full semantics of truthiness in a type assertion function, so instead a literal type of `'binding'` can be used to signal to the template type-checker that the binding expression itself should be used as the guard:
+Некоторые директивы рендерят свои шаблоны только тогда, когда input является истинным (truthy). Невозможно охватить
+полную семантику истинности в функции утверждения типа, поэтому вместо этого можно использовать литеральный тип
+`'binding'`, чтобы сигнализировать средству проверки типов шаблонов, что само выражение привязки должно использоваться в
+качестве защитника:
 
 ```ts
 @Directive(...)
@@ -224,13 +260,17 @@ class CustomIf {
 }
 ```
 
-The template type-checker will behave as if the expression bound to `condition` was asserted to be truthy within the template.
+Средство проверки типов шаблонов будет вести себя так, как будто выражение, привязанное к `condition`, было утверждено
+как истинное (truthy) внутри шаблона.
 
-### Typing the directive's context
+### Типизация контекста директивы
 
-If your structural directive provides a context to the instantiated template, you can properly type it inside the template by providing a static `ngTemplateContextGuard` type assertion function. This function can use the type of the directive to derive the type of the context, which is useful when the type of the directive is generic.
+Если ваша структурная директива предоставляет контекст для созданного шаблона, вы можете правильно типизировать его
+внутри шаблона, предоставив статическую функцию утверждения типа `ngTemplateContextGuard`. Эта функция может
+использовать тип директивы для вывода типа контекста, что полезно, когда тип директивы является обобщенным (generic).
 
-For the `SelectDirective` described above, you can implement an `ngTemplateContextGuard` to correctly specify the data type, even if the data source is generic.
+Для описанной выше `SelectDirective` вы можете реализовать `ngTemplateContextGuard`, чтобы правильно указать тип данных,
+даже если источник данных является обобщенным.
 
 ```ts
 // Declare an interface for the template context:

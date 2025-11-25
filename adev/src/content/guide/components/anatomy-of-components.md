@@ -7,12 +7,13 @@ TIP: Это руководство предполагает, что вы уже 
 Каждый компонент должен иметь:
 
 - Класс TypeScript с _поведением (behaviors)_, таким как обработка пользовательского ввода и получение данных с сервера.
-- HTML шаблон, который управляет тем, что рендерится в DOM.
-- [CSS селектор](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors), который определяет, как
+- HTML-шаблон, который управляет тем, что рендерится в DOM.
+- [CSS-селектор](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors), который определяет, как
   компонент используется в HTML.
 
-Вы предоставляете специфичную для Angular информацию для компонента, добавляя
-`@Component` [декоратор](https://www.typescriptlang.org/docs/handbook/decorators.html) поверх класса TypeScript:
+Вы предоставляете специфичную для Angular информацию для компонента,
+добавляя [декоратор](https://www.typescriptlang.org/docs/handbook/decorators.html) `@Component` поверх класса
+TypeScript:
 
 <docs-code language="angular-ts" highlight="[1, 2, 3, 4]">
 @Component({
@@ -54,24 +55,24 @@ export class ProfilePhoto { }
 export class ProfilePhoto { }
 </docs-code>
 
-Это может помочь разделить вопросы _представления (presentation)_ от _поведения (behavior)_ в вашем проекте. Вы можете
+Это может помочь отделить вопросы _представления (presentation)_ от _поведения (behavior)_ в вашем проекте. Вы можете
 выбрать один подход для всего проекта или решать, какой использовать для каждого компонента.
 
-Оба `templateUrl` и `styleUrl` относительны каталогу, в котором находится компонент.
+И `templateUrl`, и `styleUrl` являются относительными к каталогу, в котором находится компонент.
 
 ## Использование компонентов
 
 ### Импорты в декораторе `@Component`
 
-Чтобы использовать компонент, [директиву](guide/directives) или [пайп](guide/templates/pipes), вы должны добавить
-их в массив `imports` в декораторе `@Component`:
+Чтобы использовать компонент, [директиву](guide/directives) или [пайп](guide/templates/pipes), вы должны добавить их в
+массив `imports` в декораторе `@Component`:
 
 ```ts
 import {ProfilePhoto} from './profile-photo';
 
 @Component({
-  // Import the `ProfilePhoto` component in
-  // order to use it in this component's template.
+  // Импортируем компонент `ProfilePhoto`, чтобы
+  // использовать его в шаблоне этого компонента.
   imports: [ProfilePhoto],
   /* ... */
 })
@@ -87,7 +88,7 @@ export class UserProfile { }
 
 ### Отображение компонентов в шаблоне
 
-Каждый компонент определяет [CSS селектор](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors):
+Каждый компонент определяет [CSS-селектор](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors):
 
 <docs-code language="angular-ts" highlight="[2]">
 @Component({

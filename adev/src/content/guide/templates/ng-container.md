@@ -1,6 +1,7 @@
-# Grouping elements with ng-container
+# Группировка элементов с помощью ng-container
 
-`<ng-container>` is a special element in Angular that groups multiple elements together or marks a location in a template without rendering a real element in the DOM.
+`<ng-container>` — это специальный элемент в Angular, который группирует несколько элементов вместе или помечает место в
+шаблоне без рендеринга реального элемента в DOM.
 
 ```angular-html
 <!-- Component template -->
@@ -20,17 +21,19 @@
 </section>
 ```
 
-You can apply directives to `<ng-container>` to add behaviors or configuration to a part of your template.
+Вы можете применять директивы к `<ng-container>` для добавления поведения или конфигурации к части вашего шаблона.
 
-Angular ignores all attribute bindings and event listeners applied to `<ng-container>`, including those applied via directive.
+Angular игнорирует все привязки атрибутов и слушатели событий, примененные к `<ng-container>`, включая те, что
+применяются через директиву.
 
-## Using `<ng-container>` to display dynamic contents
+## Использование `<ng-container>` для отображения динамического контента
 
-`<ng-container>` can act as a placeholder for rendering dynamic content.
+`<ng-container>` может выступать в качестве заполнителя (placeholder) для рендеринга динамического контента.
 
-### Rendering components
+### Рендеринг компонентов
 
-You can use Angular's built-in `NgComponentOutlet` directive to dynamically render a component to the location of the `<ng-container>`.
+Вы можете использовать встроенную директиву Angular `NgComponentOutlet` для динамического рендеринга компонента в месте
+расположения `<ng-container>`.
 
 ```angular-ts
 @Component({
@@ -45,11 +48,13 @@ export class UserProfile {
 }
 ```
 
-In the example above, the `NgComponentOutlet` directive dynamically renders either `AdminProfile` or `BasicUserProfile` in the location of the `<ng-container>` element.
+В приведенном выше примере директива `NgComponentOutlet` динамически рендерит `AdminProfile` или `BasicUserProfile` в
+месте расположения элемента `<ng-container>`.
 
-### Rendering template fragments
+### Рендеринг фрагментов шаблона
 
-You can use Angular's built-in `NgTemplateOutlet` directive to dynamically render a template fragment to the location of the `<ng-container>`.
+Вы можете использовать встроенную директиву Angular `NgTemplateOutlet` для динамического рендеринга фрагмента шаблона в
+месте расположения `<ng-container>`.
 
 ```angular-ts
 @Component({
@@ -69,13 +74,16 @@ export class UserProfile {
 }
 ```
 
-In the example above, the `ngTemplateOutlet` directive dynamically renders one of two template fragments in the location of the `<ng-container>` element.
+В приведенном выше примере директива `ngTemplateOutlet` динамически рендерит один из двух фрагментов шаблона в месте
+расположения элемента `<ng-container>`.
 
-For more information regarding NgTemplateOutlet, see the [NgTemplateOutlets API documentation page](/api/common/NgTemplateOutlet).
+Для получения дополнительной информации о NgTemplateOutlet
+см. [страницу документации API NgTemplateOutlet](/api/common/NgTemplateOutlet).
 
-## Using `<ng-container>` with structural directives
+## Использование `<ng-container>` со структурными директивами
 
-You can also apply structural directives to `<ng-container>` elements. Common examples of this include `ngIf`and `ngFor`.
+Вы также можете применять структурные директивы к элементам `<ng-container>`. Распространенными примерами являются
+`ngIf` и `ngFor`.
 
 ```angular-html
 <ng-container *ngIf="permissions == 'admin'">
@@ -89,18 +97,20 @@ You can also apply structural directives to `<ng-container>` elements. Common ex
 </ng-container>
 ```
 
-## Using `<ng-container>` for injection
+## Использование `<ng-container>` для внедрения зависимостей
 
-See the Dependency Injection guide for more information on Angular's dependency injection system.
+См. руководство по Внедрению зависимостей (Dependency Injection) для получения дополнительной информации о системе DI в
+Angular.
 
-When you apply a directive to `<ng-container>`, descendant elements can inject the directive or anything that the directive provides. Use this when you want to declaratively provide a value to a specific part of your template.
+Когда вы применяете директиву к `<ng-container>`, дочерние элементы могут внедрять эту директиву или все, что она
+предоставляет. Используйте это, когда хотите декларативно предоставить значение определенной части вашего шаблона.
 
 ```angular-ts
 @Directive({
   selector: '[theme]',
 })
 export class Theme {
-  // Create an input that accepts 'light' or 'dark`, defaulting to 'light'.
+  // Создаем input, который принимает 'light' или 'dark', по умолчанию 'light'.
   mode = input<'light' | 'dark'>('light');
 }
 ```
@@ -112,4 +122,5 @@ export class Theme {
 </ng-container>
 ```
 
-In the example above, the `ProfilePic` and `UserBio` components can inject the `Theme` directive and apply styles based on its `mode`.
+В приведенном выше примере компоненты `ProfilePic` и `UserBio` могут внедрить директиву `Theme` и применить стили на
+основе ее свойства `mode`.

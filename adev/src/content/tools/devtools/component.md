@@ -1,76 +1,84 @@
-# Inspect the component tree
+# Инспекция дерева компонентов
 
-## Debug your application
+## Отладка вашего приложения
 
-The **Components** tab lets you explore the structure of your application.
-You can visualize the component and directive instances in the DOM and inspect or modify their state.
+Вкладка **Components** позволяет изучить структуру вашего приложения.
+Вы можете визуализировать экземпляры компонентов и директив в DOM, а также проверять или изменять их состояние.
 
-### Explore the application structure
+### Изучение структуры приложения
 
-The component tree displays a hierarchical relationship of the _components and directives_ within your application.
+Дерево компонентов отображает иерархическую связь _компонентов и директив_ внутри вашего приложения.
 
-<img src="assets/images/guide/devtools/component-explorer.png" alt="A screenshot of the 'Components' tab showing a tree of Angular components and directives starting the root of the application.">
+<img src="assets/images/guide/devtools/component-explorer.png" alt="Скриншот вкладки 'Components', показывающий дерево компонентов и директив Angular, начиная с корня приложения.">
 
-Click the individual components or directives in the component explorer to select them and preview their properties.
-Angular DevTools displays properties and metadata on the right side of the component tree.
+Нажмите на отдельные компоненты или директивы в обозревателе компонентов, чтобы выбрать их и просмотреть их свойства.
+Angular DevTools отображает свойства и метаданные в правой части дерева компонентов.
 
-To look up a component or directive by name use the search box above the component tree.
+Чтобы найти компонент или директиву по имени, используйте поле поиска над деревом компонентов.
 
-<img src="assets/images/guide/devtools/search.png" alt="A screenshot of the 'Components' tab. The filter bar immediately underneath the tab is searching for 'todo' and all components with 'todo' in the name are highlighted in the tree. `app-todos` is currently selected and a sidebar to the right displays information about the component's properties. This includes a section of `@Output` fields and another section for other properties.">
+<img src="assets/images/guide/devtools/search.png" alt="Скриншот вкладки 'Components'. Панель фильтров сразу под вкладкой ищет 'todo', и все компоненты с 'todo' в названии подсвечиваются в дереве. В данный момент выбран `app-todos`, а боковая панель справа отображает информацию о свойствах компонента. Сюда входит раздел полей `@Output` и раздел для других свойств.">
 
-### Navigate to the host node
+### Переход к хост-узлу
 
-To go to the host element of a particular component or directive, double-click it in the component explorer.
-Angular DevTools will open the Elements tab in Chrome or the Inspector tab in Firefox, and select the associated DOM node.
+Чтобы перейти к хост-элементу конкретного компонента или директивы, дважды щелкните по нему в обозревателе компонентов.
+Angular DevTools откроет вкладку Elements в Chrome или вкладку Inspector в Firefox и выберет соответствующий DOM-узел.
 
-### Navigate to source
+### Переход к исходному коду
 
-For components, Angular DevTools lets you navigate to the component definition in the Sources tab (Chrome) and Debugger tab (Firefox).
-After you select a particular component, click the icon at the top-right of the properties view:
+Для компонентов Angular DevTools позволяет перейти к определению компонента во вкладке Sources (Chrome) и вкладке
+Debugger (Firefox).
+После выбора конкретного компонента нажмите на значок в правом верхнем углу панели свойств:
 
-<img src="assets/images/guide/devtools/navigate-source.png" alt="A screenshot of the 'Components' tab. The properties view on the right is visible for a component and the mouse rests in the upper right corner of that view on top of a `<>` icon. An adjacent tooltip reads 'Open component source'.">
+<img src="assets/images/guide/devtools/navigate-source.png" alt="Скриншот вкладки 'Components'. Справа видна панель свойств компонента, курсор мыши находится в правом верхнем углу этой панели над значком `<>`. В соседней всплывающей подсказке написано 'Open component source'.">
 
-### Update property value
+### Обновление значения свойства
 
-Like browsers' DevTools, the properties view lets you edit the value of an input, output, or other properties.
-Right-click on the property value and if edit functionality is available for this value type, a text input will appear.
-Type the new value and press `Enter` to apply this value to the property.
+Как и в стандартных DevTools браузера, панель свойств позволяет редактировать значения input, output или других свойств.
+Щелкните правой кнопкой мыши по значению свойства, и если для этого типа значения доступно редактирование, появится
+текстовое поле ввода.
+Введите новое значение и нажмите `Enter`, чтобы применить его к свойству.
 
-<img src="assets/images/guide/devtools/update-property.png" alt="A screenshot of the 'Components' tab with the properties view open for a component. An `@Input` named `todo` contains a `label` property which is currently selected and has been manually updated to the value 'Buy milk'.">
+<img src="assets/images/guide/devtools/update-property.png" alt="Скриншот вкладки 'Components' с открытой панелью свойств для компонента. `@Input` с именем `todo` содержит свойство `label`, которое в данный момент выбрано и вручную обновлено до значения 'Buy milk'.">
 
-### Access selected component or directive in console
+### Доступ к выбранному компоненту или директиве в консоли
 
-As a shortcut in the console, Angular DevTools provides access to instances of recently selected components or directives.
-Type `$ng0` to get a reference to the instance of the currently selected component or directive, and type `$ng1` for the previously selected instance, `$ng2` for the instance selected before that, and so on.
+В качестве шортката в консоли Angular DevTools предоставляет доступ к экземплярам недавно выбранных компонентов или
+директив.
+Введите `$ng0`, чтобы получить ссылку на экземпляр текущего выбранного компонента или директивы, `$ng1` — для ранее
+выбранного экземпляра, `$ng2` — для выбранного перед ним, и так далее.
 
-<img src="assets/images/guide/devtools/access-console.png" alt="A screenshot of the 'Components' tab with the browser console underneath. In the console, the user has typed three commands, `$ng0`, `$ng1`, and `$ng2` to view the three most recently selected elements. After each statement, the console prints a different component reference.">
+<img src="assets/images/guide/devtools/access-console.png" alt="Скриншот вкладки 'Components' с консолью браузера внизу. В консоли пользователь ввел три команды: `$ng0`, `$ng1` и `$ng2`, чтобы просмотреть три последних выбранных элемента. После каждой команды консоль выводит ссылку на соответствующий компонент.">
 
-### Select a directive or component
+### Выбор директивы или компонента
 
-Similar to browsers' DevTools, you can inspect the page to select a particular component or directive.
-Click the **_Inspect element_** icon in the top left corner within Angular DevTools and hover over a DOM element on the page.
-The extension recognizes the associated directives and/or components and lets you select the corresponding element in the Component tree.
+По аналогии с DevTools браузеров, вы можете инспектировать страницу для выбора конкретного компонента или директивы.
+Нажмите значок **_Inspect element_** в левом верхнем углу Angular DevTools и наведите курсор на DOM-элемент на странице.
+Расширение распознает связанные директивы и/или компоненты и позволяет выбрать соответствующий элемент в дереве
+компонентов.
 
-<img src="assets/images/guide/devtools/inspect-element.png" alt="A screenshot of the 'Components' tab with an Angular todo application visible. In the very top-left corner of Angular DevTools, an icon of a screen with a mouse icon inside it is selected. The mouse rests on a todo element in the Angular application UI. The element is highlighted with a `<TodoComponent>` label displayed in an adjacent tooltip.">
+<img src="assets/images/guide/devtools/inspect-element.png" alt="Скриншот вкладки 'Components' с видимым приложением Angular todo. В самом левом верхнем углу Angular DevTools выбран значок экрана с курсором мыши внутри. Курсор наведен на элемент todo в интерфейсе приложения Angular. Элемент подсвечен, а в соседней всплывающей подсказке отображается метка `<TodoComponent>`.">
 
-### Inspect Deferrable views
+### Инспекция откладываемых представлений (Deferrable views)
 
-Alongside the directives, the directive tree also includes [`@defer` blocks](/guide/templates/defer).
+Наряду с директивами, дерево директив также включает блоки [`@defer`](/guide/templates/defer).
 
 <img src="assets/images/guide/devtools/defer-block.png" />
 
-Clicking a defer block shows more details in the properties sidebar: the different optional blocks (for example `@loading`, `@placeholder`, and `@error`), the configured triggers (defer triggers, prefetch triggers, and hydrate triggers), and timing options such as the `minimum` and `after` values.
+При нажатии на блок defer на боковой панели свойств отображаются дополнительные сведения: различные необязательные
+блоки (например, `@loading`, `@placeholder` и `@error`), настроенные триггеры (триггеры defer, триггеры prefetch и
+триггеры hydrate), а также параметры времени, такие как значения `minimum` и `after`.
 
-### Hydration
+### Гидратация
 
-When [hydration](/guide/hydration) is enabled on your SSR/SSG application, the directive tree shows the hydration status of each component.
+Когда в вашем SSR/SSG приложении включена [гидратация](/guide/hydration), дерево директив показывает статус гидратации
+каждого компонента.
 
-In case of errors, an error message is displayed on the affected component.
+В случае ошибок на затронутом компоненте отображается сообщение об ошибке.
 
 <img src="assets/images/guide/devtools/hydration-status.png" />
 
-The hydration status can also be visualized on the application itself by enabling the overlay.
+Статус гидратации также можно визуализировать в самом приложении, включив оверлей (наложение).
 
 <img src="assets/images/guide/devtools/hydration-overlay-ecom.png" />
 
-Here is an illustration of the hydration overlays on a Angular e-shop example app.
+Вот иллюстрация оверлеев гидратации на примере приложения интернет-магазина Angular.

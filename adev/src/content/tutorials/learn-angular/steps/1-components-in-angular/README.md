@@ -1,23 +1,23 @@
-# Components in Angular
+# Компоненты в Angular
 
-Components are the foundational building blocks for any Angular application. Each component has three parts:
+Компоненты — это фундаментальные строительные блоки любого приложения Angular. Каждый компонент состоит из трех частей:
 
-- TypeScript class
-- HTML template
-- CSS styles
+- Класс TypeScript
+- HTML-шаблон
+- CSS-стили
 
-Note: Learn more about [components in the essentials guide](/essentials/components).
+Примечание: Подробнее о компонентах читайте в [руководстве по основам](/essentials/components).
 
-In this activity, you'll learn how to update the template and styles of a component.
+В этом упражнении вы узнаете, как обновлять шаблон и стили компонента.
 
 <hr />
 
-This is a great opportunity for you to get started with Angular.
+Это отличная возможность начать знакомство с Angular.
 
 <docs-workflow>
 
-<docs-step title="Update the component template">
-Update the `template` property to read `Hello Universe`
+<docs-step title="Обновите шаблон компонента">
+Обновите свойство `template` так, чтобы оно содержало текст `Hello Universe`
 
 ```ts
 template: `
@@ -25,11 +25,12 @@ template: `
 `,
 ```
 
-When you changed the HTML template, the preview updated with your message. Let's go one step further: change the color of the text.
+После изменения HTML-шаблона предварительный просмотр обновился, отобразив ваше сообщение. Давайте пойдем дальше:
+изменим цвет текста.
 </docs-step>
 
-<docs-step title="Update the component styles">
-Update the styles value and change the `color` property from `blue` to `#a144eb`.
+<docs-step title="Обновите стили компонента">
+Обновите значение стилей и измените свойство `color` с `blue` на `#a144eb`.
 
 ```ts
 styles: `
@@ -39,9 +40,10 @@ styles: `
 `,
 ```
 
-When you check the preview, you'll find that the text color will be changed.
+Проверив предварительный просмотр, вы увидите, что цвет текста изменился.
 </docs-step>
 
 </docs-workflow>
 
-In Angular, you can use all the browser supported CSS and HTML that's available. If you'd like, you can store your template and styles in separate files.
+В Angular вы можете использовать все доступные возможности CSS и HTML, поддерживаемые браузером. При желании вы можете
+хранить шаблон и стили в отдельных файлах.

@@ -1,27 +1,28 @@
-# Testing Pipes
+# Тестирование пайпов
 
-You can test [pipes](guide/templates/pipes) without the Angular testing utilities.
+Вы можете тестировать [пайпы](guide/templates/pipes) без использования утилит тестирования Angular.
 
-## Testing the `TitleCasePipe`
+## Тестирование `TitleCasePipe`
 
-A pipe class has one method, `transform`, that manipulates the input value into a transformed output value.
-The `transform` implementation rarely interacts with the DOM.
-Most pipes have no dependence on Angular other than the `@Pipe` metadata and an interface.
+Класс пайпа (Pipe) имеет один метод, `transform`, который преобразует входное значение в выходное.
+Реализация `transform` редко взаимодействует с DOM.
+Большинство пайпов не зависят от Angular, за исключением метаданных `@Pipe` и интерфейса.
 
-Consider a `TitleCasePipe` that capitalizes the first letter of each word.
-Here's an implementation with a regular expression.
+Рассмотрим `TitleCasePipe`, который делает заглавной первую букву каждого слова.
+Вот реализация с использованием регулярного выражения.
 
 <docs-code header="title-case.pipe.ts" path="adev/src/content/examples/testing/src/app/shared/title-case.pipe.ts"/>
 
-Anything that uses a regular expression is worth testing thoroughly. You can use standard unit testing techniques to explore the expected cases and the edge cases.
+Все, что использует регулярные выражения, стоит тщательно тестировать. Вы можете использовать стандартные техники
+модульного тестирования для проверки ожидаемых сценариев и граничных случаев.
 
 <docs-code header="title-case.pipe.spec.ts" path="adev/src/content/examples/testing/src/app/shared/title-case.pipe.spec.ts" visibleRegion="excerpt"/>
 
-## Writing DOM tests to support a pipe test
+## Написание DOM-тестов для поддержки тестирования пайпа
 
-These are tests of the pipe _in isolation_.
-They can't tell if the `TitleCasePipe` is working properly as applied in the application components.
+Это тесты пайпа _в изоляции_.
+Они не могут показать, правильно ли работает `TitleCasePipe` при применении в компонентах приложения.
 
-Consider adding component tests such as this one:
+Рассмотрите возможность добавления тестов компонента, таких как этот:
 
 <docs-code header="hero-detail.component.spec.ts (pipe test)" path="adev/src/content/examples/testing/src/app/hero/hero-detail.component.spec.ts" visibleRegion="title-case-pipe"/>

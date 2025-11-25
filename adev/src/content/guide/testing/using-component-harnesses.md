@@ -1,33 +1,44 @@
-# Using component harnesses in tests
+# Использование component harnesses в тестах
 
-## Before you start
+## Перед началом работы
 
-TIP: This guide assumes you've already read the [component harnesses overview guide](guide/testing/component-harnesses-overview). Read that first if you're new to using component harnesses.
+СОВЕТ: Это руководство предполагает, что вы уже ознакомились
+с [обзором component harnesses](guide/testing/component-harnesses-overview). Сначала прочитайте его, если вы новичок в
+использовании component harnesses.
 
-### CDK Installation
+### Установка CDK
 
-The [Component Dev Kit (CDK)](https://material.angular.dev/cdk/categories) is a set of behavior primitives for building components. To use the component harnesses, first install `@angular/cdk` from npm. You can do this from your terminal using the Angular CLI:
+[Component Dev Kit (CDK)](https://material.angular.dev/cdk/categories) — это набор поведенческих примитивов для создания
+компонентов. Чтобы использовать component harnesses, сначала установите `@angular/cdk` из npm. Вы можете сделать это
+через терминал с помощью Angular CLI:
 
 ```shell
 ng add @angular/cdk
 ```
 
-## Test harness environments and loaders
+## Среды выполнения и загрузчики harness
 
-You can use component test harnesses in different test environments. Angular CDK supports two built-in environments:
+Вы можете использовать тестовые component harnesses в различных средах тестирования. Angular CDK поддерживает две
+встроенные среды:
 
-- Unit tests with Angular's `TestBed`
-- End-to-end tests with [WebDriver](https://developer.mozilla.org/en-US/docs/Web/WebDriver)
+- Модульные тесты с использованием `TestBed` Angular
+- End-to-end тесты с использованием [WebDriver](https://developer.mozilla.org/en-US/docs/Web/WebDriver)
 
-Each environment provides a <strong>harness loader</strong>. The loader creates the harness instances you use throughout your tests. See below for more specific guidance on supported testing environments.
+Каждая среда предоставляет <strong>загрузчик harness</strong> (harness loader). Загрузчик создает экземпляры harness,
+которые вы используете в своих тестах. Ниже приведены более конкретные рекомендации по поддерживаемым средам
+тестирования.
 
-Additional testing environments require custom bindings. See the [adding harness support for additional testing environments guide](guide/testing/component-harnesses-testing-environments) for more information.
+Дополнительные среды тестирования требуют пользовательских привязок.
+См. [руководство по добавлению поддержки harness для дополнительных сред тестирования](guide/testing/component-harnesses-testing-environments)
+для получения дополнительной информации.
 
-### Using the loader from `TestbedHarnessEnvironment` for unit tests
+### Использование загрузчика из `TestbedHarnessEnvironment` для модульных тестов
 
-For unit tests you can create a harness loader from [TestbedHarnessEnvironment](/api/cdk/testing/TestbedHarnessEnvironment). This environment uses a [component fixture](api/core/testing/ComponentFixture) created by Angular's `TestBed`.
+Для модульных тестов вы можете создать загрузчик harness
+из [TestbedHarnessEnvironment](/api/cdk/testing/TestbedHarnessEnvironment). Эта среда
+использует [фикстуру компонента](api/core/testing/ComponentFixture), созданную `TestBed` Angular.
 
-To create a harness loader rooted at the fixture's root element, use the `loader()` method:
+Чтобы создать загрузчик harness, корнем которого является корневой элемент фикстуры, используйте метод `loader()`:
 
 <docs-code language="typescript">
 const fixture = TestBed.createComponent(MyComponent);
@@ -40,15 +51,20 @@ const loader = TestbedHarnessEnvironment.loader(fixture);
 const myComponentHarness = await loader.getHarness(MyComponent);
 </docs-code>
 
-To create a harness loader for harnesses for elements that fall outside the fixture, use the `documentRootLoader()` method. For example, code that displays a floating element or pop-up often attaches DOM elements directly to the document body, such as the `Overlay` service in Angular CDK.
+Чтобы создать загрузчик harness для harness-ов элементов, находящихся за пределами фикстуры, используйте метод
+`documentRootLoader()`. Например, код, отображающий плавающий элемент или всплывающее окно, часто прикрепляет
+DOM-элементы непосредственно к телу документа (body), как, например, сервис `Overlay` в Angular CDK.
 
-You can also create a harness loader directly with `harnessForFixture()` for a harness at that fixture's root element directly.
+Вы также можете создать загрузчик harness напрямую с помощью `harnessForFixture()` для harness, привязанного
+непосредственно к корневому элементу этой фикстуры.
 
-### Using the loader from `SeleniumWebDriverHarnessEnvironment` for end-to-end tests
+### Использование загрузчика из `SeleniumWebDriverHarnessEnvironment` для end-to-end тестов
 
-For WebDriver-based end-to-end tests you can create a harness loader with `SeleniumWebDriverHarnessEnvironment`.
+Для end-to-end тестов на основе WebDriver вы можете создать загрузчик harness с помощью
+`SeleniumWebDriverHarnessEnvironment`.
 
-Use the `loader()` method to get the harness loader instance for the current HTML document, rooted at the document's root element. This environment uses a WebDriver client.
+Используйте метод `loader()`, чтобы получить экземпляр загрузчика harness для текущего HTML-документа, корнем которого
+является корневой элемент документа. Эта среда использует клиент WebDriver.
 
 <docs-code language="typescript">
 let wd: webdriver.WebDriver = getMyWebDriverClient();
@@ -57,11 +73,13 @@ const loader = SeleniumWebDriverHarnessEnvironment.loader(wd);
 const myComponentHarness = await loader.getHarness(MyComponent);
 </docs-code>
 
-## Using a harness loader
+## Использование загрузчика harness
 
-Harness loader instances correspond to a specific DOM element and are used to create component harness instances for elements under that specific element.
+Экземпляры загрузчика harness соответствуют определенному DOM-элементу и используются для создания экземпляров component
+harness для элементов внутри этого конкретного элемента.
 
-To get `ComponentHarness` for the first instance of the element, use the `getHarness()` method. To get all `ComponentHarness` instances, use the `getAllHarnesses()` method.
+Чтобы получить `ComponentHarness` для первого экземпляра элемента, используйте метод `getHarness()`. Чтобы получить все
+экземпляры `ComponentHarness`, используйте метод `getAllHarnesses()`.
 
 <docs-code language="typescript">
 // Get harness for first instance of the element
@@ -71,19 +89,22 @@ const myComponentHarness = await loader.getHarness(MyComponent);
 const myComponentHarnesses = await loader.getHarnesses(MyComponent);
 </docs-code>
 
-In addition to `getHarness` and `getAllHarnesses`, `HarnessLoader` has several other useful methods for querying for harnesses:
+В дополнение к `getHarness` и `getAllHarnesses`, у `HarnessLoader` есть несколько других полезных методов для запроса
+harness:
 
-- `getHarnessAtIndex(...)`: Gets the harness for a component that matches the given criteria at a specific index.
-- `countHarnesses(...)`: Counts the number of component instances that match the given criteria.
-- `hasHarness(...)`: Checks if at least one component instance matches the given criteria.
+- `getHarnessAtIndex(...)`: Получает harness для компонента, соответствующего заданным критериям, по определенному
+  индексу.
+- `countHarnesses(...)`: Подсчитывает количество экземпляров компонента, соответствующих заданным критериям.
+- `hasHarness(...)`: Проверяет, соответствует ли хотя бы один экземпляр компонента заданным критериям.
 
-As an example, consider a reusable dialog-button component that opens a dialog on click. It contains the following components, each with a corresponding harness:
+В качестве примера рассмотрим переиспользуемый компонент кнопки диалога, который открывает диалог при клике. Он содержит
+следующие компоненты, каждый с соответствующим harness:
 
-- `MyDialogButton` (composes the `MyButton` and `MyDialog` with a convenient API)
-- `MyButton` (a standard button component)
-- `MyDialog` (a dialog appended to `document.body` by `MyDialogButton` upon click)
+- `MyDialogButton` (компонует `MyButton` и `MyDialog` с удобным API)
+- `MyButton` (стандартный компонент кнопки)
+- `MyDialog` (диалог, добавляемый в `document.body` компонентом `MyDialogButton` при клике)
 
-The following test loads harnesses for each of these components:
+Следующий тест загружает harness для каждого из этих компонентов:
 
 <docs-code language="typescript">
 let fixture: ComponentFixture<MyDialogButton>;
@@ -115,13 +136,16 @@ const dialogHarness = await rootLoader.getHarness(MyDialogHarness);
 });
 </docs-code>
 
-### Harness behavior in different environments
+### Поведение harness в разных средах
 
-Harnesses may not behave exactly the same in all environments. Some differences are unavoidable between the real user interaction versus the simulated events generated in unit tests. Angular CDK makes a best effort to normalize the behavior to the extent possible.
+Harness не всегда ведут себя одинаково во всех средах. Некоторые различия между реальным взаимодействием пользователя и
+симулированными событиями в модульных тестах неизбежны. Angular CDK старается максимально нормализовать поведение.
 
-### Interacting with child elements
+### Взаимодействие с дочерними элементами
 
-To interact with elements below the root element of this harness loader, use the `HarnessLoader` instance of a child element. For the first instance of the child element, use the `getChildLoader()` method. For all instances of the child element, use the `getAllChildLoaders()` method.
+Для взаимодействия с элементами ниже корневого элемента этого загрузчика harness используйте экземпляр `HarnessLoader`
+дочернего элемента. Для первого экземпляра дочернего элемента используйте метод `getChildLoader()`. Для всех экземпляров
+дочернего элемента используйте метод `getAllChildLoaders()`.
 
 <docs-code language="typescript">
 const myComponentHarness = await loader.getHarness(MyComponent);
@@ -133,16 +157,21 @@ const childLoader = await myComponentHarness.getLoader('.child');
 const allChildLoaders = await myComponentHarness.getAllChildLoaders('.child');
 </docs-code>
 
-### Filtering harnesses
+### Фильтрация harness
 
-When a page contains multiple instances of a particular component, you may want to filter based on some property of the component to get a particular component instance. You can use a <strong>harness predicate</strong>, a class used to associate a `ComponentHarness` class with predicates functions that can be used to filter component instances, to do so.
+Когда страница содержит несколько экземпляров определенного компонента, вам может потребоваться фильтрация на основе
+какого-либо свойства компонента, чтобы получить конкретный экземпляр. Для этого вы можете использовать <strong>предикат
+harness</strong> (harness predicate) — класс, используемый для связывания класса `ComponentHarness` с
+функциями-предикатами, которые могут применяться для фильтрации экземпляров компонентов.
 
-When you ask a `HarnessLoader` for a harness, you're actually providing a HarnessQuery. A query can be one of two things:
+Когда вы запрашиваете harness у `HarnessLoader`, вы фактически предоставляете HarnessQuery. Запрос может быть одним из
+двух:
 
-- A harness constructor. This just gets that harness
-- A `HarnessPredicate`, which gets harnesses that are filtered based on one or more conditions
+- Конструктор harness. Это просто получает данный harness.
+- `HarnessPredicate`, который получает harness, отфильтрованные на основе одного или нескольких условий.
 
-`HarnessPredicate` does support some base filters (selector, ancestor) that work on anything that extends `ComponentHarness`.
+`HarnessPredicate` поддерживает некоторые базовые фильтры (селектор, предок), которые работают с любым классом,
+расширяющим `ComponentHarness`.
 
 <docs-code language="typescript">
 // Example of loading a MyButtonComponentHarness with a harness predicate
@@ -150,22 +179,28 @@ const disabledButtonPredicate = new HarnessPredicate(MyButtonComponentHarness, {
 const disabledButton = await loader.getHarness(disabledButtonPredicate);
 </docs-code>
 
-However it's common for harnesses to implement a static `with()` method that accepts component-specific filtering options and returns a `HarnessPredicate`.
+Однако для harness часто реализуют статический метод `with()`, который принимает специфичные для компонента параметры
+фильтрации и возвращает `HarnessPredicate`.
 
 <docs-code language="typescript">
 // Example of loading a MyButtonComponentHarness with a specific selector
 const button = await loader.getHarness(MyButtonComponentHarness.with({selector: 'btn'}))
 </docs-code>
 
-For more details refer to the specific harness documentation since additional filtering options are specific to each harness implementation.
+Для получения более подробной информации обратитесь к документации конкретного harness, так как дополнительные параметры
+фильтрации специфичны для каждой реализации harness.
 
-## Using test harness APIs
+## Использование API тестовых harness
 
-While every harness defines an API specific to its corresponding component, they all share a common base class, [ComponentHarness](/api/cdk/testing/ComponentHarness). This base class defines a static property, `hostSelector`, that matches the harness class to instances of the component in the DOM.
+Хотя каждый harness определяет API, специфичный для соответствующего компонента, все они имеют общий базовый
+класс [ComponentHarness](/api/cdk/testing/ComponentHarness). Этот базовый класс определяет статическое свойство
+`hostSelector`, которое сопоставляет класс harness с экземплярами компонента в DOM.
 
-Beyond that, the API of any given harness is specific to its corresponding component; refer to the component's documentation to learn how to use a specific harness.
+Помимо этого, API любого данного harness специфичен для соответствующего компонента; обратитесь к документации
+компонента, чтобы узнать, как использовать конкретный harness.
 
-As an example, the following is a test for a component that uses the [Angular Material slider component harness](https://material.angular.dev/components/slider/api#MatSliderHarness):
+В качестве примера ниже приведен тест для компонента,
+использующего [harness компонента слайдера Angular Material](https://material.angular.dev/components/slider/api#MatSliderHarness):
 
 <docs-code language="typescript">
 it('should get value of slider thumb', async () => {
@@ -175,11 +210,14 @@ it('should get value of slider thumb', async () => {
 });
 </docs-code>
 
-## Interop with Angular change detection
+## Взаимодействие с обнаружением изменений Angular
 
-By default, test harnesses runs Angular's [change detection](https://angular.dev/best-practices/runtime-performance) before reading the state of a DOM element and after interacting with a DOM element.
+По умолчанию тестовые harness запускают [обнаружение изменений](https://angular.dev/best-practices/runtime-performance)
+Angular перед чтением состояния DOM-элемента и после взаимодействия с DOM-элементом.
 
-There may be times that you need finer-grained control over change detection in your tests. such as checking the state of a component while an async operation is pending. In these cases use the `manualChangeDetection` function to disable automatic handling of change detection for a block of code.
+Могут быть случаи, когда вам нужен более точный контроль над обнаружением изменений в тестах, например, проверка
+состояния компонента во время выполнения асинхронной операции. В этих случаях используйте функцию
+`manualChangeDetection`, чтобы отключить автоматическую обработку обнаружения изменений для блока кода.
 
 <docs-code language="typescript">
 it('checks state while async action is in progress', async () => {
@@ -196,15 +234,21 @@ it('checks state while async action is in progress', async () => {
 });
 </docs-code>
 
-Almost all harness methods are asynchronous and return a `Promise` to support the following:
+Почти все методы harness являются асинхронными и возвращают `Promise` для поддержки следующего:
 
-- Support for unit tests
-- Support for end-to-end tests
-- Insulate tests against changes in asynchronous behavior
+- Поддержка модульных тестов
+- Поддержка end-to-end тестов
+- Изоляция тестов от изменений в асинхронном поведении
 
-The Angular team recommends using [await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) to improve the test readability. Calling `await` blocks the execution of your test until the associated `Promise` resolves.
+Команда Angular рекомендует
+использовать [await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) для
+улучшения читаемости тестов. Вызов `await` блокирует выполнение вашего теста до тех пор, пока связанный `Promise` не
+разрешится.
 
-Occasionally, you may want to perform multiple actions simultaneously and wait until they're all done rather than performing each action sequentially. For example, read multiple properties of a single component. In these situations use the `parallel` function to parallelize the operations. The parallel function works similarly to `Promise.all`, while also optimizing change detection checks.
+Иногда вам может потребоваться выполнить несколько действий одновременно и дождаться их завершения, вместо того чтобы
+выполнять каждое действие последовательно. Например, прочитать несколько свойств одного компонента. В таких ситуациях
+используйте функцию `parallel` для распараллеливания операций. Функция `parallel` работает аналогично `Promise.all`, при
+этом также оптимизируя проверки обнаружения изменений.
 
 <docs-code language="typescript">
 it('reads properties in parallel', async () => {

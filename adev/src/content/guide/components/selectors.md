@@ -1,10 +1,10 @@
-# Component selectors
+# Селекторы компонентов
 
-TIP: This guide assumes you've already read the [Essentials Guide](essentials). Read that first if you're new to Angular.
+СОВЕТ: Это руководство предполагает, что вы уже прочитали [Руководство по основам](essentials). Сначала ознакомьтесь с
+ним, если вы новичок в Angular.
 
-Every component defines
-a [CSS selector](https://developer.mozilla.org/docs/Web/CSS/CSS_selectors) that determines how
-the component is used:
+Каждый компонент задает [CSS-селектор](https://developer.mozilla.org/docs/Web/CSS/CSS_selectors), который определяет
+способ использования компонента:
 
 <docs-code language="angular-ts" highlight="[2]">
 @Component({
@@ -14,7 +14,7 @@ the component is used:
 export class ProfilePhoto { }
 </docs-code>
 
-You use a component by creating a matching HTML element in the templates of _other_ components:
+Вы используете компонент, создавая соответствующий HTML-элемент в шаблонах _других_ компонентов:
 
 <docs-code language="angular-ts" highlight="[3]">
 @Component({
@@ -26,42 +26,42 @@ You use a component by creating a matching HTML element in the templates of _oth
 export class UserProfile { }
 </docs-code>
 
-**Angular matches selectors statically at compile-time**. Changing the DOM at run-time, either via
-Angular bindings or with DOM APIs, does not affect the components rendered.
+**Angular сопоставляет селекторы статически во время компиляции.** Изменение DOM во время выполнения (через привязки
+Angular или DOM API) не влияет на отрисованные компоненты.
 
-**An element can match exactly one component selector.** If multiple component selectors match a
-single element, Angular reports an error.
+**Элемент может соответствовать ровно одному селектору компонента.** Если одному элементу соответствуют несколько
+селекторов компонентов, Angular сообщает об ошибке.
 
-**Component selectors are case-sensitive.**
+**Селекторы компонентов чувствительны к регистру.**
 
-## Types of selectors
+## Типы селекторов
 
-Angular supports a limited subset
-of [basic CSS selector types](https://developer.mozilla.org/docs/Web/CSS/CSS_Selectors) in
-component selectors:
+Angular поддерживает ограниченное
+подмножество [базовых типов CSS-селекторов](https://developer.mozilla.org/docs/Web/CSS/CSS_Selectors) в селекторах
+компонентов:
 
-| **Selector type**  | **Description**                                                                                                 | **Examples**                  |
-| ------------------ | --------------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| Type selector      | Matches elements based on their HTML tag name, or node name.                                                    | `profile-photo`               |
-| Attribute selector | Matches elements based on the presence of an HTML attribute and, optionally, an exact value for that attribute. | `[dropzone]` `[type="reset"]` |
-| Class selector     | Matches elements based on the presence of a CSS class.                                                          | `.menu-item`                  |
+| **Тип селектора**    | **Описание**                                                                                | **Примеры**                   |
+| -------------------- | ------------------------------------------------------------------------------------------- | ----------------------------- |
+| Селектор по типу     | Сопоставляет элементы на основе имени тега HTML или имени узла.                             | `profile-photo`               |
+| Селектор по атрибуту | Сопоставляет элементы на основе наличия HTML-атрибута и, опционально, его точного значения. | `[dropzone]` `[type="reset"]` |
+| Селектор по классу   | Сопоставляет элементы на основе наличия CSS-класса.                                         | `.menu-item`                  |
 
-For attribute values, Angular supports matching an exact attribute value with the equals (`=`)
-operator. Angular does not support other attribute value operators.
+Для значений атрибутов Angular поддерживает сопоставление точного значения с помощью оператора равенства (`=`). Angular
+не поддерживает другие операторы значений атрибутов.
 
-Angular component selectors do not support combinators, including
-the [descendant combinator](https://developer.mozilla.org/docs/Web/CSS/Descendant_combinator)
-or [child combinator](https://developer.mozilla.org/docs/Web/CSS/Child_combinator).
+Селекторы компонентов Angular не поддерживают комбинаторы,
+включая [комбинатор потомков](https://developer.mozilla.org/docs/Web/CSS/Descendant_combinator)
+или [дочерний комбинатор](https://developer.mozilla.org/docs/Web/CSS/Child_combinator).
 
-Angular component selectors do not support
-specifying [namespaces](https://developer.mozilla.org/docs/Web/SVG/Namespaces_Crash_Course).
+Селекторы компонентов Angular не поддерживают
+указание [пространств имен](https://developer.mozilla.org/docs/Web/SVG/Namespaces_Crash_Course).
 
-### The `:not` pseudo-class
+### Псевдокласс `:not`
 
-Angular supports [the `:not` pseudo-class](https://developer.mozilla.org/docs/Web/CSS/:not).
-You can append this pseudo-class to any other selector to narrow which elements a component's
-selector matches. For example, you could define a `[dropzone]` attribute selector and prevent
-matching `textarea` elements:
+Angular поддерживает [псевдокласс `:not`](https://developer.mozilla.org/docs/Web/CSS/:not).
+Вы можете добавить этот псевдокласс к любому другому селектору, чтобы сузить круг элементов, которым соответствует
+селектор компонента. Например, можно определить селектор атрибута `[dropzone]` и исключить совпадение с элементами
+`textarea`:
 
 <docs-code language="angular-ts" highlight="[2]">
 @Component({
@@ -71,12 +71,12 @@ matching `textarea` elements:
 export class DropZone { }
 </docs-code>
 
-Angular does not support any other pseudo-classes or pseudo-elements in component selectors.
+Angular не поддерживает никакие другие псевдоклассы или псевдоэлементы в селекторах компонентов.
 
-### Combining selectors
+### Комбинирование селекторов
 
-You can combine multiple selectors by concatenating them. For example, you can match `<button>`
-elements that specify `type="reset"`:
+Вы можете комбинировать несколько селекторов, объединяя их. Например, можно выбрать элементы `<button>`, у которых
+указан `type="reset"`:
 
 <docs-code language="angular-ts" highlight="[2]">
 @Component({
@@ -86,7 +86,7 @@ elements that specify `type="reset"`:
 export class ResetButton { }
 </docs-code>
 
-You can also define multiple selectors with a comma-separated list:
+Также можно определить несколько селекторов через запятую:
 
 <docs-code language="angular-ts" highlight="[2]">
 @Component({
@@ -96,35 +96,36 @@ You can also define multiple selectors with a comma-separated list:
 export class DropZone { }
 </docs-code>
 
-Angular creates a component for each element that matches _any_ of the selectors in the list.
+Angular создает компонент для каждого элемента, который соответствует _любому_ из селекторов в списке.
 
-## Choosing a selector
+## Выбор селектора
 
-The vast majority of components should use a custom element name as their selector. All custom
-element names should include a hyphen as described
-by [the HTML specification](https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name).
-By default, Angular reports an error if it encounters a custom tag name that does not match any
-available components, preventing bugs due to mistyped component names.
+Подавляющее большинство компонентов должно использовать имя пользовательского элемента в качестве селектора. Все имена
+пользовательских элементов должны содержать дефис, как описано
+в [спецификации HTML](https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name).
+По умолчанию Angular сообщает об ошибке, если встречает имя пользовательского тега, которое не соответствует ни одному
+доступному компоненту, предотвращая ошибки из-за опечаток в именах компонентов.
 
-See [Advanced component configuration](guide/components/advanced-configuration) for details on
-using [native custom elements](https://developer.mozilla.org/docs/Web/Web_Components) in
-Angular templates.
+См. [Расширенная конфигурация компонентов](guide/components/advanced-configuration) для получения подробной информации
+об использовании [нативных пользовательских элементов](https://developer.mozilla.org/docs/Web/Web_Components) в шаблонах
+Angular.
 
-### Selector prefixes
+### Префиксы селекторов
 
-The Angular team recommends using a short, consistent prefix for all the custom components
-defined inside your project. For example, if you were to build YouTube with Angular, you might
-prefix your components with `yt-`, with components like `yt-menu`, `yt-player`, etc. Namespacing
-your selectors like this makes it immediately clear where a particular component comes from. By
-default, the Angular CLI uses `app-`.
+Команда Angular рекомендует использовать короткий, единообразный префикс для всех пользовательских компонентов,
+определенных в вашем проекте. Например, если бы вы создавали YouTube на Angular, вы могли бы использовать префикс `yt-`
+для своих компонентов, получая такие имена, как `yt-menu`, `yt-player` и т.д. Использование пространств имен в
+селекторах позволяет сразу понять, откуда происходит конкретный компонент. По умолчанию Angular CLI использует префикс
+`app-`.
 
-IMPORTANT: Angular uses the `ng` selector prefix for its own framework APIs. Never use `ng` as a selector prefix for your own custom components.
+ВАЖНО: Angular использует префикс селектора `ng` для собственных API фреймворка. Никогда не используйте `ng` в качестве
+префикса селектора для ваших собственных пользовательских компонентов.
 
-### When to use an attribute selector
+### Когда использовать селектор по атрибуту
 
-You should consider an attribute selector when you want to create a component on a standard native
-element. For example, if you want to create a custom button component, you can take advantage of the
-standard `<button>` element by using an attribute selector:
+Вам следует рассмотреть использование селектора по атрибуту, когда вы хотите создать компонент на основе стандартного
+нативного элемента. Например, если вы хотите создать пользовательский компонент кнопки, вы можете воспользоваться
+стандартным элементом `<button>`, используя селектор по атрибуту:
 
 <docs-code language="angular-ts" highlight="[2]">
 @Component({
@@ -134,13 +135,13 @@ standard `<button>` element by using an attribute selector:
 export class YouTubeUploadButton { }
 </docs-code>
 
-This approach allows consumers of the component to directly use all the element's standard APIs
-without extra work. This is especially valuable for ARIA attributes such as `aria-label`.
+Этот подход позволяет потребителям компонента напрямую использовать все стандартные API элемента без дополнительной
+работы. Это особенно ценно для ARIA-атрибутов, таких как `aria-label`.
 
-Angular does not report errors when it encounters custom attributes that don't match an available
-component. When using components with attribute selectors, consumers may forget to import the
-component or its NgModule, resulting in the component not rendering.
-See [Importing and using components](guide/components/importing) for more information.
+Angular не сообщает об ошибках, когда встречает пользовательские атрибуты, которые не соответствуют доступному
+компоненту. При использовании компонентов с селекторами по атрибуту потребители могут забыть импортировать компонент или
+его NgModule, в результате чего компонент не будет отрисован.
+См. [Импорт и использование компонентов](guide/components/importing) для получения дополнительной информации.
 
-Components that define attribute selectors should use lowercase, dash-case attributes. You can
-follow the same prefixing recommendation described above.
+Компоненты, определяющие селекторы по атрибутам, должны использовать имена атрибутов в нижнем регистре через дефис. Вы
+можете следовать тем же рекомендациям по использованию префиксов, описанным выше.

@@ -1,10 +1,11 @@
-# Migration to Control Flow syntax
+# Миграция на синтаксис потока управления
 
-[Control flow syntax](guide/templates/control-flow) is available from Angular v17. The new syntax is baked into the template, so you don't need to import `CommonModule` anymore.
+[Синтаксис потока управления](guide/templates/control-flow) доступен начиная с Angular v17. Новый синтаксис встроен в
+шаблон, поэтому вам больше не нужно импортировать `CommonModule`.
 
-This schematic migrates all existing code in your application to use new Control Flow Syntax.
+Этот схематик переводит весь существующий код вашего приложения на использование нового синтаксиса потока управления.
 
-Run the schematic using the following command:
+Запустите схематик с помощью следующей команды:
 
 ```shell
 ng generate @angular/core:control-flow

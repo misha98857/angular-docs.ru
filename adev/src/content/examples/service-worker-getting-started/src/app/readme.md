@@ -1,9 +1,9 @@
-# Instructions for Angular Universal Example Download
+# Инструкции к примеру Angular Universal
 
-This is the downloaded sample code for the [Angular Universal (Standalone) guide](https://angular.dev/guide/ssr).
+Это загруженный пример кода для [руководства по Angular Universal (Standalone)](https://angular.dev/guide/ssr).
 
-## Install and Run
+## Установка и запуск
 
-1. `npm install` to install the `node_module` packages
-2. `npm run dev:ssr` to launch the server and application
-3. Launch the browser to `http://localhost:4200`
+1. `npm install` для установки пакетов `node_module`
+2. `npm run dev:ssr` для запуска сервера и приложения
+3. Откройте в браузере `http://localhost:4200`

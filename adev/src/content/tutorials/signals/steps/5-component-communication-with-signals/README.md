@@ -1,15 +1,20 @@
-# Passing data to components with input signals
+# Передача данных в компоненты с помощью input-сигналов
 
-Now that you've learned [managing async data with signals](/tutorials/signals/4-managing-async-data-with-signals), let's explore Angular's signal-based `input()` API for passing data from parent to child components, making component data flow more reactive and efficient. If you're familiar with component props from other frameworks, inputs are the same idea.
+Теперь, когда вы
+изучили [управление асинхронными данными с помощью сигналов](/tutorials/signals/4-managing-async-data-with-signals),
+давайте рассмотрим API `input()` в Angular, основанный на сигналах. Он предназначен для передачи данных от родительских
+компонентов к дочерним, делая поток данных компонентов более реактивным и эффективным. Если вы знакомы со свойствами (
+props) компонентов из других фреймворков, то input'ы — это та же идея.
 
-In this activity, you'll add signal inputs to a product card component and see how parent data flows down reactively.
+В этом задании вы добавите input-сигналы в компонент карточки товара и увидите, как данные от родителя передаются
+реактивно.
 
 <hr />
 
 <docs-workflow>
 
-<docs-step title="Add signal inputs to ProductCard">
-Add signal `input()` functions to receive data in the `product-card` component.
+<docs-step title="Добавление input-сигналов в ProductCard">
+Добавьте функции сигналов `input()` для получения данных в компоненте `product-card`.
 
 ```ts
 // Add imports for signal inputs
@@ -21,11 +26,12 @@ price = input.required<number>();
 available = input<boolean>(true);
 ```
 
-Notice how `input.required()` creates an input that must be provided, while `input()` with a default value is optional.
+Обратите внимание, что `input.required()` создает input, который должен быть обязательно передан, в то время как
+`input()` со значением по умолчанию является необязательным.
 </docs-step>
 
-<docs-step title="Connect inputs to the template">
-Update the template in `product-card` to display the signal input values.
+<docs-step title="Подключение input'ов к шаблону">
+Обновите шаблон в `product-card`, чтобы отобразить значения input-сигналов.
 
 ```angular-html
 <div class="product-card">
@@ -41,11 +47,11 @@ Update the template in `product-card` to display the signal input values.
 </div>
 ```
 
-Input signals work just like regular signals in templates - call them as functions to access their values.
+Input-сигналы работают в шаблонах так же, как и обычные сигналы — вызывайте их как функции для доступа к их значениям.
 </docs-step>
 
-<docs-step title="Connect parent signals to child inputs">
-Update the `product-card` usage in `app.ts` to pass dynamic signal values instead of static ones.
+<docs-step title="Подключение родительских сигналов к дочерним input'ам">
+Обновите использование `product-card` в `app.ts`, чтобы передавать динамические значения сигналов вместо статических.
 
 ```html
 <!-- Change from static values: -->
@@ -63,11 +69,11 @@ Update the `product-card` usage in `app.ts` to pass dynamic signal values instea
 />
 ```
 
-The square brackets `[]` create property bindings that pass the current signal values to the child.
+Квадратные скобки `[]` создают привязку свойств, которая передает текущие значения сигналов дочернему компоненту.
 </docs-step>
 
-<docs-step title="Test reactive updates">
-Add methods in `app.ts` to update the parent signals and see how the child component reacts automatically.
+<docs-step title="Тестирование реактивных обновлений">
+Добавьте методы в `app.ts` для обновления родительских сигналов и посмотрите, как дочерний компонент автоматически реагирует на это.
 
 ```ts
 updateProduct() {
@@ -88,18 +94,22 @@ toggleAvailability() {
 </div>
 ```
 
-When parent signals change, the child component automatically receives and displays the new values!
+Когда родительские сигналы изменяются, дочерний компонент автоматически получает и отображает новые значения!
 </docs-step>
 
 </docs-workflow>
 
-Excellent! You've learned how signal inputs work:
+Отлично! Вы узнали, как работают input-сигналы:
 
-- **Signal inputs** - Use `input()` and `input.required()` to receive data from parent components
-- **Reactive updates** - Child components automatically update when parent signal values change
-- **Type safety** - Signal inputs provide full TypeScript type checking
-- **Default values** - Optional inputs can have default values while required inputs must be provided
+- **Input-сигналы** — Используйте `input()` и `input.required()` для получения данных от родительских компонентов.
+- **Реактивные обновления** — Дочерние компоненты автоматически обновляются при изменении значений родительских
+  сигналов.
+- **Безопасность типов** — Input-сигналы обеспечивают полную проверку типов TypeScript.
+- **Значения по умолчанию** — Необязательные input'ы могут иметь значения по умолчанию, тогда как обязательные должны
+  быть предоставлены.
 
-Signal inputs make component communication more reactive and eliminate the need for `OnChanges` lifecycle hooks in many cases.
+Input-сигналы делают взаимодействие компонентов более реактивным и во многих случаях устраняют необходимость в хуке
+жизненного цикла `OnChanges`.
 
-In the next lesson, you'll learn about [two-way binding with model signals](/tutorials/signals/6-two-way-binding-with-model-signals)!
+В следующем уроке вы узнаете
+о [двусторонней привязке с помощью model-сигналов](/tutorials/signals/6-two-way-binding-with-model-signals)!
