@@ -1,28 +1,16 @@
 @if (!hasAccepted()) {
-  <div class="docs-cookies-popup docs-invert-mode">
-    <p>This site uses cookies from Google to deliver its services and to analyze traffic.</p>
+<div class="docs-cookies-popup docs-invert-mode">
+  <p>Этот сайт использует файлы cookie от Google для предоставления своих услуг и анализа трафика.</p>
 
-    <div>
-      <a
-        href="https://policies.google.com/technologies/cookies"
-        target="_blank"
-        rel="noopener"
-        class="docs-primary-btn"
-        aria-label="Learn more about how Google uses cookies"
-        text="Learn more"
-      >
-        Learn more
-      </a>
+  <div>
+    <a href="https://policies.google.com/technologies/cookies" target="_blank" rel="noopener" class="docs-primary-btn"
+      aria-label="Узнать больше о том, как Google использует cookie" text="Подробнее">
+      Подробнее
+    </a>
 
-      <button
-        type="button"
-        (click)="accept()"
-        class="docs-primary-btn"
-        text="Ok, Got it"
-        aria-label="Ok, Got it"
-      >
-        Ok, Got it
-      </button>
-    </div>
+    <button type="button" (click)="accept()" class="docs-primary-btn" text="Ок, понятно" aria-label="Ок, понятно">
+      Ок, понятно
+    </button>
   </div>
+</div>
 }

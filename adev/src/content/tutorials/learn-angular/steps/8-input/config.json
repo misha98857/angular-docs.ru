@@ -1,5 +1,8 @@
 {
-  "openFiles": ["src/app/user.ts", "src/app/app.ts"],
-  "title": "Component input properties",
+  "openFiles": [
+    "src/app/user.ts",
+    "src/app/app.ts"
+  ],
+  "title": "Входные свойства компонента (@Input)",
   "type": "editor"
 }
