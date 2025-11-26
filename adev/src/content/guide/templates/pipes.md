@@ -290,7 +290,7 @@ export class MyCustomTransformationPipe implements PipeTransform {
 }
 ```
 
-### Обнаружение изменений внутри массивов или объектов
+### Обнаружение изменений внутри массивов или объектов {#detecting-change-within-arrays-or-objects}
 
 Если вы хотите, чтобы Pipe обнаруживал изменения внутри массивов или объектов, он должен быть помечен как impure (
 нечистая) функция путем передачи флага `pure` со значением `false`.

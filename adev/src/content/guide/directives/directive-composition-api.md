@@ -35,7 +35,7 @@ API компонента. См. раздел [Включение Input-ов и O
 
 **Angular игнорирует `selector` директив, применяемых в свойстве `hostDirectives`.**
 
-## Включение Input-ов и Output-ов
+## Включение Input-ов и Output-ов {#including-inputs-and-outputs}
 
 Когда вы применяете `hostDirectives` к вашему компоненту, Input-ы и Output-ы хост-директив не включаются в API вашего
 компонента по умолчанию. Вы можете явно включить Input-ы и Output-ы в API вашего компонента, расширив запись в

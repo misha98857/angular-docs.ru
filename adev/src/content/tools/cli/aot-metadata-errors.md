@@ -110,7 +110,7 @@ export class MyComponent {}
 Добавление префикса `export` к объявлению лишь вызывает новую ошибку: "[
 `Only initialized variables and constants can be referenced`](#only-initialized-variables-and-constants)".
 
-## Только инициализированные переменные и константы (Only initialized variables and constants)
+## Только инициализированные переменные и константы (Only initialized variables and constants) {#only-initialized-variables-and-constants}
 
 ПОЛЕЗНО: _Можно ссылаться только на инициализированные переменные и константы, так как значение этой переменной
 необходимо компилятору шаблонов._

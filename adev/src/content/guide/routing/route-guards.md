@@ -22,7 +22,7 @@ ng generate guard CUSTOM_NAME
 СОВЕТ: Вы также можете создать Guard вручную, добавив отдельный TypeScript-файл в ваш проект. Разработчики обычно
 добавляют суффикс `-guard.ts` к имени файла, чтобы отличать его от других файлов.
 
-## Типы возвращаемых значений Guard-а
+## Типы возвращаемых значений Guard-а {#route-guard-return-types}
 
 Все Guard-ы имеют одинаковые возможные типы возвращаемых значений. Это дает гибкость в управлении навигацией:
 
@@ -35,7 +35,7 @@ ng generate guard CUSTOM_NAME
 Примечание: `CanMatch` ведет себя иначе — если он возвращает `false`, Angular пытается найти другие подходящие маршруты
 вместо полной блокировки навигации.
 
-## Типы Guard-ов
+## Типы Guard-ов {#types-of-route-guards}
 
 Angular предоставляет четыре типа Guard-ов, каждый из которых служит для разных целей:
 
@@ -70,7 +70,7 @@ export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: R
 
 Для получения дополнительной информации ознакомьтесь с [документацией API для CanActivateFn](api/router/CanActivateFn).
 
-### CanActivateChild
+### CanActivateChild {#canactivatechild}
 
 Guard `CanActivateChild` определяет, может ли пользователь получить доступ к дочерним маршрутам определенного
 родительского маршрута. Это полезно, когда вы хотите защитить целую секцию вложенных маршрутов. Другими словами,
@@ -95,7 +95,7 @@ export const adminChildGuard: CanActivateChildFn = (childRoute: ActivatedRouteSn
 Для получения дополнительной информации ознакомьтесь
 с [документацией API для CanActivateChildFn](api/router/CanActivateChildFn).
 
-### CanDeactivate
+### CanDeactivate {#candeactivate}
 
 Guard `CanDeactivate` определяет, может ли пользователь покинуть маршрут. Распространенный сценарий — предотвращение
 ухода со страницы с несохраненными формами.
@@ -120,7 +120,7 @@ export const unsavedChangesGuard: CanDeactivateFn<FormComponent> = (component: F
 Для получения дополнительной информации ознакомьтесь
 с [документацией API для CanDeactivateFn](api/router/CanDeactivateFn).
 
-### CanMatch
+### CanMatch {#canmatch}
 
 Guard `CanMatch` определяет, может ли маршрут быть выбран в процессе сопоставления путей (path matching). В отличие от
 других Guard-ов, отказ здесь приводит к попытке сопоставления с другими маршрутами, а не к полной блокировке навигации.

@@ -272,7 +272,7 @@ export function responseTypeInterceptor(req: HttpRequest<unknown>, next: HttpHan
 }
 ```
 
-## Interceptors на основе DI
+## Interceptors на основе DI {#di-based-interceptors}
 
 `HttpClient` также поддерживает interceptors, определенные как инъектируемые классы и настроенные через систему DI.
 Возможности interceptors на основе DI идентичны возможностям функциональных interceptors, но механизм настройки
