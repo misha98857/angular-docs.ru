@@ -8,7 +8,7 @@ Angular Router поддерживает мощную стратегию сопо
 
 В этом руководстве вы создадите пользовательский сопоставитель маршрутов (route matcher), используя `UrlMatcher` из
 Angular.
-Этот сопоставитель ищет в URL Twitter-хендл (имя пользователя).
+Этот сопоставитель ищет в URL хендл (имя пользователя).
 
 ## Цели
 
@@ -49,7 +49,7 @@ Angular.
 ## Настройка маршрутов приложения
 
 Теперь, когда каркас приложения готов, нужно добавить возможности маршрутизации в файл `app.config.ts`.
-В рамках этого процесса вы создадите пользовательский сопоставитель URL, который ищет Twitter-хендл в URL.
+В рамках этого процесса вы создадите пользовательский сопоставитель URL, который ищет хендл в URL.
 Этот хендл определяется по предшествующему символу `@`.
 
 1. В редакторе кода откройте файл `app.config.ts`.
@@ -121,4 +121,4 @@ username = input.required<string>();
 
 HELPFUL: Этот контент основан на
 статье [Custom Route Matching with the Angular Router](https://medium.com/@brandontroberts/custom-route-matching-with-the-angular-router-fbdd48665483),
-автор [Brandon Roberts](https://twitter.com/brandontroberts).
+автор Brandon Roberts.

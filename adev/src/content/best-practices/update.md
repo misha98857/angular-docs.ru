@@ -17,8 +17,7 @@ _AngularJS_ — это название для всех версий Angular 1.x
 
 ## Получение уведомлений о новых релизах
 
-Чтобы получать уведомления о выходе новых релизов, подпишитесь на [@angular](https://x.com/angular '@angular on X') в
-X (ранее Twitter) или на [блог Angular](https://blog.angular.dev 'Angular blog').
+Чтобы получать уведомления о выходе новых релизов, подпишитесь на [блог Angular](https://blog.angular.dev 'Angular blog').
 
 ## Изучение новых возможностей
 
