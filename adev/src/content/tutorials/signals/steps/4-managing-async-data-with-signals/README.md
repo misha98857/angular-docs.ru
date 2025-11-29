@@ -1,15 +1,20 @@
-# Managing async data with signals using the Resources API
+# Управление асинхронными данными с помощью сигналов и Resources API
 
-Now that you've learned [how to derive state with linked signals](/tutorials/signals/3-deriving-state-with-linked-signals), let's explore how to handle asynchronous data with the Resource API. The Resource API provides a powerful way to manage async operations using signals, with built-in loading states, error handling, and request management.
+Теперь, когда вы
+узнали, [как выводить состояние с помощью linked-сигналов](/tutorials/signals/3-deriving-state-with-linked-signals),
+давайте разберемся, как работать с асинхронными данными, используя Resource API. Этот API предоставляет мощный
+инструмент для управления асинхронными операциями с помощью сигналов, включая встроенную поддержку состояний загрузки,
+обработку ошибок и управление запросами.
 
-In this activity, you'll learn how to use the `resource()` function to load data asynchronously and how to handle different states of async operations by building a user profile loader that demonstrates the Resource API in action.
+В этом уроке вы научитесь использовать функцию `resource()` для асинхронной загрузки данных и обрабатывать различные
+состояния операций. Мы создадим загрузчик профиля пользователя, чтобы увидеть Resource API в действии.
 
 <hr />
 
 <docs-workflow>
 
-<docs-step title="Import resource function and API">
-Add `resource` to your existing imports and import the fake API function.
+<docs-step title="Импорт функции resource и API">
+Добавьте `resource` в список импортов и импортируйте функцию-заглушку API.
 
 ```ts
 // Add resource to existing imports
@@ -20,8 +25,8 @@ import {loadUser} from './user-api';
 
 </docs-step>
 
-<docs-step title="Create a resource for user data">
-Add a property in the component class that creates a resource to load user data based on a user ID signal.
+<docs-step title="Создание ресурса для данных пользователя">
+Добавьте в класс компонента свойство, создающее ресурс для загрузки данных пользователя на основе сигнала с ID пользователя.
 
 ```ts
 userId = signal(1);
@@ -34,8 +39,8 @@ userResource = resource({
 
 </docs-step>
 
-<docs-step title="Add methods to interact with the resource">
-Add methods to change the user ID and reload the resource.
+<docs-step title="Добавление методов для взаимодействия с ресурсом">
+Добавьте методы для изменения ID пользователя и перезагрузки ресурса.
 
 ```ts
 loadUser(id: number) {
@@ -47,24 +52,26 @@ reloadUser() {
 }
 ```
 
-Changing the params signal automatically triggers a reload, or you can manually reload with `reload()`.
+Изменение сигнала параметров автоматически запускает перезагрузку, либо вы можете выполнить её вручную с помощью
+`reload()`.
 </docs-step>
 
-<docs-step title="Create computed signals for resource states">
-Add computed signals to access different states of the resource.
+<docs-step title="Создание вычисляемых сигналов для состояний ресурса">
+Добавьте вычисляемые (computed) сигналы для доступа к различным состояниям ресурса.
 
 ```ts
 isLoading = computed(() => this.userResource.status() === 'loading');
 hasError = computed(() => this.userResource.status() === 'error');
 ```
 
-Resources provide a `status()` signal that can be 'loading', 'success', or 'error', a `value()` signal for the loaded data, and a `hasValue()` method that safely checks if data is available.
+Ресурсы предоставляют сигнал `status()`, который может принимать значения 'loading', 'success' или 'error', сигнал
+`value()` для загруженных данных и метод `hasValue()`, который безопасно проверяет наличие данных.
 </docs-step>
 
-<docs-step title="Wire up the buttons and display resource states">
-The template structure is already provided. Now connect everything:
+<docs-step title="Подключение кнопок и отображение состояний ресурса">
+Структура шаблона уже готова. Теперь свяжите всё воедино:
 
-Part 1. **Add click handlers to the buttons:**
+Часть 1. **Добавьте обработчики клика для кнопок:**
 
 ```html
 <button (click)="loadUser(1)">Load User 1</button>
@@ -73,7 +80,7 @@ Part 1. **Add click handlers to the buttons:**
 <button (click)="reloadUser()">Reload</button>
 ```
 
-Part 2. **Replace the placeholder with resource state handling:**
+Часть 2. **Замените заполнитель (placeholder) на логику обработки состояний ресурса:**
 
 ```angular-html
 @if (isLoading()) {
@@ -88,23 +95,24 @@ Part 2. **Replace the placeholder with resource state handling:**
 }
 ```
 
-The resource provides different methods to check its state:
+Ресурс предоставляет различные методы для проверки своего состояния:
 
-- `isLoading()` - true when fetching data
-- `hasError()` - true when an error occurred
-- `userResource.hasValue()` - true when data is available
-- `userResource.value()` - access the loaded data
-- `userResource.error()` - access error information
+- `isLoading()` - true во время получения данных
+- `hasError()` - true, если произошла ошибка
+- `userResource.hasValue()` - true, когда данные доступны
+- `userResource.value()` - доступ к загруженным данным
+- `userResource.error()` - доступ к информации об ошибке
 
 </docs-step>
 
 </docs-workflow>
 
-Excellent! You've now learned how to use the Resource API with signals. Key concepts to remember:
+Отлично! Вы научились использовать Resource API с сигналами. Ключевые моменты:
 
-- **Resources are reactive**: They automatically reload when params change
-- **Built-in state management**: Resources provide `status()`, `value()`, and `error()` signals
-- **Automatic cleanup**: Resources handle request cancellation and cleanup automatically
-- **Manual control**: You can manually reload or abort requests when needed
+- **Ресурсы реактивны**: они автоматически перезагружаются при изменении параметров.
+- **Встроенное управление состоянием**: ресурсы предоставляют сигналы `status()`, `value()` и `error()`.
+- **Автоматическая очистка**: ресурсы автоматически обрабатывают отмену запросов и очистку.
+- **Ручное управление**: при необходимости вы можете вручную перезагружать или прерывать запросы.
 
-In the next lesson, you'll learn [how to pass data to components with input signals](/tutorials/signals/5-component-communication-with-signals)!
+В следующем уроке вы
+узнаете, [как передавать данные в компоненты с помощью input-сигналов](/tutorials/signals/5-component-communication-with-signals)!

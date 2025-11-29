@@ -1,15 +1,20 @@
-# Using signals with services
+# Использование сигналов с сервисами
 
-Now that you've learned [two-way binding with model signals](/tutorials/signals/6-two-way-binding-with-model-signals), let's explore how to use signals with Angular services. Services are perfect for sharing reactive state across multiple components, and signals make this even more powerful by providing automatic change detection and clean reactive patterns.
+Теперь, когда вы
+изучили [двустороннюю привязку с model-сигналами](/tutorials/signals/6-two-way-binding-with-model-signals), давайте
+разберем, как использовать сигналы с сервисами Angular. Сервисы идеально подходят для совместного использования
+реактивного состояния несколькими компонентами, а сигналы делают этот процесс еще мощнее, обеспечивая автоматическое
+обнаружение изменений и чистые реактивные паттерны.
 
-In this activity, you'll learn how to create a cart store with signals that allow the cart display component to react to state changes automatically.
+В этом упражнении вы научитесь создавать хранилище корзины с помощью сигналов, которые позволяют компоненту отображения
+корзины автоматически реагировать на изменения состояния.
 
 <hr />
 
 <docs-workflow>
 
-<docs-step title="Add cart store signals">
-Add readonly and computed signals to make the cart state reactive in `cart-store.ts`.
+<docs-step title="Добавление сигналов в хранилище корзины">
+Добавьте сигналы только для чтения и вычисляемые сигналы в `cart-store.ts`, чтобы сделать состояние корзины реактивным.
 
 ```ts
 // Add the computed import
@@ -30,11 +35,13 @@ readonly totalPrice = computed(() => {
 });
 ```
 
-These signals allow components to reactively access cart data and computed totals. The `asReadonly()` method prevents external code from modifying the cart items directly, while `computed()` creates derived state that automatically updates when the source signal changes.
+Эти сигналы позволяют компонентам реактивно получать доступ к данным корзины и вычисляемым итогам. Метод `asReadonly()`
+предотвращает прямое изменение товаров в корзине внешним кодом, в то время как `computed()` создает производное
+состояние, которое автоматически обновляется при изменении исходного сигнала.
 </docs-step>
 
-<docs-step title="Complete the quantity update methods">
-The cart display component in `cart-display.ts` already uses the cart store signals in its template. Complete the quantity update methods to modify cart items:
+<docs-step title="Реализация методов обновления количества">
+Компонент отображения корзины в `cart-display.ts` уже использует сигналы хранилища корзины в своем шаблоне. Завершите методы обновления количества для изменения товаров в корзине:
 
 ```ts
 increaseQuantity(id: string) {
@@ -54,11 +61,12 @@ decreaseQuantity(id: string) {
 }
 ```
 
-These methods read the current cart state using `cartItems()` and update quantities through the store's methods. The UI automatically updates when the signals change!
+Эти методы считывают текущее состояние корзины с помощью `cartItems()` и обновляют количество через методы хранилища.
+Пользовательский интерфейс автоматически обновляется при изменении сигналов!
 </docs-step>
 
-<docs-step title="Update the main app component">
-Update the main app component in `app.ts` to use the cart service and display the cart component.
+<docs-step title="Обновление главного компонента приложения">
+Обновите главный компонент приложения в `app.ts`, чтобы использовать сервис корзины и отобразить компонент корзины.
 
 ```angular-ts
 import {Component, inject} from '@angular/core';
@@ -93,11 +101,13 @@ export class App {
 
 </docs-workflow>
 
-Excellent! You've now learned how to use signals with services. Key concepts to remember:
+Отлично! Теперь вы знаете, как использовать сигналы с сервисами. Ключевые концепции, которые следует запомнить:
 
-- **Service-level signals**: Services can use signals to manage reactive state
-- **Dependency injection**: Use `inject()` to access services with signals in components
-- **Computed signals in services**: Create derived state that updates automatically
-- **Readonly signals**: Expose read-only versions of signals to prevent external mutations
+- **Сигналы уровня сервиса**: Сервисы могут использовать сигналы для управления реактивным состоянием.
+- **Внедрение зависимостей**: Используйте `inject()` для доступа к сервисам с сигналами в компонентах.
+- **Вычисляемые сигналы в сервисах**: Создавайте производное состояние, которое обновляется автоматически.
+- **Сигналы только для чтения**: Предоставляйте версии сигналов только для чтения, чтобы предотвратить внешние
+  изменения.
 
-In the next lesson, you'll learn about [how to use signals with directives](/tutorials/signals/8-using-signals-with-directives)!
+В следующем уроке вы узнаете о
+том, [как использовать сигналы с директивами](/tutorials/signals/8-using-signals-with-directives)!

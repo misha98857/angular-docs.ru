@@ -1,11 +1,11 @@
-# Deferrable views tutorial
+# Руководство по откладываемым представлениям
 
-This interactive tutorial consists of lessons that introduce the Angular deferrable views concepts.
+Это интерактивное руководство состоит из уроков, которые знакомят с концепцией откладываемых представлений в Angular.
 
-## How to use this tutorial
+## Как пользоваться этим руководством
 
-Each step represents a concept in Angular deferrable views. You can do one, or all of them.
+Каждый шаг посвящен отдельной концепции откладываемых представлений в Angular. Вы можете пройти один урок или все сразу.
 
-If you get stuck, click "Reveal answer" at the top.
+Если возникнут трудности, нажмите «Reveal answer» вверху.
 
-Alright, let's [get started](/tutorials/deferrable-views/1-what-are-deferrable-views).
+Итак, [начнем](/tutorials/deferrable-views/1-what-are-deferrable-views).

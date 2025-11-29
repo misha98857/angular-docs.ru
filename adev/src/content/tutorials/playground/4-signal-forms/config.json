@@ -1,5 +1,5 @@
 {
   "type": "editor-only",
-  "title": "Signals forms template",
+  "title": "Шаблон форм на сигналах",
   "openFiles": ["src/main.ts", "src/main.css"]
 }

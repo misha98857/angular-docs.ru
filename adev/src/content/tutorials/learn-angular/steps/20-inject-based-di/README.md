@@ -1,14 +1,17 @@
-# Inject-based dependency injection
+# Внедрение зависимостей с помощью inject
 
-Creating an injectable service is the first part of the dependency injection (DI) system in Angular. How do you inject a service into a component? Angular has a convenient function called `inject()` that can be used in the proper context.
+Создание внедряемого сервиса — это первая часть системы внедрения зависимостей (DI) в Angular. Как внедрить сервис в
+компонент? В Angular есть удобная функция `inject()`, которую можно использовать в соответствующем контексте.
 
-NOTE: Injection contexts are beyond the scope of this tutorial, but you can learn more in the [dependency injection (DI) essentials guide](/essentials/dependency-injection) and [DI context guide](guide/di/dependency-injection-context).
+ПРИМЕЧАНИЕ: Контексты внедрения выходят за рамки этого руководства, но вы можете узнать больше
+в [руководстве по основам внедрения зависимостей (DI)](/essentials/dependency-injection)
+и [руководстве по контексту DI](guide/di/dependency-injection-context).
 
-In this activity, you'll learn how to inject a service and use it in a component.
+В этом задании вы узнаете, как внедрить сервис и использовать его в компоненте.
 
 <hr>
 
-It is often helpful to initialize class properties with values provided by the DI system. Here's an example:
+Часто бывает полезно инициализировать свойства класса значениями, предоставляемыми системой DI. Вот пример:
 
 <docs-code language="ts" highlight="[3]">
 @Component({...})
@@ -19,19 +22,20 @@ class PetCareDashboard {
 
 <docs-workflow>
 
-<docs-step title="Inject the `CarService`">
+<docs-step title="Внедрите `CarService`">
 
-In `app.ts`, using the `inject()` function inject the `CarService` and assign it to a property called `carService`
+В файле `app.ts`, используя функцию `inject()`, внедрите `CarService` и присвойте его свойству с именем `carService`.
 
-NOTE: Notice the difference between the property `carService` and the class `CarService`.
+ПРИМЕЧАНИЕ: Обратите внимание на разницу между свойством `carService` и классом `CarService`.
 
 </docs-step>
 
-<docs-step title="Use the `carService` instance">
+<docs-step title="Используйте экземпляр `carService`">
 
-Calling `inject(CarService)` gave you an instance of the `CarService` that you can use in your application, stored in the `carService` property.
+Вызов `inject(CarService)` предоставил вам экземпляр `CarService`, который вы можете использовать в своем приложении,
+сохраненный в свойстве `carService`.
 
-Initialize the `display` property with the following implementation:
+Инициализируйте свойство `display` следующей реализацией:
 
 ```ts
 display = this.carService.getCars().join(' ⭐️ ');
@@ -39,9 +43,9 @@ display = this.carService.getCars().join(' ⭐️ ');
 
 </docs-step>
 
-<docs-step title="Update the `App` template">
+<docs-step title="Обновите шаблон `App`">
 
-Update the component template in `app.ts` with the following code:
+Обновите шаблон компонента в `app.ts` следующим кодом:
 
 ```ts
 template: `<p>Car Listing: {{ display }}</p>`,
@@ -51,4 +55,4 @@ template: `<p>Car Listing: {{ display }}</p>`,
 
 </docs-workflow>
 
-You've just injected your first service into a component - fantastic effort.
+Вы только что внедрили свой первый сервис в компонент — отличная работа.

@@ -1,8 +1,12 @@
-# Unsubscribing with `takeUntilDestroyed`
+# Отписка с помощью `takeUntilDestroyed`
 
-TIP: This guide assumes you're familiar with [component and directive lifecycle](guide/components/lifecycle).
+СОВЕТ: Это руководство предполагает, что вы знакомы
+с [жизненным циклом компонентов и директив](guide/components/lifecycle).
 
-The `takeUntilDestroyed` operator, from `@angular/core/rxjs-interop`, provides a concise and reliable way to automatically unsubscribe from an Observable when a component or directive is destroyed. This prevents common memory leaks with RxJS subscriptions. It works similarly to the RxJS [`takeUntil`](https://rxjs.dev/api/operators/takeUntil) operator but without the need for a separate Subject.
+Оператор `takeUntilDestroyed` из `@angular/core/rxjs-interop` предоставляет лаконичный и надежный способ автоматической
+отписки от Observable при уничтожении компонента или директивы. Это предотвращает распространенные утечки памяти,
+связанные с подписками RxJS. Он работает аналогично оператору RxJS [
+`takeUntil`](https://rxjs.dev/api/operators/takeUntil), но не требует создания отдельного Subject.
 
 ```typescript
 import {Component, inject} from '@angular/core';
@@ -15,8 +19,8 @@ export class UserProfile {
   private popup = inject(CustomPopupShower);
 
   constructor() {
-    // This subscription the 'notifications' Observable is automatically
-    // unsubscribed when the 'UserProfile' component is destroyed.
+    // Эта подписка на Observable 'notifications' автоматически
+    // отменяется при уничтожении компонента 'UserProfile'.
     const messages: Observable<string> = this.dispatcher.notifications;
     messages.pipe(takeUntilDestroyed()).subscribe(message => {
       this.popup.show(message);
@@ -25,7 +29,11 @@ export class UserProfile {
 }
 ```
 
-The `takeUntilDestroyed` operator accepts a single optional [`DestroyRef`](/api/core/DestroyRef) argument. The operator uses `DestroyRef` to know when the component or directive has been destroyed. You can omit this argument when calling `takeUntilDestroyed` in an [injection context](/guide/di/dependency-injection-context), typically the constructor of a component or directive. Always provide a `DestroyRef` if your code may call `takeUntilDestroyed` outside of an injection context.
+Оператор `takeUntilDestroyed` принимает один необязательный аргумент [`DestroyRef`](/api/core/DestroyRef). Оператор
+использует `DestroyRef`, чтобы узнать, когда компонент или директива были уничтожены. Вы можете опустить этот аргумент
+при вызове `takeUntilDestroyed` в [контексте внедрения](/guide/di/dependency-injection-context), обычно в конструкторе
+компонента или директивы. Всегда передавайте `DestroyRef`, если ваш код может вызывать `takeUntilDestroyed` вне
+контекста внедрения.
 
 ```typescript
 @Component(/* ... */)
@@ -35,8 +43,8 @@ export class UserProfile {
   private destroyRef = inject(DestroyRef);
 
   startListeningToNotifications() {
-    // Always pass a `DestroyRef` if you call `takeUntilDestroyed` outside
-    // of an injection context.
+    // Всегда передавайте `DestroyRef`, если вызываете `takeUntilDestroyed` вне
+    // контекста внедрения.
     const messages: Observable<string> = this.dispatcher.notifications;
     messages.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(message => {
       this.popup.show(message);

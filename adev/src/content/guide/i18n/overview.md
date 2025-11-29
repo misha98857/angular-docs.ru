@@ -1,54 +1,55 @@
-# Angular Internationalization (i18n)
+# Интернационализация в Angular (i18n)
 
-_Internationalization_, sometimes referenced as i18n, is the process of designing and preparing your project for use in different locales around the world.
-_Localization_ is the process of building versions of your project for different locales.
-The localization process includes the following actions.
+_Интернационализация_, иногда называемая i18n, — это процесс проектирования и подготовки вашего проекта к использованию
+в различных локалях по всему миру.
+_Локализация_ — это процесс сборки версий вашего проекта для различных локалей.
+Процесс локализации включает следующие действия:
 
-- Extract text for translation into different languages
-- Format data for a specific locale
+- Извлечение текста для перевода на разные языки
+- Форматирование данных для конкретной локали
 
-A _locale_ identifies a region in which people speak a particular language or language variant.
-Possible regions include countries and geographical regions.
-A locale determines the formatting and parsing of the following details.
+_Локаль_ определяет регион, в котором люди говорят на определенном языке или варианте языка.
+Возможные регионы включают страны и географические области.
+Локаль определяет форматирование и парсинг следующих деталей:
 
-- Measurement units including date and time, numbers, and currencies
-- Translated names including time zones, languages, and countries
+- Единицы измерения, включая дату и время, числа и валюты
+- Переведенные названия, включая часовые пояса, языки и страны
 
-For a quick introduction to localization and internationalization watch this video:
+Для быстрого знакомства с локализацией и интернационализацией посмотрите это видео:
 
 <docs-video src="https://www.youtube.com/embed/KNTN-nsbV7M"/>
 
-## Learn about Angular internationalization
+## Подробнее об интернационализации в Angular
 
 <docs-card-container>
-  <docs-card title="Add the localize package" href="guide/i18n/add-package">
-    Learn how to add the Angular Localize package to your project
+  <docs-card title="Добавление пакета localize" href="guide/i18n/add-package">
+    Узнайте, как добавить пакет Angular Localize в ваш проект
   </docs-card>
-  <docs-card title="Refer to locales by ID" href="guide/i18n/locale-id">
-    Learn how to identify and specify a locale identifier for your project
+  <docs-card title="Ссылка на локали по ID" href="guide/i18n/locale-id">
+    Узнайте, как определить и указать идентификатор локали для вашего проекта
   </docs-card>
-  <docs-card title="Format data based on locale" href="guide/i18n/format-data-locale">
-    Learn how to implement localized data pipes and override the locale for your project
+  <docs-card title="Форматирование данных на основе локали" href="guide/i18n/format-data-locale">
+    Узнайте, как реализовать локализованные пайпы (Pipes) данных и переопределить локаль для вашего проекта
   </docs-card>
-  <docs-card title="Prepare component for translation" href="guide/i18n/prepare">
-    Learn how to specify source text for translation
+  <docs-card title="Подготовка компонента к переводу" href="guide/i18n/prepare">
+    Узнайте, как указать исходный текст для перевода
   </docs-card>
-  <docs-card title="Work with translation files" href="guide/i18n/translation-files">
-    Learn how to review and process translation text
+  <docs-card title="Работа с файлами перевода" href="guide/i18n/translation-files">
+    Узнайте, как просматривать и обрабатывать текст перевода
   </docs-card>
-  <docs-card title="Merge translations into the application" href="guide/i18n/merge">
-    Learn how to merge translations and build your translated application
+  <docs-card title="Объединение переводов с приложением" href="guide/i18n/merge">
+    Узнайте, как объединить переводы и собрать переведенное приложение
   </docs-card>
-  <docs-card title="Deploy multiple locales" href="guide/i18n/deploy">
-    Learn how to deploy multiple locales for your application
+  <docs-card title="Развертывание нескольких локалей" href="guide/i18n/deploy">
+    Узнайте, как развернуть несколько локалей для вашего приложения
   </docs-card>
-  <docs-card title="Import global variants of the locale data" href="guide/i18n/import-global-variants">
-    Learn how to import locale data for language variants
+  <docs-card title="Импорт глобальных вариантов данных локали" href="guide/i18n/import-global-variants">
+    Узнайте, как импортировать данные локали для вариантов языка
   </docs-card>
-  <docs-card title="Manage marked text with custom IDs" href="guide/i18n/manage-marked-text">
-    Learn how to implement custom IDs to help you manage your marked text
+  <docs-card title="Управление помеченным текстом с помощью пользовательских ID" href="guide/i18n/manage-marked-text">
+    Узнайте, как реализовать пользовательские ID для управления помеченным текстом
   </docs-card>
-  <docs-card title="Internationalization example" href="guide/i18n/example">
-    Review an example of Angular internationalization.
+  <docs-card title="Пример интернационализации" href="guide/i18n/example">
+    Изучите пример интернационализации в Angular.
   </docs-card>
 </docs-card-container>

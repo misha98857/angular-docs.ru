@@ -2,13 +2,15 @@
 </docs-decorative-header>
 
 <docs-pill-row>
-  <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/treeview/" title="Tree ARIA pattern"/>
-  <docs-pill href="/api/aria/tree/Tree" title="Tree API Reference"/>
+  <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/treeview/" title="Паттерн Tree ARIA"/>
+  <docs-pill href="/api/aria/tree/Tree" title="Справочник API Tree"/>
 </docs-pill-row>
 
-## Overview
+## Обзор
 
-A tree displays hierarchical data where items can expand to reveal children or collapse to hide them. Users navigate with arrow keys, expand and collapse nodes, and optionally select items for navigation or data selection scenarios.
+Дерево отображает иерархические данные, где элементы могут разворачиваться, чтобы показать дочерние элементы, или
+сворачиваться, чтобы скрыть их. Пользователи перемещаются с помощью клавиш со стрелками, разворачивают и сворачивают
+узлы, а также могут выбирать элементы для навигации или сценариев выбора данных.
 
 <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/tree/src/single-select/basic/app/app.ts">
   <docs-code header="TS" path="adev/src/content/examples/aria/tree/src/single-select/basic/app/app.ts"/>
@@ -16,42 +18,43 @@ A tree displays hierarchical data where items can expand to reveal children or c
   <docs-code header="CSS" path="adev/src/content/examples/aria/tree/src/single-select/basic/app/app.css"/>
 </docs-code-multifile>
 
-## Usage
+## Использование
 
-Trees work well for displaying hierarchical data where users need to navigate through nested structures.
+Деревья хорошо подходят для отображения иерархических данных, где пользователям необходимо перемещаться по вложенным
+структурам.
 
-**Use trees when:**
+**Используйте деревья, когда:**
 
-- Building file system navigation
-- Showing folder and document hierarchies
-- Creating nested menu structures
-- Displaying organization charts
-- Browsing hierarchical data
-- Implementing site navigation with nested sections
+- Создаете навигацию по файловой системе
+- Показываете иерархию папок и документов
+- Создаете вложенные структуры меню
+- Отображаете организационные диаграммы
+- Просматриваете иерархические данные
+- Реализуете навигацию по сайту с вложенными разделами
 
-**Avoid trees when:**
+**Избегайте использования деревьев, когда:**
 
-- Displaying flat lists (use [Listbox](guide/aria/listbox) instead)
-- Showing data tables (use [Grid](guide/aria/grid) instead)
-- Creating simple dropdowns (use [Select](guide/aria/select) instead)
-- Building breadcrumb navigation (use breadcrumb patterns)
+- Отображаете плоские списки (вместо этого используйте [Listbox](guide/aria/listbox))
+- Показываете таблицы данных (вместо этого используйте [Grid](guide/aria/grid))
+- Создаете простые выпадающие списки (вместо этого используйте [Select](guide/aria/select))
+- Создаете навигацию типа «хлебные крошки» (используйте паттерны breadcrumb)
 
-## Features
+## Возможности
 
-- **Hierarchical navigation** - Nested tree structure with expand and collapse functionality
-- **Selection modes** - Single or multi-selection with explicit or follow-focus behavior
-- **Selection follows focus** - Optional automatic selection when focus changes
-- **Keyboard navigation** - Arrow keys, Home, End, and type-ahead search
-- **Expand/collapse** - Right/Left arrows or Enter to toggle parent nodes
-- **Disabled items** - Disable specific nodes with focus management
-- **Focus modes** - Roving tabindex or activedescendant focus strategies
-- **RTL support** - Right-to-left language navigation
+- **Иерархическая навигация** - Вложенная структура дерева с функциональностью развертывания и свертывания
+- **Режимы выбора** - Одиночный или множественный выбор с явным действием или следованием за фокусом
+- **Выбор следует за фокусом** - Опциональный автоматический выбор при изменении фокуса
+- **Клавиатурная навигация** - Клавиши со стрелками, Home, End и поиск при наборе (type-ahead)
+- **Развертывание/свертывание** - Стрелки Вправо/Влево или Enter для переключения родительских узлов
+- **Отключенные элементы** - Отключение определенных узлов с управлением фокусом
+- **Режимы фокуса** - Стратегии фокуса Roving tabindex или activedescendant
+- **Поддержка RTL** - Навигация для языков с письмом справа налево
 
-## Examples
+## Примеры
 
-### Navigation tree
+### Дерево навигации
 
-Use a tree for navigation where clicking items triggers actions rather than selecting them.
+Используйте дерево для навигации, где нажатие на элементы вызывает действия, а не выбирает их.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -63,11 +66,12 @@ Use a tree for navigation where clicking items triggers actions rather than sele
   </docs-tab>
 </docs-tab-group>
 
-Set `[nav]="true"` to enable navigation mode. This uses `aria-current` to indicate the current page instead of selection.
+Установите `[nav]="true"` для включения режима навигации. Это использует `aria-current` для указания текущей страницы
+вместо выделения.
 
-### Single selection
+### Одиночный выбор
 
-Enable single selection for scenarios where users choose one item from the tree.
+Включите одиночный выбор для сценариев, где пользователи выбирают один элемент из дерева.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -86,11 +90,12 @@ Enable single selection for scenarios where users choose one item from the tree.
   </docs-tab>
 </docs-tab-group>
 
-Leave `[multi]="false"` (the default) for single selection. Users press Space to select the focused item.
+Оставьте `[multi]="false"` (по умолчанию) для одиночного выбора. Пользователи нажимают Пробел, чтобы выбрать элемент в
+фокусе.
 
-### Multi-selection
+### Множественный выбор
 
-Allow users to select multiple items from the tree.
+Позвольте пользователям выбирать несколько элементов из дерева.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -109,11 +114,13 @@ Allow users to select multiple items from the tree.
   </docs-tab>
 </docs-tab-group>
 
-Set `[multi]="true"` on the tree. Users select items individually with Space or select ranges with Shift+Arrow keys.
+Установите `[multi]="true"` для дерева. Пользователи выбирают элементы по отдельности с помощью Пробела или выбирают
+диапазоны с помощью Shift+Стрелки.
 
-### Selection follows focus
+### Выбор следует за фокусом
 
-When selection follows focus, the focused item is automatically selected. This simplifies interaction for navigation scenarios.
+Когда выбор следует за фокусом, элемент, находящийся в фокусе, выбирается автоматически. Это упрощает взаимодействие в
+сценариях навигации.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -132,11 +139,13 @@ When selection follows focus, the focused item is automatically selected. This s
   </docs-tab>
 </docs-tab-group>
 
-Set `[selectionMode]="'follow'"` on the tree. Selection automatically updates as users navigate with arrow keys.
+Установите `[selectionMode]="'follow'"` для дерева. Выбор автоматически обновляется по мере навигации пользователя с
+помощью клавиш со стрелками.
 
-### Disabled tree items
+### Отключенные элементы дерева
 
-Disable specific tree nodes to prevent interaction. Control whether disabled items can receive focus.
+Отключайте определенные узлы дерева, чтобы предотвратить взаимодействие. Управляйте тем, могут ли отключенные элементы
+получать фокус.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -155,69 +164,71 @@ Disable specific tree nodes to prevent interaction. Control whether disabled ite
   </docs-tab>
 </docs-tab-group>
 
-When `[softDisabled]="true"` on the tree, disabled items can receive focus but cannot be activated or selected. When `[softDisabled]="false"`, disabled items are skipped during keyboard navigation.
+Когда `[softDisabled]="true"` в дереве, отключенные элементы могут получать фокус, но не могут быть активированы или
+выбраны. Когда `[softDisabled]="false"`, отключенные элементы пропускаются при навигации с клавиатуры.
 
-## APIs
+## API
 
 ### Tree
 
-The container directive that manages hierarchical navigation and selection.
+Контейнерная директива, управляющая иерархической навигацией и выбором.
 
 #### Inputs
 
-| Property        | Type                             | Default      | Description                                                   |
-| --------------- | -------------------------------- | ------------ | ------------------------------------------------------------- |
-| `disabled`      | `boolean`                        | `false`      | Disables the entire tree                                      |
-| `softDisabled`  | `boolean`                        | `true`       | When `true`, disabled items are focusable but not interactive |
-| `multi`         | `boolean`                        | `false`      | Whether multiple items can be selected                        |
-| `selectionMode` | `'explicit' \| 'follow'`         | `'explicit'` | Whether selection requires explicit action or follows focus   |
-| `nav`           | `boolean`                        | `false`      | Whether the tree is in navigation mode (uses `aria-current`)  |
-| `wrap`          | `boolean`                        | `true`       | Whether keyboard navigation wraps from last to first item     |
-| `focusMode`     | `'roving' \| 'activedescendant'` | `'roving'`   | Focus strategy used by the tree                               |
-| `values`        | `any[]`                          | `[]`         | Selected item values (supports two-way binding)               |
+| Свойство        | Тип                              | По умолчанию | Описание                                                                   |
+| --------------- | -------------------------------- | ------------ | -------------------------------------------------------------------------- |
+| `disabled`      | `boolean`                        | `false`      | Отключает все дерево                                                       |
+| `softDisabled`  | `boolean`                        | `true`       | Если `true`, отключенные элементы могут получать фокус, но не интерактивны |
+| `multi`         | `boolean`                        | `false`      | Можно ли выбирать несколько элементов                                      |
+| `selectionMode` | `'explicit' \| 'follow'`         | `'explicit'` | Требует ли выбор явного действия или следует за фокусом                    |
+| `nav`           | `boolean`                        | `false`      | Находится ли дерево в режиме навигации (использует `aria-current`)         |
+| `wrap`          | `boolean`                        | `true`       | Зацикливается ли клавиатурная навигация с последнего на первый элемент     |
+| `focusMode`     | `'roving' \| 'activedescendant'` | `'roving'`   | Стратегия фокуса, используемая деревом                                     |
+| `values`        | `any[]`                          | `[]`         | Значения выбранных элементов (поддерживает двустороннюю привязку)          |
 
-#### Methods
+#### Методы
 
-| Method           | Parameters | Description                                   |
-| ---------------- | ---------- | --------------------------------------------- |
-| `expandAll`      | none       | Expands all tree nodes                        |
-| `collapseAll`    | none       | Collapses all tree nodes                      |
-| `selectAll`      | none       | Selects all items (only in multi-select mode) |
-| `clearSelection` | none       | Clears all selection                          |
+| Метод            | Параметры | Описание                                                      |
+| ---------------- | --------- | ------------------------------------------------------------- |
+| `expandAll`      | нет       | Разворачивает все узлы дерева                                 |
+| `collapseAll`    | нет       | Сворачивает все узлы дерева                                   |
+| `selectAll`      | нет       | Выбирает все элементы (только в режиме множественного выбора) |
+| `clearSelection` | нет       | Очищает весь выбор                                            |
 
 ### TreeItem
 
-An individual node in the tree that can contain child nodes.
+Отдельный узел в дереве, который может содержать дочерние узлы.
 
 #### Inputs
 
-| Property   | Type      | Default | Description                                             |
-| ---------- | --------- | ------- | ------------------------------------------------------- |
-| `value`    | `any`     | —       | **Required.** Unique value for this tree item           |
-| `disabled` | `boolean` | `false` | Disables this item                                      |
-| `expanded` | `boolean` | `false` | Whether the node is expanded (supports two-way binding) |
+| Свойство   | Тип       | По умолчанию | Описание                                                       |
+| ---------- | --------- | ------------ | -------------------------------------------------------------- |
+| `value`    | `any`     | —            | **Обязательно.** Уникальное значение для этого элемента дерева |
+| `disabled` | `boolean` | `false`      | Отключает этот элемент                                         |
+| `expanded` | `boolean` | `false`      | Развернут ли узел (поддерживает двустороннюю привязку)         |
 
-#### Signals
+#### Сигналы (Signals)
 
-| Property      | Type              | Description                          |
-| ------------- | ----------------- | ------------------------------------ |
-| `selected`    | `Signal<boolean>` | Whether the item is selected         |
-| `active`      | `Signal<boolean>` | Whether the item currently has focus |
-| `hasChildren` | `Signal<boolean>` | Whether the item has child nodes     |
+| Свойство      | Тип               | Описание                                      |
+| ------------- | ----------------- | --------------------------------------------- |
+| `selected`    | `Signal<boolean>` | Выбран ли элемент                             |
+| `active`      | `Signal<boolean>` | Находится ли элемент в данный момент в фокусе |
+| `hasChildren` | `Signal<boolean>` | Имеет ли элемент дочерние узлы                |
 
-#### Methods
+#### Методы
 
-| Method     | Parameters | Description                 |
-| ---------- | ---------- | --------------------------- |
-| `expand`   | none       | Expands this node           |
-| `collapse` | none       | Collapses this node         |
-| `toggle`   | none       | Toggles the expansion state |
+| Метод      | Параметры | Описание                            |
+| ---------- | --------- | ----------------------------------- |
+| `expand`   | нет       | Разворачивает этот узел             |
+| `collapse` | нет       | Сворачивает этот узел               |
+| `toggle`   | нет       | Переключает состояние развертывания |
 
 ### TreeGroup
 
-A container for child tree items.
+Контейнер для дочерних элементов дерева.
 
-This directive has no inputs, outputs, or methods. It serves as a container to organize child `ngTreeItem` elements:
+У этой директивы нет Input-ов, Output-ов или методов. Она служит контейнером для организации дочерних элементов
+`ngTreeItem`:
 
 ```angular-html
 <li ngTreeItem value="parent">

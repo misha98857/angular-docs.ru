@@ -1,22 +1,22 @@
-# Display validation errors
+# Отображение ошибок валидации
 
-Now that you're able to validate the form, it's important to show validation errors to users.
+Теперь, когда вы умеете валидировать форму, важно отображать ошибки валидации пользователям.
 
-In this activity, you'll learn how to:
+В этом уроке вы узнаете, как:
 
-- Access field state with validation signals
-- Use `@if` to conditionally display errors
-- Loop through errors with `@for`
-- Show errors only after user interaction
+- Получать доступ к состоянию поля с помощью сигналов валидации
+- Использовать `@if` для условного отображения ошибок
+- Перебирать ошибки с помощью `@for`
+- Показывать ошибки только после взаимодействия с пользователем
 
-Let's display validation feedback!
+Давайте отобразим результаты валидации!
 
 <hr />
 
 <docs-workflow>
 
-<docs-step title="Add error display for email field">
-Below the email input, add conditional error display. This will only show errors when the field is both invalid and touched:
+<docs-step title="Добавление отображения ошибок для поля email">
+Под полем ввода email добавьте условное отображение ошибок. Ошибки будут показываться только в том случае, если поле невалидно и было затронуто (touched):
 
 ```html
 <label>
@@ -32,11 +32,13 @@ Below the email input, add conditional error display. This will only show errors
 }
 ```
 
-The `loginForm.email()` call accesses the field's state signal. The `invalid()` method returns `true` when validation fails, `touched()` returns `true` after the user has interacted with the field, and `errors()` provides an array of validation errors with their custom messages.
+Вызов `loginForm.email()` обращается к сигналу состояния поля. Метод `invalid()` возвращает `true`, если валидация не
+прошла, `touched()` возвращает `true` после взаимодействия пользователя с полем, а `errors()` предоставляет массив
+ошибок валидации с соответствующими сообщениями.
 </docs-step>
 
-<docs-step title="Add error display for password field">
-Below the password input, add the same pattern for password errors:
+<docs-step title="Добавление отображения ошибок для поля пароля">
+Под полем ввода пароля добавьте аналогичный код для отображения ошибок пароля:
 
 ```html
 <label>
@@ -56,6 +58,7 @@ Below the password input, add the same pattern for password errors:
 
 </docs-workflow>
 
-Excellent! You've added error display to your form. The errors appear only after users interact with a field, providing helpful feedback without being intrusive.
+Отлично! Вы добавили отображение ошибок в форму. Ошибки появляются только после взаимодействия пользователя с полем,
+обеспечивая полезную обратную связь и не отвлекая внимание раньше времени.
 
-Next, you'll learn [how to handle form submission](/tutorials/signal-forms/5-add-submission)!
+Далее вы узнаете, [как обрабатывать отправку формы](/tutorials/signal-forms/5-add-submission)!

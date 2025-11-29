@@ -1,17 +1,24 @@
-# Deriving state with linked signals
+# Формирование состояния с помощью linked signals
 
-Now that you've learned [how to derive state with computed signals](/tutorials/signals/2-deriving-state-with-computed-signals), you created a computed signal for `notificationsEnabled` that automatically followed your user status. But what if users want to manually disable notifications even when they're online? That's where linked signals come in.
+Теперь, когда вы
+узнали, [как формировать состояние с помощью вычисляемых сигналов (computed)](/tutorials/signals/2-deriving-state-with-computed-signals),
+вы создали вычисляемый сигнал для `notificationsEnabled`, который автоматически отслеживал статус пользователя. Но что,
+если пользователи захотят вручную отключить уведомления, даже когда они онлайн? Здесь на помощь приходят linked
+signals (связанные сигналы).
 
-Linked signals are writable signals that maintain a reactive connection to their source signals. They're perfect for creating state that normally follows a computation but can be overridden when needed.
+Linked signals — это записываемые сигналы, которые поддерживают реактивную связь со своими исходными сигналами. Они
+идеально подходят для создания состояния, которое обычно следует за вычислением, но при необходимости может быть
+переопределено.
 
-In this activity, you'll learn how `linkedSignal()` differs from `computed()` by enhancing the previous user status system's computed `notificationsEnabled` to a writable linked signal.
+В этом упражнении вы узнаете, чем `linkedSignal()` отличается от `computed()`, преобразовав вычисляемый сигнал
+`notificationsEnabled` из предыдущей системы статусов пользователей в записываемый linked-сигнал.
 
 <hr />
 
 <docs-workflow>
 
-<docs-step title="Import linkedSignal function">
-Add `linkedSignal` to your existing imports.
+<docs-step title="Импорт функции linkedSignal">
+Добавьте `linkedSignal` в существующие импорты.
 
 ```ts
 // Add linkedSignal to existing imports
@@ -20,8 +27,8 @@ import {Component, signal, computed, linkedSignal, ChangeDetectionStrategy} from
 
 </docs-step>
 
-<docs-step title="Convert computed to linkedSignal with the same expression">
-Replace the computed `notificationsEnabled` with a linkedSignal using the exact same expression:
+<docs-step title="Преобразование computed в linkedSignal с тем же выражением">
+Замените computed-сигнал `notificationsEnabled` на linkedSignal, используя то же самое выражение:
 
 ```ts
 // Previously (from lesson 2):
@@ -31,11 +38,12 @@ Replace the computed `notificationsEnabled` with a linkedSignal using the exact 
 notificationsEnabled = linkedSignal(() => this.userStatus() === 'online');
 ```
 
-The expression is identical, but linkedSignal creates a writable signal. It will still automatically update when `userStatus` changes, but you can also set it manually.
+Выражение идентично, но linkedSignal создает записываемый сигнал. Он по-прежнему будет автоматически обновляться при
+изменении `userStatus`, но вы также можете установить его значение вручную.
 </docs-step>
 
-<docs-step title="Add a method to manually toggle notifications">
-Add a method to demonstrate that linked signals can be written to directly:
+<docs-step title="Добавление метода для ручного переключения уведомлений">
+Добавьте метод, чтобы продемонстрировать, что в linked signals можно записывать данные напрямую:
 
 ```ts
 toggleNotifications() {
@@ -44,11 +52,12 @@ toggleNotifications() {
 }
 ```
 
-This is the key difference: computed signals are read-only, but linked signals can be updated manually while still maintaining their reactive connection.
+В этом заключается ключевое различие: computed-сигналы доступны только для чтения, а linked signals можно обновлять
+вручную, сохраняя при этом их реактивную связь.
 </docs-step>
 
-<docs-step title="Update the template to add manual notification control">
-Update your template to add a toggle button for notifications:
+<docs-step title="Обновление шаблона для добавления ручного управления уведомлениями">
+Обновите шаблон, добавив кнопку переключения уведомлений:
 
 ```angular-html
 <div class="status-info">
@@ -73,23 +82,24 @@ Update your template to add a toggle button for notifications:
 
 </docs-step>
 
-<docs-step title="Observe the reactive behavior">
-Now test the behavior:
+<docs-step title="Наблюдение за реактивным поведением">
+Теперь проверьте поведение:
 
-1. Change the user status - notice how `notificationsEnabled` updates automatically
-2. Manually toggle notifications - it overrides the computed value
-3. Change status again - the linked signal re-syncs with its computation
+1. Измените статус пользователя — обратите внимание, как `notificationsEnabled` обновляется автоматически.
+2. Вручную переключите уведомления — это переопределит вычисленное значение.
+3. Снова измените статус — linked-сигнал повторно синхронизируется со своим вычислением.
 
-This demonstrates that linked signals maintain their reactive connection even after being manually set!
+Это демонстрирует, что linked signals сохраняют свою реактивную связь даже после ручной установки значения!
 </docs-step>
 
 </docs-workflow>
 
-Excellent! You've learned the key differences between computed and linked signals:
+Отлично! Вы узнали ключевые различия между computed и linked signals:
 
-- **Computed signals**: Read-only, always derived from other signals
-- **Linked signals**: Writable, can be both derived AND manually updated
-- **Use computed when**: The value should always be calculated
-- **Use linkedSignal when**: You need a default computation that can be overridden
+- **Computed-сигналы**: Только для чтения, всегда производятся из других сигналов.
+- **Linked signals**: Записываемые, могут быть как производными, ТАК И обновляемыми вручную.
+- **Используйте computed, когда**: Значение всегда должно вычисляться.
+- **Используйте linkedSignal, когда**: Вам нужно вычисление по умолчанию, которое можно переопределить.
 
-In the next lesson, you'll learn [how to manage async data with signals](/tutorials/signals/4-managing-async-data-with-signals)!
+В следующем уроке вы
+узнаете, [как управлять асинхронными данными с помощью сигналов](/tutorials/signals/4-managing-async-data-with-signals)!

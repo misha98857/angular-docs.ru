@@ -2,74 +2,15 @@
 </docs-decorative-header>
 
 <docs-pill-row>
-  <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/menubar/" title="Menu ARIA pattern"/>
-  <docs-pill href="/api/aria/menu/Menu" title="Menu API Reference"/>
+  <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/menubar/" title="ARIA-паттерн Menu"/>
+  <docs-pill href="/api/aria/menu/Menu" title="Справочник API Menu"/>
 </docs-pill-row>
 
-## Overview
+## Обзор
 
-A menu offers a list of actions or options to users, typically appearing in response to a button click or right-click. Menus support keyboard navigation with arrow keys, submenus, checkboxes, radio buttons, and disabled items.
-
-<docs-tab-group>
-  <docs-tab label="Basic">
-    <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/menu/src/menu-trigger/app/app.ts">
-      <docs-code header="app.ts" path="adev/src/content/examples/aria/menu/src/menu-trigger/app/app.ts"/>
-      <docs-code header="app.html" path="adev/src/content/examples/aria/menu/src/menu-trigger/app/app.html"/>
-      <docs-code header="app.css" path="adev/src/content/examples/aria/menu/src/menu-trigger/app/app.css"/>
-    </docs-code-multifile>
-  </docs-tab>
-
-  <docs-tab label="Material">
-    <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/menu/src/menu-trigger/material/app/app.ts">
-      <docs-code header="app.ts" path="adev/src/content/examples/aria/menu/src/menu-trigger/material/app/app.ts"/>
-      <docs-code header="app.html" path="adev/src/content/examples/aria/menu/src/menu-trigger/material/app/app.html"/>
-      <docs-code header="app.css" path="adev/src/content/examples/aria/menu/src/menu-trigger/material/app/app.css"/>
-    </docs-code-multifile>
-  </docs-tab>
-
-  <docs-tab label="Retro">
-    <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/menu/src/menu-trigger/retro/app/app.ts">
-      <docs-code header="app.ts" path="adev/src/content/examples/aria/menu/src/menu-trigger/retro/app/app.ts"/>
-      <docs-code header="app.html" path="adev/src/content/examples/aria/menu/src/menu-trigger/retro/app/app.html"/>
-      <docs-code header="app.css" path="adev/src/content/examples/aria/menu/src/menu-trigger/retro/app/app.css"/>
-    </docs-code-multifile>
-  </docs-tab>
-</docs-tab-group>
-
-## Usage
-
-Menus work well for presenting lists of actions or commands that users can choose from.
-
-**Use menus when:**
-
-- Building application command menus (File, Edit, View)
-- Creating context menus (right-click actions)
-- Showing dropdown action lists
-- Implementing toolbar dropdowns
-- Organizing settings or options
-
-**Avoid menus when:**
-
-- Building site navigation (use navigation landmarks instead)
-- Creating form selects (use the [Select](guide/aria/select) component)
-- Switching between content panels (use [Tabs](guide/aria/tabs))
-- Showing collapsible content (use [Accordion](guide/aria/accordion))
-
-## Features
-
-- **Keyboard navigation** - Arrow keys, Home/End, and character search for efficient navigation
-- **Submenus** - Nested menu support with automatic positioning
-- **Menu types** - Standalone menus, triggered menus, and menubars
-- **Checkboxes and radios** - Toggle and selection menu items
-- **Disabled items** - Soft or hard disabled states with focus management
-- **Auto-close behavior** - Configurable close on selection
-- **RTL support** - Right-to-left language navigation
-
-## Examples
-
-### Menu with trigger
-
-Create a dropdown menu by pairing a trigger button with a menu. The trigger opens and closes the menu.
+Меню предлагает пользователям список действий или опций, обычно появляющийся в ответ на клик по кнопке или клик правой
+кнопкой мыши. Меню поддерживают навигацию с клавиатуры с помощью клавиш со стрелками, подменю, чекбоксы, радиокнопки и
+отключенные элементы.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -97,22 +38,83 @@ Create a dropdown menu by pairing a trigger button with a menu. The trigger open
   </docs-tab>
 </docs-tab-group>
 
-The menu automatically closes when a user selects an item or presses Escape.
+## Использование
 
-### Context menu
+Меню хорошо подходят для представления списков действий или команд, из которых пользователи могут выбирать.
 
-Context menus appear at the cursor position when users right-click an element.
+**Используйте меню, когда:**
+
+- Создаете командные меню приложения (Файл, Правка, Вид)
+- Создаете контекстные меню (действия по правому клику)
+- Показываете выпадающие списки действий
+- Реализуете выпадающие списки на панели инструментов
+- Организуете настройки или опции
+
+**Избегайте использования меню, когда:**
+
+- Создаете навигацию по сайту (используйте навигационные ориентиры)
+- Создаете селекты форм (используйте компонент [Select](guide/aria/select))
+- Переключаетесь между панелями контента (используйте [Tabs](guide/aria/tabs))
+- Показываете сворачиваемый контент (используйте [Accordion](guide/aria/accordion))
+
+## Возможности
+
+- **Навигация с клавиатуры** — Клавиши со стрелками, Home/End и поиск по символам для эффективной навигации
+- **Подменю** — Поддержка вложенных меню с автоматическим позиционированием
+- **Типы меню** — Standalone-меню, вызываемые меню и строки меню (menubars)
+- **Чекбоксы и радиокнопки** — Пункты меню с переключением и выбором
+- **Отключенные элементы** — Состояния мягкого (soft) или жесткого отключения с управлением фокусом
+- **Автоматическое закрытие** — Настраиваемое закрытие при выборе
+- **Поддержка RTL** — Навигация для языков с письмом справа налево
+
+## Примеры
+
+### Меню с триггером
+
+Создайте выпадающее меню, соединив кнопку-триггер с меню. Триггер открывает и закрывает меню.
+
+<docs-tab-group>
+  <docs-tab label="Basic">
+    <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/menu/src/menu-trigger/app/app.ts">
+      <docs-code header="app.ts" path="adev/src/content/examples/aria/menu/src/menu-trigger/app/app.ts"/>
+      <docs-code header="app.html" path="adev/src/content/examples/aria/menu/src/menu-trigger/app/app.html"/>
+      <docs-code header="app.css" path="adev/src/content/examples/aria/menu/src/menu-trigger/app/app.css"/>
+    </docs-code-multifile>
+  </docs-tab>
+
+  <docs-tab label="Material">
+    <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/menu/src/menu-trigger/material/app/app.ts">
+      <docs-code header="app.ts" path="adev/src/content/examples/aria/menu/src/menu-trigger/material/app/app.ts"/>
+      <docs-code header="app.html" path="adev/src/content/examples/aria/menu/src/menu-trigger/material/app/app.html"/>
+      <docs-code header="app.css" path="adev/src/content/examples/aria/menu/src/menu-trigger/material/app/app.css"/>
+    </docs-code-multifile>
+  </docs-tab>
+
+  <docs-tab label="Retro">
+    <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/menu/src/menu-trigger/retro/app/app.ts">
+      <docs-code header="app.ts" path="adev/src/content/examples/aria/menu/src/menu-trigger/retro/app/app.ts"/>
+      <docs-code header="app.html" path="adev/src/content/examples/aria/menu/src/menu-trigger/retro/app/app.html"/>
+      <docs-code header="app.css" path="adev/src/content/examples/aria/menu/src/menu-trigger/retro/app/app.css"/>
+    </docs-code-multifile>
+  </docs-tab>
+</docs-tab-group>
+
+Меню автоматически закрывается, когда пользователь выбирает пункт или нажимает Escape.
+
+### Контекстное меню
+
+Контекстные меню появляются в позиции курсора, когда пользователи кликают правой кнопкой мыши по элементу.
 
 <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/menu/src/menu-context/app/app.ts">
   <docs-code header="app.ts" path="adev/src/content/examples/aria/menu/src/menu-context/app/app.ts"/>
   <docs-code header="app.html" path="adev/src/content/examples/aria/menu/src/menu-context/app/app.html"/>
 </docs-code-multifile>
 
-Position the menu using the `contextmenu` event coordinates.
+Позиционируйте меню, используя координаты события `contextmenu`.
 
-### Standalone menu
+### Standalone-меню
 
-A standalone menu doesn't require a trigger and remains visible in the interface.
+Standalone-меню не требует триггера и остается видимым в интерфейсе.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -140,11 +142,11 @@ A standalone menu doesn't require a trigger and remains visible in the interface
   </docs-tab>
 </docs-tab-group>
 
-Standalone menus work well for always-visible action lists or navigation.
+Standalone-меню хорошо подходят для постоянно видимых списков действий или навигации.
 
-### Disabled menu items
+### Отключенные пункты меню
 
-Disable specific menu items using the `disabled` input. Control focus behavior with `softDisabled`.
+Отключайте конкретные пункты меню, используя input `disabled`. Управляйте поведением фокуса с помощью `softDisabled`.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -172,87 +174,89 @@ Disable specific menu items using the `disabled` input. Control focus behavior w
   </docs-tab>
 </docs-tab-group>
 
-When `[softDisabled]="true"`, disabled items can receive focus but cannot be activated. When `[softDisabled]="false"`, disabled items are skipped during keyboard navigation.
+Когда `[softDisabled]="true"`, отключенные элементы могут получать фокус, но не могут быть активированы. Когда
+`[softDisabled]="false"`, отключенные элементы пропускаются при навигации с клавиатуры.
 
-## APIs
+## API
 
 ### Menu
 
-The container directive for menu items.
+Директива-контейнер для пунктов меню.
 
 #### Inputs
 
-| Property       | Type      | Default | Description                                                   |
-| -------------- | --------- | ------- | ------------------------------------------------------------- |
-| `disabled`     | `boolean` | `false` | Disables all items in the menu                                |
-| `wrap`         | `boolean` | `true`  | Whether keyboard navigation wraps at edges                    |
-| `softDisabled` | `boolean` | `true`  | When `true`, disabled items are focusable but not interactive |
+| Свойство       | Тип       | По умолчанию | Описание                                                                   |
+| -------------- | --------- | ------------ | -------------------------------------------------------------------------- |
+| `disabled`     | `boolean` | `false`      | Отключает все пункты в меню                                                |
+| `wrap`         | `boolean` | `true`       | Зацикливается ли навигация с клавиатуры по краям                           |
+| `softDisabled` | `boolean` | `true`       | Если `true`, отключенные элементы могут получать фокус, но не интерактивны |
 
-#### Methods
+#### Методы
 
-| Method           | Parameters | Description                        |
-| ---------------- | ---------- | ---------------------------------- |
-| `close`          | none       | Closes the menu                    |
-| `focusFirstItem` | none       | Moves focus to the first menu item |
+| Метод            | Параметры | Описание                              |
+| ---------------- | --------- | ------------------------------------- |
+| `close`          | нет       | Закрывает меню                        |
+| `focusFirstItem` | нет       | Перемещает фокус на первый пункт меню |
 
 ### MenuBar
 
-A horizontal container for multiple menus.
+Горизонтальный контейнер для нескольких меню.
 
 #### Inputs
 
-| Property       | Type      | Default | Description                                                   |
-| -------------- | --------- | ------- | ------------------------------------------------------------- |
-| `disabled`     | `boolean` | `false` | Disables the entire menubar                                   |
-| `wrap`         | `boolean` | `true`  | Whether keyboard navigation wraps at edges                    |
-| `softDisabled` | `boolean` | `true`  | When `true`, disabled items are focusable but not interactive |
+| Свойство       | Тип       | По умолчанию | Описание                                                                   |
+| -------------- | --------- | ------------ | -------------------------------------------------------------------------- |
+| `disabled`     | `boolean` | `false`      | Отключает всю строку меню                                                  |
+| `wrap`         | `boolean` | `true`       | Зацикливается ли навигация с клавиатуры по краям                           |
+| `softDisabled` | `boolean` | `true`       | Если `true`, отключенные элементы могут получать фокус, но не интерактивны |
 
 ### MenuItem
 
-An individual item within a menu.
+Отдельный пункт внутри меню.
 
 #### Inputs
 
-| Property     | Type      | Default | Description                                          |
-| ------------ | --------- | ------- | ---------------------------------------------------- |
-| `value`      | `any`     | —       | **Required.** Value for this item                    |
-| `disabled`   | `boolean` | `false` | Disables this menu item                              |
-| `submenu`    | `Menu`    | —       | Reference to a submenu                               |
-| `searchTerm` | `string`  | `''`    | Search term for typeahead (supports two-way binding) |
+| Свойство     | Тип       | По умолчанию | Описание                                                                     |
+| ------------ | --------- | ------------ | ---------------------------------------------------------------------------- |
+| `value`      | `any`     | —            | **Обязательно.** Значение для этого пункта                                   |
+| `disabled`   | `boolean` | `false`      | Отключает этот пункт меню                                                    |
+| `submenu`    | `Menu`    | —            | Ссылка на подменю                                                            |
+| `searchTerm` | `string`  | `''`         | Поисковый запрос для опережающего ввода (поддерживает двустороннюю привязку) |
 
-#### Signals
+#### Сигналы
 
-| Property   | Type              | Description                                |
-| ---------- | ----------------- | ------------------------------------------ |
-| `active`   | `Signal<boolean>` | Whether the item currently has focus       |
-| `expanded` | `Signal<boolean>` | Whether the submenu is expanded            |
-| `hasPopup` | `Signal<boolean>` | Whether the item has an associated submenu |
+| Свойство   | Тип               | Описание                             |
+| ---------- | ----------------- | ------------------------------------ |
+| `active`   | `Signal<boolean>` | Имеет ли пункт фокус в данный момент |
+| `expanded` | `Signal<boolean>` | Развернуто ли подменю                |
+| `hasPopup` | `Signal<boolean>` | Имеет ли пункт связанное подменю     |
 
-NOTE: MenuItem does not expose public methods. Use the `submenu` input to associate submenus with menu items.
+ПРИМЕЧАНИЕ: MenuItem не предоставляет публичных методов. Используйте input `submenu` для связывания подменю с пунктами
+меню.
 
 ### MenuTrigger
 
-A button or element that opens a menu.
+Кнопка или элемент, открывающий меню.
 
 #### Inputs
 
-| Property       | Type      | Default | Description                                |
-| -------------- | --------- | ------- | ------------------------------------------ |
-| `menu`         | `Menu`    | —       | **Required.** The menu to trigger          |
-| `disabled`     | `boolean` | `false` | Disables the trigger                       |
-| `softDisabled` | `boolean` | `true`  | When `true`, disabled trigger is focusable |
+| Свойство       | Тип       | По умолчанию | Описание                                              |
+| -------------- | --------- | ------------ | ----------------------------------------------------- |
+| `menu`         | `Menu`    | —            | **Обязательно.** Меню для вызова                      |
+| `disabled`     | `boolean` | `false`      | Отключает триггер                                     |
+| `softDisabled` | `boolean` | `true`       | Если `true`, отключенный триггер может получать фокус |
 
-#### Signals
+#### Сигналы
 
-| Property   | Type              | Description                                |
-| ---------- | ----------------- | ------------------------------------------ |
-| `expanded` | `Signal<boolean>` | Whether the menu is currently open         |
-| `hasPopup` | `Signal<boolean>` | Whether the trigger has an associated menu |
+| Свойство   | Тип               | Описание                        |
+| ---------- | ----------------- | ------------------------------- |
+| `expanded` | `Signal<boolean>` | Открыто ли меню в данный момент |
+| `hasPopup` | `Signal<boolean>` | Имеет ли триггер связанное меню |
 
-#### Methods
+#### Методы
 
-| Method   | Parameters | Description                  |
-| -------- | ---------- | ---------------------------- |
-| `open`   | none       | Opens the menu               |
-| `close`  | none       | Closes the menu              |
-| `toggle` | none       | Toggles the menu open/closed |
+| Метод    | Параметры | Описание                                     |
+| -------- | --------- | -------------------------------------------- |
+| `open`   | нет       | Открывает меню                               |
+| `close`  | нет       | Закрывает меню                               |
+| `toggle` | нет       | Переключает состояние меню (открыто/закрыто) |

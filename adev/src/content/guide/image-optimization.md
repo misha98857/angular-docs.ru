@@ -1,31 +1,34 @@
-# Getting started with NgOptimizedImage
+# Начало работы с NgOptimizedImage
 
-The `NgOptimizedImage` directive makes it easy to adopt performance best practices for loading images.
+Директива `NgOptimizedImage` позволяет легко применять лучшие практики производительности для загрузки изображений.
 
-The directive ensures that the loading of the [Largest Contentful Paint (LCP)](http://web.dev/lcp) image is prioritized by:
+Директива гарантирует приоритетную загрузку [LCP-изображения (Largest Contentful Paint)](http://web.dev/lcp) путем:
 
-- Automatically setting the `fetchpriority` attribute on the `<img>` tag
-- Lazy loading other images by default
-- Automatically generating a preconnect link tag in the document head
-- Automatically generating a `srcset` attribute
-- Generating a [preload hint](https://developer.mozilla.org/docs/Web/HTML/Link_types/preload) if app is using SSR
+- Автоматической установки атрибута `fetchpriority` для тега `<img>`
+- Ленивой загрузки (lazy loading) остальных изображений по умолчанию
+- Автоматической генерации тега preconnect link в заголовке документа
+- Автоматической генерации атрибута `srcset`
+- Генерации [подсказки предзагрузки (preload hint)](https://developer.mozilla.org/docs/Web/HTML/Link_types/preload),
+  если приложение использует SSR
 
-In addition to optimizing the loading of the LCP image, `NgOptimizedImage` enforces a number of image best practices, such as:
+В дополнение к оптимизации загрузки LCP-изображения, `NgOptimizedImage` обеспечивает соблюдение ряда лучших практик для
+изображений, таких как:
 
-- Using [image CDN URLs to apply image optimizations](https://web.dev/image-cdns/#how-image-cdns-use-urls-to-indicate-optimization-options)
-- Preventing layout shift by requiring `width` and `height`
-- Warning if `width` or `height` have been set incorrectly
-- Warning if the image will be visually distorted when rendered
+- Использование [URL-адресов CDN изображений для применения оптимизаций](https://web.dev/image-cdns/#how-image-cdns-use-urls-to-indicate-optimization-options)
+- Предотвращение сдвига макета (layout shift) за счет требования `width` и `height`
+- Предупреждение, если `width` или `height` заданы некорректно
+- Предупреждение, если изображение будет визуально искажено при рендеринге
 
-If you're using a background image in CSS, [start here](#how-to-migrate-your-background-image).
+Если вы используете фоновое изображение в CSS, [начните отсюда](#how-to-migrate-your-background-image).
 
-**NOTE: Although the `NgOptimizedImage` directive was made a stable feature in Angular version 15, it has been backported and is available as a stable feature in versions 13.4.0 and 14.3.0 as well.**
+**ПРИМЕЧАНИЕ: Хотя директива `NgOptimizedImage` стала стабильной функцией в Angular версии 15, она была портирована
+обратно и доступна как стабильная функция в версиях 13.4.0 и 14.3.0.**
 
-## Getting Started
+## Начало работы
 
 <docs-workflow>
-<docs-step title="Import `NgOptimizedImage` directive">
-Import `NgOptimizedImage` directive from `@angular/common`:
+<docs-step title="Импортируйте директиву `NgOptimizedImage`">
+Импортируйте директиву `NgOptimizedImage` из `@angular/common`:
 
 ```ts
 
@@ -33,7 +36,7 @@ import { NgOptimizedImage } from '@angular/common'
 
 ```
 
-and include it into the `imports` array of a standalone component or an NgModule:
+и включите её в массив `imports` standalone-компонента или NgModule:
 
 ```ts
 imports: [
@@ -44,13 +47,16 @@ imports: [
 
 </docs-code>
 </docs-step>
-<docs-step title="(Optional) Set up a Loader">
-An image loader is not **required** in order to use NgOptimizedImage, but using one with an image CDN enables powerful performance features, including automatic `srcset`s for your images.
+### (Необязательно) Настройте загрузчик {#optional-set-up-a-loader}
+<docs-step title="(Необязательно) Настройте загрузчик">
+Загрузчик изображений не является **обязательным** для использования NgOptimizedImage, но его использование с CDN изображений включает мощные функции производительности, в том числе автоматические `srcset` для ваших изображений.
 
-A brief guide for setting up a loader can be found in the [Configuring an Image Loader](#configuring-an-image-loader-for-ngoptimizedimage) section at the end of this page.
+Краткое руководство по настройке загрузчика можно найти в
+разделе [Настройка загрузчика изображений для NgOptimizedImage](#configuring-an-image-loader-for-ngoptimizedimage) в
+конце этой страницы.
 </docs-step>
-<docs-step title="Enable the directive">
-To activate the `NgOptimizedImage` directive, replace your image's `src` attribute with `ngSrc`.
+<docs-step title="Активируйте директиву">
+Чтобы активировать директиву `NgOptimizedImage`, замените атрибут `src` вашего изображения на `ngSrc`.
 
 ```html
 
@@ -58,10 +64,12 @@ To activate the `NgOptimizedImage` directive, replace your image's `src` attribu
 
 ```
 
-If you're using a [built-in third-party loader](#built-in-loaders), make sure to omit the base URL path from `src`, as that will be prepended automatically by the loader.
+Если вы используете [встроенный сторонний загрузчик](#built-in-loaders), убедитесь, что исключили базовый путь URL из
+`src`, так как он будет добавлен загрузчиком автоматически.
 </docs-step>
-<docs-step title="Mark images as `priority`">
-Always mark the [LCP image](https://web.dev/lcp/#what-elements-are-considered) on your page as `priority` to prioritize its loading.
+<docs-step title="Пометьте изображения как `priority`">
+Всегда помечайте [LCP-изображение](https://web.dev/lcp/#what-elements-are-considered) на вашей странице как `priority`,
+чтобы приоритизировать его загрузку.
 
 ```html
 
@@ -69,16 +77,24 @@ Always mark the [LCP image](https://web.dev/lcp/#what-elements-are-considered) o
 
 ```
 
-Marking an image as `priority` applies the following optimizations:
+Пометка изображения как `priority` применяет следующие оптимизации:
 
-- Sets `fetchpriority=high` (read more about priority hints [here](https://web.dev/priority-hints))
-- Sets `loading=eager` (read more about native lazy loading [here](https://web.dev/browser-level-image-lazy-loading))
-- Automatically generates a [preload link element](https://developer.mozilla.org/docs/Web/HTML/Link_types/preload) if [rendering on the server](guide/ssr).
+- Устанавливает `fetchpriority=high` (подробнее о подсказках приоритета читайте [здесь](https://web.dev/priority-hints))
+- Устанавливает `loading=eager` (подробнее о нативной ленивой загрузке
+  читайте [здесь](https://web.dev/browser-level-image-lazy-loading))
+- Автоматически генерирует [элемент ссылки preload](https://developer.mozilla.org/docs/Web/HTML/Link_types/preload),
+  если [рендеринг происходит на сервере](guide/ssr).
 
-Angular displays a warning during development if the LCP element is an image that does not have the `priority` attribute. A page’s LCP element can vary based on a number of factors - such as the dimensions of a user's screen, so a page may have multiple images that should be marked `priority`. See [CSS for Web Vitals](https://web.dev/css-web-vitals/#images-and-largest-contentful-paint-lcp) for more details.
+Angular отображает предупреждение во время разработки, если элемент LCP является изображением, у которого нет атрибута
+`priority`. Элемент LCP страницы может варьироваться в зависимости от ряда факторов, таких как размеры экрана
+пользователя, поэтому на странице может быть несколько изображений, которые следует пометить как `priority`.
+См. [CSS for Web Vitals](https://web.dev/css-web-vitals/#images-and-largest-contentful-paint-lcp) для получения
+дополнительных сведений.
 </docs-step>
-<docs-step title="Include Width and Height">
-In order to prevent [image-related layout shifts](https://web.dev/css-web-vitals/#images-and-layout-shifts), NgOptimizedImage requires that you specify a height and width for your image, as follows:
+<docs-step title="Укажите ширину и высоту">
+Чтобы
+предотвратить [сдвиги макета, связанные с изображениями](https://web.dev/css-web-vitals/#images-and-layout-shifts),
+NgOptimizedImage требует, чтобы вы указали высоту и ширину для вашего изображения следующим образом:
 
 ```html
 
@@ -86,19 +102,27 @@ In order to prevent [image-related layout shifts](https://web.dev/css-web-vitals
 
 ```
 
-For **responsive images** (images which you've styled to grow and shrink relative to the viewport), the `width` and `height` attributes should be the intrinsic size of the image file. For responsive images it's also important to [set a value for `sizes`.](#responsive-images)
+Для **адаптивных изображений** (изображений, которые вы стилизовали для увеличения и уменьшения относительно области
+просмотра), атрибуты `width` и `height` должны соответствовать естественному размеру файла изображения. Для адаптивных
+изображений также важно [установить значение для `sizes`.](#responsive-images)
 
-For **fixed size images**, the `width` and `height` attributes should reflect the desired rendered size of the image. The aspect ratio of these attributes should always match the intrinsic aspect ratio of the image.
+Для **изображений фиксированного размера** атрибуты `width` и `height` должны отражать желаемый размер изображения при
+рендеринге. Соотношение сторон этих атрибутов всегда должно совпадать с естественным соотношением сторон изображения.
 
-NOTE: If you don't know the size of your images, consider using "fill mode" to inherit the size of the parent container, as described below.
+ПРИМЕЧАНИЕ: Если вы не знаете размер ваших изображений, рассмотрите возможность использования режима "fill" для
+наследования размера родительского контейнера, как описано ниже.
 </docs-step>
 </docs-workflow>
 
-## Using `fill` mode
+## Использование режима `fill` {#using-fill-mode}
 
-In cases where you want to have an image fill a containing element, you can use the `fill` attribute. This is often useful when you want to achieve a "background image" behavior. It can also be helpful when you don't know the exact width and height of your image, but you do have a parent container with a known size that you'd like to fit your image into (see "object-fit" below).
+В случаях, когда вы хотите, чтобы изображение заполняло содержащий его элемент, вы можете использовать атрибут `fill`.
+Это часто полезно, когда вы хотите добиться поведения "фонового изображения". Это также может быть полезно, когда вы не
+знаете точную ширину и высоту вашего изображения, но у вас есть родительский контейнер с известным размером, в который
+вы хотели бы вписать изображение (см. "object-fit" ниже).
 
-When you add the `fill` attribute to your image, you do not need and should not include a `width` and `height`, as in this example:
+Когда вы добавляете атрибут `fill` к вашему изображению, вам не нужно и не следует указывать `width` и `height`, как в
+этом примере:
 
 ```html
 
@@ -106,31 +130,45 @@ When you add the `fill` attribute to your image, you do not need and should not 
 
 ```
 
-You can use the [object-fit](https://developer.mozilla.org/docs/Web/CSS/object-fit) CSS property to change how the image will fill its container. If you style your image with `object-fit: "contain"`, the image will maintain its aspect ratio and be "letterboxed" to fit the element. If you set `object-fit: "cover"`, the element will retain its aspect ratio, fully fill the element, and some content may be "cropped" off.
+Вы можете использовать CSS-свойство [object-fit](https://developer.mozilla.org/docs/Web/CSS/object-fit), чтобы изменить
+то, как изображение будет заполнять свой контейнер. Если вы стилизуете изображение с помощью `object-fit: "contain"`,
+изображение сохранит свое соотношение сторон и будет иметь поля ("letterboxed"), чтобы вписаться в элемент. Если вы
+установите `object-fit: "cover"`, элемент сохранит свое соотношение сторон, полностью заполнит элемент, и часть контента
+может быть "обрезана".
 
-See visual examples of the above at the [MDN object-fit documentation.](https://developer.mozilla.org/docs/Web/CSS/object-fit)
+Визуальные примеры вышеизложенного смотрите
+в [документации MDN по object-fit.](https://developer.mozilla.org/docs/Web/CSS/object-fit)
 
-You can also style your image with the [object-position property](https://developer.mozilla.org/docs/Web/CSS/object-position) to adjust its position within its containing element.
+Вы также можете стилизовать изображение с
+помощью [свойства object-position](https://developer.mozilla.org/docs/Web/CSS/object-position), чтобы настроить его
+положение внутри содержащего элемента.
 
-IMPORTANT: For the "fill" image to render properly, its parent element **must** be styled with `position: "relative"`, `position: "fixed"`, or `position: "absolute"`.
+ВАЖНО: Для правильного рендеринга изображения с `fill`, его родительский элемент **должен** быть стилизован с
+`position: "relative"`, `position: "fixed"` или `position: "absolute"`.
 
-## How to migrate your background image
+## Как перенести фоновое изображение {#how-to-migrate-your-background-image}
 
-Here's a simple step-by-step process for migrating from `background-image` to `NgOptimizedImage`. For these steps, we'll refer to the element that has an image background as the "containing element":
+Вот простой пошаговый процесс миграции с `background-image` на `NgOptimizedImage`. Для этих шагов мы будем называть
+элемент, имеющий фоновое изображение, "содержащим элементом":
 
-1. Remove the `background-image` style from the containing element.
-2. Ensure that the containing element has `position: "relative"`, `position: "fixed"`, or `position: "absolute"`.
-3. Create a new image element as a child of the containing element, using `ngSrc` to enable the `NgOptimizedImage` directive.
-4. Give that element the `fill` attribute. Do not include a `height` and `width`.
-5. If you believe this image might be your [LCP element](https://web.dev/lcp/), add the `priority` attribute to the image element.
+1. Удалите стиль `background-image` из содержащего элемента.
+2. Убедитесь, что содержащий элемент имеет `position: "relative"`, `position: "fixed"` или `position: "absolute"`.
+3. Создайте новый элемент изображения как дочерний элемент содержащего элемента, используя `ngSrc` для включения
+   директивы `NgOptimizedImage`.
+4. Добавьте этому элементу атрибут `fill`. Не указывайте `height` и `width`.
+5. Если вы считаете, что это изображение может быть вашим [элементом LCP](https://web.dev/lcp/), добавьте атрибут
+   `priority` к элементу изображения.
 
-You can adjust how the background image fills the container as described in the [Using fill mode](#using-fill-mode) section.
+Вы можете настроить то, как фоновое изображение заполняет контейнер, как описано в
+разделе [Использование режима fill](#using-fill-mode).
 
-## Using placeholders
+## Использование заполнителей (placeholders)
 
-### Automatic placeholders
+### Автоматические заполнители
 
-NgOptimizedImage can display an automatic low-resolution placeholder for your image if you're using a CDN or image host that provides automatic image resizing. Take advantage of this feature by adding the `placeholder` attribute to your image:
+NgOptimizedImage может отображать автоматический заполнитель низкого разрешения для вашего изображения, если вы
+используете CDN или хостинг изображений, который обеспечивает автоматическое изменение размера изображений.
+Воспользуйтесь этой функцией, добавив атрибут `placeholder` к вашему изображению:
 
 ```html
 
@@ -138,9 +176,13 @@ NgOptimizedImage can display an automatic low-resolution placeholder for your im
 
 ```
 
-Adding this attribute automatically requests a second, smaller version of the image using your specified image loader. This small image will be applied as a `background-image` style with a CSS blur while your image loads. If no image loader is provided, no placeholder image can be generated and an error will be thrown.
+Добавление этого атрибута автоматически запрашивает вторую, уменьшенную версию изображения с использованием указанного
+вами загрузчика изображений. Это маленькое изображение будет применено как стиль `background-image` с CSS-размытием во
+время загрузки вашего изображения. Если загрузчик изображений не предоставлен, изображение-заполнитель не может быть
+сгенерировано, и будет выдана ошибка.
 
-The default size for generated placeholders is 30px wide. You can change this size by specifying a pixel value in the `IMAGE_CONFIG` provider, as seen below:
+Размер по умолчанию для генерируемых заполнителей составляет 30px в ширину. Вы можете изменить этот размер, указав
+значение в пикселях в провайдере `IMAGE_CONFIG`, как показано ниже:
 
 ```ts
 providers: [
@@ -153,11 +195,19 @@ providers: [
 ],
 ```
 
-If you want sharp edges around your blurred placeholder, you can wrap your image in a containing `<div>` with the `overflow: hidden` style. As long as the `<div>` is the same size as the image (such as by using the `width: fit-content` style), the "fuzzy edges" of the placeholder will be hidden.
+Если вы хотите четкие края вокруг размытого заполнителя, вы можете обернуть ваше изображение в содержащий `<div>` со
+стилем `overflow: hidden`. Пока `<div>` имеет тот же размер, что и изображение (например, при использовании стиля
+`width: fit-content`), "размытые края" заполнителя будут скрыты.
 
-### Data URL placeholders
+### Заполнители Data URL
 
-You can also specify a placeholder using a base64 [data URL](https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URLs) without an image loader. The data url format is `data:image/[imagetype];[data]`, where `[imagetype]` is the image format, just as `png`, and `[data]` is a base64 encoding of the image. That encoding can be done using the command line or in JavaScript. For specific commands, see [the MDN documentation](https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URLs#encoding_data_into_base64_format). An example of a data URL placeholder with truncated data is shown below:
+Вы также можете указать заполнитель, используя
+base64 [Data URL](https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URLs) без загрузчика изображений.
+Формат data url: `data:image/[imagetype];[data]`, где `[imagetype]` — это формат изображения, например `png`, а
+`[data]` — это кодировка изображения в base64. Эту кодировку можно выполнить с помощью командной строки или в
+JavaScript. Конкретные команды см.
+в [документации MDN](https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URLs#encoding_data_into_base64_format).
+Пример заполнителя Data URL с усеченными данными показан ниже:
 
 ```html
 
@@ -170,11 +220,17 @@ You can also specify a placeholder using a base64 [data URL](https://developer.m
 
 ```
 
-However, large data URLs increase the size of your Angular bundles and slow down page load. If you cannot use an image loader, the Angular team recommends keeping base64 placeholder images smaller than 4KB and using them exclusively on critical images. In addition to decreasing placeholder dimensions, consider changing image formats or parameters used when saving images. At very low resolutions, these parameters can have a large effect on file size.
+Однако большие Data URL увеличивают размер ваших бандлов Angular и замедляют загрузку страницы. Если вы не можете
+использовать загрузчик изображений, команда Angular рекомендует сохранять изображения-заполнители в base64 размером
+менее 4 КБ и использовать их исключительно для критически важных изображений. В дополнение к уменьшению размеров
+заполнителя, рассмотрите возможность изменения форматов изображений или параметров, используемых при сохранении
+изображений. При очень низких разрешениях эти параметры могут оказать большое влияние на размер файла.
 
-### Non-blurred placeholders
+### Заполнители без размытия
 
-By default, NgOptimizedImage applies a CSS blur effect to image placeholders. To render a placeholder without blur, provide a `placeholderConfig` argument with an object that includes the `blur` property, set to false. For example:
+По умолчанию NgOptimizedImage применяет эффект CSS-размытия к заполнителям изображений. Чтобы отобразить заполнитель без
+размытия, предоставьте аргумент `placeholderConfig` с объектом, который включает свойство `blur`, установленное в false.
+Например:
 
 ```html
 <img
@@ -186,23 +242,34 @@ placeholder
 />
 ```
 
-## Adjusting image styling
+## Настройка стилизации изображений
 
-Depending on the image's styling, adding `width` and `height` attributes may cause the image to render differently. `NgOptimizedImage` warns you if your image styling renders the image at a distorted aspect ratio.
+В зависимости от стилизации изображения, добавление атрибутов `width` и `height` может привести к тому, что изображение
+будет отображаться по-другому. `NgOptimizedImage` предупреждает вас, если ваша стилизация изображения приводит к
+искажению соотношения сторон.
 
-You can typically fix this by adding `height: auto` or `width: auto` to your image styles. For more information, see the [web.dev article on the `<img>` tag](https://web.dev/patterns/web-vitals-patterns/images/img-tag).
+Обычно это можно исправить, добавив `height: auto` или `width: auto` к стилям вашего изображения. Для получения
+дополнительной информации см. [статью на web.dev о теге
+`<img>`](https://web.dev/patterns/web-vitals-patterns/images/img-tag).
 
-If the `width` and `height` attribute on the image are preventing you from sizing the image the way you want with CSS, consider using `fill` mode instead, and styling the image's parent element.
+Если атрибуты `width` и `height` изображения мешают вам задать размер изображения так, как вы хотите с помощью CSS,
+рассмотрите возможность использования режима `fill` и стилизации родительского элемента изображения.
 
-## Performance Features
+## Функции производительности
 
-NgOptimizedImage includes a number of features designed to improve loading performance in your app. These features are described in this section.
+NgOptimizedImage включает ряд функций, предназначенных для улучшения производительности загрузки в вашем приложении. Эти
+функции описаны в этом разделе.
 
-### Add resource hints
+### Добавление подсказок ресурсов (Resource Hints) {#add-resource-hints}
 
-A [`preconnect` resource hint](https://web.dev/preconnect-and-dns-prefetch) for your image origin ensures that the LCP image loads as quickly as possible.
+[Подсказка ресурса `preconnect`](https://web.dev/preconnect-and-dns-prefetch) для источника вашего изображения
+гарантирует, что LCP-изображение загрузится как можно быстрее.
 
-Preconnect links are automatically generated for domains provided as an argument to a [loader](#optional-set-up-a-loader). If an image origin cannot be automatically identified, and no preconnect link is detected for the LCP image, `NgOptimizedImage` will warn during development. In that case, you should manually add a resource hint to `index.html`. Within the `<head>` of the document, add a `link` tag with `rel="preconnect"`, as shown below:
+Ссылки preconnect автоматически генерируются для доменов, предоставленных в качестве
+аргумента [загрузчику](#optional-set-up-a-loader). Если источник изображения не может быть автоматически
+идентифицирован, и для LCP-изображения не обнаружена ссылка preconnect, `NgOptimizedImage` выдаст предупреждение во
+время разработки. В этом случае вам следует вручную добавить подсказку ресурса в `index.html`. Внутри `<head>` документа
+добавьте тег `link` с `rel="preconnect"`, как показано ниже:
 
 ```html
 
@@ -210,7 +277,7 @@ Preconnect links are automatically generated for domains provided as an argument
 
 ```
 
-To disable preconnect warnings, inject the `PRECONNECT_CHECK_BLOCKLIST` token:
+Чтобы отключить предупреждения preconnect, внедрите токен `PRECONNECT_CHECK_BLOCKLIST`:
 
 ```ts
 
@@ -220,37 +287,54 @@ providers: [
 
 ```
 
-See more information on automatic preconnect generation [here](#why-is-a-preconnect-element-not-being-generated-for-my-image-domain).
+Дополнительную информацию об автоматической генерации preconnect
+смотрите [здесь](#why-is-a-preconnect-element-not-being-generated-for-my-image-domain).
 
-### Request images at the correct size with automatic `srcset`
+### Запрос изображений правильного размера с автоматическим `srcset`
 
-Defining a [`srcset` attribute](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/srcset) ensures that the browser requests an image at the right size for your user's viewport, so it doesn't waste time downloading an image that's too large. `NgOptimizedImage` generates an appropriate `srcset` for the image, based on the presence and value of the [`sizes` attribute](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/sizes) on the image tag.
+Определение [атрибута `srcset`](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/srcset) гарантирует, что
+браузер запросит изображение правильного размера для области просмотра вашего пользователя, чтобы не тратить время на
+загрузку слишком большого изображения. `NgOptimizedImage` генерирует подходящий `srcset` для изображения на основе
+наличия и значения [атрибута `sizes`](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/sizes) в теге
+изображения.
 
-#### Fixed-size images
+#### Изображения фиксированного размера
 
-If your image should be "fixed" in size (i.e. the same size across devices, except for [pixel density](https://web.dev/codelab-density-descriptors/)), there is no need to set a `sizes` attribute. A `srcset` can be generated automatically from the image's width and height attributes with no further input required.
+Если ваше изображение должно быть "фиксированным" по размеру (т.е. одинакового размера на всех устройствах, за
+исключением [плотности пикселей](https://web.dev/codelab-density-descriptors/)), нет необходимости устанавливать атрибут
+`sizes`. `Srcset` может быть сгенерирован автоматически из атрибутов ширины и высоты изображения без дополнительных
+входных данных.
 
-Example srcset generated:
+Пример сгенерированного srcset:
 
 ```html
 <img ... srcset="image-400w.jpg 1x, image-800w.jpg 2x">
 ```
 
-#### Responsive images
+#### Адаптивные изображения {#responsive-images}
 
-If your image should be responsive (i.e. grow and shrink according to viewport size), then you will need to define a [`sizes` attribute](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/sizes) to generate the `srcset`.
+Если ваше изображение должно быть адаптивным (т.е. увеличиваться и уменьшаться в зависимости от размера области
+просмотра), вам нужно будет определить [атрибут
+`sizes`](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/sizes) для генерации `srcset`.
 
-If you haven't used `sizes` before, a good place to start is to set it based on viewport width. For example, if your CSS causes the image to fill 100% of viewport width, set `sizes` to `100vw` and the browser will select the image in the `srcset` that is closest to the viewport width (after accounting for pixel density). If your image is only likely to take up half the screen (ex: in a sidebar), set `sizes` to `50vw` to ensure the browser selects a smaller image. And so on.
+Если вы раньше не использовали `sizes`, хорошее начало — установить его на основе ширины области просмотра. Например,
+если ваш CSS заставляет изображение занимать 100% ширины области просмотра, установите `sizes` в `100vw`, и браузер
+выберет изображение из `srcset`, которое ближе всего к ширине области просмотра (с учетом плотности пикселей). Если ваше
+изображение, скорее всего, займет только половину экрана (например, в боковой панели), установите `sizes` в `50vw`,
+чтобы браузер выбрал изображение меньшего размера. И так далее.
 
-If you find that the above does not cover your desired image behavior, see the documentation on [advanced sizes values](#advanced-sizes-values).
+Если вы обнаружите, что вышеизложенное не покрывает желаемое поведение изображения, см. документацию
+по [продвинутым значениям sizes](#advanced-sizes-values).
 
-Note that `NgOptimizedImage` automatically prepends `"auto"` to the provided `sizes` value. This is an optimization that increases the accuracy of srcset selection on browsers which support `sizes="auto"`, and is ignored by browsers which do not.
+Обратите внимание, что `NgOptimizedImage` автоматически добавляет `"auto"` перед предоставленным значением `sizes`. Это
+оптимизация, которая повышает точность выбора srcset в браузерах, поддерживающих `sizes="auto"`, и игнорируется
+браузерами, которые этого не поддерживают.
 
-By default, the responsive breakpoints are:
+По умолчанию адаптивные точки останова (breakpoints):
 
 `[16, 32, 48, 64, 96, 128, 256, 384, 640, 750, 828, 1080, 1200, 1920, 2048, 3840]`
 
-If you would like to customize these breakpoints, you can do so using the `IMAGE_CONFIG` provider:
+Если вы хотите настроить эти точки останова, вы можете сделать это с помощью провайдера `IMAGE_CONFIG`:
 
 ```ts
 providers: [
@@ -263,7 +347,8 @@ providers: [
 ],
 ```
 
-If you would like to manually define a `srcset` attribute, you can provide your own using the `ngSrcset` attribute:
+Если вы хотите вручную определить атрибут `srcset`, вы можете предоставить свой собственный, используя атрибут
+`ngSrcset`:
 
 ```html
 
@@ -271,7 +356,9 @@ If you would like to manually define a `srcset` attribute, you can provide your 
 
 ```
 
-If the `ngSrcset` attribute is present, `NgOptimizedImage` generates and sets the `srcset` based on the sizes included. Do not include image file names in `ngSrcset` - the directive infers this information from `ngSrc`. The directive supports both width descriptors (e.g. `100w`) and density descriptors (e.g. `1x`).
+Если атрибут `ngSrcset` присутствует, `NgOptimizedImage` генерирует и устанавливает `srcset` на основе включенных
+размеров. Не включайте имена файлов изображений в `ngSrcset` — директива выводит эту информацию из `ngSrc`. Директива
+поддерживает как дескрипторы ширины (например, `100w`), так и дескрипторы плотности (например, `1x`).
 
 ```html
 
@@ -279,9 +366,10 @@ If the `ngSrcset` attribute is present, `NgOptimizedImage` generates and sets th
 
 ```
 
-### Disabling automatic srcset generation
+### Отключение автоматической генерации srcset
 
-To disable srcset generation for a single image, you can add the `disableOptimizedSrcset` attribute on the image:
+Чтобы отключить генерацию srcset для одного изображения, вы можете добавить атрибут `disableOptimizedSrcset` к
+изображению:
 
 ```html
 
@@ -289,9 +377,12 @@ To disable srcset generation for a single image, you can add the `disableOptimiz
 
 ```
 
-### Disabling image lazy loading
+### Отключение ленивой загрузки изображений
 
-By default, `NgOptimizedImage` sets `loading=lazy` for all images that are not marked `priority`. You can disable this behavior for non-priority images by setting the `loading` attribute. This attribute accepts values: `eager`, `auto`, and `lazy`. [See the documentation for the standard image `loading` attribute for details](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/loading#value).
+По умолчанию `NgOptimizedImage` устанавливает `loading=lazy` для всех изображений, которые не помечены как `priority`.
+Вы можете отключить это поведение для неприоритетных изображений, установив атрибут `loading`. Этот атрибут принимает
+значения: `eager`, `auto` и `lazy`. [Подробности см. в документации по стандартному атрибуту изображения
+`loading`](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/loading#value).
 
 ```html
 
@@ -299,36 +390,44 @@ By default, `NgOptimizedImage` sets `loading=lazy` for all images that are not m
 
 ```
 
-### Controlling image decoding
+### Управление декодированием изображений
 
-By default, `NgOptimizedImage` sets `decoding="auto"` for all images. This allows the browser to decide the optimal time to decode an image after it has been fetched. When an image is marked as `priority`, Angular automatically sets `decoding="sync"` to ensure the image is decoded and painted as early as possible helping improve **Largest Contentful Paint (LCP)** performance.
+По умолчанию `NgOptimizedImage` устанавливает `decoding="auto"` для всех изображений. Это позволяет браузеру выбирать
+оптимальное время для декодирования изображения после его загрузки. Когда изображение помечено как `priority`, Angular
+автоматически устанавливает `decoding="sync"`, чтобы гарантировать, что изображение будет декодировано и отрисовано как
+можно раньше, помогая улучшить показатели **Largest Contentful Paint (LCP)**.
 
-You can still override this behavior by explicitly setting the `decoding` attribute.  
-[See the documentation for the standard image `decoding` attribute for details](https://developer.mozilla.org/docs/Web/HTML/Element/img#decoding).
+Вы все равно можете переопределить это поведение, явно установив атрибут `decoding`.
+[Подробности см. в документации по стандартному атрибуту изображения
+`decoding`](https://developer.mozilla.org/docs/Web/HTML/Element/img#decoding).
 
 ```html
-<!-- Default: decoding is 'auto' -->
+<!-- По умолчанию: decoding равно 'auto' -->
 <img ngSrc="gallery/landscape.jpg" width="1200" height="800">
 
-<!-- Decode the image asynchronously to avoid blocking the main thread.-->
+<!-- Декодировать изображение асинхронно, чтобы избежать блокировки основного потока.-->
 <img ngSrc="gallery/preview.jpg" width="600" height="400" decoding="async">
 
-<!-- Priority images automatically use decoding="sync" -->
+<!-- Приоритетные изображения автоматически используют decoding="sync" -->
 <img ngSrc="awesome.jpg" width="500" height="625" priority >
 
-<!-- Decode immediately (can block) when you need the pixels right away -->
+<!-- Декодировать немедленно (может блокировать), когда пиксели нужны прямо сейчас -->
 <img ngSrc="hero.jpg" width="1600" height="900" decoding="sync">
 ```
 
-**Allowed values**
+**Допустимые значения**
 
-- `auto` (default): lets the browser choose the optimal strategy.
-- `async`: decodes the image asynchronously, avoiding main‑thread blocking where possible.
-- `sync`: decodes the image immediately; can block rendering but ensures pixels are ready as soon as the image is available.
+- `auto` (по умолчанию): позволяет браузеру выбрать оптимальную стратегию.
+- `async`: декодирует изображение асинхронно, избегая блокировки основного потока, где это возможно.
+- `sync`: декодирует изображение немедленно; может блокировать рендеринг, но гарантирует готовность пикселей, как только
+  изображение станет доступным.
 
-### Advanced 'sizes' values
+### Продвинутые значения 'sizes' {#advanced-sizes-values}
 
-You may want to have images displayed at varying widths on differently-sized screens. A common example of this pattern is a grid- or column-based layout that renders a single column on mobile devices, and two columns on larger devices. You can capture this behavior in the `sizes` attribute, using a "media query" syntax, such as the following:
+Возможно, вы захотите, чтобы изображения отображались с разной шириной на экранах разного размера. Распространенным
+примером этого паттерна является макет на основе сетки или колонок, который отображает одну колонку на мобильных
+устройствах и две колонки на более крупных устройствах. Вы можете описать это поведение в атрибуте `sizes`, используя
+синтаксис "медиа-запросов", например:
 
 ```html
 
@@ -336,37 +435,49 @@ You may want to have images displayed at varying widths on differently-sized scr
 
 ```
 
-The `sizes` attribute in the above example says "I expect this image to be 100 percent of the screen width on devices under 768px wide. Otherwise, I expect it to be 50 percent of the screen width.
+Атрибут `sizes` в приведенном выше примере говорит: "Я ожидаю, что это изображение будет занимать 100 процентов ширины
+экрана на устройствах шириной менее 768 пикселей. В противном случае я ожидаю, что оно будет занимать 50 процентов
+ширины экрана".
 
-For additional information about the `sizes` attribute, see [web.dev](https://web.dev/learn/design/responsive-images/#sizes) or [mdn](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/sizes).
+Для получения дополнительной информации об атрибуте `sizes`
+см. [web.dev](https://web.dev/learn/design/responsive-images/#sizes)
+или [mdn](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/sizes).
 
-## Configuring an image loader for `NgOptimizedImage`
+## Настройка загрузчика изображений для `NgOptimizedImage` {#configuring-an-image-loader-for-ngoptimizedimage}
 
-A "loader" is a function that generates an [image transformation URL](https://web.dev/image-cdns/#how-image-cdns-use-urls-to-indicate-optimization-options) for a given image file. When appropriate, `NgOptimizedImage` sets the size, format, and image quality transformations for an image.
+"Загрузчик" (loader) — это функция, которая
+генерирует [URL трансформации изображения](https://web.dev/image-cdns/#how-image-cdns-use-urls-to-indicate-optimization-options)
+для заданного файла изображения. Когда это уместно, `NgOptimizedImage` устанавливает трансформации размера, формата и
+качества для изображения.
 
-`NgOptimizedImage` provides both a generic loader that applies no transformations, as well as loaders for various third-party image services. It also supports writing your own custom loader.
+`NgOptimizedImage` предоставляет как универсальный загрузчик, который не применяет никаких трансформаций, так и
+загрузчики для различных сторонних сервисов изображений. Он также поддерживает написание собственного пользовательского
+загрузчика.
 
-| Loader type                            | Behavior                                                                                                                                                                                                                       |
-| :------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Generic loader                         | The URL returned by the generic loader will always match the value of `src`. In other words, this loader applies no transformations. Sites that use Angular to serve images are the primary intended use case for this loader. |
-| Loaders for third-party image services | The URL returned by the loaders for third-party image services will follow API conventions used by that particular image service.                                                                                              |
-| Custom loaders                         | A custom loader's behavior is defined by its developer. You should use a custom loader if your image service isn't supported by the loaders that come preconfigured with `NgOptimizedImage`.                                   |
+| Тип загрузчика                                | Поведение                                                                                                                                                                                                                                                                           |
+| :-------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Универсальный загрузчик                       | URL, возвращаемый универсальным загрузчиком, всегда будет соответствовать значению `src`. Другими словами, этот загрузчик не применяет никаких трансформаций. Сайты, использующие Angular для обслуживания изображений, являются основным вариантом использования этого загрузчика. |
+| Загрузчики для сторонних сервисов изображений | URL, возвращаемый загрузчиками для сторонних сервисов изображений, будет следовать соглашениям API, используемым конкретным сервисом изображений.                                                                                                                                   |
+| Пользовательские загрузчики                   | Поведение пользовательского загрузчика определяется его разработчиком. Вам следует использовать пользовательский загрузчик, если ваш сервис изображений не поддерживается загрузчиками, предварительно настроенными в `NgOptimizedImage`.                                           |
 
-Based on the image services commonly used with Angular applications, `NgOptimizedImage` provides loaders preconfigured to work with the following image services:
+Основываясь на сервисах изображений, часто используемых с приложениями Angular, `NgOptimizedImage` предоставляет
+загрузчики, предварительно настроенные для работы со следующими сервисами:
 
-| Image Service             | Angular API               | Documentation                                                               |
-| :------------------------ | :------------------------ | :-------------------------------------------------------------------------- |
-| Cloudflare Image Resizing | `provideCloudflareLoader` | [Documentation](https://developers.cloudflare.com/images/image-resizing/)   |
-| Cloudinary                | `provideCloudinaryLoader` | [Documentation](https://cloudinary.com/documentation/resizing_and_cropping) |
-| ImageKit                  | `provideImageKitLoader`   | [Documentation](https://docs.imagekit.io/)                                  |
-| Imgix                     | `provideImgixLoader`      | [Documentation](https://docs.imgix.com/)                                    |
-| Netlify                   | `provideNetlifyLoader`    | [Documentation](https://docs.netlify.com/image-cdn/overview/)               |
+| Сервис изображений        | Angular API               | Документация                                                               |
+| :------------------------ | :------------------------ | :------------------------------------------------------------------------- |
+| Cloudflare Image Resizing | `provideCloudflareLoader` | [Документация](https://developers.cloudflare.com/images/image-resizing/)   |
+| Cloudinary                | `provideCloudinaryLoader` | [Документация](https://cloudinary.com/documentation/resizing_and_cropping) |
+| ImageKit                  | `provideImageKitLoader`   | [Документация](https://docs.imagekit.io/)                                  |
+| Imgix                     | `provideImgixLoader`      | [Документация](https://docs.imgix.com/)                                    |
+| Netlify                   | `provideNetlifyLoader`    | [Документация](https://docs.netlify.com/image-cdn/overview/)               |
 
-To use the **generic loader** no additional code changes are necessary. This is the default behavior.
+Для использования **универсального загрузчика** никаких дополнительных изменений кода не требуется. Это поведение по
+умолчанию.
 
-### Built-in Loaders
+### Встроенные загрузчики {#built-in-loaders}
 
-To use an existing loader for a **third-party image service**, add the provider factory for your chosen service to the `providers` array. In the example below, the Imgix loader is used:
+Чтобы использовать существующий загрузчик для **стороннего сервиса изображений**, добавьте фабрику провайдера для
+выбранного вами сервиса в массив `providers`. В примере ниже используется загрузчик Imgix:
 
 ```ts
 providers: [
@@ -374,17 +485,20 @@ providers: [
 ],
 ```
 
-The base URL for your image assets should be passed to the provider factory as an argument. For most sites, this base URL should match one of the following patterns:
+Базовый URL для ваших ресурсов изображений должен быть передан фабрике провайдера в качестве аргумента. Для большинства
+сайтов этот базовый URL должен соответствовать одному из следующих шаблонов:
 
 - <https://yoursite.yourcdn.com>
 - <https://subdomain.yoursite.com>
 - <https://subdomain.yourcdn.com/yoursite>
 
-You can learn more about the base URL structure in the docs of a corresponding CDN provider.
+Вы можете узнать больше о структуре базового URL в документации соответствующего CDN-провайдера.
 
-### Custom Loaders
+### Пользовательские загрузчики {#custom-loaders}
 
-To use a **custom loader**, provide your loader function as a value for the `IMAGE_LOADER` DI token. In the example below, the custom loader function returns a URL starting with `https://example.com` that includes `src` and `width` as URL parameters.
+Чтобы использовать **пользовательский загрузчик**, предоставьте функцию загрузчика в качестве значения для DI-токена
+`IMAGE_LOADER`. В примере ниже функция пользовательского загрузчика возвращает URL, начинающийся с
+`https://example.com`, который включает `src` и `width` в качестве параметров URL.
 
 ```ts
 providers: [
@@ -397,19 +511,27 @@ providers: [
 ],
 ```
 
-A loader function for the `NgOptimizedImage` directive takes an object with the `ImageLoaderConfig` type (from `@angular/common`) as its argument and returns the absolute URL of the image asset. The `ImageLoaderConfig` object contains the `src` property, and optional `width` and `loaderParams` properties.
+Функция загрузчика для директивы `NgOptimizedImage` принимает объект с типом `ImageLoaderConfig` (из `@angular/common`)
+в качестве аргумента и возвращает абсолютный URL ресурса изображения. Объект `ImageLoaderConfig` содержит свойство `src`
+и необязательные свойства `width` и `loaderParams`.
 
-NOTE: even though the `width` property may not always be present, a custom loader must use it to support requesting images at various widths in order for `ngSrcset` to work properly.
+ПРИМЕЧАНИЕ: даже если свойство `width` может не всегда присутствовать, пользовательский загрузчик должен использовать
+его для поддержки запроса изображений различной ширины, чтобы `ngSrcset` работал правильно.
 
-### The `loaderParams` Property
+### Свойство `loaderParams` {#the-loaderparams-property}
 
-There is an additional attribute supported by the `NgOptimizedImage` directive, called `loaderParams`, which is specifically designed to support the use of custom loaders. The `loaderParams` attribute takes an object with any properties as a value, and does not do anything on its own. The data in `loaderParams` is added to the `ImageLoaderConfig` object passed to your custom loader, and can be used to control the behavior of the loader.
+Существует дополнительный атрибут, поддерживаемый директивой `NgOptimizedImage`, называемый `loaderParams`, который
+специально разработан для поддержки использования пользовательских загрузчиков. Атрибут `loaderParams` принимает объект
+с любыми свойствами в качестве значения и сам по себе ничего не делает. Данные в `loaderParams` добавляются в объект
+`ImageLoaderConfig`, передаваемый вашему пользовательскому загрузчику, и могут использоваться для управления поведением
+загрузчика.
 
-A common use for `loaderParams` is controlling advanced image CDN features.
+Обычное использование `loaderParams` — управление расширенными функциями CDN изображений.
 
-### Example custom loader
+### Пример пользовательского загрузчика
 
-The following shows an example of a custom loader function. This example function concatenates `src` and `width`, and uses `loaderParams` to control a custom CDN feature for rounded corners:
+Ниже показан пример функции пользовательского загрузчика. Эта примерная функция объединяет `src` и `width` и использует
+`loaderParams` для управления пользовательской функцией CDN для закругленных углов:
 
 ```ts
 const myCustomLoader = (config: ImageLoaderConfig) => {
@@ -425,7 +547,9 @@ const myCustomLoader = (config: ImageLoaderConfig) => {
 };
 ```
 
-Note that in the above example, we've invented the 'roundedCorners' property name to control a feature of our custom loader. We could then use this feature when creating an image, as follows:
+Обратите внимание, что в приведенном выше примере мы придумали имя свойства 'roundedCorners' для управления функцией
+нашего пользовательского загрузчика. Затем мы могли бы использовать эту функцию при создании изображения следующим
+образом:
 
 ```html
 
@@ -433,21 +557,27 @@ Note that in the above example, we've invented the 'roundedCorners' property nam
 
 ```
 
-## Frequently Asked Questions
+## Часто задаваемые вопросы
 
-### Does NgOptimizedImage support the `background-image` css property?
+### Поддерживает ли NgOptimizedImage CSS-свойство `background-image`?
 
-The NgOptimizedImage does not directly support the `background-image` css property, but it is designed to easily accommodate the use case of having an image as the background of another element.
+NgOptimizedImage не поддерживает напрямую CSS-свойство `background-image`, но она разработана так, чтобы легко
+приспособить вариант использования, когда изображение является фоном другого элемента.
 
-For a step-by-step process for migration from `background-image` to `NgOptimizedImage`, see the [How to migrate your background image](#how-to-migrate-your-background-image) section above.
+Пошаговый процесс миграции с `background-image` на `NgOptimizedImage` см. в
+разделе [Как перенести фоновое изображение](#how-to-migrate-your-background-image) выше.
 
-### Why can't I use `src` with `NgOptimizedImage`?
+### Почему я не могу использовать `src` с `NgOptimizedImage`?
 
-The `ngSrc` attribute was chosen as the trigger for NgOptimizedImage due to technical considerations around how images are loaded by the browser. NgOptimizedImage makes programmatic changes to the `loading` attribute -- if the browser sees the `src` attribute before those changes are made, it will begin eagerly downloading the image file, and the loading changes will be ignored.
+Атрибут `ngSrc` был выбран в качестве триггера для NgOptimizedImage из-за технических соображений, касающихся того, как
+изображения загружаются браузером. NgOptimizedImage вносит программные изменения в атрибут `loading` — если браузер
+увидит атрибут `src` до того, как эти изменения будут внесены, он начнет жадно (eagerly) загружать файл изображения, и
+изменения загрузки будут проигнорированы.
 
-### Why is a preconnect element not being generated for my image domain?
+### Почему для домена моего изображения не генерируется элемент preconnect? {#why-is-a-preconnect-element-not-being-generated-for-my-image-domain}
 
-Preconnect generation is performed based on static analysis of your application. That means that the image domain must be directly included in the loader parameter, as in the following example:
+Генерация preconnect выполняется на основе статического анализа вашего приложения. Это означает, что домен изображения
+должен быть непосредственно включен в параметр загрузчика, как в следующем примере:
 
 ```ts
 providers: [
@@ -455,34 +585,46 @@ providers: [
 ],
 ```
 
-If you use a variable to pass the domain string to the loader, or you're not using a loader, the static analysis will not be able to identify the domain, and no preconnect link will be generated. In this case you should manually add a preconnect link to the document head, as [described above](#add-resource-hints).
+Если вы используете переменную для передачи строки домена в загрузчик или не используете загрузчик, статический анализ
+не сможет идентифицировать домен, и ссылка preconnect не будет сгенерирована. В этом случае вам следует вручную добавить
+ссылку preconnect в заголовок документа, как [описано выше](#add-resource-hints).
 
-### Can I use two different image domains in the same page?
+### Могу ли я использовать два разных домена изображений на одной странице?
 
-The [image loaders](#configuring-an-image-loader-for-ngoptimizedimage) provider pattern is designed to be as simple as possible for the common use case of having only a single image CDN used within a component. However, it's still very possible to manage multiple image CDNs using a single provider.
+Паттерн провайдера [загрузчиков изображений](#configuring-an-image-loader-for-ngoptimizedimage) разработан так, чтобы
+быть максимально простым для обычного случая использования только одного CDN изображений внутри компонента. Однако
+вполне возможно управлять несколькими CDN изображений, используя один провайдер.
 
-To do this, we recommend writing a [custom image loader](#custom-loaders) which uses the [`loaderParams` property](#the-loaderparams-property) to pass a flag that specifies which image CDN should be used, and then invokes the appropriate loader based on that flag.
+Для этого мы рекомендуем написать [пользовательский загрузчик изображений](#custom-loaders), который
+использует [свойство `loaderParams`](#the-loaderparams-property) для передачи флага, указывающего, какой CDN изображений
+следует использовать, а затем вызывает соответствующий загрузчик на основе этого флага.
 
-### Can you add a new built-in loader for my preferred CDN?
+### Можете ли вы добавить новый встроенный загрузчик для моего предпочтительного CDN?
 
-For maintenance reasons, we don't currently plan to support additional built-in loaders in the Angular repository. Instead, we encourage developers to publish any additional image loaders as third-party packages.
+По причинам поддержки мы в настоящее время не планируем поддерживать дополнительные встроенные загрузчики в репозитории
+Angular. Вместо этого мы призываем разработчиков публиковать любые дополнительные загрузчики изображений в виде
+сторонних пакетов.
 
-### Can I use this with the `<picture>` tag
+### Могу ли я использовать это с тегом `<picture>`
 
-No, but this is on our roadmap, so stay tuned.
+Нет, но это есть в нашей дорожной карте, так что следите за обновлениями.
 
-If you're waiting on this feature, please upvote the Github issue [here](https://github.com/angular/angular/issues/56594).
+Если вы ждете эту функцию, пожалуйста, проголосуйте за проблему на
+Github [здесь](https://github.com/angular/angular/issues/56594).
 
-### How do I find my LCP image with Chrome DevTools?
+### Как найти мое LCP-изображение с помощью Chrome DevTools?
 
-1. Using the performance tab of the Chrome DevTools, click on the "start profiling and reload page" button on the top left. It looks like a page refresh icon.
+1. Используя вкладку Performance в Chrome DevTools, нажмите кнопку "start profiling and reload page" (начать
+   профилирование и перезагрузить страницу) в левом верхнем углу. Она выглядит как значок обновления страницы.
 
-2. This will trigger a profiling snapshot of your Angular application.
+2. Это запустит снимок профилирования вашего приложения Angular.
 
-3. Once the profiling result is available, select "LCP" in the timings section.
+3. Как только результат профилирования будет доступен, выберите "LCP" в разделе timings.
 
-4. A summary entry should appear in the panel at the bottom. You can find the LCP element in the row for "related node". Clicking on it will reveal the element in the Elements panel.
+4. В панели внизу должна появиться сводная запись. Вы можете найти элемент LCP в строке "related node". Нажатие на него
+   покажет элемент в панели Elements.
 
-<img alt="LCP in the Chrome DevTools" src="assets/images/guide/image-optimization/devtools-lcp.png">
+<img alt="LCP в Chrome DevTools" src="assets/images/guide/image-optimization/devtools-lcp.png">
 
-NOTE: This only identifies the LCP element within the viewport of the page you are testing. It is also recommended to use mobile emulation to identify the LCP element for smaller screens.
+ПРИМЕЧАНИЕ: Это идентифицирует элемент LCP только в пределах области просмотра страницы, которую вы тестируете. Также
+рекомендуется использовать эмуляцию мобильных устройств для идентификации элемента LCP для экранов меньшего размера.

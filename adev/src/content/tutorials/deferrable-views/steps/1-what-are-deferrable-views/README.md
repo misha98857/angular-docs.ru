@@ -1,16 +1,21 @@
-# What are deferrable views?
+# Что такое откладываемые представления?
 
-A fully rendered Angular page may contain many different components, directives, and pipes. While certain parts of the page should be shown to the user immediately, there may be portions that can wait to display until later.
-Angular's _deferrable views_, using the `@defer` syntax, can help you speed up your application by telling Angular to wait to download the JavaScript for the parts of the page that don't need to be shown right away.
+Полностью отрисованная страница Angular может содержать множество различных компонентов, директив и пайпов. Хотя
+определенные части страницы должны быть показаны пользователю немедленно, могут быть и такие части, отображение которых
+может подождать.
+_Откладываемые представления_ (deferrable views) в Angular, использующие синтаксис `@defer`, помогают ускорить ваше
+приложение. Они сообщают Angular, что загрузку JavaScript для частей страницы, которые не нужно показывать сразу,
+следует отложить.
 
-In this activity, you'll learn how to use deferrable views to defer load a section of your component template.
+В этом упражнении вы узнаете, как использовать откладываемые представления для отложенной загрузки секции шаблона вашего
+компонента.
 
 <hr>
 
 <docs-workflow>
 
-<docs-step title="Add a `@defer` block to a section of a template">
-In your `app.ts`, wrap the `article-comments` component with a `@defer` block to defer load it.
+<docs-step title="Добавьте блок `@defer` в секцию шаблона">
+В файле `app.ts` оберните компонент `article-comments` в блок `@defer` для его отложенной загрузки.
 
 <docs-code language="angular-html">
 @defer {
@@ -18,9 +23,10 @@ In your `app.ts`, wrap the `article-comments` component with a `@defer` block to
 }
 </docs-code>
 
-By default, `@defer` loads the `article-comments` component when the browser is idle.
+По умолчанию `@defer` загружает компонент `article-comments`, когда браузер находится в состоянии простоя (idle).
 
-In your browser's developer console, you can see that the `article-comments-component` lazy chunk file is loaded separately (The specific file names may change from run to run):
+В консоли разработчика в браузере вы можете увидеть, что файл lazy-чанка `article-comments-component` загружается
+отдельно (конкретные имена файлов могут меняться от запуска к запуску):
 
 <docs-code language="markdown">
 Initial chunk files | Names                      |  Raw size
@@ -34,4 +40,4 @@ chunk-T5UYXUSI.js | article-comments-component | 1.84 kB |
 </docs-step>
 </docs-workflow>
 
-Great work! You’ve learned the basics of deferrable views.
+Отличная работа! Вы изучили основы откладываемых представлений.

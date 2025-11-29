@@ -1,5 +1,5 @@
 {
   "type": "editor-only",
-  "title": "Minigame template",
+  "title": "Шаблон мини-игры",
   "openFiles": ["src/main.ts", "src/game.html", "src/game.css"]
 }

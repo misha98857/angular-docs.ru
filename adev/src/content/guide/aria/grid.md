@@ -1,14 +1,16 @@
+---
+
 <docs-decorative-header title="Grid">
 </docs-decorative-header>
 
 <docs-pill-row>
-  <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/" title="Grid ARIA pattern"/>
-  <docs-pill href="/api?query=grid#angular_aria_grid" title="Grid API Reference"/>
+<docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/" title="ARIA-паттерн Grid"/>
+<docs-pill href="/api?query=grid#angular_aria_grid" title="Справочник API Grid"/>
 </docs-pill-row>
 
-## Overview
+## Обзор
 
-A grid enables users to navigate two-dimensional data or interactive elements using directional arrow keys, Home, End, and Page Up/Down. Grids work for data tables, calendars, spreadsheets, and layout patterns that group related interactive elements.
+Grid (сетка) позволяет пользователям перемещаться по двумерным данным или интерактивным элементам, используя клавиши со стрелками, Home, End и Page Up/Down. Grid подходит для таблиц данных, календарей, электронных таблиц и шаблонов макета, группирующих связанные интерактивные элементы.
 
 <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/grid/src/overview/basic/app/app.ts">
   <docs-code header="TS" path="adev/src/content/examples/aria/grid/src/overview/basic/app/app.ts"/>
@@ -16,40 +18,40 @@ A grid enables users to navigate two-dimensional data or interactive elements us
   <docs-code header="CSS" path="adev/src/content/examples/aria/grid/src/overview/basic/app/app.css"/>
 </docs-code-multifile>
 
-## Usage
+## Использование
 
-Grids work well for data or interactive elements organized in rows and columns where users need keyboard navigation in multiple directions.
+Grid хорошо подходит для данных или интерактивных элементов, организованных в строки и столбцы, где пользователям необходима навигация с клавиатуры в нескольких направлениях.
 
-**Use grids when:**
+**Используйте Grid, когда:**
 
-- Building interactive data tables with editable or selectable cells
-- Creating calendars or date pickers
-- Implementing spreadsheet-like interfaces
-- Grouping interactive elements (buttons, checkboxes) to reduce tab stops on a page
-- Building interfaces requiring two-dimensional keyboard navigation
+- Создаете интерактивные таблицы данных с редактируемыми или выбираемыми ячейками
+- Создаете календари или элементы выбора даты
+- Реализуете интерфейсы, подобные электронным таблицам
+- Группируете интерактивные элементы (кнопки, чекбоксы) для уменьшения количества остановок табуляции на странице
+- Создаете интерфейсы, требующие двумерной навигации с клавиатуры
 
-**Avoid grids when:**
+**Избегайте использования Grid, когда:**
 
-- Displaying simple read-only tables (use semantic HTML `<table>` instead)
-- Showing single-column lists (use [Listbox](guide/aria/listbox) instead)
-- Displaying hierarchical data (use [Tree](guide/aria/tree) instead)
-- Building forms without tabular layout (use standard form controls)
+- Отображаете простые таблицы только для чтения (используйте семантический HTML `<table>`)
+- Показываете одноколоночные списки (используйте [Listbox](guide/aria/listbox))
+- Отображаете иерархические данные (используйте [Tree](guide/aria/tree))
+- Создаете формы без табличной структуры (используйте стандартные элементы управления форм)
 
-## Features
+## Возможности
 
-- **Two-dimensional navigation** - Arrow keys move between cells in all directions
-- **Focus modes** - Choose between roving tabindex or activedescendant focus strategies
-- **Selection support** - Optional cell selection with single or multi-select modes
-- **Wrapping behavior** - Configure how navigation wraps at grid edges (continuous, loop, or nowrap)
-- **Range selection** - Select multiple cells with modifier keys or dragging
-- **Disabled states** - Disable the entire grid or individual cells
-- **RTL support** - Automatic right-to-left language navigation
+- **Двумерная навигация** — Клавиши со стрелками перемещают фокус между ячейками во всех направлениях
+- **Режимы фокуса** — Выбор между стратегиями фокуса `roving tabindex` или `activedescendant`
+- **Поддержка выбора** — Опциональный выбор ячеек с режимами одиночного или множественного выбора
+- **Поведение переноса** — Настройка того, как навигация переносится на краях сетки (непрерывная, зацикленная или без переноса)
+- **Выбор диапазона** — Выбор нескольких ячеек с помощью клавиш-модификаторов или перетаскивания
+- **Отключенные состояния** — Отключение всей сетки или отдельных ячеек
+- **Поддержка RTL** — Автоматическая навигация для языков с письмом справа налево
 
-## Examples
+## Примеры
 
-### Data table grid
+### Сетка таблицы данных
 
-Use a grid for interactive tables where users need to navigate between cells using arrow keys. This example shows a basic data table with keyboard navigation.
+Используйте Grid для интерактивных таблиц, где пользователям нужно перемещаться между ячейками с помощью стрелок. Этот пример показывает базовую таблицу данных с навигацией с клавиатуры.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -68,11 +70,11 @@ Use a grid for interactive tables where users need to navigate between cells usi
   </docs-tab>
 </docs-tab-group>
 
-Apply the `ngGrid` directive to the table element, `ngGridRow` to each row, and `ngGridCell` to each cell.
+Примените директиву `ngGrid` к элементу таблицы, `ngGridRow` к каждой строке и `ngGridCell` к каждой ячейке.
 
-### Calendar grid
+### Сетка календаря
 
-Calendars are a common use case for grids. This example shows a month view where users navigate dates using arrow keys.
+Календари — частый случай использования Grid. Этот пример показывает вид месяца, где пользователи перемещаются по датам с помощью стрелок.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -98,11 +100,11 @@ Calendars are a common use case for grids. This example shows a month view where
   </docs-tab>
 </docs-tab-group>
 
-Users can activate a date by pressing Enter or Space when focused on a cell.
+Пользователи могут активировать дату, нажав Enter или Пробел, когда фокус находится на ячейке.
 
-### Layout grid
+### Сетка макета
 
-Use a layout grid to group interactive elements and reduce tab stops. This example shows a grid of pill buttons.
+Используйте сетку макета для группировки интерактивных элементов и сокращения количества остановок табуляции. Этот пример показывает сетку кнопок-pill.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -128,11 +130,11 @@ Use a layout grid to group interactive elements and reduce tab stops. This examp
   </docs-tab>
 </docs-tab-group>
 
-Instead of tabbing through each button, users navigate with arrow keys and only one button receives tab focus.
+Вместо переключения табуляцией по каждой кнопке, пользователи перемещаются с помощью стрелок, и только одна кнопка получает фокус табуляции.
 
-### Selection and focus modes
+### Режимы выбора и фокуса
 
-Enable selection with `[enableSelection]="true"` and configure how focus and selection interact.
+Включите выбор с помощью `[enableSelection]="true"` и настройте взаимодействие фокуса и выбора.
 
 ```angular-html
 <table ngGrid
@@ -147,68 +149,68 @@ Enable selection with `[enableSelection]="true"` and configure how focus and sel
 </table>
 ```
 
-**Selection modes:**
+**Режимы выбора:**
 
-- `follow`: Focused cell is automatically selected
-- `explicit`: Users select cells with Space or click
+- `follow`: Сфокусированная ячейка выбирается автоматически
+- `explicit`: Пользователи выбирают ячейки нажатием Пробела или кликом
 
-**Focus modes:**
+**Режимы фокуса:**
 
-- `roving`: Focus moves to cells using `tabindex` (better for simple grids)
-- `activedescendant`: Focus stays on grid container, `aria-activedescendant` indicates active cell (better for virtual scrolling)
+- `roving`: Фокус перемещается к ячейкам с использованием `tabindex` (лучше для простых сеток)
+- `activedescendant`: Фокус остается на контейнере сетки, `aria-activedescendant` указывает на активную ячейку (лучше для виртуального скроллинга)
 
-## APIs
+## API
 
 ### Grid
 
-The container directive that provides keyboard navigation and focus management for rows and cells.
+Контейнерная директива, обеспечивающая навигацию с клавиатуры и управление фокусом для строк и ячеек.
 
-#### Inputs
+#### Входные свойства (Inputs)
 
-| Property               | Type                                 | Default    | Description                                                   |
-| ---------------------- | ------------------------------------ | ---------- | ------------------------------------------------------------- |
-| `enableSelection`      | `boolean`                            | `false`    | Whether selection is enabled for the grid                     |
-| `disabled`             | `boolean`                            | `false`    | Disables the entire grid                                      |
-| `softDisabled`         | `boolean`                            | `true`     | When `true`, disabled cells are focusable but not interactive |
-| `focusMode`            | `'roving' \| 'activedescendant'`     | `'roving'` | Focus strategy used by the grid                               |
-| `rowWrap`              | `'continuous' \| 'loop' \| 'nowrap'` | `'loop'`   | Navigation wrapping behavior along rows                       |
-| `colWrap`              | `'continuous' \| 'loop' \| 'nowrap'` | `'loop'`   | Navigation wrapping behavior along columns                    |
-| `multi`                | `boolean`                            | `false`    | Whether multiple cells can be selected                        |
-| `selectionMode`        | `'follow' \| 'explicit'`             | `'follow'` | Whether selection follows focus or requires explicit action   |
-| `enableRangeSelection` | `boolean`                            | `false`    | Enable range selections with modifier keys or dragging        |
+| Свойство               | Тип                                  | По умолчанию | Описание                                                                   |
+| ---------------------- | ------------------------------------ | ------------ | -------------------------------------------------------------------------- |
+| `enableSelection`      | `boolean`                            | `false`      | Включен ли выбор для сетки                                                 |
+| `disabled`             | `boolean`                            | `false`      | Отключает всю сетку                                                        |
+| `softDisabled`         | `boolean`                            | `true`       | Если `true`, отключенные ячейки могут получать фокус, но не интерактивны   |
+| `focusMode`            | `'roving' \| 'activedescendant'`     | `'roving'`   | Стратегия фокуса, используемая сеткой                                      |
+| `rowWrap`              | `'continuous' \| 'loop' \| 'nowrap'` | `'loop'`     | Поведение переноса навигации вдоль строк                                   |
+| `colWrap`              | `'continuous' \| 'loop' \| 'nowrap'` | `'loop'`     | Поведение переноса навигации вдоль столбцов                                |
+| `multi`                | `boolean`                            | `false`      | Можно ли выбирать несколько ячеек                                          |
+| `selectionMode`        | `'follow' \| 'explicit'`             | `'follow'`   | Следует ли выбор за фокусом или требует явного действия                    |
+| `enableRangeSelection` | `boolean`                            | `false`      | Включить выбор диапазона с помощью клавиш-модификаторов или перетаскивания |
 
 ### GridRow
 
-Represents a row within a grid and serves as a container for grid cells.
+Представляет строку внутри сетки и служит контейнером для ячеек сетки.
 
-#### Inputs
+#### Входные свойства (Inputs)
 
-| Property   | Type     | Default | Description                           |
-| ---------- | -------- | ------- | ------------------------------------- |
-| `rowIndex` | `number` | auto    | The index of this row within the grid |
+| Свойство   | Тип      | По умолчанию | Описание                        |
+| ---------- | -------- | ------------ | ------------------------------- |
+| `rowIndex` | `number` | auto         | Индекс этой строки внутри сетки |
 
 ### GridCell
 
-Represents an individual cell within a grid row.
+Представляет отдельную ячейку внутри строки сетки.
 
-#### Inputs
+#### Входные свойства (Inputs)
 
-| Property      | Type                         | Default        | Description                                             |
+| Свойство      | Тип                          | По умолчанию   | Описание                                                |
 | ------------- | ---------------------------- | -------------- | ------------------------------------------------------- |
-| `id`          | `string`                     | auto           | Unique identifier for the cell                          |
-| `role`        | `string`                     | `'gridcell'`   | Cell role: `gridcell`, `columnheader`, or `rowheader`   |
-| `disabled`    | `boolean`                    | `false`        | Disables this cell                                      |
-| `selected`    | `boolean`                    | `false`        | Whether the cell is selected (supports two-way binding) |
-| `selectable`  | `boolean`                    | `true`         | Whether the cell can be selected                        |
-| `rowSpan`     | `number`                     | —              | Number of rows the cell spans                           |
-| `colSpan`     | `number`                     | —              | Number of columns the cell spans                        |
-| `rowIndex`    | `number`                     | —              | Row index of the cell                                   |
-| `colIndex`    | `number`                     | —              | Column index of the cell                                |
-| `orientation` | `'vertical' \| 'horizontal'` | `'horizontal'` | Orientation for widgets within the cell                 |
-| `wrap`        | `boolean`                    | `true`         | Whether widget navigation wraps within the cell         |
+| `id`          | `string`                     | auto           | Уникальный идентификатор ячейки                         |
+| `role`        | `string`                     | `'gridcell'`   | Роль ячейки: `gridcell`, `columnheader` или `rowheader` |
+| `disabled`    | `boolean`                    | `false`        | Отключает эту ячейку                                    |
+| `selected`    | `boolean`                    | `false`        | Выбрана ли ячейка (поддерживает двустороннюю привязку)  |
+| `selectable`  | `boolean`                    | `true`         | Можно ли выбрать ячейку                                 |
+| `rowSpan`     | `number`                     | —              | Количество строк, которые занимает ячейка               |
+| `colSpan`     | `number`                     | —              | Количество столбцов, которые занимает ячейка            |
+| `rowIndex`    | `number`                     | —              | Индекс строки ячейки                                    |
+| `colIndex`    | `number`                     | —              | Индекс столбца ячейки                                   |
+| `orientation` | `'vertical' \| 'horizontal'` | `'horizontal'` | Ориентация виджетов внутри ячейки                       |
+| `wrap`        | `boolean`                    | `true`         | Переносится ли навигация по виджетам внутри ячейки      |
 
-#### Signals
+#### Сигналы (Signals)
 
-| Property | Type              | Description                          |
-| -------- | ----------------- | ------------------------------------ |
-| `active` | `Signal<boolean>` | Whether the cell currently has focus |
+| Свойство | Тип               | Описание                                     |
+| -------- | ----------------- | -------------------------------------------- |
+| `active` | `Signal<boolean>` | Находится ли фокус в данный момент на ячейке |

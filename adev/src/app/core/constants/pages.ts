@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-// File contains the enums used across whole application.
+// Файл содержит перечисления, используемые во всем приложении.
 
 export const DEFAULT_PAGES = {
   DOCS: 'overview',

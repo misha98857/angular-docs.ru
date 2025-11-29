@@ -1,36 +1,40 @@
-# Migration to lazy-loaded routes
+# Миграция на маршруты с ленивой загрузкой
 
-This schematic helps developers to convert eagerly loaded component routes to lazy loaded routes. This allows the build process to split the production bundle into smaller chunks, to avoid big JS bundle that includes all routes, which negatively affects initial page load of an application.
+Эта схема помогает разработчикам преобразовать маршруты компонентов с активной загрузкой (eagerly loaded) в маршруты с
+ленивой загрузкой (lazy loaded). Это позволяет процессу сборки разделять продакшн-бандл на более мелкие чанки, избегая
+создания большого JS-бандла, включающего все маршруты, что негативно сказывается на начальной загрузке приложения.
 
-Run the schematic using the following command:
+Запустите схему, используя следующую команду:
 
 ```shell
 ng generate @angular/core:route-lazy-loading
 ```
 
-### `path` config option
+### Опция конфигурации `path`
 
-By default, migration will go over the entire application. If you want to apply this migration to a subset of the files, you can pass the path argument as shown below:
+По умолчанию миграция проходит по всему приложению. Если вы хотите применить эту миграцию к подмножеству файлов, вы
+можете передать аргумент пути, как показано ниже:
 
 ```shell
 ng generate @angular/core:route-lazy-loading --path src/app/sub-component
 ```
 
-The value of the path parameter is a relative path within the project.
+Значение параметра path — это относительный путь внутри проекта.
 
-### How does it work?
+### Как это работает?
 
-The schematic will attempt to find all the places where the application routes as defined:
+Схема попытается найти все места, где определены маршруты приложения:
 
-- `RouterModule.forRoot` and `RouterModule.forChild`
+- `RouterModule.forRoot` и `RouterModule.forChild`
 - `Router.resetConfig`
 - `provideRouter`
 - `provideRoutes`
-- variables of type `Routes` or `Route[]` (e.g. `const routes: Routes = [{...}]`)
+- переменные типа `Routes` или `Route[]` (например, `const routes: Routes = [{...}]`)
 
-The migration will check all the components in the routes, check if they are standalone and eagerly loaded, and if so, it will convert them to lazy loaded routes.
+Миграция проверит все компоненты в маршрутах, определит, являются ли они standalone-компонентами и загружаются ли они
+сразу. Если это так, она преобразует их в маршруты с ленивой загрузкой.
 
-#### Before
+#### До
 
 ```typescript
 // app.module.ts
@@ -41,7 +45,7 @@ import {HomeComponent} from './home/home.component';
     RouterModule.forRoot([
       {
         path: 'home',
-        // HomeComponent is standalone and eagerly loaded
+        // HomeComponent является standalone-компонентом и загружается сразу
         component: HomeComponent,
       },
     ]),
@@ -50,7 +54,7 @@ import {HomeComponent} from './home/home.component';
 export class AppModule {}
 ```
 
-#### After
+#### После
 
 ```typescript
 // app.module.ts
@@ -59,7 +63,7 @@ export class AppModule {}
     RouterModule.forRoot([
       {
         path: 'home',
-        // ↓ HomeComponent is now lazy loaded
+        // ↓ HomeComponent теперь загружается лениво
         loadComponent: () => import('./home/home.component').then(m => m.HomeComponent),
       },
     ]),
@@ -68,4 +72,7 @@ export class AppModule {}
 export class AppModule {}
 ```
 
-This migration will also collect information about all the components declared in NgModules and output the list of routes that use them (including corresponding location of the file). Consider making those components standalone and run this migration again. You can use an existing migration ([see](reference/migrations/standalone)) to convert those components to standalone.
+Эта миграция также соберет информацию обо всех компонентах, объявленных в NgModules, и выведет список маршрутов, которые
+их используют (включая соответствующее расположение файла). Рассмотрите возможность сделать эти компоненты
+standalone-компонентами и запустите эту миграцию снова. Вы можете использовать существующую
+миграцию ([см. здесь](reference/migrations/standalone)) для преобразования этих компонентов в standalone.

@@ -1,10 +1,12 @@
-# Getting started with service workers
+# Начало работы с Service Workers
 
-This document explains how to enable Angular service worker support in projects that you created with the [Angular CLI](tools/cli). It then uses an example to show you a service worker in action, demonstrating loading and basic caching.
+Этот документ объясняет, как включить поддержку Angular Service Worker в проектах, созданных с
+помощью [Angular CLI](tools/cli). Затем на примере демонстрируется работа Service Worker, включая загрузку и базовое
+кеширование.
 
-## Adding a service worker to your project
+## Добавление Service Worker в проект
 
-To set up the Angular service worker in your project, run the following CLI command:
+Чтобы настроить Angular Service Worker в вашем проекте, выполните следующую команду CLI:
 
 ```shell
 
@@ -12,19 +14,21 @@ ng add @angular/pwa
 
 ```
 
-The CLI configures your application to use service workers with the following actions:
+CLI настраивает ваше приложение для использования Service Workers, выполняя следующие действия:
 
-1. Adds the `@angular/service-worker` package to your project.
-1. Enables service worker build support in the CLI.
-1. Imports and registers the service worker with the application's root providers.
-1. Updates the `index.html` file:
-   - Includes a link to add the `manifest.webmanifest` file
-   - Adds a meta tag for `theme-color`
-1. Installs icon files to support the installed Progressive Web App (PWA).
-1. Creates the service worker configuration file called [`ngsw-config.json`](ecosystem/service-workers/config),
-   which specifies the caching behaviors and other settings.
+1. Добавляет пакет `@angular/service-worker` в ваш проект.
+1. Включает поддержку сборки Service Worker в CLI.
+1. Импортирует и регистрирует Service Worker в корневых провайдерах приложения.
+1. Обновляет файл `index.html`:
 
-Now, build the project:
+- Включает ссылку для добавления файла `manifest.webmanifest`
+- Добавляет мета-тег для `theme-color`
+
+1. Устанавливает файлы иконок для поддержки установленного Progressive Web App (PWA).
+1. Создает конфигурационный файл Service Worker под названием [`ngsw-config.json`](ecosystem/service-workers/config),
+   который определяет поведение кеширования и другие настройки.
+
+Теперь соберите проект:
 
 ```shell
 
@@ -32,12 +36,12 @@ ng build
 
 ```
 
-The CLI project is now set up to use the Angular service worker.
+Проект CLI теперь настроен для использования Angular Service Worker.
 
-## Service worker in action: a tour
+## Service Worker в действии: обзор
 
-This section demonstrates a service worker in action,
-using an example application. To enable service worker support during local development, use the production configuration with the following command:
+Этот раздел демонстрирует работу Service Worker на примере приложения. Чтобы включить поддержку Service Worker во время
+локальной разработки, используйте производственную конфигурацию с помощью следующей команды:
 
 ```shell
 
@@ -45,8 +49,8 @@ ng serve --configuration=production
 
 ```
 
-Alternatively, you can use the [`http-server package`](https://www.npmjs.com/package/http-server) from
-npm, which supports service worker applications. Run it without installation using:
+В качестве альтернативы можно использовать пакет [`http-server`](https://www.npmjs.com/package/http-server) из npm,
+который поддерживает приложения с Service Worker. Запустите его без установки с помощью:
 
 ```shell
 
@@ -54,116 +58,128 @@ npx http-server -p 8080 -c-1 dist/<project-name>/browser
 
 ```
 
-This will serve your application with service worker support at http://localhost:8080.
+Это запустит ваше приложение с поддержкой Service Worker по адресу http://localhost:8080.
 
-### Initial load
+### Первоначальная загрузка
 
-With the server running on port `8080`, point your browser at `http://localhost:8080`.
-Your application should load normally.
+Запустив сервер на порту `8080`, перейдите в браузере по адресу `http://localhost:8080`.
+Ваше приложение должно загрузиться как обычно.
 
-TIP: When testing Angular service workers, it's a good idea to use an incognito or private window in your browser to ensure the service worker doesn't end up reading from a previous leftover state, which can cause unexpected behavior.
+СОВЕТ: При тестировании Angular Service Workers рекомендуется использовать режим инкогнито или приватное окно в
+браузере, чтобы гарантировать, что Service Worker не считывает предыдущее остаточное состояние, что может вызвать
+неожиданное поведение.
 
-HELPFUL: If you are not using HTTPS, the service worker will only be registered when accessing the application on `localhost`.
+ПОЛЕЗНО: Если вы не используете HTTPS, Service Worker будет зарегистрирован только при доступе к приложению через
+`localhost`.
 
-### Simulating a network issue
+### Моделирование проблем с сетью
 
-To simulate a network issue, disable network interaction for your application.
+Чтобы смоделировать проблему с сетью, отключите сетевое взаимодействие для вашего приложения.
 
-In Chrome:
+В Chrome:
 
-1. Select **Tools** > **Developer Tools** (from the Chrome menu located in the top right corner).
-1. Go to the **Network tab**.
-1. Select **Offline** in the **Throttling** dropdown menu.
+1. Выберите **Tools** > **Developer Tools** (в меню Chrome в правом верхнем углу).
+1. Перейдите на вкладку **Network**.
+1. Выберите **Offline** в выпадающем меню **Throttling**.
 
-<img alt="The offline option in the Network tab is selected" src="assets/images/guide/service-worker/offline-option.png">
+<img alt="Опция offline выбрана на вкладке Network" src="assets/images/guide/service-worker/offline-option.png">
 
-Now the application has no access to network interaction.
+Теперь у приложения нет доступа к сети.
 
-For applications that do not use the Angular service worker, refreshing now would display Chrome's Internet disconnected page that says "There is no Internet connection".
+Для приложений, не использующих Angular Service Worker, обновление страницы сейчас отобразило бы страницу Chrome "Нет
+подключения к Интернету".
 
-With the addition of an Angular service worker, the application behavior changes.
-On a refresh, the page loads normally.
+С добавлением Angular Service Worker поведение приложения меняется.
+При обновлении страница загружается нормально.
 
-Look at the Network tab to verify that the service worker is active.
+Посмотрите на вкладку Network, чтобы убедиться, что Service Worker активен.
 
-<img alt="Requests are marked as from ServiceWorker" src="assets/images/guide/service-worker/sw-active.png">
+<img alt="Запросы помечены как от ServiceWorker" src="assets/images/guide/service-worker/sw-active.png">
 
-HELPFUL: Under the "Size" column, the requests state is `(ServiceWorker)`.
-This means that the resources are not being loaded from the network.
-Instead, they are being loaded from the service worker's cache.
+ПОЛЕЗНО: В столбце "Size" состояние запросов указано как `(ServiceWorker)`.
+Это означает, что ресурсы загружаются не из сети.
+Вместо этого они загружаются из кеша Service Worker.
 
-### What's being cached?
+### Что кешируется?
 
-Notice that all of the files the browser needs to render this application are cached.
-The `ngsw-config.json` boilerplate configuration is set up to cache the specific resources used by the CLI:
+Обратите внимание, что все файлы, необходимые браузеру для рендеринга этого приложения, закешированы.
+Шаблонная конфигурация `ngsw-config.json` настроена на кеширование конкретных ресурсов, используемых CLI:
 
 - `index.html`
 - `favicon.ico`
-- Build artifacts (JS and CSS bundles)
-- Anything under `assets`
-- Images and fonts directly under the configured `outputPath` (by default `./dist/<project-name>/`) or `resourcesOutputPath`.
-  See the documentation for `ng build` for more information about these options.
+- Артефакты сборки (JS и CSS бандлы)
+- Всё в папке `assets`
+- Изображения и шрифты непосредственно в настроенном `outputPath` (по умолчанию `./dist/<project-name>/`) или
+  `resourcesOutputPath`.
+  См. документацию по `ng build` для получения дополнительной информации об этих опциях.
 
-IMPORTANT: The generated `ngsw-config.json` includes a limited list of cacheable fonts and images extensions. In some cases, you might want to modify the glob pattern to suit your needs.
+ВАЖНО: Сгенерированный `ngsw-config.json` включает ограниченный список расширений для кешируемых шрифтов и изображений.
+В некоторых случаях вам может потребоваться изменить glob-шаблон в соответствии с вашими потребностями.
 
-IMPORTANT: If `resourcesOutputPath` or `assets` paths are modified after the generation of configuration file, you need to change the paths manually in `ngsw-config.json`.
+ВАЖНО: Если пути `resourcesOutputPath` или `assets` были изменены после генерации файла конфигурации, необходимо
+изменить пути вручную в `ngsw-config.json`.
 
-### Making changes to your application
+### Внесение изменений в приложение
 
-Now that you've seen how service workers cache your application, the next step is understanding how updates work.
-Make a change to the application, and watch the service worker install the update:
+Теперь, когда вы увидели, как Service Worker кеширует приложение, следующий шаг — понять, как работают обновления.
+Внесите изменение в приложение и наблюдайте, как Service Worker устанавливает обновление:
 
-1. If you're testing in an incognito window, open a second blank tab.
-   This keeps the incognito and the cache state alive during your test.
+1. Если вы тестируете в окне инкогнито, откройте вторую пустую вкладку.
+   Это сохранит состояние инкогнито и кеша активными во время теста.
 
-1. Close the application tab, but not the window.
-   This should also close the Developer Tools.
+1. Закройте вкладку приложения, но не окно.
+   Это также должно закрыть инструменты разработчика.
 
-1. Shut down `http-server` (Ctrl-c).
-1. Open `src/app/app.component.html` for editing.
-1. Change the text `Welcome to {{title}}!` to `Bienvenue à {{title}}!`.
-1. Build and run the server again:
+1. Остановите `http-server` (Ctrl-c).
+1. Откройте `src/app/app.component.html` для редактирования.
+1. Измените текст `Welcome to {{title}}!` на `Bienvenue à {{title}}!`.
+1. Соберите проект и запустите сервер снова:
 
 ```shell
     ng build
     npx http-server -p 8080 -c-1 dist/<project-name>/browser
 ```
 
-### Updating your application in the browser
+### Обновление приложения в браузере
 
-Now look at how the browser and service worker handle the updated application.
+Теперь посмотрите, как браузер и Service Worker обрабатывают обновленное приложение.
 
-1. Open [http://localhost:8080](http://localhost:8080) again in the same window.
-   What happens?
+1. Откройте [http://localhost:8080](http://localhost:8080) снова в том же окне.
+   Что происходит?
 
-   <img alt="It still says Welcome to Service Workers!" src="assets/images/guide/service-worker/welcome-msg-en.png">
+   <img alt="Текст все еще гласит Welcome to Service Workers!" src="assets/images/guide/service-worker/welcome-msg-en.png">
 
-   What went wrong?
-   _Nothing, actually!_
-   The Angular service worker is doing its job and serving the version of the application that it has **installed**, even though there is an update available.
-   In the interest of speed, the service worker doesn't wait to check for updates before it serves the application that it has cached.
+   Что пошло не так?
+   _На самом деле, ничего!_
+   Angular Service Worker выполняет свою работу и предоставляет ту версию приложения, которую он **установил**, даже
+   если доступно обновление.
+   В интересах скорости Service Worker не ждет проверки обновлений перед тем, как предоставить закешированное
+   приложение.
 
-   Look at the `http-server` logs to see the service worker requesting `/ngsw.json`.
+   Посмотрите логи `http-server`, чтобы увидеть запрос Service Worker к `/ngsw.json`.
 
    ```text
    [2023-09-07T00:37:24.372Z]  "GET /ngsw.json?ngsw-cache-bust=0.9365263935102124" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
    ```
 
-   This is how the service worker checks for updates.
+   Так Service Worker проверяет наличие обновлений.
 
-1. Refresh the page.
+1. Обновите страницу.
 
-   <img alt="The text has changed to say Bienvenue à app!" src="assets/images/guide/service-worker/welcome-msg-fr.png">
+   <img alt="Текст изменился на Bienvenue à app!" src="assets/images/guide/service-worker/welcome-msg-fr.png">
 
-   The service worker installed the updated version of your application _in the background_, and the next time the page is loaded or reloaded, the service worker switches to the latest version.
+   Service Worker установил обновленную версию вашего приложения _в фоновом режиме_, и при следующей загрузке или
+   перезагрузке страницы Service Worker переключится на последнюю версию.
 
-## Service worker configuration
+## Конфигурация Service Worker
 
-Angular service workers support comprehensive configuration options through the `SwRegistrationOptions` interface, providing fine-grained control over registration behavior, caching, and script execution.
+Angular Service Workers поддерживают обширные возможности конфигурации через интерфейс `SwRegistrationOptions`,
+обеспечивая детальный контроль над поведением регистрации, кешированием и выполнением скриптов.
 
-### Enabling and disabling service workers
+### Включение и отключение Service Workers
 
-The `enabled` option controls whether the service worker will be registered and related services will attempt to communicate with it.
+Опция `enabled` управляет тем, будет ли зарегистрирован Service Worker и будут ли связанные сервисы пытаться
+взаимодействовать с ним.
 
 ```ts
 
@@ -173,16 +189,18 @@ import { provideServiceWorker } from '@angular/service-worker';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideServiceWorker('ngsw-worker.js', {
-      enabled: !isDevMode(), // Disable in development, enable in production
+      enabled: !isDevMode(), // Отключить в разработке, включить в продакшене
     }),
   ],
 };
 
 ```
 
-### Cache control with updateViaCache
+### Управление кешем с помощью updateViaCache
 
-The `updateViaCache` option controls how the browser consults the HTTP cache during service worker updates. This provides fine-grained control over when the browser fetches updated service worker scripts and imported modules.
+Опция `updateViaCache` управляет тем, как браузер обращается к HTTP-кешу во время обновлений Service Worker. Это
+обеспечивает детальный контроль над тем, когда браузер извлекает обновленные скрипты Service Worker и импортируемые
+модули.
 
 ```ts
 
@@ -197,37 +215,17 @@ export const appConfig: ApplicationConfig = {
 
 ```
 
-The `updateViaCache` option accepts the following values:
+Опция `updateViaCache` принимает следующие значения:
 
-- **`'imports'`** - The HTTP cache is consulted for the service worker script's imported scripts, but not for the service worker script itself
-- **`'all'`** - The HTTP cache is consulted for both the service worker script and its imported scripts
-- **`'none'`** - The HTTP cache is not consulted for the service worker script or its imported scripts
+- **`'imports'`** — HTTP-кеш используется для скриптов, импортируемых скриптом Service Worker, но не для самого скрипта
+  Service Worker
+- **`'all'`** — HTTP-кеш используется как для скрипта Service Worker, так и для его импортируемых скриптов
+- **`'none'`** — HTTP-кеш не используется ни для скрипта Service Worker, ни для его импортируемых скриптов
 
-### ES Module support with type option
+### Поддержка ES-модулей с опцией type
 
-The `type` option enables specifying the script type when registering service workers, providing support for ES module features in your service worker scripts.
-
-```ts
-
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideServiceWorker('ngsw-worker.js', {
-      enabled: !isDevMode(),
-      type: 'module', // Enable ES module features
-    }),
-  ],
-};
-
-```
-
-The `type` option accepts the following values:
-
-- **`'classic'`** (default) - Traditional service worker script execution. ES module features such as `import` and `export` are NOT allowed in the script
-- **`'module'`** - Registers the script as an ES module. Allows use of `import`/`export` syntax and module features
-
-### Registration scope control
-
-The `scope` option defines the service worker's registration scope, determining what range of URLs it can control.
+Опция `type` позволяет указать тип скрипта при регистрации Service Worker, обеспечивая поддержку функций ES-модулей в
+ваших скриптах Service Worker.
 
 ```ts
 
@@ -235,20 +233,45 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
-      scope: '/app/', // Service worker will only control URLs under /app/
+      type: 'module', // Включить функции ES-модулей
     }),
   ],
 };
 
 ```
 
-- Controls which URLs the service worker can intercept and manage
-- By default, the scope is the directory containing the service worker script
-- Used when calling `ServiceWorkerContainer.register()`
+Опция `type` принимает следующие значения:
 
-### Registration strategy configuration
+- **`'classic'`** (по умолчанию) — Традиционное выполнение скрипта Service Worker. Функции ES-модулей, такие как
+  `import` и `export`, НЕ разрешены в скрипте
+- **`'module'`** — Регистрирует скрипт как ES-модуль. Позволяет использовать синтаксис `import`/`export` и функции
+  модулей
 
-The `registrationStrategy` option defines when the service worker will be registered with the browser, providing control over the timing of registration.
+### Управление областью регистрации (scope)
+
+Опция `scope` определяет область регистрации Service Worker, указывая диапазон URL-адресов, которыми он может управлять.
+
+```ts
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      scope: '/app/', // Service Worker будет управлять только URL-адресами в /app/
+    }),
+  ],
+};
+
+```
+
+- Управляет тем, какие URL-адреса Service Worker может перехватывать и обрабатывать
+- По умолчанию областью видимости является каталог, содержащий скрипт Service Worker
+- Используется при вызове `ServiceWorkerContainer.register()`
+
+### Конфигурация стратегии регистрации
+
+Опция `registrationStrategy` определяет, когда Service Worker будет зарегистрирован в браузере, обеспечивая контроль над
+временем регистрации.
 
 ```ts
 
@@ -263,15 +286,16 @@ export const appConfig: ApplicationConfig = {
 
 ```
 
-Available registration strategies:
+Доступные стратегии регистрации:
 
-- **`'registerWhenStable:timeout'`** (default: `'registerWhenStable:30000'`) - Register as soon as the application stabilizes (no pending micro-/macro-tasks) but no later than the specified timeout in milliseconds
-- **`'registerImmediately'`** - Register the service worker immediately
-- **`'registerWithDelay:timeout'`** - Register with a delay of the specified timeout in milliseconds
+- **`'registerWhenStable:timeout'`** (по умолчанию: `'registerWhenStable:30000'`) — Регистрировать, как только
+  приложение стабилизируется (нет ожидающих микро-/макрозадач), но не позднее указанного тайм-аута в миллисекундах
+- **`'registerImmediately'`** — Зарегистрировать Service Worker немедленно
+- **`'registerWithDelay:timeout'`** — Зарегистрировать с задержкой в указанное количество миллисекунд
 
 ```ts
 
-// Register immediately
+// Зарегистрировать немедленно
 export const immediateConfig: ApplicationConfig = {
   providers: [
     provideServiceWorker('ngsw-worker.js', {
@@ -281,7 +305,7 @@ export const immediateConfig: ApplicationConfig = {
   ],
 };
 
-// Register with a 5-second delay
+// Зарегистрировать с задержкой в 5 секунд
 export const delayedConfig: ApplicationConfig = {
   providers: [
     provideServiceWorker('ngsw-worker.js', {
@@ -293,7 +317,7 @@ export const delayedConfig: ApplicationConfig = {
 
 ```
 
-You can also provide an Observable factory function for custom registration timing:
+Вы также можете предоставить фабричную функцию, возвращающую Observable, для пользовательского времени регистрации:
 
 ```ts
 import { timer } from 'rxjs';
@@ -302,21 +326,21 @@ export const customConfig: ApplicationConfig = {
   providers: [
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
-      registrationStrategy: () => timer(10_000), // Register after 10 seconds
+      registrationStrategy: () => timer(10_000), // Зарегистрировать через 10 секунд
     }),
   ],
 };
 
 ```
 
-## More on Angular service workers
+## Дополнительно об Angular Service Workers
 
-You might also be interested in the following:
+Вас также может заинтересовать следующее:
 
 <docs-pill-row>
-  <docs-pill href="ecosystem/service-workers/config" title="Configuration file"/>
-  <docs-pill href="ecosystem/service-workers/communications" title="Communicating with the Service Worker"/>
-  <docs-pill href="ecosystem/service-workers/push-notifications" title="Push notifications"/>
-  <docs-pill href="ecosystem/service-workers/devops" title="Service Worker devops"/>
-  <docs-pill href="ecosystem/service-workers/app-shell" title="App shell pattern"/>
+  <docs-pill href="ecosystem/service-workers/config" title="Файл конфигурации"/>
+  <docs-pill href="ecosystem/service-workers/communications" title="Взаимодействие с Service Worker"/>
+  <docs-pill href="ecosystem/service-workers/push-notifications" title="Push-уведомления"/>
+  <docs-pill href="ecosystem/service-workers/devops" title="DevOps для Service Worker"/>
+  <docs-pill href="ecosystem/service-workers/app-shell" title="Шаблон App shell"/>
 </docs-pill-row>

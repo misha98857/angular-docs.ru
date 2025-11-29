@@ -1,52 +1,59 @@
-# The Angular CLI
+# Angular CLI
 
-The Angular CLI is a command-line interface tool which allows you to scaffold, develop, test, deploy, and maintain Angular applications directly from a command shell.
+Angular CLI — это инструмент командной строки, который позволяет создавать структуру, разрабатывать, тестировать,
+развертывать и поддерживать приложения Angular непосредственно из командной оболочки.
 
-Angular CLI is published on npm as the `@angular/cli` package and includes a binary named `ng`. Commands invoking `ng` are using the Angular CLI.
+Angular CLI опубликован в npm как пакет `@angular/cli` и включает исполняемый файл с именем `ng`. Команды, вызывающие
+`ng`, используют Angular CLI.
 
-<docs-callout title="Try Angular without local setup">
+<docs-callout title="Попробуйте Angular без локальной настройки">
 
-If you are new to Angular, you might want to start with [Try it now!](tutorials/learn-angular), which introduces the essentials of Angular in the context of a ready-made basic online store app for you to examine and modify.
-This standalone tutorial takes advantage of the interactive [StackBlitz](https://stackblitz.com) environment for online development.
-You don't need to set up your local environment until you're ready.
+Если вы новичок в Angular, возможно, вы захотите начать с [Попробуйте сейчас!](tutorials/learn-angular). Это руководство
+знакомит с основами Angular на примере готового приложения базового интернет-магазина, которое вы можете изучить и
+изменить.
+В этом автономном руководстве используется интерактивная среда [StackBlitz](https://stackblitz.com) для
+онлайн-разработки.
+Вам не нужно настраивать локальное окружение, пока вы не будете к этому готовы.
 
 </docs-callout>
 
 <docs-card-container>
-  <docs-card title="Getting Started" link="Get Started" href="tools/cli/setup-local">
-    Install Angular CLI to create and build your first app.
+  <docs-card title="Начало работы" link="Начать" href="tools/cli/setup-local">
+    Установите Angular CLI, чтобы создать и собрать свое первое приложение.
   </docs-card>
-  <docs-card title="Command Reference" link="Learn More" href="cli">
-    Discover CLI commands to make you more productive with Angular.
+  <docs-card title="Справочник команд" link="Подробнее" href="cli">
+    Изучите команды CLI, чтобы повысить продуктивность работы с Angular.
   </docs-card>
-  <docs-card title="Schematics" link="Learn More" href="tools/cli/schematics">
-    Create and run schematics to generate and modify source files in your application automatically.
+  <docs-card title="Schematics" link="Подробнее" href="tools/cli/schematics">
+    Создавайте и запускайте Schematics для автоматической генерации и изменения исходных файлов вашего приложения.
   </docs-card>
-  <docs-card title="Builders" link="Learn More" href="tools/cli/cli-builder">
-    Create and run builders to perform complex transformations from your source code to generated build outputs.
+  <docs-card title="Builders" link="Подробнее" href="tools/cli/cli-builder">
+    Создавайте и запускайте Builders для выполнения сложных преобразований исходного кода в готовые артефакты сборки.
   </docs-card>
 </docs-card-container>
 
-## CLI command-language syntax
+## Синтаксис командного языка CLI
 
-Angular CLI roughly follows Unix/POSIX conventions for option syntax.
+Angular CLI в целом следует соглашениям Unix/POSIX в отношении синтаксиса опций.
 
-### Boolean options
+### Логические (Boolean) опции
 
-Boolean options have two forms: `--this-option` sets the flag to `true`, `--no-this-option` sets it to `false`.
-You can also use `--this-option=false` or `--this-option=true`.
-If neither option is supplied, the flag remains in its default state, as listed in the reference documentation.
+Логические опции имеют две формы: `--this-option` устанавливает флаг в `true`, а `--no-this-option` устанавливает его в
+`false`.
+Вы также можете использовать `--this-option=false` или `--this-option=true`.
+Если ни одна из опций не указана, флаг остается в состоянии по умолчанию, как указано в справочной документации.
 
-### Array options
+### Опции-массивы
 
-Array options can be provided in two forms: `--option value1 value2` or `--option value1 --option value2`.
+Опции-массивы могут быть указаны в двух формах: `--option value1 value2` или `--option value1 --option value2`.
 
-### Key/value options
+### Опции ключ/значение
 
-Some options like `--define` expect an array of `key=value` pairs as their values.
-Just like array options, key/value options can be provided in two forms:
-`--define 'KEY_1="value1"' KEY_2=true` or `--define 'KEY_1="value1"' --define KEY_2=true`.
+Некоторые опции, такие как `--define`, ожидают массив пар `key=value` в качестве значений.
+Как и опции-массивы, опции ключ/значение могут быть указаны в двух формах:
+`--define 'KEY_1="value1"' KEY_2=true` или `--define 'KEY_1="value1"' --define KEY_2=true`.
 
-### Relative paths
+### Относительные пути
 
-Options that specify files can be given as absolute paths, or as paths relative to the current working directory, which is generally either the workspace or project root.
+Опции, указывающие на файлы, могут быть заданы как абсолютные пути или как пути относительно текущего рабочего каталога,
+которым обычно является корень рабочей области (workspace) или проекта.

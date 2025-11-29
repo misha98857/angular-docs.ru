@@ -1,5 +1,5 @@
 {
   "openFiles": ["src/app/child.ts", "src/app/app.ts"],
-  "title": "Component output properties",
+  "title": "Выходные свойства компонента (@Output)",
   "type": "editor"
 }

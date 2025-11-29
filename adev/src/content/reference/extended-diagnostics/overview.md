@@ -1,14 +1,16 @@
-# Extended Diagnostics
+# Расширенная диагностика
 
-There are many coding patterns that are technically valid to the compiler or runtime, but which may have complex nuances or caveats.
-These patterns may not have the intended effect expected by a developer, which often leads to bugs.
-The Angular compiler includes "extended diagnostics" which identify many of these patterns, in order to warn developers about the potential issues and enforce common best practices within a codebase.
+Существует множество шаблонов кода, которые технически корректны для компилятора или среды выполнения, но могут иметь
+сложные нюансы или предостережения.
+Эти шаблоны могут не давать ожидаемого разработчиком эффекта, что часто приводит к ошибкам.
+Компилятор Angular включает "расширенную диагностику", которая выявляет многие из этих шаблонов, чтобы предупредить
+разработчиков о потенциальных проблемах и обеспечить соблюдение общих лучших практик в кодовой базе.
 
-## Diagnostics
+## Диагностики {#diagnostics}
 
-Currently, Angular supports the following extended diagnostics:
+В настоящее время Angular поддерживает следующие расширенные диагностики:
 
-| Code     | Name                                                                  |
+| Код      | Имя                                                                   |
 | :------- | :-------------------------------------------------------------------- |
 | `NG8101` | [`invalidBananaInBox`](extended-diagnostics/NG8101)                   |
 | `NG8102` | [`nullishCoalescingNotNullable`](extended-diagnostics/NG8102)         |
@@ -27,18 +29,18 @@ Currently, Angular supports the following extended diagnostics:
 | `NG8117` | [`uninvokedFunctionInTextInterpolation`](extended-diagnostics/NG8117) |
 | `NG8021` | [`deferTriggerMisconfiguration`](extended-diagnostics/NG8021)         |
 
-## Configuration
+## Настройка {#configuration}
 
-Extended diagnostics are warnings by default and do not block compilation.
-Each diagnostic can be configured as either:
+Расширенные диагностики по умолчанию являются предупреждениями и не блокируют компиляцию.
+Каждая диагностика может быть настроена как:
 
-| Error category | Effect                                                                                                                                                                   |
-| :------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `warning`      | Default - The compiler emits the diagnostic as a warning but does not block compilation. The compiler will still exist with status code 0, even if warnings are emitted. |
-| `error`        | The compiler emits the diagnostic as an error and fails the compilation. The compiler will exit with a non-zero status code if one or more errors are emitted.           |
-| `suppress`     | The compiler does _not_ emit the diagnostic at all.                                                                                                                      |
+| Категория ошибки | Эффект                                                                                                                                                                |
+| :--------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `warning`        | По умолчанию — компилятор выдает диагностику как предупреждение, но не блокирует компиляцию. Компилятор завершит работу со статусом 0, даже если есть предупреждения. |
+| `error`          | Компилятор выдает диагностику как ошибку и прерывает компиляцию. Компилятор завершит работу с ненулевым кодом статуса, если выдана одна или несколько ошибок.         |
+| `suppress`       | Компилятор _не_ выдает диагностику вообще.                                                                                                                            |
 
-Check severity can be configured as an [Angular compiler option](reference/configs/angular-compiler-options):
+Строгость проверки можно настроить как [опцию компилятора Angular](reference/configs/angular-compiler-options):
 
 ```json
 
@@ -54,37 +56,44 @@ Check severity can be configured as an [Angular compiler option](reference/confi
 }
 ```
 
-The `checks` field maps the name of individual diagnostics to their associated category.
-See [Diagnostics](#diagnostics) for a complete list of extended diagnostics and the name to use for configuring them.
+Поле `checks` сопоставляет имена отдельных диагностик с их соответствующей категорией.
+См. [Диагностики](#diagnostics) для получения полного списка расширенных диагностик и имен, используемых для их
+настройки.
 
-The `defaultCategory` field is used for any diagnostics that are not explicitly listed under `checks`.
-If not set, such diagnostics will be treated as `warning`.
+Поле `defaultCategory` используется для любых диагностик, которые явно не перечислены в `checks`.
+Если оно не установлено, такие диагностики будут рассматриваться как `warning`.
 
-Extended diagnostics will emit when [`strictTemplates`](tools/cli/template-typecheck#strict-mode) is enabled.
-This is required to allow the compiler to better understand Angular template types and provide accurate and meaningful diagnostics.
+Расширенная диагностика будет работать, когда включен [`strictTemplates`](tools/cli/template-typecheck#strict-mode).
+Это необходимо, чтобы позволить компилятору лучше понимать типы шаблонов Angular и предоставлять точную и значимую
+диагностику.
 
-## Semantic Versioning
+## Семантическое версионирование
 
-The Angular team intends to add or enable new extended diagnostics in **minor** versions of Angular (see [semver](https://docs.npmjs.com/about-semantic-versioning)).
-This means that upgrading Angular may show new warnings in your existing codebase.
-This enables the team to deliver features more quickly and to make extended diagnostics more accessible to developers.
+Команда Angular намерена добавлять или включать новые расширенные диагностики в **минорных** версиях Angular (
+см. [semver](https://docs.npmjs.com/about-semantic-versioning)).
+Это означает, что обновление Angular может показать новые предупреждения в вашей существующей кодовой базе.
+Это позволяет команде быстрее поставлять функции и делать расширенную диагностику более доступной для разработчиков.
 
-However, setting `"defaultCategory": "error"` will promote such warnings to hard errors.
-This can cause a minor version upgrade to introduce compilation errors, which may be seen as a semver non-compliant breaking change.
-Any new diagnostics can be suppressed or demoted to warnings via the above [configuration](#configuration), so the impact of a new diagnostic should be minimal to
-projects that treat extended diagnostics as errors by default.
-Defaulting to error is a very powerful tool; just be aware of this semver caveat when deciding if `error` is the right default for your project.
+Однако установка `"defaultCategory": "error"` превратит такие предупреждения в жесткие ошибки.
+Это может привести к тому, что обновление минорной версии вызовет ошибки компиляции, что может быть воспринято как
+нарушение semver (критическое изменение).
+Любые новые диагностики могут быть подавлены или понижены до предупреждений с помощью
+вышеуказанной [настройки](#configuration), поэтому влияние новой диагностики должно быть минимальным для проектов,
+которые по умолчанию рассматривают расширенную диагностику как ошибки.
+Использование ошибки по умолчанию — очень мощный инструмент; просто помните об этом нюансе semver при решении, подходит
+ли `error` в качестве значения по умолчанию для вашего проекта.
 
-## New Diagnostics
+## Новые диагностики
 
-The Angular team is always open to suggestions about new diagnostics that could be added.
-Extended diagnostics should generally:
+Команда Angular всегда открыта для предложений о новых диагностиках, которые могут быть добавлены.
+Расширенные диагностики, как правило, должны:
 
-- Detect a common, non-obvious developer mistake with Angular templates
-- Clearly articulate why this pattern can lead to bugs or unintended behavior
-- Suggest one or more clear solutions
-- Have a low, preferably zero, false-positive rate
-- Apply to the vast majority of Angular applications (not specific to an unofficial library)
-- Improve program correctness or performance (not style, that responsibility falls to a linter)
+- Обнаруживать распространенные, неочевидные ошибки разработчиков в шаблонах Angular.
+- Четко формулировать, почему этот шаблон может привести к багам или непреднамеренному поведению.
+- Предлагать одно или несколько понятных решений.
+- Иметь низкий, желательно нулевой, уровень ложных срабатываний.
+- Применяться к подавляющему большинству приложений Angular (не быть специфичными для неофициальной библиотеки).
+- Улучшать корректность или производительность программы (не стиль, эта ответственность ложится на линтер).
 
-If you have an idea for an extended diagnostic which fits these criteria, consider filing a [feature request](https://github.com/angular/angular/issues/new?template=2-feature-request.yaml).
+Если у вас есть идея для расширенной диагностики, которая соответствует этим критериям, рассмотрите возможность
+подачи [запроса на функцию](https://github.com/angular/angular/issues/new?template=2-feature-request.yaml).

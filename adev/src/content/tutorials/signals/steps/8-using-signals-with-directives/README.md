@@ -1,15 +1,19 @@
-# Using signals with directives
+# Использование сигналов с директивами
 
-Now that you've learned [using signals with services](/tutorials/signals/7-using-signals-with-services), let's explore how directives use signals. **The great news: signals work exactly the same in directives as they do in components!** The main difference is that since directives don't have templates, you'll primarily use signals in host bindings to reactively update the host element.
+Теперь, когда вы узнали об [использовании сигналов с сервисами](/tutorials/signals/7-using-signals-with-services),
+давайте рассмотрим, как директивы используют сигналы. **Отличная новость: сигналы работают в директивах точно так же,
+как и в компонентах!** Главное отличие заключается в том, что, поскольку у директив нет шаблонов, вы будете использовать
+сигналы в основном в привязках к хосту (host bindings) для реактивного обновления хост-элемента.
 
-In this activity, you'll build a highlight directive that demonstrates how signals create reactive behavior in directives.
+В этом задании вы создадите директиву подсветки, которая продемонстрирует, как сигналы создают реактивное поведение в
+директивах.
 
 <hr />
 
 <docs-workflow>
 
-<docs-step title="Set up signals just like in a component">
-Import the signal functions and create your reactive state. This works exactly the same as in components:
+<docs-step title="Настройка сигналов так же, как в компоненте">
+Импортируйте функции сигналов и создайте свое реактивное состояние. Это работает точно так же, как и в компонентах:
 
 ```ts
 import {Directive, input, signal, computed} from '@angular/core';
@@ -18,14 +22,14 @@ import {Directive, input, signal, computed} from '@angular/core';
   selector: '[highlight]',
 })
 export class HighlightDirective {
-  // Signal inputs - same as components!
+  // Signal inputs - так же, как в компонентах!
   color = input<string>('yellow');
   intensity = input<number>(0.3);
 
-  // Internal state - same as components!
+  // Внутреннее состояние - так же, как в компонентах!
   private isHovered = signal(false);
 
-  // Computed signals - same as components!
+  // Вычисляемые сигналы (Computed signals) - так же, как в компонентах!
   backgroundStyle = computed(() => {
     const baseColor = this.color();
     const alpha = this.isHovered() ? this.intensity() : this.intensity() * 0.5;
@@ -42,11 +46,12 @@ export class HighlightDirective {
 }
 ```
 
-Notice how this is identical to component patterns - the only difference is we're in a `@Directive` instead of `@Component`.
+Обратите внимание, что это идентично паттернам компонентов — единственная разница в том, что мы находимся в
+`@Directive`, а не в `@Component`.
 </docs-step>
 
-<docs-step title="Use signals in host bindings">
-Since directives don't have templates, you'll use signals in **host bindings** to reactively update the host element. Add the `host` configuration and event handlers:
+<docs-step title="Использование сигналов в привязках к хосту">
+Поскольку у директив нет шаблонов, вы будете использовать сигналы в **привязках к хосту** для реактивного обновления хост-элемента. Добавьте конфигурацию `host` и обработчики событий:
 
 ```ts
 @Directive({
@@ -58,7 +63,7 @@ Since directives don't have templates, you'll use signals in **host bindings** t
   },
 })
 export class HighlightDirective {
-  // ... signals from previous step ...
+  // ... сигналы из предыдущего шага ...
 
   onMouseEnter() {
     this.isHovered.set(true);
@@ -70,11 +75,13 @@ export class HighlightDirective {
 }
 ```
 
-The host bindings automatically re-evaluate when the signals change - just like template bindings in components! When `isHovered` changes, the `backgroundStyle` computed signal recalculates, and the host binding updates the element's style.
+Привязки к хосту автоматически пересчитываются при изменении сигналов — точно так же, как привязки в шаблонах
+компонентов! Когда изменяется `isHovered`, вычисляемый сигнал `backgroundStyle` пересчитывается, и привязка к хосту
+обновляет стиль элемента.
 </docs-step>
 
-<docs-step title="Use the directive in your template">
-Update the app template to demonstrate the reactive directive:
+<docs-step title="Использование директивы в шаблоне">
+Обновите шаблон приложения, чтобы продемонстрировать реактивную директиву:
 
 ```angular-ts
 template: `
@@ -96,15 +103,19 @@ template: `
 `,
 ```
 
-The directive automatically applies reactive highlighting based on the signal inputs!
+Директива автоматически применяет реактивную подсветку на основе входных сигналов (signal inputs)!
 </docs-step>
 
 </docs-workflow>
 
-Perfect! You've now seen how signals work with directives. Some key takeaways from this lesson are:
+Отлично! Теперь вы увидели, как сигналы работают с директивами. Вот ключевые выводы из этого урока:
 
-- **Signals are universal** - All signal APIs (`input()`, `signal()`, `computed()`, `effect()`) work the same in both directives and components
-- **Host bindings are the primary use case** - Since directives don't have templates, you use signals in host bindings to reactively modify the host element
-- **Same reactive patterns** - Signal updates trigger automatic re-evaluation of computed signals and host bindings, just like in component templates
+- **Сигналы универсальны** — Все API сигналов (`input()`, `signal()`, `computed()`, `effect()`) работают одинаково как в
+  директивах, так и в компонентах.
+- **Привязки к хосту — основной вариант использования** — Поскольку у директив нет шаблонов, вы используете сигналы в
+  привязках к хосту для реактивного изменения хост-элемента.
+- **Те же реактивные паттерны** — Обновления сигналов вызывают автоматический пересчет вычисляемых сигналов и привязок к
+  хосту, точно так же, как в шаблонах компонентов.
 
-In the next lesson, you'll [learn how to query child elements with signal queries](/tutorials/signals/9-query-child-elements-with-signal-queries)!
+В следующем уроке
+вы [узнаете, как запрашивать дочерние элементы с помощью сигнальных запросов](/tutorials/signals/9-query-child-elements-with-signal-queries)!

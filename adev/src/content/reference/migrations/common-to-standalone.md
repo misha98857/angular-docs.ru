@@ -1,22 +1,23 @@
-# Convert CommonModule usage to standalone imports
+# Преобразование использования CommonModule в standalone-импорты
 
-This migration helps projects remove imports of the `CommonModule` inside components by adding the minimal set of directive and pipe imports each template requires (for example, `NgIf`, `NgFor`, `AsyncPipe`, etc.).
+Эта миграция помогает проектам удалить импорты `CommonModule` внутри компонентов, добавляя вместо него минимальный набор
+импортов директив и пайпов, необходимых каждому конкретному шаблону (например, `NgIf`, `NgFor`, `AsyncPipe` и т.д.).
 
-Run the schematic using the following command:
+Запустите схематик с помощью следующей команды:
 
 ```shell
 ng generate @angular/core:common-to-standalone
 ```
 
-## Options
+## Опции
 
-| Option | Details                                                                                                                       |
-| :----- | :---------------------------------------------------------------------------------------------------------------------------- |
-| `path` | The path (relative to project root) to migrate. Defaults to `./`. Use this to incrementally migrate a subset of your project. |
+| Опция  | Подробности                                                                                                                                                                |
+| :----- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `path` | Путь (относительно корня проекта) для миграции. По умолчанию `./`. Используйте этот параметр для постепенной (инкрементальной) миграции определенной части вашего проекта. |
 
-## Example
+## Пример
 
-Before:
+До:
 
 ```angular-ts
 import { Component } from '@angular/core';
@@ -37,7 +38,7 @@ export class ExampleComponent {
 }
 ```
 
-After running the migration (component imports added, CommonModule removed):
+После запуска миграции (добавлены импорты компонента, удален `CommonModule`):
 
 ```angular-ts
 import { Component } from '@angular/core';

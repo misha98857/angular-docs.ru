@@ -1,16 +1,21 @@
-# Two-way binding
+# Двусторонняя привязка
 
-**Two way binding** is a shorthand to simultaneously bind a value into an element, while also giving that element the ability to propagate changes back through this binding.
+**Двусторонняя привязка** (Two-way binding) — это сокращенная запись для одновременной привязки значения к элементу и
+предоставления этому элементу возможности передавать изменения обратно через эту привязку.
 
-## Syntax
+## Синтаксис
 
-The syntax for two-way binding is a combination of square brackets and parentheses, `[()]`. It combines the syntax from property binding, `[]`, and the syntax from event binding, `()`. The Angular community informally refers to this syntax as "banana-in-a-box".
+Синтаксис двусторонней привязки представляет собой комбинацию квадратных и круглых скобок: `[()]`. Он объединяет
+синтаксис привязки свойств `[]` и синтаксис привязки событий `()`. В сообществе Angular этот синтаксис неформально
+называют "банан в коробке" (banana-in-a-box).
 
-## Two-way binding with form controls
+## Двусторонняя привязка с элементами управления формы
 
-Developers commonly use two-way binding to keep component data in sync with a form control as a user interacts with the control. For example, when a user fills out a text input, it should update the state in the component.
+Разработчики часто используют двустороннюю привязку для синхронизации данных компонента с элементом управления формы по
+мере взаимодействия пользователя с ним. Например, когда пользователь заполняет текстовое поле ввода, состояние в
+компоненте должно обновляться.
 
-The following example dynamically updates the `firstName` attribute on the page:
+Следующий пример динамически обновляет атрибут `firstName` на странице:
 
 ```angular-ts
 import { Component } from '@angular/core';
@@ -30,21 +35,25 @@ export class AppComponent {
 }
 ```
 
-To use two-way binding with native form controls, you need to:
+Чтобы использовать двустороннюю привязку с нативными элементами управления формы, необходимо:
 
-1. Import the `FormsModule` from `@angular/forms`
-1. Use the `ngModel` directive with the two-way binding syntax (e.g., `[(ngModel)]`)
-1. Assign it the state that you want it to update (e.g., `firstName`)
+1. Импортировать `FormsModule` из `@angular/forms`
+1. Использовать директиву `ngModel` с синтаксисом двусторонней привязки (например, `[(ngModel)]`)
+1. Присвоить ей состояние, которое вы хотите обновлять (например, `firstName`)
 
-Once that is set up, Angular will ensure that any updates in the text input will reflect correctly inside of the component state!
+Как только это будет настроено, Angular гарантирует, что любые обновления в текстовом поле ввода будут корректно
+отражены в состоянии компонента!
 
-Learn more about [`NgModel`](guide/directives#displaying-and-updating-properties-with-ngmodel) in the official docs.
+Узнайте больше об [`NgModel`](guide/directives#displaying-and-updating-properties-with-ngmodel) в официальной
+документации.
 
-## Two-way binding between components
+## Двусторонняя привязка между компонентами
 
-Leveraging two-way binding between a parent and child component requires more configuration compared to form elements.
+Использование двусторонней привязки между родительским и дочерним компонентами требует большей настройки по сравнению с
+элементами формы.
 
-Here is an example where the `AppComponent` is responsible for setting the initial count state, but the logic for updating and rendering the UI for the counter primarily resides inside its child `CounterComponent`.
+Вот пример, где `AppComponent` отвечает за установку начального состояния счетчика, но логика обновления и рендеринга
+пользовательского интерфейса для счетчика в основном находится внутри его дочернего компонента `CounterComponent`.
 
 ```angular-ts
 // ./app.component.ts
@@ -87,13 +96,13 @@ export class CounterComponent {
 }
 ```
 
-### Enabling two-way binding between components
+### Включение двусторонней привязки между компонентами
 
-If we break down the example above to its core, each two-way binding for components requires the following:
+Если разобрать приведенный выше пример до сути, каждая двусторонняя привязка для компонентов требует следующего:
 
-The child component must contain a `model` property.
+Дочерний компонент должен содержать свойство `model`.
 
-Here is a simplified example:
+Вот упрощенный пример:
 
 ```angular-ts
 // './counter/counter.component.ts';
@@ -109,12 +118,12 @@ export class CounterComponent {
 }
 ```
 
-The parent component must:
+Родительский компонент должен:
 
-1. Wrap the `model` property name in the two-way binding syntax.
-1. Assign a property or a signal to the `model` property.
+1. Обернуть имя свойства `model` в синтаксис двусторонней привязки.
+1. Присвоить свойство или сигнал свойству `model`.
 
-Here is a simplified example:
+Вот упрощенный пример:
 
 ```angular-ts
 // ./app.component.ts

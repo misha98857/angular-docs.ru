@@ -1,43 +1,50 @@
 # Add an input parameter to the component
 
-This tutorial lesson demonstrates how to create a component `input` and use it to pass data to a component for customization.
+В этом уроке демонстрируется, как создать `input` компонента и использовать его для передачи данных в компонент для
+настройки.
 
 <docs-video src="https://www.youtube.com/embed/eM3zi_n7lNs?si=WvRGFSkW_7_zDIFD&amp;start=241"/>
 
-NOTE: This video reflects an older syntax, but the main concepts remain valid.
+ПРИМЕЧАНИЕ: В этом видео используется старый синтаксис, но основные концепции остаются актуальными.
 
-## What you'll learn
+## Чему вы научитесь
 
-Your app's `HousingLocation` template has a `HousingLocation` property to receive input.
+Шаблон `HousingLocation` вашего приложения получит свойство `HousingLocation` для приема входных данных.
 
-## Conceptual preview of Inputs
+## Концептуальный обзор Inputs
 
-[Inputs](api/core/input) allow components to specify data that can be passed to it from a parent component.
+[Inputs](api/core/input) (входные свойства) позволяют компонентам определять данные, которые могут быть переданы им из
+родительского компонента.
 
-In this lesson, you'll define an `input` property in the `HousingLocation` component that enables you to customize the data displayed in the component.
+В этом уроке вы определите свойство `input` в компоненте `HousingLocation`, которое позволит настраивать данные,
+отображаемые в компоненте.
 
-Learn more in the [Accepting data with input properties](guide/components/inputs) and [Custom events with outputs](guide/components/outputs) guides.
+Узнайте больше в руководствах [Прием данных с помощью свойств input](guide/components/inputs)
+и [Пользовательские события с output](guide/components/outputs).
 
 <docs-workflow>
 
-<docs-step title="Import the input() function">
-In the code editor, import the `input` helper method from `@angular/core` into the `HousingLocation` component.
+<docs-step title="Импорт функции input()">
+В редакторе кода импортируйте вспомогательный метод `input` из `@angular/core` в компонент `HousingLocation`.
 
 <docs-code header="Import input in housing-location.ts" path="adev/src/content/tutorials/first-app/steps/06-property-binding/src/app/housing-location/housing-location.ts" visibleLines="[1]"/>
 
 </docs-step>
 
-<docs-step title="Add the Input property">
-Add a required property called `housingLocation` and initialize it using `input.required()` with the type `HousingLocationInfo`.
+<docs-step title="Добавление свойства Input">
+Добавьте обязательное свойство с именем `housingLocation` и инициализируйте его с помощью `input.required()`, указав тип `HousingLocationInfo`.
 
   <docs-code header="Declare the input property in housing-location.ts" path="adev/src/content/tutorials/first-app/steps/06-property-binding/src/app/housing-location/housing-location.ts" visibleLines="[12]"/>
 
-You have to invoke the `required` method on `input` to indicate that the parent component must provide a value. In our example application, we know this value will always be passed in — this is by design. The `.required()` call ensures that the TypeScript compiler enforces this and treats the property as non-nullable when this component is used in a template.
+Вам необходимо вызвать метод `required` для `input`, чтобы указать, что родительский компонент обязан предоставить
+значение. В нашем примере приложения мы знаем, что это значение будет передаваться всегда — так задумано. Вызов
+`.required()` гарантирует, что компилятор TypeScript будет следить за этим и рассматривать свойство как non-nullable (не
+допускающее null), когда этот компонент используется в шаблоне.
 
 </docs-step>
 
-<docs-step title="Pass data to the input">
-Send the `housingLocation` value from the `Home` component to the `housingLocation` property of the HousingLocation component.
+<docs-step title="Передача данных во входное свойство">
+Отправьте значение `housingLocation` из компонента `Home` в свойство `housingLocation` компонента HousingLocation.
 
 <docs-code language="angular-ts" header="Declare the input property for HousingLocation in home.ts" path="adev/src/content/tutorials/first-app/steps/06-property-binding/src/app/home/home.ts" visibleLines="[16]"/>
 
@@ -45,7 +52,8 @@ Send the `housingLocation` value from the `Home` component to the `housingLocati
 
 </docs-workflow>
 
-SUMMARY: In this lesson, you created a new `input` property. You also used the `.required` method to ensure the signal value is always defined.
+РЕЗЮМЕ: В этом уроке вы создали новое свойство `input`. Вы также использовали метод `.required`, чтобы гарантировать,
+что значение Сигнала всегда определено.
 
 <docs-pill-row>
   <docs-pill href="guide/components/inputs" title="Accepting data with input properties"/>

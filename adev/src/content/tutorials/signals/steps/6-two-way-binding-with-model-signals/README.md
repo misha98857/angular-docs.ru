@@ -1,15 +1,20 @@
-# Two-way binding with model signals
+# Двусторонняя привязка с использованием сигналов model()
 
-Now that you've learned [passing data to components with input signals](/tutorials/signals/5-component-communication-with-signals), let's explore Angular's `model()` API for two-way binding. Model signals are perfect for UI components like checkboxes, sliders, or custom form controls where the component needs to both receive a value AND update it.
+Теперь, когда вы узнали,
+как [передавать данные в компоненты с помощью input-сигналов](/tutorials/signals/5-component-communication-with-signals),
+давайте изучим API `model()` в Angular для двусторонней привязки. Сигналы `model()` идеально подходят для
+UI-компонентов, таких как чекбоксы, слайдеры или пользовательские элементы управления формой, где компонент должен как
+получать значение, ТАК И обновлять его.
 
-In this activity, you'll create a custom checkbox component that manages its own state while keeping the parent synchronized.
+В этом задании вы создадите пользовательский компонент чекбокса, который управляет своим собственным состоянием,
+сохраняя синхронизацию с родительским компонентом.
 
 <hr />
 
 <docs-workflow>
 
-<docs-step title="Set up the custom checkbox with model signal">
-Create a model signal in the `custom-checkbox` component that can both receive and update the parent's value.
+<docs-step title="Настройка пользовательского чекбокса с сигналом model()">
+Создайте сигнал `model()` в компоненте `custom-checkbox`, который может как получать, так и обновлять значение родителя.
 
 ```ts
 // Add imports for model signals
@@ -22,11 +27,12 @@ checked = model.required<boolean>();
 label = input<string>('');
 ```
 
-Unlike `input()` signals which are read-only, `model()` signals can be both read and written to.
+В отличие от сигналов `input()`, которые доступны только для чтения, сигналы `model()` можно как читать, так и
+записывать.
 </docs-step>
 
-<docs-step title="Create the checkbox template">
-Build the checkbox template that responds to clicks and updates its own model.
+<docs-step title="Создание шаблона чекбокса">
+Создайте шаблон чекбокса, который реагирует на клики и обновляет свою модель.
 
 ```html
 <label class="custom-checkbox">
@@ -39,11 +45,11 @@ Build the checkbox template that responds to clicks and updates its own model.
 </label>
 ```
 
-The component reads from its model signal and has a method to update it.
+Компонент считывает данные из своего сигнала `model()` и имеет метод для его обновления.
 </docs-step>
 
-<docs-step title="Add the toggle method">
-Implement the toggle method that updates the model signal when the checkbox is clicked.
+<docs-step title="Добавление метода переключения">
+Реализуйте метод `toggle`, который обновляет сигнал `model()` при клике на чекбокс.
 
 ```ts
 toggle() {
@@ -52,11 +58,12 @@ toggle() {
 }
 ```
 
-When the child component calls `this.checked.set()`, it automatically propagates the change back to the parent. This is the key difference from `input()` signals.
+Когда дочерний компонент вызывает `this.checked.set()`, он автоматически передает изменение обратно родителю. Это
+ключевое отличие от сигналов `input()`.
 </docs-step>
 
-<docs-step title="Set up two-way binding in the parent">
-First, uncomment the model signal properties and methods in `app.ts`:
+<docs-step title="Настройка двусторонней привязки в родительском компоненте">
+Сначала раскомментируйте свойства model-сигналов и методы в `app.ts`:
 
 ```ts
 // Parent signal models
@@ -74,14 +81,14 @@ resetAll() {
 }
 ```
 
-Then update the template:
+Затем обновите шаблон:
 
-Part 1. **Uncomment the checkboxes and add two-way binding:**
+Часть 1. **Раскомментируйте чекбоксы и добавьте двустороннюю привязку:**
 
-- Replace `___ADD_TWO_WAY_BINDING___` with `[(checked)]="agreedToTerms"` for the first checkbox
-- Replace `___ADD_TWO_WAY_BINDING___` with `[(checked)]="enableNotifications"` for the second
+- Замените `___ADD_TWO_WAY_BINDING___` на `[(checked)]="agreedToTerms"` для первого чекбокса
+- Замените `___ADD_TWO_WAY_BINDING___` на `[(checked)]="enableNotifications"` для второго
 
-Part 2. **Replace the `???` placeholders with @if blocks:**
+Часть 2. **Замените заполнители `???` на блоки @if:**
 
 ```angular-html
 @if (agreedToTerms()) {
@@ -97,38 +104,44 @@ Part 2. **Replace the `???` placeholders with @if blocks:**
 }
 ```
 
-Part 3. **Add click handlers to the buttons:**
+Часть 3. **Добавьте обработчики кликов к кнопкам:**
 
 ```html
 <button (click)="toggleTermsFromParent()">Toggle Terms from Parent</button>
 <button (click)="resetAll()">Reset All</button>
 ```
 
-The `[(checked)]` syntax creates two-way binding - data flows down to the component AND changes flow back up to the parent by emitting an event that references the signal itself and does _not_ call the signal getter directly.
+Синтаксис `[(checked)]` создает двустороннюю привязку — данные передаются вниз в компонент, А изменения передаются
+обратно родителю путем генерации события, которое ссылается на сам сигнал и _не_ вызывает геттер сигнала напрямую.
 </docs-step>
 
-<docs-step title="Test the two-way binding">
-Interact with your app to see two-way binding in action:
+<docs-step title="Проверка двусторонней привязки">
+Взаимодействуйте с приложением, чтобы увидеть двустороннюю привязку в действии:
 
-1. **Click checkboxes** - Component updates its own state and notifies parent
-2. **Click "Toggle Terms from Parent"** - Parent updates propagate down to component
-3. **Click "Reset All"** - Parent resets both models and components update automatically
+1. **Нажмите на чекбоксы** — Компонент обновляет свое состояние и уведомляет родителя
+2. **Нажмите «Toggle Terms from Parent»** — Обновления родителя передаются вниз в компонент
+3. **Нажмите «Reset All»** — Родитель сбрасывает обе модели, и компоненты обновляются автоматически
 
-Both the parent and child can update the shared state, and both stay in sync automatically!
+И родитель, и дочерний компонент могут обновлять общее состояние, и оба автоматически остаются синхронизированными!
 </docs-step>
 
 </docs-workflow>
 
-Perfect! You've learned how model signals enable two-way binding:
+Отлично! Вы узнали, как сигналы `model()` обеспечивают двустороннюю привязку:
 
-- **Model signals** - Use `model()` and `model.required()` for values that can be both read and written
-- **Two-way binding** - Use `[(property)]` syntax to bind parent signals to child models
-- **Perfect for UI components** - Checkboxes, form controls, and widgets that need to manage their own state
-- **Automatic synchronization** - Parent and child stay in sync without manual event handling
+- **Сигналы `model()`** — Используйте `model()` и `model.required()` для значений, которые можно как читать, так и
+  записывать
+- **Двусторонняя привязка** — Используйте синтаксис `[(property)]` для привязки сигналов родителя к моделям дочернего
+  компонента
+- **Идеально для UI-компонентов** — Чекбоксы, элементы управления формами и виджеты, которым нужно управлять своим
+  собственным состоянием
+- **Автоматическая синхронизация** — Родитель и дочерний компонент остаются синхронизированными без ручной обработки
+  событий
 
-**When to use `model()` vs `input()`:**
+**Когда использовать `model()` вместо `input()`:**
 
-- Use `input()` for data that only flows down (display data, configuration)
-- Use `model()` for UI components that need to update their own value (form controls, toggles)
+- Используйте `input()` для данных, которые передаются только вниз (данные для отображения, конфигурация)
+- Используйте `model()` для UI-компонентов, которым нужно обновлять свое значение (элементы управления формами,
+  переключатели)
 
-In the next lesson, you'll learn about [using signals with services](/tutorials/signals/7-using-signals-with-services)!
+В следующем уроке вы узнаете об [использовании сигналов с сервисами](/tutorials/signals/7-using-signals-with-services)!

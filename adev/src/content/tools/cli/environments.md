@@ -1,13 +1,17 @@
-# Configuring application environments
+# Настройка окружений приложения
 
-You can define different named build configurations for your project, such as `development` and `staging`, with different defaults.
+Вы можете определить различные именованные конфигурации сборки для вашего проекта, такие как `development` (разработка)
+и `staging` (промежуточная среда), с разными настройками по умолчанию.
 
-Each named configuration can have defaults for any of the options that apply to the various builder targets, such as `build`, `serve`, and `test`.
-The [Angular CLI](tools/cli) `build`, `serve`, and `test` commands can then replace files with appropriate versions for your intended target environment.
+Каждая именованная конфигурация может иметь значения по умолчанию для любых опций, применимых к различным целям
+билдера (builder targets), таким как `build`, `serve` и `test`.
+Команды [Angular CLI](tools/cli) `build`, `serve` и `test` могут затем заменять файлы соответствующими версиями для
+вашей целевой среды.
 
-## Angular CLI configurations
+## Конфигурации Angular CLI
 
-Angular CLI builders support a `configurations` object, which allows overwriting specific options for a builder based on the configuration provided on the command line.
+Билдеры Angular CLI поддерживают объект `configurations`, который позволяет переопределять конкретные опции билдера на
+основе конфигурации, указанной в командной строке.
 
 ```json
 
@@ -36,7 +40,7 @@ Angular CLI builders support a `configurations` object, which allows overwriting
 
 ```
 
-You can choose which configuration to use with the `--configuration` option.
+Вы можете выбрать, какую конфигурацию использовать, с помощью опции `--configuration`.
 
 ```shell
 
@@ -44,7 +48,8 @@ ng build --configuration debug
 
 ```
 
-Configurations can be applied to any Angular CLI builder. Multiple configurations can be specified with a comma separator. The configurations are applied in order, with conflicting options using the value from the last configuration.
+Конфигурации могут применяться к любому билдеру Angular CLI. Можно указать несколько конфигураций через запятую.
+Конфигурации применяются по порядку, при этом конфликтующие опции используют значение из последней конфигурации.
 
 ```shell
 
@@ -52,12 +57,15 @@ ng build --configuration debug,production,customer-facing
 
 ```
 
-## Configure environment-specific defaults
+## Настройка значений по умолчанию для конкретных окружений
 
-`@angular-devkit/build-angular:browser` supports file replacements, an option for substituting source files before executing a build.
-Using this in combination with `--configuration` provides a mechanism for configuring environment-specific data in your application.
+`@angular-devkit/build-angular:browser` поддерживает замену файлов (file replacements) — опцию для подмены исходных
+файлов перед выполнением сборки.
+Использование этого в сочетании с `--configuration` обеспечивает механизм для настройки данных, специфичных для
+окружения, в вашем приложении.
 
-Start by [generating environments](cli/generate/environments) to create the `src/environments/` directory and configure the project to use file replacements.
+Начните с [генерации окружений](cli/generate/environments), чтобы создать директорию `src/environments/` и настроить
+проект на использование замены файлов.
 
 ```shell
 
@@ -65,10 +73,12 @@ ng generate environments
 
 ```
 
-The project's `src/environments/` directory contains the base configuration file, `environment.ts`, which provides the default configuration for production.
-You can override default values for additional environments, such as `development` and `staging`, in target-specific configuration files.
+Директория проекта `src/environments/` содержит базовый файл конфигурации `environment.ts`, который предоставляет
+конфигурацию по умолчанию для продакшна.
+Вы можете переопределить значения по умолчанию для дополнительных окружений, таких как `development` и `staging`, в
+конфигурационных файлах, специфичных для цели.
 
-For example:
+Например:
 
 ```text
 
@@ -79,8 +89,8 @@ my-app/src/environments
 
 ```
 
-The base file `environment.ts`, contains the default environment settings.
-For example:
+Базовый файл `environment.ts` содержит настройки окружения по умолчанию.
+Например:
 
 ```ts
 
@@ -90,9 +100,10 @@ export const environment = {
 
 ```
 
-The `build` command uses this as the build target when no environment is specified.
-You can add further variables, either as additional properties on the environment object, or as separate objects.
-For example, the following adds a default for a variable to the default environment:
+Команда `build` использует это как цель сборки, когда окружение не указано.
+Вы можете добавить дополнительные переменные либо как дополнительные свойства объекта environment, либо как отдельные
+объекты.
+Например, следующий код добавляет значение по умолчанию для переменной в окружение по умолчанию:
 
 ```ts
 
@@ -103,8 +114,8 @@ export const environment = {
 
 ```
 
-You can add target-specific configuration files, such as `environment.development.ts`.
-The following content sets default values for the development build target:
+Вы можете добавить конфигурационные файлы для конкретных целей, например `environment.development.ts`.
+Следующее содержимое устанавливает значения по умолчанию для цели сборки разработки:
 
 ```ts
 
@@ -115,9 +126,10 @@ export const environment = {
 
 ```
 
-## Using environment-specific variables in your app
+## Использование переменных, специфичных для окружения, в вашем приложении
 
-To use the environment configurations you have defined, your components must import the original environments file:
+Чтобы использовать определенные вами конфигурации окружения, ваши компоненты должны импортировать исходный файл
+окружения:
 
 ```ts
 
@@ -125,9 +137,10 @@ import { environment } from './environments/environment';
 
 ```
 
-This ensures that the build and serve commands can find the configurations for specific build targets.
+Это гарантирует, что команды `build` и `serve` смогут найти конфигурации для конкретных целей сборки.
 
-The following code in the component file (`app.component.ts`) uses an environment variable defined in the configuration files.
+Следующий код в файле компонента (`app.component.ts`) использует переменную окружения, определенную в конфигурационных
+файлах.
 
 ```ts
 
@@ -138,11 +151,14 @@ fetch(environment.apiUrl);
 
 ```
 
-The main CLI configuration file, `angular.json`, contains a `fileReplacements` section in the configuration for each build target, which lets you replace any file in the TypeScript program with a target-specific version of that file.
-This is useful for including target-specific code or variables in a build that targets a specific environment, such as production or staging.
+Главный конфигурационный файл CLI, `angular.json`, содержит секцию `fileReplacements` в конфигурации для каждой цели
+сборки, что позволяет заменять любой файл в программе TypeScript на версию этого файла, специфичную для цели.
+Это полезно для включения кода или переменных, специфичных для цели, в сборку, предназначенную для конкретного
+окружения, такого как продакшн или стейджинг.
 
-By default no files are replaced, however `ng generate environments` sets up this configuration automatically.
-You can change or add file replacements for specific build targets by editing the `angular.json` configuration directly.
+По умолчанию файлы не заменяются, однако `ng generate environments` настраивает эту конфигурацию автоматически.
+Вы можете изменить или добавить замену файлов для конкретных целей сборки, отредактировав конфигурацию `angular.json`
+напрямую.
 
 ```json
 
@@ -158,9 +174,12 @@ You can change or add file replacements for specific build targets by editing th
 
 ```
 
-This means that when you build your development configuration with `ng build --configuration development`, the `src/environments/environment.ts` file is replaced with the target-specific version of the file, `src/environments/environment.development.ts`.
+Это означает, что когда вы собираете конфигурацию разработки с помощью `ng build --configuration development`, файл
+`src/environments/environment.ts` заменяется версией файла для конкретной цели:
+`src/environments/environment.development.ts`.
 
-To add a staging environment, create a copy of `src/environments/environment.ts` called `src/environments/environment.staging.ts`, then add a `staging` configuration to `angular.json`:
+Чтобы добавить окружение staging, создайте копию `src/environments/environment.ts` с именем
+`src/environments/environment.staging.ts`, затем добавьте конфигурацию `staging` в `angular.json`:
 
 ```json
 
@@ -179,10 +198,10 @@ To add a staging environment, create a copy of `src/environments/environment.ts`
 
 ```
 
-You can add more configuration options to this target environment as well.
-Any option that your build supports can be overridden in a build target configuration.
+Вы также можете добавить больше опций конфигурации в это целевое окружение.
+Любая опция, которую поддерживает ваша сборка, может быть переопределена в конфигурации цели сборки.
 
-To build using the staging configuration, run the following command:
+Чтобы выполнить сборку с использованием конфигурации staging, выполните следующую команду:
 
 ```shell
 
@@ -190,8 +209,9 @@ ng build --configuration staging
 
 ```
 
-By default, the `build` target includes `production` and `development` configurations and `ng serve` uses the development build of the application.
-You can also configure `ng serve` to use the targeted build configuration if you set the `buildTarget` option:
+По умолчанию цель `build` включает конфигурации `production` и `development`, а `ng serve` использует сборку приложения
+для разработки.
+Вы также можете настроить `ng serve` на использование целевой конфигурации сборки, если установите опцию `buildTarget`:
 
 ```json
 
@@ -213,5 +233,5 @@ You can also configure `ng serve` to use the targeted build configuration if you
 
 ```
 
-The `defaultConfiguration` option specifies which configuration is used by default.
-When `defaultConfiguration` is not set, `options` are used directly without modification.
+Опция `defaultConfiguration` указывает, какая конфигурация используется по умолчанию.
+Если `defaultConfiguration` не установлена, `options` используются напрямую без изменений.

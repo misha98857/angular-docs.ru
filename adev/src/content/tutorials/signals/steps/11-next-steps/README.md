@@ -1,12 +1,12 @@
-# Want to dive deeper into signals?
+# Хотите узнать больше о сигналах?
 
-You can also learn more about signals with the following resources:
+Узнать больше о сигналах можно с помощью следующих ресурсов:
 
 <docs-card-container>
-  <docs-card title="Angular Signals Guide" href="guide/signals">
-  The official guide for Angular Signals.
+  <docs-card title="Руководство по сигналам Angular" href="guide/signals">
+  Официальное руководство по сигналам в Angular.
   </docs-card>
-  <docs-card title="Angular's Roadmap" href="roadmap">
-  Read about Angular's open source roadmap including current, future and accomplished projects.
+  <docs-card title="Дорожная карта Angular" href="roadmap">
+  Узнайте о дорожной карте Angular, включая текущие, будущие и завершенные проекты.
   </docs-card>
 </docs-card-container>

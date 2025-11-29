@@ -1,11 +1,13 @@
-<docs-decorative-header title="Server-side & hybrid rendering" imgSrc="adev/src/assets/images/overview.svg"> <!-- markdownlint-disable-line -->
-Learn about different ways you can optimize the performance of your application with different rendering strategies.
+<docs-decorative-header title="Серверный и гибридный рендеринг" imgSrc="adev/src/assets/images/overview.svg"> <!-- markdownlint-disable-line -->
+Узнайте о различных способах оптимизации производительности приложения с помощью разных стратегий рендеринга.
 </docs-decorative-header>
 
-One of the top priorities of any developer is ensuring that their application is as performant as possible. These guides are here to help you follow best practices for building performant applications by taking advantage of different rendering strategies.
+Обеспечение максимальной производительности приложения — один из главных приоритетов любого разработчика. Эти
+руководства помогут вам следовать лучшим практикам создания высокопроизводительных приложений за счет использования
+различных стратегий рендеринга.
 
-| Guides Types                                          | Description                                                                                                                                                                             |
-| :---------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Server and hybrid rendering](/guide/ssr)             | Learn how to leverage rendering pages on the server to improve load times.                                                                                                              |
-| [Hydration](/guide/hydration)                         | A process to improve application performance by restoring its state after server-side rendering and reusing existing DOM structure as much as possible.                                 |
-| [Incremental Hydration](/guide/incremental-hydration) | Incremental hydration is an advanced type of hydration that can leave sections of your application dehydrated and incrementally trigger hydration of those sections as they are needed. |
+| Типы руководств                                            | Описание                                                                                                                                                                                    |
+| :--------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [Серверный и гибридный рендеринг](/guide/ssr)              | Узнайте, как использовать рендеринг страниц на сервере для сокращения времени загрузки.                                                                                                     |
+| [Гидратация](/guide/hydration)                             | Процесс улучшения производительности приложения путем восстановления его состояния после рендеринга на стороне сервера и максимального повторного использования существующей DOM-структуры. |
+| [Инкрементальная гидратация](/guide/incremental-hydration) | Инкрементальная гидратация — это продвинутый тип гидратации, который позволяет оставлять части приложения дегидратированными и запускать их гидратацию постепенно, по мере необходимости.   |

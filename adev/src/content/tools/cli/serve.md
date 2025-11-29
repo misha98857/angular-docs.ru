@@ -1,12 +1,15 @@
-# Serving Angular apps for development
+# Запуск приложений Angular для разработки
 
-You can serve your Angular CLI application with the `ng serve` command.
-This will compile your application, skip unnecessary optimizations, start a devserver, and automatically rebuild and live reload any subsequent changes.
-You can stop the server by pressing `Ctrl+C`.
+Вы можете запустить ваше приложение Angular CLI с помощью команды `ng serve`.
+Это скомпилирует приложение, пропустит ненужные оптимизации, запустит сервер разработки (devserver), а также будет
+автоматически пересобирать проект и перезагружать страницу при любых последующих изменениях.
+Остановить сервер можно нажатием `Ctrl+C`.
 
-`ng serve` only executes the builder for the `serve` target in the default project as specified in `angular.json`. While any builder can be used here, the most common (and default) builder is `@angular/build:dev-server`.
+`ng serve` выполняет только билдер для цели `serve` в проекте по умолчанию, как указано в `angular.json`. Хотя здесь
+может использоваться любой билдер, наиболее распространенным (и используемым по умолчанию) является
+`@angular/build:dev-server`.
 
-You can determine which builder is being used for a particular project by looking up the `serve` target for that project.
+Вы можете определить, какой билдер используется для конкретного проекта, посмотрев цель `serve` этого проекта.
 
 ```json
 
@@ -28,13 +31,15 @@ You can determine which builder is being used for a particular project by lookin
 
 ```
 
-## Proxying to a backend server
+## Проксирование на бэкенд-сервер
 
-Use [proxying support](https://vite.dev/config/server-options#server-proxy) to divert certain URLs to a backend server, by passing a file to the `--proxy-config` build option.
-For example, to divert all calls for `http://localhost:4200/api` to a server running on `http://localhost:3000/api`, take the following steps.
+Используйте [поддержку проксирования](https://vite.dev/config/server-options#server-proxy), чтобы перенаправлять
+определенные URL на бэкенд-сервер, передав файл в опцию сборки `--proxy-config`.
+Например, чтобы перенаправить все вызовы `http://localhost:4200/api` на сервер, запущенный на
+`http://localhost:3000/api`, выполните следующие шаги.
 
-1. Create a file `proxy.conf.json` in your project's `src/` folder.
-1. Add the following content to the new proxy file:
+1. Создайте файл `proxy.conf.json` в папке `src/` вашего проекта.
+1. Добавьте следующее содержимое в новый файл прокси:
 
 ```json
 {
@@ -45,7 +50,7 @@ For example, to divert all calls for `http://localhost:4200/api` to a server run
 }
 ```
 
-1. In the CLI configuration file, `angular.json`, add the `proxyConfig` option to the `serve` target:
+1. В файле конфигурации CLI, `angular.json`, добавьте опцию `proxyConfig` в цель `serve`:
 
 ```json
 {
@@ -65,18 +70,20 @@ For example, to divert all calls for `http://localhost:4200/api` to a server run
 
 ```
 
-1. To run the development server with this proxy configuration, call `ng serve`.
+1. Чтобы запустить сервер разработки с этой конфигурацией прокси, выполните `ng serve`.
 
-NOTE: To apply changes made to your proxy configuration file, you must restart the `ng serve` process.
+ПРИМЕЧАНИЕ: Чтобы применить изменения, внесенные в файл конфигурации прокси, необходимо перезапустить процесс
+`ng serve`.
 
-### Path matching behavior depends on the builder
+### Поведение сопоставления путей зависит от билдера
 
-**`@angular/build:dev-server`** (based on [Vite](https://vite.dev/config/server-options#server-proxy))
+**`@angular/build:dev-server`** (основан на [Vite](https://vite.dev/config/server-options#server-proxy))
 
-- `/api` matches only `/api`.
-- `/api/*` matches `/api/users` but not `/api/users/123`.
-- `/api/**` matches `/api/users` and `/api/users/123`.
+- `/api` соответствует только `/api`.
+- `/api/*` соответствует `/api/users`, но не `/api/users/123`.
+- `/api/**` соответствует `/api/users` и `/api/users/123`.
 
-**`@angular-devkit/build-angular:dev-server`** (based on [Webpack DevServer](https://webpack.js.org/configuration/dev-server/#devserverproxy))
+**`@angular-devkit/build-angular:dev-server`** (основан
+на [Webpack DevServer](https://webpack.js.org/configuration/dev-server/#devserverproxy))
 
-- `/api` matches `/api` and any sub-paths (equivalent to `/api/**`).
+- `/api` соответствует `/api` и любым подпутям (эквивалентно `/api/**`).

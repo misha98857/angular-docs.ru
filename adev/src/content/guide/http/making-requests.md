@@ -1,16 +1,23 @@
-# Making HTTP requests
+# Выполнение HTTP-запросов
 
-`HttpClient` has methods corresponding to the different HTTP verbs used to make requests, both to load data and to apply mutations on the server. Each method returns an [RxJS `Observable`](https://rxjs.dev/guide/observable) which, when subscribed, sends the request and then emits the results when the server responds.
+`HttpClient` имеет методы, соответствующие различным HTTP-глаголам, используемым для выполнения запросов, как для
+загрузки данных, так и для внесения изменений на сервере. Каждый метод возвращает [RxJS
+`Observable`](https://rxjs.dev/guide/observable), который при подписке отправляет запрос и выдает результаты, когда
+сервер отвечает.
 
-NOTE: `Observable`s created by `HttpClient` may be subscribed any number of times and will make a new backend request for each subscription.
+ПРИМЕЧАНИЕ: На `Observable`, созданные `HttpClient`, можно подписываться любое количество раз, и для каждой подписки
+будет выполняться новый запрос к бэкенду.
 
-Through an options object passed to the request method, various properties of the request and the returned response type can be adjusted.
+С помощью объекта опций, передаваемого в метод запроса, можно настраивать различные свойства запроса и тип возвращаемого
+ответа.
 
-## Fetching JSON data
+## Получение JSON-данных
 
-Fetching data from a backend often requires making a GET request using the [`HttpClient.get()`](api/common/http/HttpClient#get) method. This method takes two arguments: the string endpoint URL from which to fetch, and an _optional options_ object to configure the request.
+Получение данных с бэкенда часто требует выполнения GET-запроса с использованием метода [
+`HttpClient.get()`](api/common/http/HttpClient#get). Этот метод принимает два аргумента: строковый URL-адрес конечной
+точки (endpoint), откуда нужно получить данные, и _необязательный объект опций_ для настройки запроса.
 
-For example, to fetch configuration data from a hypothetical API using the `HttpClient.get()` method:
+Например, чтобы получить данные конфигурации из гипотетического API с помощью метода `HttpClient.get()`:
 
 ```ts
 http.get<Config>('/api/config').subscribe(config => {
@@ -18,24 +25,29 @@ http.get<Config>('/api/config').subscribe(config => {
 });
 ```
 
-Note the generic type argument which specifies that the data returned by the server will be of type `Config`. This argument is optional, and if you omit it then the returned data will have type `Object`.
+Обратите внимание на аргумент обобщенного типа (generic), который указывает, что данные, возвращаемые сервером, будут
+иметь тип `Config`. Этот аргумент необязателен; если его опустить, возвращаемые данные будут иметь тип `Object`.
 
-TIP: When dealing with data of uncertain structure and potential `undefined` or `null` values, consider using the `unknown` type instead of `Object` as the response type.
+СОВЕТ: При работе с данными неопределенной структуры и потенциальными значениями `undefined` или `null`, рассмотрите
+возможность использования типа `unknown` вместо `Object` в качестве типа ответа.
 
-CRITICAL: The generic type of request methods is a type **assertion** about the data returned by the server. `HttpClient` does not verify that the actual return data matches this type.
+ВАЖНО: Обобщенный тип методов запроса — это **утверждение** (assertion) о типе данных, возвращаемых сервером.
+`HttpClient` не проверяет, соответствуют ли фактические возвращаемые данные этому типу.
 
-## Fetching other types of data
+## Получение других типов данных
 
-By default, `HttpClient` assumes that servers will return JSON data. When interacting with a non-JSON API, you can tell `HttpClient` what response type to expect and return when making the request. This is done with the `responseType` option.
+По умолчанию `HttpClient` предполагает, что серверы возвращают JSON-данные. При взаимодействии с API, не использующим
+JSON, вы можете сообщить `HttpClient`, какой тип ответа ожидать и возвращать при выполнении запроса. Это делается с
+помощью опции `responseType`.
 
-| **`responseType` value** | **Returned response type**                                                                                                                |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `'json'` (default)       | JSON data of the given generic type                                                                                                       |
-| `'text'`                 | string data                                                                                                                               |
-| `'arraybuffer'`          | [`ArrayBuffer`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) containing the raw response bytes |
-| `'blob'`                 | [`Blob`](https://developer.mozilla.org/docs/Web/API/Blob) instance                                                                        |
+| **Значение `responseType`** | **Тип возвращаемого ответа**                                                                                                                    |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `'json'` (по умолчанию)     | JSON-данные указанного обобщенного типа                                                                                                         |
+| `'text'`                    | строковые данные                                                                                                                                |
+| `'arraybuffer'`             | [`ArrayBuffer`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer), содержащий необработанные байты ответа |
+| `'blob'`                    | экземпляр [`Blob`](https://developer.mozilla.org/docs/Web/API/Blob)                                                                             |
 
-For example, you can ask `HttpClient` to download the raw bytes of a `.jpeg` image into an `ArrayBuffer`:
+Например, вы можете попросить `HttpClient` загрузить необработанные байты изображения `.jpeg` в `ArrayBuffer`:
 
 ```ts
 http.get('/images/dog.jpg', {responseType: 'arraybuffer'}).subscribe(buffer => {
@@ -43,17 +55,21 @@ http.get('/images/dog.jpg', {responseType: 'arraybuffer'}).subscribe(buffer => {
 });
 ```
 
-<docs-callout important title="Literal value for `responseType`">
-Because the value of `responseType` affects the type returned by `HttpClient`, it must have a literal type and not a `string` type.
+<docs-callout important title="Литеральное значение для `responseType`">
+Поскольку значение `responseType` влияет на тип, возвращаемый `HttpClient`, оно должно иметь литеральный тип, а не тип `string`.
 
-This happens automatically if the options object passed to the request method is a literal object, but if you're extracting the request options out into a variable or helper method you might need to explicitly specify it as a literal, such as `responseType: 'text' as const`.
+Это происходит автоматически, если объект опций, переданный в метод запроса, является литеральным объектом. Однако, если
+вы выносите опции запроса в переменную или вспомогательный метод, вам может потребоваться явно указать его как литерал,
+например `responseType: 'text' as const`.
 </docs-callout>
 
-## Mutating server state
+## Изменение состояния сервера
 
-Server APIs which perform mutations often require making POST requests with a request body specifying the new state or the change to be made.
+Серверные API, выполняющие изменения (мутации), часто требуют выполнения POST-запросов с телом запроса, указывающим
+новое состояние или вносимые изменения.
 
-The [`HttpClient.post()`](api/common/http/HttpClient#post) method behaves similarly to `get()`, and accepts an additional `body` argument before its options:
+Метод [`HttpClient.post()`](api/common/http/HttpClient#post) ведет себя аналогично `get()` и принимает дополнительный
+аргумент `body` перед опциями:
 
 ```ts
 http.post<Config>('/api/config', newConfig).subscribe(config => {
@@ -61,24 +77,25 @@ http.post<Config>('/api/config', newConfig).subscribe(config => {
 });
 ```
 
-Many different types of values can be provided as the request's `body`, and `HttpClient` will serialize them accordingly:
+В качестве `body` запроса можно передавать множество различных типов значений, и `HttpClient` сериализует их
+соответствующим образом:
 
-| **`body` type**                                                                                                               | **Serialized as**                                    |
-| ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| string                                                                                                                        | Plain text                                           |
-| number, boolean, array, or plain object                                                                                       | JSON                                                 |
-| [`ArrayBuffer`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer)                       | raw data from the buffer                             |
-| [`Blob`](https://developer.mozilla.org/docs/Web/API/Blob)                                                                     | raw data with the `Blob`'s content type              |
-| [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData)                                                             | `multipart/form-data` encoded data                   |
-| [`HttpParams`](api/common/http/HttpParams) or [`URLSearchParams`](https://developer.mozilla.org/docs/Web/API/URLSearchParams) | `application/x-www-form-urlencoded` formatted string |
+| **Тип `body`**                                                                                                                 | **Сериализуется как**                                             |
+| ------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| string                                                                                                                         | Обычный текст                                                     |
+| number, boolean, array или plain object                                                                                        | JSON                                                              |
+| [`ArrayBuffer`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer)                        | необработанные данные из буфера                                   |
+| [`Blob`](https://developer.mozilla.org/docs/Web/API/Blob)                                                                      | необработанные данные с типом контента `Blob`                     |
+| [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData)                                                              | данные, закодированные как `multipart/form-data`                  |
+| [`HttpParams`](api/common/http/HttpParams) или [`URLSearchParams`](https://developer.mozilla.org/docs/Web/API/URLSearchParams) | строка, отформатированная как `application/x-www-form-urlencoded` |
 
-IMPORTANT: Remember to `.subscribe()` to mutation request `Observable`s in order to actually fire the request.
+ВАЖНО: Не забудьте вызвать `.subscribe()` для `Observable` запросов на изменение, чтобы фактически отправить запрос.
 
-## Setting URL parameters
+## Установка параметров URL
 
-Specify request parameters that should be included in the request URL using the `params` option.
+Укажите параметры запроса, которые должны быть включены в URL запроса, используя опцию `params`.
 
-Passing an object literal is the simplest way of configuring URL parameters:
+Передача литерала объекта — самый простой способ настройки параметров URL:
 
 ```ts
 http.get('/api/config', {
@@ -88,9 +105,11 @@ http.get('/api/config', {
 });
 ```
 
-Alternatively, pass an instance of `HttpParams` if you need more control over the construction or serialization of the parameters.
+В качестве альтернативы передайте экземпляр `HttpParams`, если вам нужен больший контроль над созданием или
+сериализацией параметров.
 
-IMPORTANT: Instances of `HttpParams` are _immutable_ and cannot be directly changed. Instead, mutation methods such as `append()` return a new instance of `HttpParams` with the mutation applied.
+ВАЖНО: Экземпляры `HttpParams` являются _неизменяемыми_ (immutable) и не могут быть изменены напрямую. Вместо этого
+методы изменения, такие как `append()`, возвращают новый экземпляр `HttpParams` с примененными изменениями.
 
 ```ts
 const baseParams = new HttpParams().set('filter', 'all');
@@ -102,13 +121,16 @@ http.get('/api/config', {
 });
 ```
 
-You can instantiate `HttpParams` with a custom `HttpParameterCodec` that determines how `HttpClient` will encode the parameters into the URL.
+Вы можете создать экземпляр `HttpParams` с пользовательским `HttpParameterCodec`, который определяет, как `HttpClient`
+будет кодировать параметры в URL.
 
-### Custom parameter encoding
+### Пользовательское кодирование параметров
 
-By default, `HttpParams` uses the built-in [`HttpUrlEncodingCodec`](api/common/http/HttpUrlEncodingCodec) to encode and decode parameter keys and values.
+По умолчанию `HttpParams` использует встроенный [`HttpUrlEncodingCodec`](api/common/http/HttpUrlEncodingCodec) для
+кодирования и декодирования ключей и значений параметров.
 
-You can provide your own implementation of [`HttpParameterCodec`](api/common/http/HttpParameterCodec) to customize how encoding and decoding are applied.
+Вы можете предоставить собственную реализацию [`HttpParameterCodec`](api/common/http/HttpParameterCodec), чтобы
+настроить применение кодирования и декодирования.
 
 ```ts
 import { HttpClient, HttpParams, HttpParameterCodec } from '@angular/common/http';
@@ -147,11 +169,11 @@ export class ApiService {
 }
 ```
 
-## Setting request headers
+## Установка заголовков запроса
 
-Specify request headers that should be included in the request using the `headers` option.
+Укажите заголовки запроса, которые должны быть включены в запрос, используя опцию `headers`.
 
-Passing an object literal is the simplest way of configuring request headers:
+Передача литерала объекта — самый простой способ настройки заголовков запроса:
 
 ```ts
 http.get('/api/config', {
@@ -163,9 +185,10 @@ http.get('/api/config', {
 });
 ```
 
-Alternatively, pass an instance of `HttpHeaders` if you need more control over the construction of headers
+В качестве альтернативы передайте экземпляр `HttpHeaders`, если вам нужен больший контроль над созданием заголовков.
 
-IMPORTANT: Instances of `HttpHeaders` are _immutable_ and cannot be directly changed. Instead, mutation methods such as `append()` return a new instance of `HttpHeaders` with the mutation applied.
+ВАЖНО: Экземпляры `HttpHeaders` являются _неизменяемыми_ и не могут быть изменены напрямую. Вместо этого методы
+изменения, такие как `append()`, возвращают новый экземпляр `HttpHeaders` с примененными изменениями.
 
 ```ts
 const baseHeaders = new HttpHeaders().set('X-Debug-Level', 'minimal');
@@ -177,11 +200,12 @@ http.get<Config>('/api/config', {
 });
 ```
 
-## Interacting with the server response events
+## Взаимодействие с событиями ответа сервера
 
-For convenience, `HttpClient` by default returns an `Observable` of the data returned by the server (the response body). Occasionally it's desirable to examine the actual response, for example to retrieve specific response headers.
+Для удобства `HttpClient` по умолчанию возвращает `Observable` с данными, возвращенными сервером (тело ответа). Иногда
+желательно изучить фактический ответ, например, чтобы получить определенные заголовки ответа.
 
-To access the entire response, set the `observe` option to `'response'`:
+Чтобы получить доступ ко всему ответу, установите опцию `observe` в значение `'response'`:
 
 ```ts
 http.get<Config>('/api/config', {observe: 'response'}).subscribe(res => {
@@ -190,21 +214,28 @@ http.get<Config>('/api/config', {observe: 'response'}).subscribe(res => {
 });
 ```
 
-<docs-callout important title="Literal value for `observe`">
-Because the value of `observe` affects the type returned by `HttpClient`, it must have a literal type and not a `string` type.
+<docs-callout important title="Литеральное значение для `observe`">
+Поскольку значение `observe` влияет на тип, возвращаемый `HttpClient`, оно должно иметь литеральный тип, а не тип `string`.
 
-This happens automatically if the options object passed to the request method is a literal object, but if you're extracting the request options out into a variable or helper method you might need to explicitly specify it as a literal, such as `observe: 'response' as const`.
+Это происходит автоматически, если объект опций, переданный в метод запроса, является литеральным объектом. Однако, если
+вы выносите опции запроса в переменную или вспомогательный метод, вам может потребоваться явно указать его как литерал,
+например `observe: 'response' as const`.
 </docs-callout>
 
-## Receiving raw progress events
+## Получение необработанных событий прогресса
 
-In addition to the response body or response object, `HttpClient` can also return a stream of raw _events_ corresponding to specific moments in the request lifecycle. These events include when the request is sent, when the response header is returned, and when the body is complete. These events can also include _progress events_ which report upload and download status for large request or response bodies.
+В дополнение к телу ответа или объекту ответа, `HttpClient` также может возвращать поток необработанных _событий_,
+соответствующих определенным моментам жизненного цикла запроса. Эти события включают моменты отправки запроса, получения
+заголовков ответа и завершения получения тела. Эти события также могут включать _события прогресса_, которые сообщают о
+статусе загрузки (upload) и скачивания (download) для больших тел запросов или ответов.
 
-Progress events are disabled by default (as they have a performance cost) but can be enabled with the `reportProgress` option.
+События прогресса отключены по умолчанию (так как они влияют на производительность), но их можно включить с помощью
+опции `reportProgress`.
 
-NOTE: The optional `fetch` implementation of `HttpClient` does not report _upload_ progress events.
+ПРИМЕЧАНИЕ: Необязательная реализация `HttpClient` на основе `fetch` не сообщает о событиях прогресса _загрузки на
+сервер_ (upload).
 
-To observe the event stream, set the `observe` option to `'events'`:
+Чтобы наблюдать за потоком событий, установите опцию `observe` в значение `'events'`:
 
 ```ts
 http.post('/api/upload', myData, {
@@ -222,44 +253,58 @@ http.post('/api/upload', myData, {
 });
 ```
 
-<docs-callout important title="Literal value for `observe`">
-Because the value of `observe` affects the type returned by `HttpClient`, it must have a literal type and not a `string` type.
+<docs-callout important title="Литеральное значение для `observe`">
+Поскольку значение `observe` влияет на тип, возвращаемый `HttpClient`, оно должно иметь литеральный тип, а не тип `string`.
 
-This happens automatically if the options object passed to the request method is a literal object, but if you're extracting the request options out into a variable or helper method you might need to explicitly specify it as a literal, such as `observe: 'events' as const`.
+Это происходит автоматически, если объект опций, переданный в метод запроса, является литеральным объектом. Однако, если
+вы выносите опции запроса в переменную или вспомогательный метод, вам может потребоваться явно указать его как литерал,
+например `observe: 'events' as const`.
 </docs-callout>
 
-Each `HttpEvent` reported in the event stream has a `type` which distinguishes what the event represents:
+Каждое событие `HttpEvent`, сообщаемое в потоке событий, имеет свойство `type`, которое определяет, что представляет
+собой событие:
 
-| **`type` value**                 | **Event meaning**                                                                  |
-| -------------------------------- | ---------------------------------------------------------------------------------- |
-| `HttpEventType.Sent`             | The request has been dispatched to the server                                      |
-| `HttpEventType.UploadProgress`   | An `HttpUploadProgressEvent` reporting progress on uploading the request body      |
-| `HttpEventType.ResponseHeader`   | The head of the response has been received, including status and headers           |
-| `HttpEventType.DownloadProgress` | An `HttpDownloadProgressEvent` reporting progress on downloading the response body |
-| `HttpEventType.Response`         | The entire response has been received, including the response body                 |
-| `HttpEventType.User`             | A custom event from an Http interceptor.                                           |
+| **Значение `type`**              | **Значение события**                                                       |
+| -------------------------------- | -------------------------------------------------------------------------- |
+| `HttpEventType.Sent`             | Запрос был отправлен на сервер                                             |
+| `HttpEventType.UploadProgress`   | `HttpUploadProgressEvent`, сообщающее о прогрессе загрузки тела запроса    |
+| `HttpEventType.ResponseHeader`   | Получена головная часть ответа, включая статус и заголовки                 |
+| `HttpEventType.DownloadProgress` | `HttpDownloadProgressEvent`, сообщающее о прогрессе скачивания тела ответа |
+| `HttpEventType.Response`         | Получен полный ответ, включая тело ответа                                  |
+| `HttpEventType.User`             | Пользовательское событие от Http Interceptor'а.                            |
 
-## Handling request failure
+## Обработка сбоев запроса
 
-There are three ways an HTTP request can fail:
+Существует три способа сбоя HTTP-запроса:
 
-- A network or connection error can prevent the request from reaching the backend server.
-- A request didn't respond in time when the timeout option was set.
-- The backend can receive the request but fail to process it, and return an error response.
+- Ошибка сети или соединения может помешать запросу достичь бэкенд-сервера.
+- Запрос не получил ответа вовремя, если была установлена опция таймаута.
+- Бэкенд может получить запрос, но не суметь его обработать и вернуть ответ с ошибкой.
 
-`HttpClient` captures all of the above kinds of errors in an `HttpErrorResponse` which it returns through the `Observable`'s error channel. Network and timeout errors have a `status` code of `0` and an `error` which is an instance of [`ProgressEvent`](https://developer.mozilla.org/docs/Web/API/ProgressEvent). Backend errors have the failing `status` code returned by the backend, and the error response as the `error`. Inspect the response to identify the error's cause and the appropriate action to handle the error.
+`HttpClient` перехватывает все вышеперечисленные типы ошибок в `HttpErrorResponse`, который возвращается через канал
+ошибок `Observable`. Ошибки сети и таймаута имеют код `status`, равный `0`, и свойство `error`, являющееся экземпляром [
+`ProgressEvent`](https://developer.mozilla.org/docs/Web/API/ProgressEvent). Ошибки бэкенда имеют код `status`,
+возвращенный бэкендом, и ответ с ошибкой в свойстве `error`. Изучите ответ, чтобы определить причину ошибки и
+соответствующие действия для ее обработки.
 
-The [RxJS library](https://rxjs.dev/) offers several operators which can be useful for error handling.
+Библиотека [RxJS](https://rxjs.dev/) предлагает несколько операторов, которые могут быть полезны для обработки ошибок.
 
-You can use the `catchError` operator to transform an error response into a value for the UI. This value can tell the UI to display an error page or value, and capture the error's cause if necessary.
+Вы можете использовать оператор `catchError` для преобразования ответа с ошибкой в значение для UI. Это значение может
+сообщить UI о необходимости отображения страницы ошибки или значения по умолчанию, а также перехватить причину ошибки
+при необходимости.
 
-Sometimes transient errors such as network interruptions can cause a request to fail unexpectedly, and simply retrying the request will allow it to succeed. RxJS provides several _retry_ operators which automatically re-subscribe to a failed `Observable` under certain conditions. For example, the `retry()` operator will automatically attempt to re-subscribe a specified number of times.
+Иногда временные ошибки, такие как прерывания сети, могут привести к неожиданному сбою запроса, и простой повтор запроса
+позволит ему выполниться успешно. RxJS предоставляет несколько операторов _повтора_ (retry), которые автоматически
+переподписываются на сбойный `Observable` при определенных условиях. Например, оператор `retry()` автоматически
+попытается переподписаться указанное количество раз.
 
-### Timeouts
+### Таймауты
 
-To set a timeout for a request, you can set the `timeout` option to a number of milliseconds along other request options. If the backend request does not complete within the specified time, the request will be aborted and an error will be emitted.
+Чтобы установить таймаут для запроса, вы можете задать опцию `timeout` (количество миллисекунд) наряду с другими опциями
+запроса. Если запрос к бэкенду не завершится в течение указанного времени, запрос будет прерван, и будет выдана ошибка.
 
-NOTE: The timeout will only apply to the backend HTTP request itself. It is not a timeout for the entire request handling chain. Therefore, this option is not affected by any delay introduced by interceptors.
+ПРИМЕЧАНИЕ: Таймаут применяется только к самому HTTP-запросу к бэкенду. Это не таймаут для всей цепочки обработки
+запроса. Следовательно, эта опция не зависит от задержек, вносимых interceptor'ами.
 
 ```ts
 http.get('/api/config', {
@@ -274,17 +319,20 @@ http.get('/api/config', {
 });
 ```
 
-## Advanced fetch options
+## Расширенные опции fetch
 
-When using the `withFetch()` provider, Angular's `HttpClient` provides access to advanced fetch API options that can improve performance and user experience. These options are only available when using the fetch backend.
+При использовании провайдера `withFetch()`, `HttpClient` в Angular предоставляет доступ к расширенным опциям fetch API,
+которые могут улучшить производительность и пользовательский опыт. Эти опции доступны только при использовании бэкенда
+на основе fetch.
 
-### Fetch options
+### Опции fetch
 
-The following options provide fine-grained control over request behavior when using the fetch backend.
+Следующие опции обеспечивают детальный контроль над поведением запроса при использовании fetch-бэкенда.
 
-#### Keep-alive connections
+#### Keep-alive соединения
 
-The `keepalive` option allows a request to outlive the page that initiated it. This is particularly useful for analytics or logging requests that need to complete even if the user navigates away from the page.
+Опция `keepalive` позволяет запросу пережить страницу, которая его инициировала. Это особенно полезно для запросов
+аналитики или логирования, которые должны завершиться, даже если пользователь уходит со страницы.
 
 ```ts
 http.post('/api/analytics', analyticsData, {
@@ -292,26 +340,27 @@ http.post('/api/analytics', analyticsData, {
 }).subscribe();
 ```
 
-#### HTTP caching control
+#### Управление HTTP-кэшированием
 
-The `cache` option controls how the request interacts with the browser's HTTP cache, which can significantly improve performance for repeated requests.
+Опция `cache` управляет тем, как запрос взаимодействует с HTTP-кэшем браузера, что может значительно улучшить
+производительность для повторяющихся запросов.
 
 ```ts
-//  Use cached response regardless of freshness
+//  Использовать кэшированный ответ независимо от свежести
 http.get('/api/config', {
   cache: 'force-cache'
 }).subscribe(config => {
   // ...
 });
 
-// Always fetch from network, bypass cache
+// Всегда запрашивать из сети, игнорируя кэш
 http.get('/api/live-data', {
   cache: 'no-cache'
 }).subscribe(data => {
   // ...
 });
 
-// Use cached response only, fail if not in cache
+// Использовать только кэшированный ответ, ошибка если нет в кэше
 http.get('/api/static-data', {
   cache: 'only-if-cached'
 }).subscribe(data => {
@@ -319,26 +368,27 @@ http.get('/api/static-data', {
 });
 ```
 
-#### Request priority for Core Web Vitals
+#### Приоритет запроса для Core Web Vitals
 
-The `priority` option allows you to indicate the relative importance of a request, helping browsers optimize resource loading for better Core Web Vitals scores.
+Опция `priority` позволяет указать относительную важность запроса, помогая браузерам оптимизировать загрузку ресурсов
+для улучшения показателей Core Web Vitals.
 
 ```ts
-// High priority for critical resources
+// Высокий приоритет для критически важных ресурсов
 http.get('/api/user-profile', {
   priority: 'high'
 }).subscribe(profile => {
   // ...
 });
 
-// Low priority for non-critical resources
+// Низкий приоритет для некритичных ресурсов
 http.get('/api/recommendations', {
   priority: 'low'
 }).subscribe(recommendations => {
   // ...
 });
 
-// Auto priority (default) lets the browser decide
+// Автоматический приоритет (по умолчанию), решение принимает браузер
 http.get('/api/settings', {
   priority: 'auto'
 }).subscribe(settings => {
@@ -346,34 +396,35 @@ http.get('/api/settings', {
 });
 ```
 
-Available `priority` values:
+Доступные значения `priority`:
 
-- `'high'`: High priority, loaded early (e.g., critical user data, above-the-fold content)
-- `'low'`: Low priority, loaded when resources are available (e.g., analytics, prefetch data)
-- `'auto'`: Browser determines priority based on request context (default)
+- `'high'`: Высокий приоритет, загружается рано (например, критические данные пользователя, контент "первого экрана").
+- `'low'`: Низкий приоритет, загружается при наличии ресурсов (например, аналитика, предварительная выборка данных).
+- `'auto'`: Браузер определяет приоритет на основе контекста запроса (по умолчанию).
 
-TIP: Use `priority: 'high'` for requests that affect Largest Contentful Paint (LCP) and `priority: 'low'` for requests that don't impact initial user experience.
+СОВЕТ: Используйте `priority: 'high'` для запросов, влияющих на Largest Contentful Paint (LCP), и `priority: 'low'` для
+запросов, не влияющих на начальный пользовательский опыт.
 
-#### Request mode
+#### Режим запроса (Request mode)
 
-The `mode` option controls how the request handles cross-origin requests and determines the response type.
+Опция `mode` управляет тем, как запрос обрабатывает кросс-доменные запросы, и определяет тип ответа.
 
 ```ts
-// Same-origin requests only
+// Только запросы к тому же источнику (same-origin)
 http.get('/api/local-data', {
   mode: 'same-origin'
 }).subscribe(data => {
   // ...
 });
 
-// CORS-enabled cross-origin requests
+// Кросс-доменные запросы с поддержкой CORS
 http.get('https://api.external.com/data', {
   mode: 'cors'
 }).subscribe(data => {
   // ...
 });
 
-// No-CORS mode for simple cross-origin requests
+// Режим No-CORS для простых кросс-доменных запросов
 http.get('https://external-api.com/public-data', {
   mode: 'no-cors'
 }).subscribe(data => {
@@ -381,119 +432,123 @@ http.get('https://external-api.com/public-data', {
 });
 ```
 
-Available `mode` values:
+Доступные значения `mode`:
 
-- `'same-origin'`: Only allow same-origin requests, fail for cross-origin requests
-- `'cors'`: Allow cross-origin requests with CORS (default)
-- `'no-cors'`: Allow simple cross-origin requests without CORS, response is opaque
+- `'same-origin'`: Разрешать только запросы к тому же источнику, ошибка для кросс-доменных запросов.
+- `'cors'`: Разрешать кросс-доменные запросы с CORS (по умолчанию).
+- `'no-cors'`: Разрешать простые кросс-доменные запросы без CORS, ответ является непрозрачным (opaque).
 
-TIP: Use `mode: 'same-origin'` for sensitive requests that should never go cross-origin.
+СОВЕТ: Используйте `mode: 'same-origin'` для чувствительных запросов, которые никогда не должны уходить на другой домен.
 
-#### Redirect handling
+#### Обработка редиректов
 
-The `redirect` option specifies how to handle redirect responses from the server.
+Опция `redirect` указывает, как обрабатывать ответы с перенаправлением (redirect) от сервера.
 
 ```ts
-// Follow redirects automatically (default behavior)
+// Автоматически переходить по редиректам (поведение по умолчанию)
 http.get('/api/resource', {
   redirect: 'follow'
 }).subscribe(data => {
   // ...
 });
 
-// Prevent automatic redirects
+// Предотвратить автоматические переходы
 http.get('/api/resource', {
   redirect: 'manual'
 }).subscribe(response => {
-  // Handle redirect manually
+  // Обработать редирект вручную
 });
 
-// Treat redirects as errors
+// Считать редиректы ошибками
 http.get('/api/resource', {
   redirect: 'error'
 }).subscribe({
   next: data => {
-    // Success response
+    // Успешный ответ
   },
   error: err => {
-    // Redirect responses will trigger this error handler
+    // Ответы с редиректом вызовут этот обработчик ошибок
   }
 });
 ```
 
-Available `redirect` values:
+Доступные значения `redirect`:
 
-- `'follow'`: Automatically follow redirects (default)
-- `'error'`: Treat redirects as errors
-- `'manual'`: Don't follow redirects automatically, return redirect response
+- `'follow'`: Автоматически переходить по редиректам (по умолчанию).
+- `'error'`: Считать редиректы ошибками.
+- `'manual'`: Не переходить по редиректам автоматически, возвращать ответ с редиректом.
 
-TIP: Use `redirect: 'manual'` when you need to handle redirects with custom logic.
+СОВЕТ: Используйте `redirect: 'manual'`, когда вам нужно обработать редиректы с помощью пользовательской логики.
 
-#### Credentials handling
+#### Обработка учетных данных (Credentials)
 
-The `credentials` option controls whether cookies, authorization headers, and other credentials are sent with cross-origin requests. This is particularly important for authentication scenarios.
+Опция `credentials` управляет тем, отправляются ли файлы cookie, заголовки авторизации и другие учетные данные при
+кросс-доменных запросах. Это особенно важно для сценариев аутентификации.
 
 ```ts
-// Include credentials for cross-origin requests
+// Включать учетные данные для кросс-доменных запросов
 http.get('https://api.example.com/protected-data', {
   credentials: 'include'
 }).subscribe(data => {
   // ...
 });
 
-// Never send credentials (default for cross-origin)
+// Никогда не отправлять учетные данные (по умолчанию для кросс-доменных)
 http.get('https://api.example.com/public-data', {
   credentials: 'omit'
 }).subscribe(data => {
   // ...
 });
 
-// Send credentials only for same-origin requests
+// Отправлять учетные данные только для запросов к тому же источнику
 http.get('/api/user-data', {
   credentials: 'same-origin'
 }).subscribe(data => {
   // ...
 });
 
-// withCredentials overrides credentials setting
+// withCredentials переопределяет настройку credentials
 http.get('https://api.example.com/data', {
-  credentials: 'omit',        // This will be ignored
-  withCredentials: true       // This forces credentials: 'include'
+  credentials: 'omit',        // Это будет проигнорировано
+  withCredentials: true       // Это принудительно устанавливает credentials: 'include'
 }).subscribe(data => {
-  // Request will include credentials despite credentials: 'omit'
+  // Запрос будет включать учетные данные, несмотря на credentials: 'omit'
 });
 
-// Legacy approach (still supported)
+// Устаревший подход (все еще поддерживается)
 http.get('https://api.example.com/data', {
   withCredentials: true
 }).subscribe(data => {
-  // Equivalent to credentials: 'include'
+  // Эквивалентно credentials: 'include'
 });
 ```
 
-IMPORTANT: The `withCredentials` option takes precedence over the `credentials` option. If both are specified, `withCredentials: true` will always result in `credentials: 'include'`, regardless of the explicit `credentials` value.
+ВАЖНО: Опция `withCredentials` имеет приоритет над опцией `credentials`. Если указаны обе, `withCredentials: true`
+всегда приведет к `credentials: 'include'`, независимо от явного значения `credentials`.
 
-Available `credentials` values:
+Доступные значения `credentials`:
 
-- `'omit'`: Never send credentials
-- `'same-origin'`: Send credentials only for same-origin requests (default)
-- `'include'`: Always send credentials, even for cross-origin requests
+- `'omit'`: Никогда не отправлять учетные данные.
+- `'same-origin'`: Отправлять учетные данные только для запросов к тому же источнику (по умолчанию).
+- `'include'`: Всегда отправлять учетные данные, даже для кросс-доменных запросов.
 
-TIP: Use `credentials: 'include'` when you need to send authentication cookies or headers to a different domain that supports CORS. Avoid mixing `credentials` and `withCredentials` options to prevent confusion.
+СОВЕТ: Используйте `credentials: 'include'`, когда вам нужно отправить аутентификационные cookie или заголовки на другой
+домен, поддерживающий CORS. Избегайте смешивания опций `credentials` и `withCredentials`, чтобы предотвратить путаницу.
 
 #### Referrer
 
-The `referrer` option allows you to control what referrer information is sent with the request. This is important for privacy and security considerations.
+Опция `referrer` позволяет контролировать, какая информация о реферере (источнике перехода) отправляется с запросом. Это
+важно для конфиденциальности и безопасности.
 
 ```ts
-// Send a specific referrer URL
+// Отправить конкретный URL реферера
 http.get('/api/data', {
   referrer: 'https://example.com/page'
 }).subscribe(data => {
   // ...
 });
 
-// Use the current page as referrer (default behavior)
+// Использовать текущую страницу как реферер (поведение по умолчанию)
 http.get('/api/analytics', {
   referrer: 'about:client'
 }).subscribe(data => {
@@ -501,80 +556,105 @@ http.get('/api/analytics', {
 });
 ```
 
-The `referrer` option accepts:
+Опция `referrer` принимает:
 
-- A valid URL string: Sets the specific referrer URL to send
-- An empty string `''`: Sends no referrer information
-- `'about:client'`: Uses the default referrer (current page URL)
+- Строку с валидным URL: Устанавливает конкретный URL реферера для отправки.
+- Пустую строку `''`: Не отправляет информацию о реферере.
+- `'about:client'`: Использует реферер по умолчанию (URL текущей страницы).
 
-TIP: Use `referrer: ''` for sensitive requests where you don't want to leak the referring page URL.
+СОВЕТ: Используйте `referrer: ''` для чувствительных запросов, где вы не хотите раскрывать URL ссылающейся страницы.
 
-#### Referrer policy
+#### Политика реферера (Referrer policy)
 
-The `referrerPolicy` option controls how much referrer information , the URL of the page making the request is sent along with an HTTP request. This setting affects both privacy and analytics, allowing you to balance data visibility with security considerations.
+Опция `referrerPolicy` управляет тем, какой объем информации о реферере (URL страницы, выполняющей запрос) отправляется
+вместе с HTTP-запросом. Эта настройка влияет как на конфиденциальность, так и на аналитику, позволяя балансировать между
+видимостью данных и соображениями безопасности.
 
 ```ts
-// Send no referrer information regardless of the current page
+// Не отправлять информацию о реферере независимо от текущей страницы
 http.get('/api/data', {
   referrerPolicy: 'no-referrer'
 }).subscribe();
 
-// Send origin only (e.g. https://example.com)
+// Отправлять только origin (например, https://example.com)
 http.get('/api/analytics', {
   referrerPolicy: 'origin'
 }).subscribe();
 ```
 
-The `referrerPolicy` option accepts:
+Опция `referrerPolicy` принимает:
 
-- `'no-referrer'` Never send the `Referer` header.
-- `'no-referrer-when-downgrade'` Sends the referrer for same-origin and secure (HTTPS→HTTPS) requests, but omits it when navigating from a secure to a less secure origin (HTTPS→HTTP).
-- `'origin'` Sends only the origin (scheme, host, port) of the referrer, omitting path and query information.
-- `'origin-when-cross-origin'` Sends the full URL for same-origin requests, but only the origin for cross-origin requests.
-- `'same-origin'` Sends the full URL for same-origin requests and no referrer for cross-origin requests.
-- `'strict-origin'` Sends only the origin, and only if the protocol security level is not downgraded (e.g., HTTPS→HTTPS). Omits the referrer on downgrade.
-- `'strict-origin-when-cross-origin'` Default browser behavior. Sends the full URL for same-origin requests, the origin for cross-origin requests when not downgraded, and omits the referrer on downgrade.
-- `'unsafe-url'`Always sends the full URL (including path and query). This can expose sensitive data and should be used with caution.
+- `'no-referrer'`: Никогда не отправлять заголовок `Referer`.
+- `'no-referrer-when-downgrade'`: Отправляет реферер для запросов к тому же источнику и безопасных (HTTPS→HTTPS)
+  запросов, но опускает его при переходе от безопасного к менее безопасному источнику (HTTPS→HTTP).
+- `'origin'`: Отправляет только origin (схема, хост, порт) реферера, опуская путь и информацию запроса.
+- `'origin-when-cross-origin'`: Отправляет полный URL для запросов к тому же источнику, но только origin для
+  кросс-доменных запросов.
+- `'same-origin'`: Отправляет полный URL для запросов к тому же источнику и не отправляет реферер для кросс-доменных
+  запросов.
+- `'strict-origin'`: Отправляет только origin, и только если уровень безопасности протокола не понижается (например,
+  HTTPS→HTTPS). Опускает реферер при понижении уровня безопасности.
+- `'strict-origin-when-cross-origin'`: Поведение браузера по умолчанию. Отправляет полный URL для запросов к тому же
+  источнику, origin для кросс-доменных запросов (если уровень безопасности не понижается) и опускает реферер при
+  понижении уровня безопасности.
+- `'unsafe-url'`: Всегда отправляет полный URL (включая путь и запрос). Это может раскрыть чувствительные данные и
+  должно использоваться с осторожностью.
 
-TIP: Prefer conservative values such as `'no-referrer'`, `'origin'`, or `'strict-origin-when-cross-origin'` for privacy-sensitive requests.
+СОВЕТ: Отдавайте предпочтение консервативным значениям, таким как `'no-referrer'`, `'origin'` или
+`'strict-origin-when-cross-origin'`, для запросов, чувствительных к конфиденциальности.
 
-#### Integrity
+#### Целостность (Integrity)
 
-The `integrity` option allows you to verify that the response hasn't been tampered with by providing a cryptographic hash of the expected content. This is particularly useful for loading scripts or other resources from CDNs.
+Опция `integrity` позволяет проверить, что ответ не был подделан, предоставляя криптографический хэш ожидаемого
+контента. Это особенно полезно для загрузки скриптов или других ресурсов из CDN.
 
 ```ts
-// Verify response integrity with SHA-256 hash
+// Проверить целостность ответа с помощью хэша SHA-256
 http.get('/api/script.js', {
   integrity: 'sha256-ABC123...',
   responseType: 'text'
 }).subscribe(script => {
-  // Script content is verified against the hash
+  // Содержимое скрипта проверяется на соответствие хэшу
 });
 ```
 
-IMPORTANT: The `integrity` option requires an exact match between the response content and the provided hash. If the content doesn't match, the request will fail with a network error.
+ВАЖНО: Опция `integrity` требует точного совпадения между содержимым ответа и предоставленным хэшем. Если содержимое не
+совпадает, запрос завершится с сетевой ошибкой.
 
-TIP: Use subresource integrity when loading critical resources from external sources to ensure they haven't been modified. Generate hashes using tools like `openssl`.
+СОВЕТ: Используйте целостность подресурсов (subresource integrity) при загрузке критически важных ресурсов из внешних
+источников, чтобы гарантировать, что они не были изменены. Генерируйте хэши с помощью инструментов, таких как `openssl`.
 
-## Http `Observable`s
+## Http `Observable`
 
-Each request method on `HttpClient` constructs and returns an `Observable` of the requested response type. Understanding how these `Observable`s work is important when using `HttpClient`.
+Каждый метод запроса в `HttpClient` создает и возвращает `Observable` запрошенного типа ответа. Понимание того, как
+работают эти `Observable`, важно при использовании `HttpClient`.
 
-`HttpClient` produces what RxJS calls "cold" `Observable`s, meaning that no actual request happens until the `Observable` is subscribed. Only then is the request actually dispatched to the server. Subscribing to the same `Observable` multiple times will trigger multiple backend requests. Each subscription is independent.
+`HttpClient` создает то, что RxJS называет "холодными" `Observable`. Это означает, что фактический запрос не происходит
+до тех пор, пока на `Observable` не подпишутся. Только тогда запрос фактически отправляется на сервер. Подписка на один
+и тот же `Observable` несколько раз вызовет несколько запросов к бэкенду. Каждая подписка независима.
 
-TIP: You can think of `HttpClient` `Observable`s as _blueprints_ for actual server requests.
+СОВЕТ: Вы можете думать об `Observable` из `HttpClient` как о _чертежах_ для фактических запросов к серверу.
 
-Once subscribed, unsubscribing will abort the in-progress request. This is very useful if the `Observable` is subscribed via the `async` pipe, as it will automatically cancel the request if the user navigates away from the current page. Additionally, if you use the `Observable` with an RxJS combinator like `switchMap`, this cancellation will clean up any stale requests.
+После подписки, отписка прервет выполняющийся запрос. Это очень полезно, если подписка на `Observable` осуществляется
+через pipe `async`, так как он автоматически отменит запрос, если пользователь уйдет с текущей страницы. Кроме того,
+если вы используете `Observable` с комбинатором RxJS, таким как `switchMap`, эта отмена очистит все устаревшие запросы.
 
-Once the response returns, `Observable`s from `HttpClient` usually complete (although interceptors can influence this).
+После возвращения ответа `Observable` от `HttpClient` обычно завершаются (complete) (хотя interceptor'ы могут повлиять
+на это).
 
-Because of the automatic completion, there is usually no risk of memory leaks if `HttpClient` subscriptions are not cleaned up. However, as with any async operation, we strongly recommend that you clean up subscriptions when the component using them is destroyed, as the subscription callback may otherwise run and encounter errors when it attempts to interact with the destroyed component.
+Из-за автоматического завершения обычно нет риска утечки памяти, если подписки `HttpClient` не очищаются. Однако, как и
+в случае с любой асинхронной операцией, мы настоятельно рекомендуем очищать подписки при уничтожении компонента,
+использующего их, так как иначе колбэк подписки может запуститься и столкнуться с ошибками при попытке взаимодействия с
+уничтоженным компонентом.
 
-TIP: Using the `async` pipe or the `toSignal` operation to subscribe to `Observable`s ensures that subscriptions are disposed properly.
+СОВЕТ: Использование pipe `async` или операции `toSignal` для подписки на `Observable` гарантирует правильное удаление
+подписок.
 
-## Best practices
+## Лучшие практики
 
-While `HttpClient` can be injected and used directly from components, generally we recommend you create reusable, injectable services which isolate and encapsulate data access logic. For example, this `UserService` encapsulates the logic to request data for a user by their id:
+Хотя `HttpClient` можно внедрять и использовать непосредственно в компонентах, обычно мы рекомендуем создавать повторно
+используемые, внедряемые сервисы, которые изолируют и инкапсулируют логику доступа к данным. Например, этот
+`UserService` инкапсулирует логику запроса данных пользователя по его id:
 
 ```ts
 @Injectable({providedIn: 'root'})
@@ -587,7 +667,8 @@ export class UserService {
 }
 ```
 
-Within a component, you can combine `@if` with the `async` pipe to render the UI for the data only after it's finished loading:
+Внутри компонента вы можете комбинировать `@if` с pipe `async`, чтобы отображать UI для данных только после завершения
+их загрузки:
 
 ```angular-ts
 import { AsyncPipe } from '@angular/common';

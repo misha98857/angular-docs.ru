@@ -1,33 +1,35 @@
-# Custom service worker scripts
+# Пользовательские скрипты Service Worker
 
-While the Angular service worker provides excellent capabilities, you may need to add custom functionality such as handling push notifications, background sync, or other service worker events. You can create a custom service worker script that imports and extends the Angular service worker.
+Хотя Service Worker в Angular предоставляет отличные возможности, вам может потребоваться добавить пользовательскую
+функциональность, такую как обработка Push-уведомлений, фоновая синхронизация или другие события Service Worker. Вы
+можете создать пользовательский скрипт Service Worker, который импортирует и расширяет Service Worker из Angular.
 
-## Creating a custom service worker
+## Создание пользовательского Service Worker
 
-To create a custom service worker that extends Angular's functionality:
+Чтобы создать пользовательский Service Worker, расширяющий функциональность Angular:
 
-1. Create a custom service worker file (e.g., `custom-sw.js`) in your `src` directory:
+1. Создайте файл пользовательского Service Worker (например, `custom-sw.js`) в директории `src`:
 
 ```js
-// Import the Angular service worker
+// Импорт Service Worker из Angular
 importScripts('./ngsw-worker.js');
 
 (function () {
   'use strict';
 
-  // Add custom notification click handler
+  // Добавление пользовательского обработчика клика по уведомлению
   self.addEventListener('notificationclick', (event) => {
     console.log('Custom notification click handler');
     console.log('Notification details:', event.notification);
 
-    // Handle notification click - open URL if provided
+    // Обработка клика по уведомлению - открытие URL, если он предоставлен
     if (clients.openWindow && event.notification.data.url) {
       event.waitUntil(clients.openWindow(event.notification.data.url));
       console.log('Opening URL:', event.notification.data.url);
     }
   });
 
-  // Add custom background sync handler
+  // Добавление пользовательского обработчика фоновой синхронизации
   self.addEventListener('sync', (event) => {
     console.log('Custom background sync handler');
 
@@ -37,7 +39,7 @@ importScripts('./ngsw-worker.js');
   });
 
   function doBackgroundSync() {
-    // Implement your background sync logic here
+    // Реализуйте логику фоновой синхронизации здесь
     return fetch('https://example.com/api/sync')
       .then((response) => response.json())
       .then((data) => console.log('Background sync completed:', data))
@@ -46,7 +48,7 @@ importScripts('./ngsw-worker.js');
 })();
 ```
 
-2. Update your `angular.json` file to use the custom service worker:
+2. Обновите файл `angular.json`, чтобы использовать пользовательский Service Worker:
 
 ```json
 {
@@ -70,7 +72,7 @@ importScripts('./ngsw-worker.js');
 }
 ```
 
-3. Configure the service worker registration to use your custom script:
+3. Настройте регистрацию Service Worker для использования вашего пользовательского скрипта:
 
 ```ts
 import { ApplicationConfig, isDevMode } from '@angular/core';
@@ -86,20 +88,23 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-### Best practices for custom service workers
+### Лучшие практики для пользовательских Service Worker
 
-When extending the Angular service worker:
+При расширении Service Worker из Angular:
 
-- **Always import the Angular service worker first** using `importScripts('./ngsw-worker.js')` to ensure you get all the caching and update functionality
-- **Wrap your custom code in an IIFE** (Immediately Invoked Function Expression) to avoid polluting the global scope
-- **Use `event.waitUntil()`** for asynchronous operations to ensure they complete before the service worker is terminated
-- **Test thoroughly** in both development and production environments
-- **Handle errors gracefully** to prevent your custom code from breaking the Angular service worker functionality
+- **Всегда импортируйте Service Worker из Angular первым**, используя `importScripts('./ngsw-worker.js')`, чтобы
+  гарантировать получение всей функциональности кэширования и обновлений.
+- **Оберните свой код в IIFE** (Immediately Invoked Function Expression — немедленно вызываемое функциональное
+  выражение), чтобы избежать загрязнения глобальной области видимости.
+- **Используйте `event.waitUntil()`** для асинхронных операций, чтобы гарантировать их завершение до того, как работа
+  Service Worker будет прекращена.
+- **Тщательно тестируйте** как в среде разработки, так и в продакшене.
+- **Корректно обрабатывайте ошибки**, чтобы ваш код не нарушал работу функциональности Service Worker из Angular.
 
-### Common use cases
+### Распространенные сценарии использования
 
-Custom service workers are commonly used for:
+Пользовательские Service Worker обычно используются для:
 
-- **Push notifications**: Handle incoming push messages and display notifications
-- **Background sync**: Sync data when the network connection is restored
-- **Custom navigation**: Handle special routing or offline page scenarios
+- **Push-уведомления**: Обработка входящих push-сообщений и отображение уведомлений.
+- **Фоновая синхронизация**: Синхронизация данных при восстановлении сетевого соединения.
+- **Пользовательская навигация**: Обработка специальных сценариев маршрутизации или страниц в офлайн-режиме.

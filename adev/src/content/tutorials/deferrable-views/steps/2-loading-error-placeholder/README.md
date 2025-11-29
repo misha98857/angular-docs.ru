@@ -1,43 +1,46 @@
-# @loading, @error and @placeholder blocks
+# Блоки @loading, @error и @placeholder
 
-Deferrable views let you define content to be shown in different loading states.
+Откладываемые представления (deferrable views) позволяют определять контент, который будет показан в различных
+состояниях загрузки.
 
 <div class="docs-table docs-scroll-track-transparent">
   <table>
     <tr>
       <td><code>@placeholder</code></td>
       <td>
-        By default, defer blocks do not render any content before they are triggered. The <code>@placeholder</code> is an optional block that declares content to show before the deferred content loads. Angular replaces the placeholder with the deferred content after loading completes. While this block is optional, the Angular team recommends always including a placeholder.
+        По умолчанию блоки defer не рендерят никакого контента до срабатывания триггера. <code>@placeholder</code> — это необязательный блок, объявляющий контент, который нужно показать до загрузки отложенного контента. Angular заменяет заполнитель отложенным контентом после завершения загрузки. Хотя этот блок необязателен, команда Angular рекомендует всегда включать placeholder.
         <a href="https://angular.dev/guide/templates/defer#triggers" target="_blank">
-          Learn more in the full deferrable views documentation
+          Подробнее в полной документации по откладываемым представлениям
         </a>
       </td>
     </tr>
     <tr>
       <td><code>@loading</code></td>
       <td>
-        This optional block allows you to declare content to be shown during the loading of any deferred dependencies.
+        Этот необязательный блок позволяет объявить контент, который будет показан во время загрузки любых отложенных зависимостей.
       </td>
     </tr>
     <tr>
       <td><code>@error</code></td>
       <td>
-        This block allows you to declare content which is shown if deferred loading fails.
+        Этот блок позволяет объявить контент, который будет показан в случае сбоя отложенной загрузки.
       </td>
     </tr>
   </table>
 </div>
 
-The contents of all the above sub-blocks are eagerly loaded. Additionally, some features require a `@placeholder` block.
+Содержимое всех вышеперечисленных подблоков загружается сразу (eagerly). Кроме того, некоторые функции требуют наличия
+блока `@placeholder`.
 
-In this activity, you'll learn how to use the `@loading`, `@error` and `@placeholder` blocks to manage the states of deferrable views.
+В этом упражнении вы узнаете, как использовать блоки `@loading`, `@error` и `@placeholder` для управления состояниями
+откладываемых представлений.
 
 <hr>
 
 <docs-workflow>
 
-<docs-step title="Add `@placeholder` block">
-In your `app.ts`, add a `@placeholder` block to the `@defer` block.
+<docs-step title="Добавление блока `@placeholder`">
+В вашем `app.ts` добавьте блок `@placeholder` к блоку `@defer`.
 
 <docs-code language="angular-html" highlight="[3,4,5]">
 @defer {
@@ -48,8 +51,8 @@ In your `app.ts`, add a `@placeholder` block to the `@defer` block.
 </docs-code>
 </docs-step>
 
-<docs-step title="Configure the `@placeholder` block">
-The `@placeholder` block accepts an optional parameter to specify the `minimum` amount of time that this placeholder should be shown. This `minimum` parameter is specified in time increments of milliseconds (ms) or seconds (s). This parameter exists to prevent fast flickering of placeholder content in the case that the deferred dependencies are fetched quickly.
+<docs-step title="Настройка блока `@placeholder`">
+Блок `@placeholder` принимает необязательный параметр для указания минимального (`minimum`) времени отображения этого заполнителя. Параметр `minimum` указывается в миллисекундах (ms) или секундах (s). Этот параметр существует для предотвращения быстрого мерцания контента заполнителя в случае, если отложенные зависимости загружаются быстро.
 
 <docs-code language="angular-html" highlight="[3,4,5]">
 @defer {
@@ -60,17 +63,18 @@ The `@placeholder` block accepts an optional parameter to specify the `minimum` 
 </docs-code>
 </docs-step>
 
-<docs-step title="Add `@loading` block">
-Next add a `@loading` block to the component template.
+<docs-step title="Добавление блока `@loading`">
+Далее добавьте блок `@loading` в шаблон компонента.
 
-The `@loading` block accepts two optional parameters:
+Блок `@loading` принимает два необязательных параметра:
 
-- `minimum`: the amount of time that this block should be shown
-- `after`: the amount of time to wait after loading begins before showing the loading template
+- `minimum`: время, в течение которого этот блок должен отображаться
+- `after`: время ожидания после начала загрузки перед показом шаблона загрузки
 
-Both parameters are specified in time increments of milliseconds (ms) or seconds (s).
+Оба параметра указываются в миллисекундах (ms) или секундах (s).
 
-Update `app.ts` to include a `@loading` block with a minimum parameter of `1s` as well as an after parameter with the value 500ms to the @loading block.
+Обновите `app.ts`, добавив блок `@loading` с параметром `minimum`, равным `1s`, а также параметром `after` со значением
+`500ms`.
 
 <docs-code language="angular-html" highlight="[5,6,7]">
 @defer {
@@ -82,12 +86,12 @@ Update `app.ts` to include a `@loading` block with a minimum parameter of `1s` a
 }
 </docs-code>
 
-NOTE: this example uses two parameters, separated by the ; character.
+ПРИМЕЧАНИЕ: в этом примере используются два параметра, разделенные символом `;`.
 
 </docs-step>
 
-<docs-step title="Add `@error` block">
-Finally, add an `@error` block to the `@defer` block.
+<docs-step title="Добавление блока `@error`">
+И наконец, добавьте блок `@error` к блоку `@defer`.
 
 <docs-code language="angular-html" highlight="[7,8,9]">
 @defer {
@@ -103,4 +107,5 @@ Finally, add an `@error` block to the `@defer` block.
 </docs-step>
 </docs-workflow>
 
-Congratulations! At this point, you have a good understanding about deferrable views. Keep up the great work and let's learn about triggers next.
+Поздравляем! Теперь у вас есть хорошее понимание откладываемых представлений. Продолжайте в том же духе, и давайте
+перейдем к изучению триггеров.

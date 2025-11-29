@@ -1,16 +1,19 @@
-# Component input properties
+# Входные свойства компонента
 
-Sometimes app development requires you to send data into a component. This data can be used to customize a component or perhaps send information from a parent component to a child component.
+Иногда при разработке приложений требуется передать данные в компонент. Эти данные могут использоваться для настройки
+компонента или передачи информации от родительского компонента к дочернему.
 
-Angular uses a concept called `input`. This is similar to `props` in other frameworks. To create an `input` property, use the `input()` function.
+Angular использует концепцию, называемую `input`. Это похоже на `props` в других фреймворках. Чтобы создать свойство
+`input`, используйте функцию `input()`.
 
-Note: Learn more about [accepting data with input properties in the inputs guide](/guide/components/inputs).
+Примечание: Подробнее
+о [приеме данных с помощью входных свойств читайте в руководстве по inputs](/guide/components/inputs).
 
-In this activity, you'll learn how to use the `input()` function to send information to components.
+В этом упражнении вы узнаете, как использовать функцию `input()` для отправки информации в компоненты.
 
 <hr>
 
-To create an `input` property, add the `input()` function to initialize a property of a component class:
+Чтобы создать свойство `input`, добавьте функцию `input()` для инициализации свойства класса компонента:
 
 <docs-code header="user.ts" language="ts">
 class User {
@@ -18,7 +21,8 @@ class User {
 }
 </docs-code>
 
-When you are ready to pass in a value through an `input`, values can be set in templates using the attribute syntax. Here's an example:
+Когда вы готовы передать значение через `input`, значения можно задать в шаблонах, используя синтаксис атрибутов. Вот
+пример:
 
 <docs-code header="app.ts" language="angular-ts" highlight="[3]">
 @Component({
@@ -28,7 +32,7 @@ When you are ready to pass in a value through an `input`, values can be set in t
 export class App {}
 </docs-code>
 
-The `input` function returns an `InputSignal`. You can read the value by calling the signal.
+Функция `input` возвращает `InputSignal`. Вы можете прочитать значение, вызвав этот сигнал.
 
 <docs-code header="user.ts" language="angular-ts">
 @Component({
@@ -39,19 +43,20 @@ The `input` function returns an `InputSignal`. You can read the value by calling
 
 <docs-workflow>
 
-<docs-step title="Define an `input()` property">
-Update the code in `user.ts` to define an `input` property on the `User` called `name` and specify the `string` type. For now, don't set an initial value and invoke `input()` without arguments. Be sure to update the template to invoke and interpolate the `name` property at the end of the sentence.
+<docs-step title="Определите свойство `input()`">
+Обновите код в `user.ts`, чтобы определить свойство `input` в классе `User` с именем `name` и укажите тип `string`. Пока не задавайте начальное значение и вызовите `input()` без аргументов. Не забудьте обновить шаблон, чтобы вызвать и интерполировать свойство `name` в конце предложения.
 </docs-step>
 
-<docs-step title="Pass a value to the `input` property">
-Update the code in `app.ts` to send in the `name` property with a value of `"Simran"`.
+<docs-step title="Передайте значение во входное свойство `input`">
+Обновите код в `app.ts`, чтобы передать свойство `name` со значением `"Simran"`.
 <br>
 
-When the code has been successfully updated, the app will display `The user's name is Simran`.
+После успешного обновления кода приложение отобразит `The user's name is Simran`.
 </docs-step>
 
 </docs-workflow>
 
-While this is great, it is only one direction of the component communication. What if you want to send information and data to a parent component from a child component? Check out the next lesson to find out.
+Хотя это здорово, это лишь одно направление взаимодействия компонентов. Что, если вы хотите отправить информацию и
+данные родительскому компоненту от дочернего? Переходите к следующему уроку, чтобы узнать.
 
-P.S. you are doing great - keep going 🎉
+P.S. вы отлично справляетесь — так держать 🎉

@@ -1,10 +1,13 @@
-# Redirecting Routes
+# Перенаправление маршрутов
 
-Route redirects allow you to automatically navigate users from one route to another. Think of it like mail forwarding, where mail intended for one address is sent to a different address. This is useful for handling legacy URLs, implementing default routes, or managing access control.
+Перенаправление маршрутов (Route redirects) позволяет автоматически переводить пользователей с одного маршрута на
+другой. Представьте это как переадресацию почты, когда письма, предназначенные для одного адреса, отправляются на
+другой. Это полезно для обработки устаревших URL, реализации маршрутов по умолчанию или управления контролем доступа.
 
-## How to configure redirects
+## Как настроить перенаправления
 
-You can define redirects in your route configuration with the `redirectTo` property. This property accepts a string.
+Вы можете определить перенаправления в конфигурации маршрута с помощью свойства `redirectTo`. Это свойство принимает
+строку.
 
 ```ts
 import { Routes } from '@angular/router';
@@ -22,28 +25,30 @@ const routes: Routes = [
 ];
 ```
 
-In this example, there are three redirects:
+В этом примере есть три перенаправления:
 
-1. When a user visits the `/marketing` path, they are redirected to `/newsletter`.
-2. When a user visits any `/legacy-user/:id` path, they are routed to the corresponding `/users/:id` path.
-3. When a user visit any path that’s not defined in the router, they are redirected to the login page because of the `**` wildcard path definition.
+1. Когда пользователь посещает путь `/marketing`, он перенаправляется на `/newsletter`.
+2. Когда пользователь посещает любой путь `/legacy-user/:id`, он перенаправляется на соответствующий путь `/users/:id`.
+3. Когда пользователь посещает любой путь, не определенный в роутере, он перенаправляется на страницу входа из-за
+   определения wildcard-пути `**`.
 
-## Understanding `pathMatch`
+## Понимание `pathMatch`
 
-The `pathMatch` property on routes enables developers to control how Angular matches a URL to routes.
+Свойство `pathMatch` в маршрутах позволяет разработчикам контролировать, как Angular сопоставляет URL с маршрутами.
 
-There are two values that `pathMatch` accepts:
+Свойство `pathMatch` принимает два значения:
 
-| Value      | Description                                  |
-| ---------- | -------------------------------------------- |
-| `'full'`   | The entire URL path must match exactly       |
-| `'prefix'` | Only the beginning of the URL needs to match |
+| Значение   | Описание                                 |
+| ---------- | ---------------------------------------- |
+| `'full'`   | Весь путь URL должен совпадать полностью |
+| `'prefix'` | Должно совпадать только начало URL       |
 
-By default, all redirects use the `prefix` strategy.
+По умолчанию все перенаправления используют стратегию `prefix`.
 
 ### `pathMatch: 'prefix'`
 
-`pathMatch: 'prefix'` is the default strategy and ideal when you want Angular Router to match all subsequent routes when triggering a redirect.
+`pathMatch: 'prefix'` — это стратегия по умолчанию, идеально подходящая, когда вы хотите, чтобы роутер Angular
+сопоставлял все последующие маршруты при запуске перенаправления.
 
 ```ts
 export const routes: Routes = [
@@ -55,15 +60,17 @@ export const routes: Routes = [
 ];
 ```
 
-In this example, all routes that are prefixed with `news` are redirected to their `/blog` equivalents. Here are some examples where users are redirected when visiting the old `news` prefix:
+В этом примере все маршруты, начинающиеся с `news`, перенаправляются на их эквиваленты в `/blog`. Вот несколько примеров
+того, куда перенаправляются пользователи при посещении старого префикса `news`:
 
-- `/news` redirects to `/blog`
-- `/news/article` redirects to `/blog/article`
-- `/news/article/:id` redirects to `/blog/article/:id`
+- `/news` перенаправляется на `/blog`
+- `/news/article` перенаправляется на `/blog/article`
+- `/news/article/:id` перенаправляется на `/blog/article/:id`
 
 ### `pathMatch: 'full'`
 
-On the other hand, `pathMatch: 'full'` is useful when you want Angular Router to only redirect a specific path.
+С другой стороны, `pathMatch: 'full'` полезен, когда вы хотите, чтобы роутер Angular перенаправлял только конкретный
+путь.
 
 ```ts
 export const routes: Routes = [
@@ -71,13 +78,17 @@ export const routes: Routes = [
 ];
 ```
 
-In this example, any time the user visits the root URL (i.e., `''`), the router redirects that user to the `'/dashboard'` page.
+В этом примере каждый раз, когда пользователь посещает корневой URL (т.е. `''`), роутер перенаправляет его на страницу
+`'/dashboard'`.
 
-Any subsequent pages (e.g., `/login`, `/about`, `/product/id`, etc.), are ignored and do not trigger a redirect.
+Любые последующие страницы (например, `/login`, `/about`, `/product/id` и т.д.) игнорируются и не вызывают
+перенаправления.
 
-TIP: Be careful when configuring a redirect on the root page (i.e., `"/"` or `""`). If you do not set `pathMatch: 'full'`, the router will redirect all URLs.
+СОВЕТ: Будьте осторожны при настройке перенаправления на корневой странице (т.е. `"/"` или `""`). Если вы не установите
+`pathMatch: 'full'`, роутер будет перенаправлять все URL.
 
-To further illustrate this, if the `news` example from the previous section used `pathMatch: 'full'` instead:
+Чтобы проиллюстрировать это подробнее: если бы в примере с `news` из предыдущего раздела использовался
+`pathMatch: 'full'`:
 
 ```ts
 export const routes: Routes = [
@@ -85,20 +96,23 @@ export const routes: Routes = [
 ];
 ```
 
-This means that:
+Это означает, что:
 
-1. Only the `/news` path will be redirected to `/blog`.
-2. Any subsequent segments such as `/news/articles` or `/news/articles/1` would not redirect with the new `/blog` prefix.
+1. Только путь `/news` будет перенаправлен на `/blog`.
+2. Любые последующие сегменты, такие как `/news/articles` или `/news/articles/1`, не будут перенаправлены с новым
+   префиксом `/blog`.
 
-## Conditional redirects
+## Условные перенаправления
 
-The `redirectTo` property can also accept a function in order to add logic to how users are redirected.
+Свойство `redirectTo` также может принимать функцию для добавления логики в процесс перенаправления пользователей.
 
-The [function](api/router/RedirectFunction) only has access part of the [`ActivatedRouteSnapshot`](api/router/ActivatedRouteSnapshot) data since some data is not accurately known at the route matching phase. Examples include: resolved titles, lazy loaded components, etc.
+[Функция](api/router/RedirectFunction) имеет доступ только к части данных [
+`ActivatedRouteSnapshot`](api/router/ActivatedRouteSnapshot), так как некоторые данные еще не известны точно на этапе
+сопоставления маршрутов. Примеры включают: разрешенные заголовки (resolved titles), лениво загружаемые компоненты и т.д.
 
-It typically returns a string or [`URLTree`](api/router/UrlTree), but it can also return an observable or promise.
+Обычно она возвращает строку или [`URLTree`](api/router/UrlTree), но также может возвращать Observable или Promise.
 
-Here is an example where the user is redirected to different menu based on the time of the day:
+Вот пример, где пользователь перенаправляется в разное меню в зависимости от времени суток:
 
 ```ts
 import { Routes } from '@angular/router';
@@ -137,8 +151,9 @@ export const routes: Routes = [
 ];
 ```
 
-To learn more, check out [the API docs for the RedirectFunction](api/router/RedirectFunction).
+Чтобы узнать больше, ознакомьтесь с [документацией API для RedirectFunction](api/router/RedirectFunction).
 
-## Next steps
+## Дальнейшие действия
 
-For more information about the `redirectTo` property, check out the [API docs](api/router/Route#redirectTo).
+Для получения дополнительной информации о свойстве `redirectTo` ознакомьтесь
+с [документацией API](api/router/Route#redirectTo).

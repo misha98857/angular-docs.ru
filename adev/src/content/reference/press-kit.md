@@ -1,67 +1,81 @@
-# Angular Press Kit
+# Пресс-кит Angular
 
-The logo graphics available for download on this page are provided under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+Графические логотипы, доступные для скачивания на этой странице, предоставляются по
+лицензии [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 <docs-card-container>
-  <docs-card title="Angular logos" href="https://drive.google.com/drive/folders/1IgcAwLDVZUz8ycnFa7T4_H6B4V4LhYUQ?usp=sharing" link="Download from Google Drive">
-    ![Angular wordmark gradient logo](assets/images/press-kit/angular_wordmark_gradient.png "Angular wordmark gradient logo")
-    ![Angular wordmark white logo](assets/images/press-kit/angular_wordmark_white.png "Angular wordmark white logo")
-    ![Angular wordmark black logo](assets/images/press-kit/angular_wordmark_black.png "Angular wordmark black logo")
-    Black and white are the default color variations and should be used in most circumstances. A gradient version of the icon and lockup is available in both static and animated formats and can be used in cases where a color icon is required.
+  <docs-card title="Логотипы Angular" href="https://drive.google.com/drive/folders/1IgcAwLDVZUz8ycnFa7T4_H6B4V4LhYUQ?usp=sharing" link="Скачать с Google Диска">
+    ![Градиентный текстовый логотип Angular](assets/images/press-kit/angular_wordmark_gradient.png "Градиентный текстовый логотип Angular")
+    ![Белый текстовый логотип Angular](assets/images/press-kit/angular_wordmark_white.png "Белый текстовый логотип Angular")
+    ![Черный текстовый логотип Angular](assets/images/press-kit/angular_wordmark_black.png "Черный текстовый логотип Angular")
+    Черный и белый — это цветовые вариации по умолчанию, которые следует использовать в большинстве случаев. Градиентная версия значка и логотипа доступна как в статическом, так и в анимированном формате и может использоваться в случаях, когда требуется цветной значок.
   </docs-card>
-  <docs-card title="Brand guidelines" href="https://drive.google.com/drive/folders/1gD5-kamfribnib6TH4-aqVZxjYaDZlCg?usp=drive_link" link="Download from Google Drive">
-    ![Angular animated gradient logo](assets/images/press-kit/angular_icon_gradient.gif "Angular animated gradient logo")
-    Our brand guidelines folders contain the design files, guidance and community examples for how the brand can be adapted.
-    Read more about adapting the logo in the section below.
+  <docs-card title="Руководство по бренду" href="https://drive.google.com/drive/folders/1gD5-kamfribnib6TH4-aqVZxjYaDZlCg?usp=drive_link" link="Скачать с Google Диска">
+    ![Анимированный градиентный логотип Angular](assets/images/press-kit/angular_icon_gradient.gif "Анимированный градиентный логотип Angular")
+    Наши папки с руководством по бренду содержат файлы дизайна, рекомендации и примеры от сообщества по адаптации бренда.
+    Подробнее об адаптации логотипа читайте в разделе ниже.
   </docs-card>
 </docs-card-container>
 
-## Press and Media
+## Пресса и СМИ
 
-For inquiries regarding press and media please contact us at press@angular.io. For developer inquiries contact devrel@angular.io.
+По вопросам прессы и СМИ, пожалуйста, свяжитесь с нами по адресу press@angular.io. По вопросам для разработчиков
+обращайтесь на devrel@angular.io.
 
-## Adapting the logo
+## Адаптация логотипа
 
-Angular’s success is deeply connected to our community. We know many communities, meetups, conferences, blogs, websites, YouTube channels and developers have built their brand on top of ours. This logo is for us and our community, and it’s important that you can join us in updating your brand as well.
+Успех Angular глубоко связан с нашим сообществом. Мы знаем, что многие сообщества, митапы, конференции, блоги,
+веб-сайты, YouTube-каналы и разработчики построили свой бренд на основе нашего. Этот логотип предназначен для нас и
+нашего сообщества, и нам важно, чтобы вы могли присоединиться к нам в обновлении и вашего бренда.
 
-Angular has long valued creative expression through customized shield icons. The new Angular icon allows customization in several ways. The icon shape can be used as a container for simple colors and patterns. Alternatively, a custom backplate can be used for more intricate designs. We recommend keeping your compositions simple and clear, since busy and complex patterns can be difficult to read. We appreciate your cooperation in keeping our community a safe and welcoming space. Please keep designs respectful and be mindful of our community guidelines when creating your icons.
+Angular давно ценит творческое самовыражение через кастомизированные значки щитов. Новый значок Angular допускает
+кастомизацию несколькими способами. Форму значка можно использовать как контейнер для простых цветов и узоров. В
+качестве альтернативы можно использовать кастомную подложку для более сложных дизайнов. Мы рекомендуем делать композиции
+простыми и понятными, так как насыщенные и сложные узоры могут плохо читаться. Мы ценим ваше сотрудничество в сохранении
+нашего сообщества как безопасного и гостеприимного пространства. Пожалуйста, при создании значков соблюдайте уважение и
+помните о наших правилах сообщества.
 
-We have provided a template to get you started.
+Мы подготовили шаблон, чтобы помочь вам начать.
 
-If you have any questions on adapting the new logo, or updating your own, please email devrel@angular.io for additional help – we can’t wait to see what you create!
+Если у вас есть вопросы по адаптации нового логотипа или обновлению собственного, пожалуйста, напишите на
+devrel@angular.io для получения дополнительной помощи — нам не терпится увидеть, что вы создадите!
 
 <docs-workflow>
 
-<docs-step title="Adapt the logo colors as your own">
-Lean into the shape of Angular’s new logo by changing the logo colors to match your brand colors, flag, cause, etc.
+<docs-step title="Адаптируйте цвета логотипа под свои">
+Используйте форму нового логотипа Angular, изменяя его цвета в соответствии с цветами вашего бренда, флага, идеи и т. д.
 
-In this example, we’ve adapted the colors to create an Angular Pride logo variation:
-![Angular pride logo](assets/images/press-kit/angular_pride.png#small 'Angular pride logo')
+В этом примере мы адаптировали цвета для создания вариации логотипа Angular Pride:
+![Логотип Angular Pride](assets/images/press-kit/angular_pride.png#small 'Логотип Angular Pride')
 </docs-step>
 
-<docs-step title="Adapt the logo shape as your own">
-Lean into the shape of Angular’s new logo by adapting the shield to match your own brand.
+<docs-step title="Адаптируйте форму логотипа под свою">
+Используйте форму нового логотипа Angular, адаптируя щит под свой собственный бренд.
 
-In this example, we’ve adapted the shield to create an Angular Signals logo variation:
-![Angular Signals logo](assets/images/press-kit/angular_signals.png#medium 'Angular Signals logo')
+В этом примере мы адаптировали щит для создания вариации логотипа Angular Signals:
+![Логотип Angular Signals](assets/images/press-kit/angular_signals.png#medium 'Логотип Angular Signals')
 </docs-step>
 
-<docs-step title="Do’s and don’ts of using Angular's brand">
-If you are creating your own logo, we encourage differentiating your logo from ours to not cause confusion. When adapting the logo, you are free to change and adapt the colors and shape to make it your own.
-  
-When representing Angular with the original logo, please follow these guidelines:
-![Rhubarb the small cat](assets/images/press-kit/do_and_dont.png "Rhubarb the small cat")
+<docs-step title="Что можно и чего нельзя делать с брендом Angular">
+Если вы создаете собственный логотип, мы рекомендуем сделать его отличным от нашего, чтобы не вызывать путаницы. При адаптации логотипа вы можете свободно менять и адаптировать цвета и форму, чтобы сделать его своим.
+
+При представлении Angular с оригинальным логотипом, пожалуйста, следуйте этим рекомендациям:
+![Маленький кот Рубарб](assets/images/press-kit/do_and_dont.png 'Маленький кот Рубарб')
 </docs-step>
 
 </docs-workflow>
 
-## Deprecated logos
+## Устаревшие логотипы
 
-### 2016 Angular (v3-v16)
+### Angular 2016 года (v3-v16)
 
-In 2023 , we announced a modernized logo with v17. We advise against using the former Angular logo to prevent confusion. You can view the old press kit on our [old docs site](https://angular.io/presskit).
+В 2023 году мы представили обновленный логотип вместе с v17. Мы не рекомендуем использовать прежний логотип Angular во
+избежание путаницы. Вы можете ознакомиться со старым пресс-китом на
+нашем [сайте старой документации](https://angular.io/presskit).
 
 ### AngularJS
 
-AngularJS is the v1.x predecessor of modern Angular. We advise against using this logo to prevent confusion.
-Read more about the discontinued LTS (Long Term Support) for AngularJS on our [blog](https://blog.angular.dev/discontinued-long-term-support-for-angularjs-cc066b82e65a).
+AngularJS — это предшественник современного Angular версии v1.x. Мы не рекомендуем использовать этот логотип во
+избежание путаницы.
+Подробнее о прекращении долгосрочной поддержки (LTS) для AngularJS читайте в
+нашем [блоге](https://blog.angular.dev/discontinued-long-term-support-for-angularjs-cc066b82e65a).

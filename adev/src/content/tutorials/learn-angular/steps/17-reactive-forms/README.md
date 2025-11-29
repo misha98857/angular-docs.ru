@@ -1,18 +1,18 @@
-# Reactive Forms
+# Реактивные формы
 
-When you want to manage your forms programmatically instead of relying purely on the template, reactive forms are the answer.
+Если вы хотите управлять формами программно, а не полагаться исключительно на шаблон, ответом станут реактивные формы.
 
-Note: Learn more about [reactive forms in the in-depth guide](/guide/forms/reactive-forms).
+Примечание: Подробнее о [реактивных формах читайте в подробном руководстве](/guide/forms/reactive-forms).
 
-In this activity, you'll learn how to set up reactive forms.
+В этом упражнении вы узнаете, как настраивать реактивные формы.
 
 <hr>
 
 <docs-workflow>
 
-<docs-step title="Import `ReactiveForms` module">
+<docs-step title="Импорт модуля `ReactiveForms`">
 
-In `app.ts`, import `ReactiveFormsModule` from `@angular/forms` and add it to the `imports` array of the component.
+В `app.ts` импортируйте `ReactiveFormsModule` из `@angular/forms` и добавьте его в массив `imports` компонента.
 
 ```angular-ts
 import { ReactiveFormsModule } from '@angular/forms';
@@ -36,11 +36,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 </docs-step>
 
-<docs-step title="Create the `FormGroup` object with FormControls">
+<docs-step title="Создание объекта `FormGroup` с FormControls">
 
-Reactive forms use the `FormControl` class to represent the form controls (e.g., inputs). Angular provides the `FormGroup` class to serve as a grouping of form controls into a helpful object that makes handling large forms more convenient for developers.
+Реактивные формы используют класс `FormControl` для представления элементов управления формы (например, полей ввода).
+Angular предоставляет класс `FormGroup`, который объединяет элементы управления формы в удобный объект, упрощая работу с
+большими формами для разработчиков.
 
-Add `FormControl` and `FormGroup` to the import from `@angular/forms` so that you can create a FormGroup for each form, with the properties `name` and `email` as FormControls.
+Добавьте `FormControl` и `FormGroup` в импорт из `@angular/forms`, чтобы создать FormGroup для каждой формы со
+свойствами `name` и `email` в качестве FormControls.
 
 ```ts
 import {ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
@@ -55,11 +58,12 @@ export class App {
 
 </docs-step>
 
-<docs-step title="Link the FormGroup and FormControls to the form">
+<docs-step title="Связывание FormGroup и FormControls с формой">
 
-Each `FormGroup` should be attached to a form using the `[formGroup]` directive.
+Каждый `FormGroup` должен быть прикреплен к форме с помощью директивы `[formGroup]`.
 
-In addition, each `FormControl` can be attached with the `formControlName` directive and assigned to the corresponding property. Update the template with the following form code:
+Кроме того, каждый `FormControl` можно прикрепить с помощью директивы `formControlName` и назначить соответствующему
+свойству. Обновите шаблон, добавив следующий код формы:
 
 ```angular-html
 <form [formGroup]="profileForm">
@@ -77,9 +81,10 @@ In addition, each `FormControl` can be attached with the `formControlName` direc
 
 </docs-step>
 
-<docs-step title="Handle update to the form">
+<docs-step title="Обработка обновлений формы">
 
-When you want to access data from the `FormGroup`, it can be done by accessing the value of the `FormGroup`. Update the `template` to display the form values:
+Когда вам нужно получить данные из `FormGroup`, это можно сделать, обратившись к значению (value) `FormGroup`. Обновите
+`template`, чтобы отобразить значения формы:
 
 ```angular-html
 ...
@@ -90,11 +95,11 @@ When you want to access data from the `FormGroup`, it can be done by accessing t
 
 </docs-step>
 
-<docs-step title="Access FormGroup values">
-Add a new method to the component class called `handleSubmit` that you'll later use to handle the form submission.
-This method will display values from the form, you can access the values from the FormGroup.
+<docs-step title="Доступ к значениям FormGroup">
+Добавьте в класс компонента новый метод `handleSubmit`, который вы позже будете использовать для обработки отправки формы.
+Этот метод будет отображать значения из формы; вы можете получить доступ к значениям через FormGroup.
 
-In the component class, add the `handleSubmit()` method to handle the form submission.
+В классе компонента добавьте метод `handleSubmit()` для обработки отправки формы.
 
 <docs-code language="ts">
 handleSubmit() {
@@ -105,9 +110,9 @@ handleSubmit() {
 </docs-code>
 </docs-step>
 
-<docs-step title="Add `ngSubmit` to the form">
-You have access to the form values, now it is time to handle the submission event and use the `handleSubmit` method.
-Angular has an event handler for this specific purpose called `ngSubmit`. Update the form element to call the `handleSubmit` method when the form is submitted.
+<docs-step title="Добавление `ngSubmit` к форме">
+У вас есть доступ к значениям формы, теперь пришло время обработать событие отправки и использовать метод `handleSubmit`.
+В Angular для этой цели есть специальный обработчик событий под названием `ngSubmit`. Обновите элемент формы, чтобы вызывать метод `handleSubmit` при отправке формы.
 
 <docs-code language="angular-html" highlight="[3]">
 <form
@@ -119,6 +124,6 @@ Angular has an event handler for this specific purpose called `ngSubmit`. Update
 
 </docs-workflow>
 
-And just like that, you know how to work with reactive forms in Angular.
+Вот так просто вы научились работать с реактивными формами в Angular.
 
-Fantastic job with this activity. Keep going to learn about form validation.
+Отличная работа с этим упражнением. Продолжайте обучение, чтобы узнать о валидации форм.

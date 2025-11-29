@@ -1,9 +1,10 @@
 <docs-decorative-header title="Select">
 </docs-decorative-header>
 
-## Overview
+## Обзор
 
-A pattern that combines readonly combobox with listbox to create single-selection dropdowns with keyboard navigation and screen reader support.
+Паттерн, объединяющий combobox (только для чтения) и listbox для создания выпадающих списков с одиночным выбором,
+поддержкой навигации с клавиатуры и скринридеров.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -31,41 +32,44 @@ A pattern that combines readonly combobox with listbox to create single-selectio
   </docs-tab>
 </docs-tab-group>
 
-## Usage
+## Использование
 
-The select pattern works best when users need to choose a single value from a familiar set of options.
+Паттерн Select лучше всего подходит, когда пользователям нужно выбрать одно значение из знакомого набора опций.
 
-Consider using this pattern when:
+Рассмотрите использование этого паттерна, когда:
 
-- **The option list is fixed** (fewer than 20 items) - Users can scan and choose without filtering
-- **Options are familiar** - Users recognize the choices without needing to search
-- **Forms need standard fields** - Country, state, category, or status selection
-- **Settings and configuration** - Dropdown menus for preferences or options
-- **Clear option labels** - Each choice has a distinct, scannable name
+- **Список опций фиксирован** (менее 20 элементов) — Пользователи могут просмотреть и выбрать без фильтрации.
+- **Опции знакомы** — Пользователи узнают варианты без необходимости поиска.
+- **Формам нужны стандартные поля** — Выбор страны, штата, категории или статуса.
+- **Настройки и конфигурация** — Выпадающие меню для предпочтений или опций.
+- **Понятные метки опций** — Каждый вариант имеет четкое, легко считываемое название.
 
-Avoid this pattern when:
+Избегайте этого паттерна, когда:
 
-- **The list has more than 20 items** - Use the [Autocomplete pattern](guide/aria/autocomplete) for better filtering
-- **Users need to search options** - [Autocomplete](guide/aria/autocomplete) provides text input and filtering
-- **Multiple selection is needed** - Use the [Multiselect pattern](guide/aria/multiselect) instead
-- **Very few options exist (2-3)** - Radio buttons provide better visibility of all choices
+- **В списке более 20 элементов** — Используйте [паттерн Autocomplete](guide/aria/autocomplete) для лучшей фильтрации.
+- **Пользователям нужно искать опции** — [Autocomplete](guide/aria/autocomplete) предоставляет текстовый ввод и
+  фильтрацию.
+- **Требуется множественный выбор** — Используйте [паттерн Multiselect](guide/aria/multiselect).
+- **Существует очень мало опций (2-3)** — Радиокнопки обеспечивают лучшую видимость всех вариантов.
 
-## Features
+## Возможности
 
-The select pattern combines [Combobox](guide/aria/combobox) and [Listbox](guide/aria/listbox) directives to provide a fully accessible dropdown with:
+Паттерн Select объединяет директивы [Combobox](guide/aria/combobox) и [Listbox](guide/aria/listbox) для создания
+полностью доступного выпадающего списка с:
 
-- **Keyboard Navigation** - Navigate options with arrow keys, select with Enter, close with Escape
-- **Screen Reader Support** - Built-in ARIA attributes for assistive technologies
-- **Custom Display** - Show selected values with icons, formatting, or rich content
-- **Signal-Based Reactivity** - Reactive state management using Angular signals
-- **Smart Positioning** - CDK Overlay handles viewport edges and scrolling
-- **Bidirectional Text Support** - Automatically handles right-to-left (RTL) languages
+- **Навигацией с клавиатуры** — Перемещение по опциям стрелками, выбор через Enter, закрытие через Escape.
+- **Поддержкой скринридеров** — Встроенные ARIA-атрибуты для вспомогательных технологий.
+- **Настраиваемым отображением** — Показ выбранных значений с иконками, форматированием или богатым контентом.
+- **Реактивностью на основе Сигналов** — Управление реактивным состоянием с использованием сигналов Angular.
+- **Умным позиционированием** — CDK Overlay обрабатывает границы области просмотра (viewport) и прокрутку.
+- **Поддержкой двунаправленного текста** — Автоматическая обработка языков с письмом справа налево (RTL).
 
-## Examples
+## Примеры
 
-### Basic select
+### Базовый select
 
-Users need a standard dropdown to choose from a list of values. A readonly combobox paired with a listbox provides the familiar select experience with full accessibility support.
+Пользователям нужен стандартный выпадающий список для выбора из перечня значений. Combobox (только для чтения) в паре с
+listbox обеспечивает привычный опыт использования select с полной поддержкой доступности.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -93,11 +97,15 @@ Users need a standard dropdown to choose from a list of values. A readonly combo
   </docs-tab>
 </docs-tab-group>
 
-The `readonly` attribute on `ngCombobox` prevents text input while preserving keyboard navigation. Users interact with the dropdown using arrow keys and Enter, just like a native select element.
+Атрибут `readonly` в `ngCombobox` предотвращает ввод текста, сохраняя при этом навигацию с клавиатуры. Пользователи
+взаимодействуют с выпадающим списком с помощью клавиш со стрелками и Enter, точно так же, как с нативным элементом
+select.
 
-### Select with custom display
+### Select с кастомным отображением
 
-Options often need visual indicators like icons or badges to help users identify choices quickly. Custom templates within options allow rich formatting while maintaining accessibility.
+Опциям часто требуются визуальные индикаторы, такие как иконки или значки, чтобы помочь пользователям быстро
+идентифицировать выбор. Пользовательские шаблоны внутри опций позволяют использовать сложное форматирование, сохраняя
+доступность.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -125,11 +133,13 @@ Options often need visual indicators like icons or badges to help users identify
   </docs-tab>
 </docs-tab-group>
 
-Each option displays an icon alongside the label. The selected value updates to show the chosen option's icon and text, providing clear visual feedback.
+Каждая опция отображает иконку рядом с меткой. Выбранное значение обновляется, показывая иконку и текст выбранной опции,
+обеспечивая четкую визуальную обратную связь.
 
-### Disabled select
+### Отключенный select
 
-Selects can be disabled to prevent user interaction when certain form conditions aren't met. The disabled state provides visual feedback and prevents keyboard interaction.
+Select можно отключить, чтобы предотвратить взаимодействие с пользователем, когда определенные условия формы не
+соблюдены. Отключенное состояние обеспечивает визуальную обратную связь и блокирует взаимодействие с клавиатурой.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -157,37 +167,43 @@ Selects can be disabled to prevent user interaction when certain form conditions
   </docs-tab>
 </docs-tab-group>
 
-When disabled, the select shows a disabled visual state and blocks all user interaction. Screen readers announce the disabled state to assistive technology users.
+В отключенном состоянии select показывает соответствующий визуальный стиль и блокирует любое взаимодействие с
+пользователем. Скринридеры объявляют об отключенном состоянии пользователям вспомогательных технологий.
 
-## APIs
+## API
 
-The select pattern uses the following directives from Angular's Aria library. See the full API documentation in the linked guides.
+Паттерн Select использует следующие директивы из библиотеки Angular Aria. Полную документацию по API смотрите в
+связанных руководствах.
 
-### Combobox Directives
+### Директивы Combobox
 
-The select pattern uses `ngCombobox` with the `readonly` attribute to prevent text input while preserving keyboard navigation.
+Паттерн Select использует `ngCombobox` с атрибутом `readonly`, чтобы предотвратить ввод текста, сохраняя навигацию с
+клавиатуры.
 
-#### Inputs
+#### Input-свойства
 
-| Property   | Type      | Default | Description                               |
-| ---------- | --------- | ------- | ----------------------------------------- |
-| `readonly` | `boolean` | `false` | Set to `true` to create dropdown behavior |
-| `disabled` | `boolean` | `false` | Disables the entire select                |
+| Свойство   | Тип       | По умолчанию | Описание                                                      |
+| ---------- | --------- | ------------ | ------------------------------------------------------------- |
+| `readonly` | `boolean` | `false`      | Установите в `true` для создания поведения выпадающего списка |
+| `disabled` | `boolean` | `false`      | Отключает весь select                                         |
 
-See the [Combobox API documentation](guide/aria/combobox#apis) for complete details on all available inputs and signals.
+Смотрите [документацию API Combobox](guide/aria/combobox#apis) для получения полной информации обо всех доступных
+Input-свойствах и сигналах.
 
-### Listbox Directives
+### Директивы Listbox
 
-The select pattern uses `ngListbox` for the dropdown list and `ngOption` for each selectable item.
+Паттерн Select использует `ngListbox` для выпадающего списка и `ngOption` для каждого выбираемого элемента.
 
-#### Model
+#### Модель
 
-| Property | Type    | Description                                                                  |
-| -------- | ------- | ---------------------------------------------------------------------------- |
-| `values` | `any[]` | Two-way bindable array of selected values (contains single value for select) |
+| Свойство | Тип     | Описание                                                                               |
+| -------- | ------- | -------------------------------------------------------------------------------------- |
+| `values` | `any[]` | Массив выбранных значений с двусторонней привязкой (содержит одно значение для select) |
 
-See the [Listbox API documentation](guide/aria/listbox#apis) for complete details on listbox configuration, selection modes, and option properties.
+Смотрите [документацию API Listbox](guide/aria/listbox#apis) для получения полной информации о конфигурации listbox,
+режимах выбора и свойствах опций.
 
-### Positioning
+### Позиционирование
 
-The select pattern integrates with [CDK Overlay](api/cdk/overlay/CdkConnectedOverlay) for smart positioning. Use `cdkConnectedOverlay` to handle viewport edges and scrolling automatically.
+Паттерн Select интегрируется с [CDK Overlay](api/cdk/overlay/CdkConnectedOverlay) для умного позиционирования.
+Используйте `cdkConnectedOverlay` для автоматической обработки границ области просмотра и прокрутки.

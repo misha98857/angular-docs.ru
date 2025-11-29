@@ -1,16 +1,19 @@
-# Creating an injectable service
+# Создание внедряемого сервиса
 
-Dependency injection (DI) in Angular is one of the framework's most powerful features. Consider dependency injection to be the ability for Angular to _provide_ resources you need for your application at runtime. A dependency could be a service or some other resources.
+Внедрение зависимостей (Dependency Injection, DI) в Angular — одна из самых мощных возможностей фреймворка.
+Рассматривайте внедрение зависимостей как способность Angular _предоставлять_ ресурсы, необходимые вашему приложению во
+время выполнения. Зависимостью может быть сервис или какие-либо другие ресурсы.
 
-Note: Learn more about [dependency injection in the essentials guide](/essentials/dependency-injection).
+Примечание: Подробнее о [внедрении зависимостей читайте в руководстве по основам](/essentials/dependency-injection).
 
-In this activity, you'll learn how to create an `injectable` service.
+В этом упражнении вы научитесь создавать внедряемый (`injectable`) сервис.
 
 <hr>
 
-One way to use a service is to act as a way to interact with data and APIs. To make a service reusable you should keep the logic in the service and share it throughout the application when it is needed.
+Один из способов использования сервиса — взаимодействие с данными и API. Чтобы сделать сервис переиспользуемым, следует
+хранить логику внутри сервиса и предоставлять к ней доступ по всему приложению по мере необходимости.
 
-To make a service eligible to be injected by the DI system use the `@Injectable` decorator. For example:
+Чтобы сервис мог быть внедрен системой DI, используйте декоратор `@Injectable`. Например:
 
 <docs-code language="ts" highlight="[1, 2, 3]">
 @Injectable({
@@ -21,25 +24,28 @@ class UserService {
 }
 </docs-code>
 
-The `@Injectable` decorator notifies the DI system that the `UserService` is available to be requested in a class. `providedIn` sets the scope in which this resource is available. For now, it is good enough to understand that `providedIn: 'root'` means that the `UserService` is available to the entire application.
+Декоратор `@Injectable` уведомляет систему DI о том, что `UserService` доступен для запроса в классе. Свойство
+`providedIn` задает область видимости, в которой доступен этот ресурс. На данный момент достаточно понимать, что
+`providedIn: 'root'` означает доступность `UserService` для всего приложения.
 
-Alright, you try:
+Хорошо, теперь ваша очередь:
 
 <docs-workflow>
 
-<docs-step title="Add the `@Injectable` decorator">
-Update the code in `car.service.ts` by adding the `@Injectable` decorator.
+<docs-step title="Добавьте декоратор @Injectable">
+Обновите код в `car.service.ts`, добавив декоратор `@Injectable`.
 </docs-step>
 
-<docs-step title="Configure the decorator">
-The values in the object passed to the decorator are considered to be the configuration for the decorator.
+<docs-step title="Настройте декоратор">
+Значения в объекте, переданном декоратору, считаются его конфигурацией.
 <br>
-Update the `@Injectable` decorator in `car.service.ts` to include the configuration for `providedIn: 'root'`.
+Обновите декоратор `@Injectable` в `car.service.ts`, добавив конфигурацию `providedIn: 'root'`.
 
-TIP: Use the above example to find the correct syntax.
+СОВЕТ: Используйте пример выше, чтобы найти правильный синтаксис.
 
 </docs-step>
 
 </docs-workflow>
 
-Well, done 👍 that service is now `injectable` and can participate in the fun. Now that the service is `injectable`, let's try injecting it into a component 👉
+Отлично сработано 👍 этот сервис теперь является внедряемым (`injectable`) и готов к использованию. Теперь, когда сервис
+стал внедряемым, давайте попробуем внедрить его в компонент 👉

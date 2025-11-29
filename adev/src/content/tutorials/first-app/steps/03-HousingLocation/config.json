@@ -1,5 +1,5 @@
 {
-  "title": "Create housing location component",
+  "title": "Создание компонента HousingLocation",
   "type": "editor",
   "answerSrc": "../04-interfaces/src",
   "answerRootDir": "../04-interfaces/",
