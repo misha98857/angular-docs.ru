@@ -1,24 +1,24 @@
 <div class="adev-preview-error docs-light-mode docs-mini-scroll-track">
   @if (error()?.type === ErrorType.UNSUPPORTED_BROWSER_ENVIRONMENT) {
-    @if (isIos) {
-      <p>Open angular.dev on desktop to code in your browser.</p>
-    }
+  @if (isIos) {
+  <p>Откройте angular.dev на компьютере, чтобы писать код в браузере.</p>
+  }
   } @else if (error()?.type === ErrorType.COOKIES || error()?.type === ErrorType.UNKNOWN) {
-    <p>
-      We couldn't start the tutorial app. Please ensure third party cookies are enabled for this
-      site.
-    </p>
+  <p>
+    Не удалось запустить учебное приложение. Пожалуйста, убедитесь, что для этого сайта
+    включены сторонние файлы cookie.
+  </p>
   } @else if (error()?.type === ErrorType.OUT_OF_MEMORY) {
-    <p>
-      We couldn't start the tutorial app because your browser is out of memory. To free up memory,
-      close angular.dev tutorials in other tabs or windows, and refresh the page.
-    </p>
+  <p>
+    Не удалось запустить учебное приложение, так как в браузере закончилась память.
+    Чтобы освободить память, закройте учебники angular-docs.ru в других вкладках или окнах и обновите страницу.
+  </p>
   }
 
   @if (error()?.message) {
-    <small>
-      The error message is:
-      <code>{{ error()!.message }}</code>
-    </small>
+  <small>
+    Сообщение об ошибке:
+    <code>{{ error()!.message }}</code>
+  </small>
   }
 </div>
