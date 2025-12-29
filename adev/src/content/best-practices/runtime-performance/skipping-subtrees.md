@@ -28,6 +28,7 @@ JavaScript по умолчанию использует изменяемые с�
 
 ```ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -15,13 +15,13 @@ TIP: Это руководство предполагает, что вы уже 
 добавляя [декоратор](https://www.typescriptlang.org/docs/handbook/decorators.html) `@Component` поверх класса
 TypeScript:
 
-<docs-code language="angular-ts" highlight="[1, 2, 3, 4]">
+```angular-ts {highlight: [1, 2, 3, 4]}
 @Component({
   selector: 'profile-photo',
   template: `<img src="profile-photo.jpg" alt="Your profile photo">`,
 })
 export class ProfilePhoto { }
-</docs-code>
+```
 
 Для получения полной информации о написании шаблонов Angular, включая привязку данных, обработку событий и управление
 потоком, см. [Руководство по шаблонам](guide/templates).
@@ -31,14 +31,14 @@ export class ProfilePhoto { }
 
 Компоненты могут опционально включать список стилей CSS, которые применяются к DOM этого компонента:
 
-<docs-code language="angular-ts" highlight="[4]">
+```angular-ts {highlight: [4]}
 @Component({
   selector: 'profile-photo',
   template: `<img src="profile-photo.jpg" alt="Your profile photo">`,
   styles: `img { border-radius: 50%; }`,
 })
 export class ProfilePhoto { }
-</docs-code>
+```
 
 По умолчанию стили компонента влияют только на элементы, определенные в шаблоне этого компонента.
 См. [Стилизация компонентов](guide/components/styling) для получения подробной информации о подходе Angular к
@@ -46,14 +46,14 @@ export class ProfilePhoto { }
 
 В качестве альтернативы вы можете написать свой шаблон и стили в отдельных файлах:
 
-<docs-code language="angular-ts" highlight="[3, 4]">
+```ts {highlight: [3,4]}
 @Component({
   selector: 'profile-photo',
   templateUrl: 'profile-photo.html',
   styleUrl: 'profile-photo.css',
 })
 export class ProfilePhoto { }
-</docs-code>
+```
 
 Это может помочь отделить вопросы _представления (presentation)_ от _поведения (behavior)_ в вашем проекте. Вы можете
 выбрать один подход для всего проекта или решать, какой использовать для каждого компонента.
@@ -90,20 +90,20 @@ export class UserProfile { }
 
 Каждый компонент определяет [CSS-селектор](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors):
 
-<docs-code language="angular-ts" highlight="[2]">
+```angular-ts {highlight: [2]}
 @Component({
   selector: 'profile-photo',
   ...
 })
 export class ProfilePhoto { }
-</docs-code>
+```
 
 См. [Селекторы компонентов](guide/components/selectors) для получения подробной информации о типах селекторов,
 поддерживаемых Angular, и рекомендаций по выбору селектора.
 
 Вы показываете компонент, создавая соответствующий HTML-элемент в шаблоне _других_ компонентов:
 
-<docs-code language="angular-ts" highlight="[8]">
+```angular-ts {highlight: [8]}
 @Component({
   selector: 'profile-photo',
 })
@@ -114,7 +114,7 @@ imports: [ProfilePhoto],
 template: `<profile-photo />`
 })
 export class UserProfile { }
-</docs-code>
+```
 
 Angular создает экземпляр компонента для каждого встреченного соответствующего HTML-элемента. DOM-элемент, который
 соответствует селектору компонента, называется **хост-элементом (host element)** этого компонента. Содержимое шаблона

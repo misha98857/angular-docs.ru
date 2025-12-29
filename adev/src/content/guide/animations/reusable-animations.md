@@ -15,7 +15,7 @@ CSS-анимации в ваших приложениях.
 Затем вы можете импортировать и повторно использовать эту анимацию в любых компонентах вашего приложения с помощью
 функции [`useAnimation()`](api/animations/useAnimation).
 
-<docs-code header="animations.ts" path="adev/src/content/examples/animations/src/app/animations.1.ts" visibleRegion="animation-const"/>
+<docs-code header="animations.ts" path="adev/src/content/examples/animations/src/app/animations.1.ts" region="animation-const"/>
 
 В предыдущем фрагменте кода `transitionAnimation` становится переиспользуемой благодаря объявлению её как экспортируемой
 переменной.
@@ -25,13 +25,13 @@ HELPFUL: Входные параметры `height`, `opacity`, `backgroundColor
 Вы также можете экспортировать часть анимации.
 Например, следующий фрагмент экспортирует `trigger` анимации.
 
-<docs-code header="animations.1.ts" path="adev/src/content/examples/animations/src/app/animations.1.ts" visibleRegion="trigger-const"/>
+<docs-code header="animations.1.ts" path="adev/src/content/examples/animations/src/app/animations.1.ts" region="trigger-const"/>
 
 С этого момента вы можете импортировать переменные переиспользуемой анимации в класс вашего компонента.
 Например, следующий фрагмент кода импортирует переменную `transitionAnimation` и использует её через функцию
 `useAnimation()`.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.3.ts" visibleRegion="reusable"/>
+<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.3.ts" region="reusable"/>
 
 ## Дополнительно об анимациях в Angular
 

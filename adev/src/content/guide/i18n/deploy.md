@@ -13,7 +13,7 @@ HTML-тег `base` с атрибутом `href` определяет базов�
 `angular.json`][GuideWorkspaceConfig].
 В следующем примере `"subPath"` задан как пустая строка.
 
-<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" visibleRegion="i18n-subPath"/>
+<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" region="i18n-subPath"/>
 
 ## Настройка сервера
 

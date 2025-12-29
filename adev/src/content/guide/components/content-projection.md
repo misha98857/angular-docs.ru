@@ -95,7 +95,7 @@ export class CardBody {}
 
 ```angular-ts
 <!-- Component template -->
-Component({
+@Component({
   selector: 'custom-card',
   template: `
   <div class="card-shadow">
@@ -218,7 +218,7 @@ Angular поддерживает специальный атрибут `ngProjec
 <div class="card-shadow">
   <ng-content select="card-title"></ng-content>
   <div class="card-divider"></div>
-  <ng-content></ng-content>
+  <ng-content />
 </div>
 ```
 

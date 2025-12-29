@@ -16,7 +16,7 @@
 Все, что использует регулярные выражения, стоит тщательно тестировать. Вы можете использовать стандартные техники
 модульного тестирования для проверки ожидаемых сценариев и граничных случаев.
 
-<docs-code header="title-case.pipe.spec.ts" path="adev/src/content/examples/testing/src/app/shared/title-case.pipe.spec.ts" visibleRegion="excerpt"/>
+<docs-code header="title-case.pipe.spec.ts" path="adev/src/content/examples/testing/src/app/shared/title-case.pipe.spec.ts" region="excerpt"/>
 
 ## Написание DOM-тестов для поддержки тестирования пайпа
 
@@ -25,4 +25,4 @@
 
 Рассмотрите возможность добавления тестов компонента, таких как этот:
 
-<docs-code header="hero-detail.component.spec.ts (pipe test)" path="adev/src/content/examples/testing/src/app/hero/hero-detail.component.spec.ts" visibleRegion="title-case-pipe"/>
+<docs-code header="hero-detail.component.spec.ts (pipe test)" path="adev/src/content/examples/testing/src/app/hero/hero-detail.component.spec.ts" region="title-case-pipe"/>

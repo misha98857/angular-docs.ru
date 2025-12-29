@@ -53,7 +53,7 @@ HELPFUL:
 Например, следующий фрагмент файла конфигурации рабочего пространства [`angular.json`][GuideWorkspaceConfig]
 устанавливает исходную локаль `en-US` и указывает путь к файлу перевода для французской (`fr`) локали.
 
-<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" visibleRegion="locale-config"/>
+<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" region="locale-config"/>
 
 ## Генерация вариантов приложения для каждой локали
 
@@ -89,7 +89,7 @@ CLI также корректирует базовый HREF HTML для кажд
 В следующем примере показана опция `"localize"`, установленная в `true` в файле конфигурации рабочего пространства [
 `angular.json`][GuideWorkspaceConfig], так что собираются все локали, определенные в конфигурации сборки.
 
-<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" visibleRegion="build-localize-true"/>
+<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" region="build-localize-true"/>
 
 ## Сборка из командной строки
 
@@ -100,7 +100,7 @@ CLI собирает все локали, определенные в конфи
 HELPFUL: Для получения дополнительной информации о том, как задать локали,
 см. [Генерация вариантов приложения для каждой локали][GuideI18nCommonMergeGenerateApplicationVariantsForEachLocale].
 
-<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" visibleRegion="build-localize"/>
+<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" region="build-localize"/>
 
 ## Применение специфических параметров сборки только для одной локали
 
@@ -113,18 +113,18 @@ IMPORTANT: Используйте сервер разработки [Angular CLI
 
 В следующем примере показана пользовательская конфигурация для конкретной локали, использующая одну локаль.
 
-<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" visibleRegion="build-single-locale"/>
+<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" region="build-single-locale"/>
 
 Передайте эту конфигурацию командам `ng serve` или `ng build`.
 В следующем примере кода показано, как обслуживать файл французского языка.
 
-<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" visibleRegion="serve-french"/>
+<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" region="serve-french"/>
 
 Для производственных сборок (production) используйте композицию конфигураций для запуска обеих конфигураций.
 
-<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" visibleRegion="build-production-french"/>
+<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" region="build-production-french"/>
 
-<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" visibleRegion="build-production-french" />
+<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" region="build-production-french" />
 
 ## Отчет об отсутствующих переводах
 
@@ -145,7 +145,7 @@ IMPORTANT: Используйте сервер разработки [Angular CLI
 
 В следующем примере показано, как установить уровень предупреждения на `error`.
 
-<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" visibleRegion="missing-translation-error" />
+<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" region="missing-translation-error" />
 
 HELPFUL: Когда вы компилируете свой проект Angular в приложение Angular, экземпляры атрибута `i18n` заменяются
 экземплярами строки сообщения с тегом [`$localize`][ApiLocalizeInitLocalize].

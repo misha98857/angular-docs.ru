@@ -33,11 +33,11 @@ HTML-элемента.
 
 Это позволяет добавлять новые состояния без необходимости прописывать отдельные переходы для каждого из них.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="trigger-wildcard1"/>
+<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" region="trigger-wildcard1"/>
 
 Используйте синтаксис с двусторонней стрелкой для указания переходов между состояниями в обоих направлениях.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="trigger-wildcard2"/>
+<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" region="trigger-wildcard2"/>
 
 ### Использование подстановочного знака с несколькими состояниями перехода
 
@@ -50,7 +50,7 @@ HTML-элемента.
 
 <img alt="wildcard state with 3 states" src="assets/images/guide/animations/wildcard-3-states.png">
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="trigger-transition"/>
+<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" region="trigger-transition"/>
 
 Переход `* => *` применяется, когда происходит любое изменение между двумя состояниями.
 
@@ -68,7 +68,7 @@ HTML-элемента.
 Подстановочный знак — это запасное значение, которое используется, если анимируемое состояние не объявлено внутри
 триггера.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="transition4"/>
+<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" region="transition4"/>
 
 ### Состояние void
 
@@ -94,7 +94,7 @@ HTML-элемента.
 - Когда вы добавляете героя в список героев, он как бы влетает на страницу слева.
 - Когда вы удаляете героя из списка, он как бы улетает вправо.
 
-<docs-code header="hero-list-enter-leave.component.ts" path="adev/src/content/examples/animations/src/app/hero-list-enter-leave.component.ts" visibleRegion="animationdef"/>
+<docs-code header="hero-list-enter-leave.component.ts" path="adev/src/content/examples/animations/src/app/hero-list-enter-leave.component.ts" region="animationdef"/>
 
 В приведенном выше коде вы применили состояние `void`, когда HTML-элемент не прикреплен к представлению.
 
@@ -127,12 +127,12 @@ IMPORTANT: Поведение входа/выхода иногда может с
 В этом примере есть специальный триггер для анимации входа и выхода под названием `myInsertRemoveTrigger`.
 HTML-шаблон содержит следующий код.
 
-<docs-code header="insert-remove.component.html" path="adev/src/content/examples/animations/src/app/insert-remove.component.html" visibleRegion="insert-remove"/>
+<docs-code header="insert-remove.component.html" path="adev/src/content/examples/animations/src/app/insert-remove.component.html" region="insert-remove"/>
 
 В файле компонента переход `:enter` устанавливает начальную непрозрачность (opacity) равной 0. Затем он анимирует её
 изменение до 1 по мере вставки элемента в представление.
 
-<docs-code header="insert-remove.component.ts" path="adev/src/content/examples/animations/src/app/insert-remove.component.ts" visibleRegion="enter-leave-trigger"/>
+<docs-code header="insert-remove.component.ts" path="adev/src/content/examples/animations/src/app/insert-remove.component.ts" region="enter-leave-trigger"/>
 
 Обратите внимание, что в этом примере не нужно использовать [`state()`](api/animations/state).
 
@@ -145,14 +145,14 @@ HELPFUL: В следующем примере используются мето�
 Для получения дополнительной информации об этих методах см.
 страницу [сложные последовательности](guide/legacy-animations/complex-sequences).
 
-<docs-code header="hero-list-page.component.ts" path="adev/src/content/examples/animations/src/app/hero-list-page.component.ts" visibleRegion="increment"/>
+<docs-code header="hero-list-page.component.ts" path="adev/src/content/examples/animations/src/app/hero-list-page.component.ts" region="increment"/>
 
 ## Булевы значения в переходах
 
 Если триггер содержит булево значение в качестве значения привязки, то это значение можно сопоставить с помощью
 выражения `transition()`, которое сравнивает `true` и `false` или `1` и `0`.
 
-<docs-code header="open-close.component.html" path="adev/src/content/examples/animations/src/app/open-close.component.2.html" visibleRegion="trigger-boolean"/>
+<docs-code header="open-close.component.html" path="adev/src/content/examples/animations/src/app/open-close.component.2.html" region="trigger-boolean"/>
 
 В приведенном выше фрагменте кода HTML-шаблон связывает элемент `<div>` с триггером с именем `openClose` с выражением
 статуса `isOpen` и возможными значениями `true` и `false`.
@@ -163,7 +163,7 @@ HTML-элемента становится стилем подстановочн
 В этом случае анимация использует любую высоту, которую элемент имел до начала анимации.
 Когда элемент `closed` (значение `false`), он анимируется до высоты 0, что делает его невидимым.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.2.ts" visibleRegion="trigger-boolean"/>
+<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.2.ts" region="trigger-boolean"/>
 
 ## Несколько триггеров анимации
 
@@ -187,8 +187,8 @@ HTML-элемента становится стилем подстановочн
 Следующий пример кода показывает, как использовать эту функцию.
 
 <docs-code-multifile>
-    <docs-code header="open-close.component.html" path="adev/src/content/examples/animations/src/app/open-close.component.4.html" visibleRegion="toggle-animation"/>
-    <docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.4.ts" visibleRegion="toggle-animation" language="typescript"/>
+    <docs-code header="open-close.component.html" path="adev/src/content/examples/animations/src/app/open-close.component.4.html" region="toggle-animation"/>
+    <docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.4.ts" region="toggle-animation" language="typescript"/>
 </docs-code-multifile>
 
 Когда привязка `@.disabled` истинна, триггер `@childAnimation` не срабатывает.
@@ -211,7 +211,7 @@ HTML-элемента становится стилем подстановочн
 Чтобы отключить все анимации для приложения Angular, поместите хост-привязку `@.disabled` на самый верхний компонент
 Angular.
 
-<docs-code header="app.component.ts" path="adev/src/content/examples/animations/src/app/app.component.ts" visibleRegion="toggle-app-animations"/>
+<docs-code header="app.component.ts" path="adev/src/content/examples/animations/src/app/app.component.ts" region="toggle-app-animations"/>
 
 HELPFUL: Отключение анимации во всем приложении полезно во время сквозного \(E2E\) тестирования.
 
@@ -220,13 +220,13 @@ HELPFUL: Отключение анимации во всем приложени�
 Функция анимации `trigger()` генерирует _коллбэки_ (обратные вызовы) при запуске и при завершении.
 В следующем примере представлен компонент, содержащий триггер `openClose`.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="events1"/>
+<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" region="events1"/>
 
 В HTML-шаблоне событие анимации передается обратно через `$event` как `@triggerName.start` и `@triggerName.done`, где
 `triggerName` — это имя используемого триггера.
 В этом примере триггер `openClose` выглядит следующим образом.
 
-<docs-code header="open-close.component.html" path="adev/src/content/examples/animations/src/app/open-close.component.3.html" visibleRegion="callbacks"/>
+<docs-code header="open-close.component.html" path="adev/src/content/examples/animations/src/app/open-close.component.3.html" region="callbacks"/>
 
 Потенциальным применением коллбэков анимации может быть маскировка медленного вызова API, например, поиска в базе
 данных.
@@ -243,7 +243,7 @@ HELPFUL: Отключение анимации во всем приложени�
 Следующий фрагмент кода создает вывод в лог консоли для исходного примера — кнопки с двумя состояниями `open` и
 `closed`.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="events"/>
+<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" region="events"/>
 
 ## Ключевые кадры (Keyframes)
 
@@ -257,7 +257,7 @@ HELPFUL: Отключение анимации во всем приложени�
 
 Код для этого изменения цвета может выглядеть так.
 
-<docs-code header="status-slider.component.ts" path="adev/src/content/examples/animations/src/app/status-slider.component.ts" visibleRegion="keyframes"/>
+<docs-code header="status-slider.component.ts" path="adev/src/content/examples/animations/src/app/status-slider.component.ts" region="keyframes"/>
 
 ### Смещение (Offset)
 
@@ -274,7 +274,7 @@ HELPFUL: Отключение анимации во всем приложени�
 
 Код с указанными смещениями будет следующим.
 
-<docs-code header="status-slider.component.ts" path="adev/src/content/examples/animations/src/app/status-slider.component.ts" visibleRegion="keyframesWithOffsets"/>
+<docs-code header="status-slider.component.ts" path="adev/src/content/examples/animations/src/app/status-slider.component.ts" region="keyframesWithOffsets"/>
 
 Вы можете комбинировать ключевые кадры с `duration`, `delay` и `easing` в рамках одной анимации.
 
@@ -294,7 +294,7 @@ HELPFUL: Отключение анимации во всем приложени�
 
 Фрагмент кода для этой анимации может выглядеть так.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.1.ts" visibleRegion="trigger"/>
+<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.1.ts" region="trigger"/>
 
 ### Анимируемые свойства и единицы измерения
 
@@ -334,7 +334,7 @@ HELPFUL: Строка `"50"` не будет считаться допустим
 В следующем примере есть триггер под названием `shrinkOut`, используемый, когда HTML-элемент покидает страницу.
 Анимация берет любую высоту, которую элемент имеет перед уходом, и анимирует её от этой высоты до нуля.
 
-<docs-code header="hero-list-auto.component.ts" path="adev/src/content/examples/animations/src/app/hero-list-auto.component.ts" visibleRegion="auto-calc"/>
+<docs-code header="hero-list-auto.component.ts" path="adev/src/content/examples/animations/src/app/hero-list-auto.component.ts" region="auto-calc"/>
 
 ### Кратко о ключевых кадрах
 

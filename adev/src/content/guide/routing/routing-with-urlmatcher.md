@@ -65,7 +65,7 @@ Angular.
 
 1. Определите пользовательский сопоставитель маршрутов, добавив следующий код в маршруты приложения.
 
-   <docs-code header="app.routes.ts" path="adev/src/content/examples/routing-with-urlmatcher/src/app/app.routes.ts" visibleRegion="matcher"/>
+   <docs-code header="app.routes.ts" path="adev/src/content/examples/routing-with-urlmatcher/src/app/app.routes.ts" region="matcher"/>
 
 Этот пользовательский сопоставитель представляет собой функцию, которая выполняет следующие задачи:
 

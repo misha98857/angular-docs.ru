@@ -11,7 +11,7 @@ Angular присваивает каждой единице перевода ун
 
 В следующем примере показаны единицы перевода с уникальными ID.
 
-<docs-code header="messages.fr.xlf.html" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" visibleRegion="generated-id"/>
+<docs-code header="messages.fr.xlf.html" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" region="generated-id"/>
 
 При изменении переводимого текста экстрактор генерирует новый ID для этой единицы перевода.
 В большинстве случаев изменения в исходном тексте также требуют изменения перевода.
@@ -28,21 +28,17 @@ ID.
 используйте префикс `@@`.
 В следующем примере определяется пользовательский ID `introductionHeader` в элементе заголовка.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="i18n-attribute-solo-id"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" region="i18n-attribute-solo-id"/>
 
 В следующем примере определяется пользовательский ID `introductionHeader` для переменной.
 
-<!--todo: replace with code example -->
-
-<docs-code language="typescript">
-
+```ts
 variableText1 = $localize`:@@introductionHeader:Hello i18n!`;
-
-</docs-code>
+```
 
 Когда вы указываете пользовательский ID, экстрактор генерирует единицу перевода с этим ID.
 
-<docs-code header="messages.fr.xlf.html" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" visibleRegion="custom-id"/>
+<docs-code header="messages.fr.xlf.html" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" region="custom-id"/>
 
 Если вы измените текст, экстрактор не изменит ID.
 В результате вам не нужно предпринимать дополнительных шагов для обновления перевода.
@@ -56,31 +52,23 @@ variableText1 = $localize`:@@introductionHeader:Hello i18n!`;
 
 Следующий пример включает описание, за которым следует пользовательский ID.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="i18n-attribute-id"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" region="i18n-attribute-id"/>
 
 В следующем примере определяются пользовательский ID `introductionHeader` и описание для переменной.
 
-<!--todo: replace with code example -->
-
-<docs-code language="typescript">
-
+```ts
 variableText2 = $localize`:An introduction header for this sample@@introductionHeader:Hello i18n!`;
-
-</docs-code>
+```
 
 В следующем примере добавляется смысловое значение.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="i18n-attribute-meaning-and-id"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" region="i18n-attribute-meaning-and-id"/>
 
 В следующем примере определяется пользовательский ID `introductionHeader` для переменной.
 
-<!--todo: replace with code example -->
-
-<docs-code language="typescript">
-
+```ts
 variableText3 = $localize`:site header|An introduction header for this sample@@introductionHeader:Hello i18n!`;
-
-</docs-code>
+```
 
 ### Определение уникальных пользовательских ID
 
@@ -91,11 +79,11 @@ variableText3 = $localize`:site header|An introduction header for this sample@@i
 Например, в следующем фрагменте кода один и тот же пользовательский ID `myId` определен для двух разных текстовых
 элементов.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="i18n-duplicate-custom-id"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" region="i18n-duplicate-custom-id"/>
 
 Ниже показан перевод на французский язык.
 
-<docs-code header="src/locale/messages.fr.xlf" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" visibleRegion="i18n-duplicate-custom-id"/>
+<docs-code header="src/locale/messages.fr.xlf" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" region="i18n-duplicate-custom-id"/>
 
 Оба элемента теперь используют один и тот же перевод \(`Bonjour`\), так как оба были определены с одним и тем же
 пользовательским ID.

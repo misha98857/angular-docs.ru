@@ -8,7 +8,7 @@ Karma/Jasmine. Мы активно работаем над предоставл�
 Сервисы часто проще всего покрыть юнит-тестами.
 Вот несколько синхронных и асинхронных юнит-тестов `ValueService`, написанных без помощи утилит тестирования Angular.
 
-<docs-code header="demo.spec.ts" path="adev/src/content/examples/testing/src/app/demo/demo.spec.ts" visibleRegion="ValueService"/>
+<docs-code header="demo.spec.ts" path="adev/src/content/examples/testing/src/app/demo/demo.spec.ts" region="ValueService"/>
 
 ## Тестирование сервисов с помощью `TestBed`
 
@@ -35,7 +35,7 @@ Angular [@NgModule](guide/ngmodules).
 Чтобы протестировать сервис, вы устанавливаете свойство метаданных `providers` с массивом сервисов, которые вы будете
 тестировать или мокать (mock).
 
-<docs-code header="demo.testbed.spec.ts (provide ValueService in beforeEach)" path="adev/src/content/examples/testing/src/app/demo/demo.testbed.spec.ts" visibleRegion="value-service-before-each"/>
+<docs-code header="demo.testbed.spec.ts (provide ValueService in beforeEach)" path="adev/src/content/examples/testing/src/app/demo/demo.testbed.spec.ts" region="value-service-before-each"/>
 
 Затем внедрите его внутри теста, вызвав `TestBed.inject()` с классом сервиса в качестве аргумента.
 
@@ -43,21 +43,21 @@ HELPFUL: `TestBed.get()` устарел, начиная с Angular версии 
 Чтобы минимизировать критические изменения, Angular вводит новую функцию под названием `TestBed.inject()`, которую
 следует использовать вместо него.
 
-<docs-code path="adev/src/content/examples/testing/src/app/demo/demo.testbed.spec.ts" visibleRegion="value-service-inject-it"/>
+<docs-code path="adev/src/content/examples/testing/src/app/demo/demo.testbed.spec.ts" region="value-service-inject-it"/>
 
 Или внутри `beforeEach()`, если вы предпочитаете внедрять сервис как часть вашей настройки.
 
-<docs-code path="adev/src/content/examples/testing/src/app/demo/demo.testbed.spec.ts" visibleRegion="value-service-inject-before-each"> </docs-code>
+<docs-code path="adev/src/content/examples/testing/src/app/demo/demo.testbed.spec.ts" region="value-service-inject-before-each"> </docs-code>
 
 При тестировании сервиса с зависимостью, предоставьте мок (mock) в массиве `providers`.
 
 В следующем примере мок — это spy-объект.
 
-<docs-code path="adev/src/content/examples/testing/src/app/demo/demo.testbed.spec.ts" visibleRegion="master-service-before-each"/>
+<docs-code path="adev/src/content/examples/testing/src/app/demo/demo.testbed.spec.ts" region="master-service-before-each"/>
 
 Тест использует этот spy так же, как и раньше.
 
-<docs-code path="adev/src/content/examples/testing/src/app/demo/demo.testbed.spec.ts" visibleRegion="master-service-it"/>
+<docs-code path="adev/src/content/examples/testing/src/app/demo/demo.testbed.spec.ts" region="master-service-it"/>
 
 ## Тестирование без `beforeEach()`
 
@@ -71,7 +71,7 @@ HELPFUL: `TestBed.get()` устарел, начиная с Angular версии 
 
 Начните с размещения повторно используемого подготовительного кода в функции _setup_ вместо `beforeEach()`.
 
-<docs-code header="demo.spec.ts (setup)" path="adev/src/content/examples/testing/src/app/demo/demo.spec.ts" visibleRegion="no-before-each-setup"/>
+<docs-code header="demo.spec.ts (setup)" path="adev/src/content/examples/testing/src/app/demo/demo.spec.ts" region="no-before-each-setup"/>
 
 Функция `setup()` возвращает литерал объекта с переменными, такими как `masterService`, на которые может ссылаться тест.
 Вы не определяете _полуглобальные_ переменные (например, `let masterService: MasterService`) в теле `describe()`.
@@ -79,13 +79,13 @@ HELPFUL: `TestBed.get()` устарел, начиная с Angular версии 
 Затем каждый тест вызывает `setup()` в своей первой строке, прежде чем продолжить шаги, которые манипулируют объектом
 тестирования и проверяют ожидания.
 
-<docs-code path="adev/src/content/examples/testing/src/app/demo/demo.spec.ts" visibleRegion="no-before-each-test"/>
+<docs-code path="adev/src/content/examples/testing/src/app/demo/demo.spec.ts" region="no-before-each-test"/>
 
 Обратите внимание, как тест
 использует [деструктурирующее присваивание](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
 для извлечения необходимых переменных настройки.
 
-<docs-code path="adev/src/content/examples/testing/src/app/demo/demo.spec.ts" visibleRegion="no-before-each-setup-call"/>
+<docs-code path="adev/src/content/examples/testing/src/app/demo/demo.spec.ts" region="no-before-each-setup-call"/>
 
 Многие разработчики считают этот подход более чистым и явным, чем традиционный стиль с `beforeEach()`.
 
@@ -101,7 +101,7 @@ HELPFUL: `TestBed.get()` устарел, начиная с Angular версии 
 Вы можете протестировать сервис данных с внедренным шпионом (spy) `HttpClient` так же, как вы тестируете любой сервис с
 зависимостью.
 
-<docs-code header="hero.service.spec.ts (tests with spies)" path="adev/src/content/examples/testing/src/app/model/hero.service.spec.ts" visibleRegion="test-with-spies"/>
+<docs-code header="hero.service.spec.ts (tests with spies)" path="adev/src/content/examples/testing/src/app/model/hero.service.spec.ts" region="test-with-spies"/>
 
 IMPORTANT: Методы `HeroService` возвращают `Observable`.
 Вы должны _подписаться_ на Observable, чтобы (а) заставить его выполниться и (б) утверждать, что метод завершился

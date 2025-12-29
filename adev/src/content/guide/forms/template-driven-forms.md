@@ -80,14 +80,14 @@ Angular поддерживает два подхода к проектирова
 
 1. Макет формы и детали определены в классе `ActorFormComponent`.
 
-   <docs-code header="actor-form.component.ts (v1)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" visibleRegion="v1"/>
+   <docs-code header="actor-form.component.ts (v1)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" region="v1"/>
 
    Значение `selector` компонента «app-actor-form» означает, что вы можете поместить эту форму в родительский шаблон,
    используя тег `<app-actor-form>`.
 
 1. Следующий код создает новый экземпляр актера, чтобы начальная форма могла показать пример актера.
 
-   <docs-code language="typescript" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" language="typescript" visibleRegion="Marilyn"/>
+   <docs-code language="typescript" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" language="typescript" region="Marilyn"/>
 
    В этой демонстрации используются фиктивные данные для `model` и `skills`.
    В реальном приложении вы бы внедрили сервис данных для получения и сохранения реальных данных или предоставили бы эти
@@ -95,7 +95,7 @@ Angular поддерживает два подхода к проектирова
 
 1. Компонент включает функциональность форм, импортируя модуль `FormsModule`.
 
-   <docs-code language="typescript" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" language="typescript" visibleRegion="imports"/>
+   <docs-code language="typescript" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" language="typescript" region="imports"/>
 
 1. Форма отображается в макете приложения, определенном шаблоном корневого компонента.
 
@@ -121,7 +121,7 @@ Angular поддерживает два подхода к проектирова
    `ActorFormComponent`.
    Цикл Angular `@for` перебирает значения данных для заполнения элемента `<select>`.
 
-   <docs-code header="actor-form.component.html (skills)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" visibleRegion="skills"/>
+   <docs-code header="actor-form.component.html (skills)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="skills"/>
 
 Если вы запустите приложение прямо сейчас, вы увидите список навыков в элементе выбора.
 Элементы ввода еще не привязаны к значениям данных или событиям, поэтому они пока пусты и не имеют поведения.
@@ -141,7 +141,7 @@ Angular поддерживает два подхода к проектирова
 1. Найдите тег `<input>` рядом с меткой **Name**.
 1. Добавьте директиву `ngModel`, используя синтаксис двусторонней привязки данных `[(ngModel)]="..."`.
 
-<docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" visibleRegion="ngModelName-1"/>
+<docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="ngModelName-1"/>
 
 ПОЛЕЗНО: В этом примере есть временная диагностическая интерполяция после каждого тега input, `{{model.name}}`, чтобы
 показать текущее значение данных соответствующего свойства. Комментарий напоминает удалить диагностические строки, когда
@@ -159,7 +159,7 @@ Angular поддерживает два подхода к проектирова
 1. Отредактируйте файл шаблона `actor-form.component.html`.
 1. Обновите тег `<form>` с переменной ссылки на шаблон `#actorForm` и установите ее значение следующим образом.
 
-   <docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" visibleRegion="template-variable"/>
+   <docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="template-variable"/>
 
    Переменная шаблона `actorForm` теперь является ссылкой на экземпляр директивы `NgForm`, которая управляет формой в
    целом.
@@ -189,7 +189,7 @@ Angular использует назначенное имя для регистр
 
 После этих изменений шаблон формы должен выглядеть следующим образом:
 
-<docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" visibleRegion="ngModel-2"/>
+<docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="ngModel-2"/>
 
 Вы заметите, что:
 
@@ -275,7 +275,7 @@ Angular также применяет класс `ng-submitted` к элемен�
 
 1. В файле `index.html` обновите тег `<head>`, чтобы включить новую таблицу стилей.
 
-   <docs-code header="index.html (styles)" path="adev/src/content/examples/forms/src/index.html" visibleRegion="styles"/>
+   <docs-code header="index.html (styles)" path="adev/src/content/examples/forms/src/index.html" region="styles"/>
 
 ### Отображение и скрытие сообщений об ошибках валидации
 
@@ -305,12 +305,12 @@ Angular также применяет класс `ng-submitted` к элемен�
 Показывайте или скрывайте сообщение об ошибке, привязывая свойства элемента управления `name` к свойству `hidden` элемента `<div>` сообщения.
 </docs-step>
 
-<docs-code header="actor-form.component.html (hidden-error-msg)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" visibleRegion="hidden-error-msg"/>
+<docs-code header="actor-form.component.html (hidden-error-msg)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="hidden-error-msg"/>
 
 <docs-step title="Добавьте условное сообщение об ошибке к имени">
 Добавьте условное сообщение об ошибке к полю ввода `name`, как в следующем примере.
 
-<docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" visibleRegion="name-with-error-msg"/>
+<docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="name-with-error-msg"/>
 </docs-step>
 </docs-workflow>
 
@@ -338,11 +338,11 @@ Pristine означает, что пользователь не изменял �
 1. В шаблоне поместите элемент `<button>` «New Actor» внизу формы.
 1. В файле компонента добавьте метод создания актера в модель данных актера.
 
-   <docs-code header="actor-form.component.ts (New Actor method)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" visibleRegion="new-actor"/>
+   <docs-code header="actor-form.component.ts (New Actor method)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" region="new-actor"/>
 
 1. Привяжите событие клика кнопки к методу создания актера `newActor()`.
 
-   <docs-code header="actor-form.component.html (New Actor button)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" visibleRegion="new-actor-button-no-reset"/>
+   <docs-code header="actor-form.component.html (New Actor button)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="new-actor-button-no-reset"/>
 
 1. Запустите приложение снова и нажмите кнопку **New Actor**.
 
@@ -359,7 +359,7 @@ Pristine означает, что пользователь не изменял �
 1. Чтобы восстановить состояние pristine элементов управления формы, очистите все флаги императивно, вызвав метод формы
    `reset()` после вызова метода `newActor()`.
 
-   <docs-code header="actor-form.component.html (Reset the form)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" visibleRegion="new-actor-button-form-reset"/>
+   <docs-code header="actor-form.component.html (Reset the form)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="new-actor-button-form-reset"/>
 
    Теперь нажатие **New Actor** сбрасывает как форму, так и флаги ее элементов управления.
 
@@ -376,7 +376,7 @@ Pristine означает, что пользователь не изменял �
 <docs-step title="Прослушивание ngOnSubmit">
 Привяжите свойство события [`ngSubmit`](api/forms/NgForm#properties) формы к методу `onSubmit()` компонента actor-form.
 
-<docs-code header="actor-form.component.html (ngSubmit)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" visibleRegion="ngSubmit"/>
+<docs-code header="actor-form.component.html (ngSubmit)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="ngSubmit"/>
 </docs-step>
 
 <docs-step title="Привязка свойства disabled">
@@ -384,7 +384,7 @@ Pristine означает, что пользователь не изменял �
 
 Вы привяжете свойство формы, указывающее на ее общую валидность, к свойству `disabled` кнопки **Submit**.
 
-<docs-code header="actor-form.component.html (submit-button)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" visibleRegion="submit-button"/>
+<docs-code header="actor-form.component.html (submit-button)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="submit-button"/>
 </docs-step>
 
 <docs-step title="Запуск приложения">
@@ -408,12 +408,12 @@ Pristine означает, что пользователь не изменял �
 <docs-step title="Оберните форму">
 Оберните всю форму в `<div>` и привяжите его свойство `hidden` к свойству `ActorFormComponent.submitted`.
 
-<docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" visibleRegion="edit-div"/>
+<docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="edit-div"/>
 
 Основная форма видна с самого начала, так как свойство `submitted` ложно до тех пор, пока вы не отправите форму, как
 показывает этот фрагмент из `ActorFormComponent`:
 
-<docs-code header="actor-form.component.ts (submitted)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" visibleRegion="submitted"/>
+<docs-code header="actor-form.component.ts (submitted)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" region="submitted"/>
 
 Когда вы нажимаете кнопку **Submit**, флаг `submitted` становится истинным, и форма исчезает.
 </docs-step>
@@ -421,7 +421,7 @@ Pristine означает, что пользователь не изменял �
 <docs-step title="Добавьте состояние отправки">
 Чтобы показать что-то другое, пока форма находится в состоянии отправки, добавьте следующий HTML под новой оберткой `<div>`.
 
-<docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" visibleRegion="submitted"/>
+<docs-code header="actor-form.component.html (excerpt)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="submitted"/>
 
 Этот `<div>`, показывающий актера только для чтения с привязками интерполяции, появляется только тогда, когда компонент
 находится в состоянии отправки.
@@ -454,8 +454,8 @@ Pristine означает, что пользователь не изменял �
 Вот код финальной версии приложения:
 
 <docs-code-multifile>
-    <docs-code header="actor-form.component.ts" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" visibleRegion="final"/>
-    <docs-code header="actor-form.component.html" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" visibleRegion="final"/>
+    <docs-code header="actor-form.component.ts" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" region="final"/>
+    <docs-code header="actor-form.component.html" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="final"/>
     <docs-code header="actor.ts" path="adev/src/content/examples/forms/src/app/actor.ts"/>
     <docs-code header="app.component.html" path="adev/src/content/examples/forms/src/app/app.component.html"/>
     <docs-code header="app.component.ts" path="adev/src/content/examples/forms/src/app/app.component.ts"/>

@@ -179,12 +179,8 @@
           "name": "V"
         }
       ],
-      "description": "The container element that wraps a combobox input and popup, and orchestrates its behavior.\n\nThe `ngCombobox` directive is the main entry point for creating a combobox and customizing its\nbehavior. It coordinates the interactions between the `ngComboboxInput` and the popup, which\nis defined by a `ng-template` with the `ngComboboxPopupContainer` directive. If using the\n`CdkOverlay`, the `cdkConnectedOverlay` directive takes the place of `ngComboboxPopupContainer`.\n\n```html\n<div ngCombobox filterMode=\"highlight\">\n  <input\n    ngComboboxInput\n    placeholder=\"Search for a state...\"\n    [(value)]=\"searchString\"\n  />\n\n  <ng-template ngComboboxPopupContainer>\n    <div ngListbox [(value)]=\"selectedValue\">",
+      "description": "The container element that wraps a combobox input and popup, and orchestrates its behavior.\n\nThe `ngCombobox` directive is the main entry point for creating a combobox and customizing its\nbehavior. It coordinates the interactions between the `ngComboboxInput` and the popup, which\nis defined by a `ng-template` with the `ngComboboxPopupContainer` directive. If using the\n`CdkOverlay`, the `cdkConnectedOverlay` directive takes the place of `ngComboboxPopupContainer`.\n\n```html\n<div ngCombobox filterMode=\"highlight\">\n  <input\n    ngComboboxInput\n    placeholder=\"Search for a state...\"\n    [(value)]=\"searchString\"\n  />\n\n  <ng-template ngComboboxPopupContainer>\n    <div ngListbox [(value)]=\"selectedValue\">\n      @for (option of filteredOptions(); track option) {\n        <div ngOption [value]=\"option\" [label]=\"option\">\n          <span>{{option}}</span>\n        </div>\n      }\n    </div>\n  </ng-template>\n</div>\n```",
       "jsdocTags": [
-        {
-          "name": "for",
-          "comment": "(option of filteredOptions(); track option) {\n<div ngOption [value]=\"option\" [label]=\"option\">\n<span>{{option}}</span>\n</div>\n}\n</div>\n</ng-template>\n</div>\n```"
-        },
         {
           "name": "developerPreview",
           "comment": "21.0"
@@ -194,8 +190,8 @@
       "implements": [],
       "source": {
         "filePath": "src/aria/combobox/combobox.ts",
-        "startLine": 64,
-        "endLine": 170
+        "startLine": 65,
+        "endLine": 176
       }
     },
     {
@@ -255,8 +251,8 @@
       ],
       "source": {
         "filePath": "src/aria/combobox/combobox.ts",
-        "startLine": 190,
-        "endLine": 236
+        "startLine": 196,
+        "endLine": 242
       }
     },
     {
@@ -276,8 +272,8 @@
       "implements": [],
       "source": {
         "filePath": "src/aria/combobox/combobox.ts",
-        "startLine": 268,
-        "endLine": 273
+        "startLine": 274,
+        "endLine": 279
       }
     },
     {
@@ -317,8 +313,8 @@
       ],
       "source": {
         "filePath": "src/aria/combobox/combobox.ts",
-        "startLine": 285,
-        "endLine": 300
+        "startLine": 291,
+        "endLine": 306
       }
     },
     {
@@ -397,8 +393,8 @@
       ],
       "source": {
         "filePath": "src/aria/combobox/combobox.ts",
-        "startLine": 317,
-        "endLine": 367
+        "startLine": 323,
+        "endLine": 373
       }
     }
   ],
@@ -425,6 +421,10 @@
     ],
     [
       "ElementRef",
+      "@angular/core"
+    ],
+    [
+      "forwardRef",
       "@angular/core"
     ],
     [

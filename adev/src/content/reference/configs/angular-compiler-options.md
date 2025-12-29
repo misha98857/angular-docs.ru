@@ -7,7 +7,7 @@
 Объект опций Angular, `angularCompilerOptions`, находится на одном уровне с объектом `compilerOptions`, который
 предоставляет стандартные опции для компилятора TypeScript.
 
-<docs-code header="tsconfig.json" path="adev/src/content/examples/angular-compiler-options/tsconfig.json" visibleRegion="angular-compiler-options"/>
+<docs-code header="tsconfig.json" path="adev/src/content/examples/angular-compiler-options/tsconfig.json" region="angular-compiler-options"/>
 
 ## Наследование конфигурации с помощью `extends`
 
@@ -21,7 +21,7 @@
 
 Например:
 
-<docs-code header="tsconfig.app.json" path="adev/src/content/examples/angular-compiler-options/tsconfig.app.json" visibleRegion="angular-compiler-options-app"/>
+<docs-code header="tsconfig.app.json" path="adev/src/content/examples/angular-compiler-options/tsconfig.app.json" region="angular-compiler-options-app"/>
 
 Для получения дополнительной информации
 см. [Справочник TypeScript](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html).

@@ -30,11 +30,11 @@ CSS-анимации обычно обеспечивают лучшую прои
 
 #### С пакетом Animations
 
-<docs-code header="animations.ts" path="adev/src/content/examples/animations/src/app/animations.1.ts" visibleRegion="animation-example"/>
+<docs-code header="animations.ts" path="adev/src/content/examples/animations/src/app/animations.1.ts" region="animation-example"/>
 
 #### С нативным CSS
 
-<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" visibleRegion="animation-shared"/>
+<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" region="animation-shared"/>
 
 Добавление класса `animated-class` к элементу запустит анимацию на этом элементе.
 
@@ -48,14 +48,14 @@ CSS-анимации обычно обеспечивают лучшую прои
 
 #### С пакетом Animations
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="state1"/>
+<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" region="state1"/>
 
 Такого же поведения можно добиться нативно, используя CSS-классы с keyframe-анимацией или стилизацией переходов (
 transitions).
 
 #### С нативным CSS
 
-<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" visibleRegion="animation-states"/>
+<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" region="animation-states"/>
 
 Запуск состояния `open` или `closed` осуществляется путем переключения классов на элементе в вашем компоненте. Примеры
 того, как это сделать, можно найти в
@@ -72,12 +72,12 @@ easing). Это можно сделать нативно с помощью CSS, 
 Укажите `animation-duration`, `animation-delay` и `animation-timing-function` для keyframe-анимации в CSS или
 используйте сокращенное свойство `animation`.
 
-<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" visibleRegion="animation-timing"/>
+<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" region="animation-timing"/>
 
 Аналогично, вы можете использовать `transition-duration`, `transition-delay`, `transition-timing-function` и сокращение
 `transition` для анимаций, которые не используют `@keyframes`.
 
-<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" visibleRegion="transition-timing"/>
+<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" region="transition-timing"/>
 
 ### Запуск анимации
 

@@ -13,16 +13,16 @@ ng generate @angular/core:self-closing-tag
 
 #### До
 
-<docs-code language="angular-html">
+```angular-html
 
 <hello-world></hello-world>
 
-</docs-code>
+```
 
 #### После
 
-<docs-code language="angular-html">
+```angular-html
 
 <hello-world />
 
-</docs-code>
+```

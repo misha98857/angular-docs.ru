@@ -48,7 +48,7 @@ ng generate component banner --inline-template --inline-style --module app
 Она также генерирует начальный файл теста для компонента, `banner-external.component.spec.ts`, который выглядит
 следующим образом:
 
-<docs-code header="banner-external.component.spec.ts (initial)" path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" visibleRegion="v1"/>
+<docs-code header="banner-external.component.spec.ts (initial)" path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" region="v1"/>
 
 HELPFUL: Поскольку `compileComponents` является асинхронным, он использует утилиту [
 `waitForAsync`](api/core/testing/waitForAsync), импортируемую из `@angular/core/testing`.
@@ -67,12 +67,12 @@ Angular может создать компонент.
 Вы узнаете об этих продвинутых возможностях тестирования в следующих разделах.
 А пока вы можете радикально сократить этот файл теста до более управляемого размера:
 
-<docs-code header="banner-initial.component.spec.ts (minimal)" path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" visibleRegion="v2"/>
+<docs-code header="banner-initial.component.spec.ts (minimal)" path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" region="v2"/>
 
 В этом примере объект метаданных, передаваемый в `TestBed.configureTestingModule`, просто объявляет `BannerComponent` —
 компонент для тестирования.
 
-<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" visibleRegion="configureTestingModule"/>
+<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" region="configureTestingModule"/>
 
 HELPFUL: Нет необходимости объявлять или импортировать что-либо еще.
 Модуль тестирования по умолчанию предварительно настроен с чем-то вроде `BrowserModule` из `@angular/platform-browser`.
@@ -85,7 +85,7 @@ HELPFUL: Нет необходимости объявлять или импор�
 
 После настройки `TestBed` вы вызываете его метод `createComponent()`.
 
-<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" visibleRegion="createComponent"/>
+<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" region="createComponent"/>
 
 `TestBed.createComponent()` создает экземпляр `BannerComponent`, добавляет соответствующий элемент в DOM тест-раннера и
 возвращает [`ComponentFixture`](#componentfixture).
@@ -105,7 +105,7 @@ IMPORTANT: Не перенастраивайте `TestBed` после вызов
 
 Получите доступ к экземпляру компонента через фикстуру и подтвердите его существование с помощью ожидания Jasmine:
 
-<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" visibleRegion="componentInstance"/>
+<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" region="componentInstance"/>
 
 ### `beforeEach()`
 
@@ -113,11 +113,11 @@ IMPORTANT: Не перенастраивайте `TestBed` после вызов
 Вместо того чтобы дублировать конфигурацию `TestBed` для каждого теста, выполните рефакторинг, чтобы вынести настройку в
 `beforeEach()` Jasmine и некоторые вспомогательные переменные:
 
-<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" visibleRegion="v3"/>
+<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" region="v3"/>
 
 Теперь добавьте тест, который получает элемент компонента из `fixture.nativeElement` и ищет ожидаемый текст.
 
-<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" visibleRegion="v4-test-2"/>
+<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" region="v4-test-2"/>
 
 ### `nativeElement`
 
@@ -137,17 +137,17 @@ HTML-элементом.
 
 Вот еще один тест, который вызывает `HTMLElement.querySelector`, чтобы получить элемент абзаца и найти текст баннера:
 
-<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" visibleRegion="v4-test-3"/>
+<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" region="v4-test-3"/>
 
 ### `DebugElement`
 
 _Фикстура_ Angular предоставляет элемент компонента напрямую через `fixture.nativeElement`.
 
-<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" visibleRegion="nativeElement"/>
+<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" region="nativeElement"/>
 
 На самом деле это вспомогательный метод, реализованный как `fixture.debugElement.nativeElement`.
 
-<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" visibleRegion="debugElement-nativeElement"/>
+<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" region="debugElement-nativeElement"/>
 
 Для такого окольного пути к элементу есть веская причина.
 
@@ -165,13 +165,13 @@ Angular полагается на абстракцию `DebugElement` для б�
 
 Вот предыдущий тест, реализованный заново с использованием `fixture.debugElement.nativeElement`:
 
-<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" visibleRegion="v4-test-4"/>
+<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" region="v4-test-4"/>
 
 У `DebugElement` есть и другие методы и свойства, полезные в тестах, как вы увидите в других частях этого руководства.
 
 Вы импортируете символ `DebugElement` из основной библиотеки Angular.
 
-<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" visibleRegion="import-debug-element"/>
+<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" region="import-debug-element"/>
 
 ### `By.css()`
 
@@ -190,11 +190,11 @@ Angular полагается на абстракцию `DebugElement` для б�
 Вы создаете _предикат_ с помощью класса `By`, импортируемого из библиотеки для платформы выполнения.
 Вот импорт `By` для браузерной платформы:
 
-<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" visibleRegion="import-by"/>
+<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" region="import-by"/>
 
 Следующий пример заново реализует предыдущий тест с использованием `DebugElement.query()` и браузерного метода `By.css`.
 
-<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" visibleRegion="v4-test-5"/>
+<docs-code path="adev/src/content/examples/testing/src/app/banner/banner-initial.component.spec.ts" region="v4-test-5"/>
 
 Некоторые примечательные наблюдения:
 

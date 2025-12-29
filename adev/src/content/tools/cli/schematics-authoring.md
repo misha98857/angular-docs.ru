@@ -44,19 +44,17 @@ Schematic описывает конвейер преобразований, ко
 является _фабрикой правил_ (rule factory).
 Объект `RuleFactory` определяет функцию высшего порядка, которая создает `Rule`.
 
-<docs-code header="index.ts" language="typescript">
-
+```ts {header: "index.ts"}
 import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 
 // You don't have to export the function as default.
 // You can also have more than one rule factory per file.
 export function helloWorld(\_options: any): Rule {
-return (tree: Tree,\_context: SchematicContext) => {
-return tree;
-};
+   return (tree: Tree,\_context: SchematicContext) => {
+    return tree;
+  };
 }
-
-</docs-code>
+```
 
 Ваши правила могут вносить изменения в проекты, вызывая внешние инструменты и реализуя логику.
 Вам нужно правило, например, чтобы определить, как шаблон в Schematic должен быть слит с принимающим проектом.
@@ -65,7 +63,7 @@ return tree;
 Ищите вспомогательные функции для работы с модулями, зависимостями, TypeScript, AST, JSON, рабочими пространствами и
 проектами Angular CLI и многим другим.
 
-<docs-code header="index.ts" language="typescript">
+```ts {header: "index.ts"}
 
 import {
 JsonAstObject,
@@ -76,8 +74,7 @@ normalize,
 parseJsonAst,
 strings,
 } from '@angular-devkit/core';
-
-</docs-code>
+```
 
 ### Определение входных опций с помощью схемы и интерфейсов
 

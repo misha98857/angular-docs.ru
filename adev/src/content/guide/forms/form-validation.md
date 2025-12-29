@@ -16,7 +16,7 @@ Angular использует директивы для сопоставлени�
 Затем вы можете проверить состояние элемента управления, экспортировав `ngModel` в локальную переменную шаблона.
 Следующий пример экспортирует `NgModel` в переменную с именем `name`:
 
-<docs-code header="actor-form-template.component.html (name)" path="adev/src/content/examples/form-validation/src/app/template/actor-form-template.component.html" visibleRegion="name-with-error-msg"/>
+<docs-code header="actor-form-template.component.html (name)" path="adev/src/content/examples/form-validation/src/app/template/actor-form-template.component.html" region="name-with-error-msg"/>
 
 Обратите внимание на следующие особенности, проиллюстрированные в примере:
 
@@ -73,7 +73,7 @@ Angular вызывает эти функции всякий раз, когда �
 Чтобы обновить форму актера до реактивной формы, используйте некоторые из тех же встроенных валидаторов — на этот раз в
 виде функций, как в следующем примере.
 
-<docs-code header="actor-form-reactive.component.ts (validator functions)" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.1.ts" visibleRegion="form-group"/>
+<docs-code header="actor-form-reactive.component.ts (validator functions)" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.1.ts" region="form-group"/>
 
 В этом примере элемент управления `name` устанавливает два встроенных валидатора — `Validators.required` и
 `Validators.minLength(4)` — и один пользовательский валидатор `forbiddenNameValidator`.
@@ -87,7 +87,7 @@ Angular вызывает эти функции всякий раз, когда �
 
 Если вы снова посмотрите на шаблон для ввода `name`, он довольно похож на пример с формой на основе шаблона.
 
-<docs-code header="actor-form-reactive.component.html (name with error msg)" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.html" visibleRegion="name-with-error-msg"/>
+<docs-code header="actor-form-reactive.component.html (name with error msg)" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.html" region="name-with-error-msg"/>
 
 Эта форма отличается от версии на основе шаблонов тем, что она больше не экспортирует никаких директив. Вместо этого она
 использует геттер `name`, определенный в классе компонента.
@@ -103,7 +103,7 @@ Angular вызывает эти функции всякий раз, когда �
 Рассмотрим функцию `forbiddenNameValidator` из предыдущего примера.
 Вот как выглядит определение этой функции.
 
-<docs-code header="forbidden-name.directive.ts (forbiddenNameValidator)" path="adev/src/content/examples/form-validation/src/app/shared/forbidden-name.directive.ts" visibleRegion="custom-validator"/>
+<docs-code header="forbidden-name.directive.ts (forbiddenNameValidator)" path="adev/src/content/examples/form-validation/src/app/shared/forbidden-name.directive.ts" region="custom-validator"/>
 
 Функция представляет собой фабрику, которая принимает регулярное выражение для обнаружения _конкретного_ запрещенного
 имени и возвращает функцию-валидатор.
@@ -126,7 +126,7 @@ Angular вызывает эти функции всякий раз, когда �
 
 В реактивных формах добавьте пользовательский валидатор, передав функцию непосредственно в `FormControl`.
 
-<docs-code header="actor-form-reactive.component.ts (validator functions)" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.1.ts" visibleRegion="custom-validator"/>
+<docs-code header="actor-form-reactive.component.ts (validator functions)" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.1.ts" region="custom-validator"/>
 
 ### Добавление пользовательских валидаторов в формы на основе шаблонов
 
@@ -137,18 +137,18 @@ Angular распознает роль директивы в процессе в�
 `NG_VALIDATORS`, как показано в следующем примере.
 `NG_VALIDATORS` — это предопределенный провайдер с расширяемой коллекцией валидаторов.
 
-<docs-code header="forbidden-name.directive.ts (providers)" path="adev/src/content/examples/form-validation/src/app/shared/forbidden-name.directive.ts" visibleRegion="directive-providers"/>
+<docs-code header="forbidden-name.directive.ts (providers)" path="adev/src/content/examples/form-validation/src/app/shared/forbidden-name.directive.ts" region="directive-providers"/>
 
 Затем класс директивы реализует интерфейс `Validator`, чтобы легко интегрироваться с формами Angular.
 Вот остальная часть директивы, чтобы помочь вам понять, как все это работает вместе.
 
-<docs-code header="forbidden-name.directive.ts (directive)" path="adev/src/content/examples/form-validation/src/app/shared/forbidden-name.directive.ts" visibleRegion="directive"/>
+<docs-code header="forbidden-name.directive.ts (directive)" path="adev/src/content/examples/form-validation/src/app/shared/forbidden-name.directive.ts" region="directive"/>
 
 Как только `ForbiddenValidatorDirective` готова, вы можете добавить ее селектор `appForbiddenName` к любому элементу
 input, чтобы активировать ее.
 Например:
 
-<docs-code header="actor-form-template.component.html (forbidden-name-input)" path="adev/src/content/examples/form-validation/src/app/template/actor-form-template.component.html" visibleRegion="name-input"/>
+<docs-code header="actor-form-template.component.html (forbidden-name-input)" path="adev/src/content/examples/form-validation/src/app/template/actor-form-template.component.html" region="name-input"/>
 
 ПОЛЕЗНО: Обратите внимание, что директива пользовательской валидации создается с использованием `useExisting`, а не
 `useClass`.
@@ -230,7 +230,7 @@ const actorForm = new FormGroup(
 
 Код валидатора выглядит следующим образом:
 
-<docs-code header="unambiguous-role.directive.ts" path="adev/src/content/examples/form-validation/src/app/shared/unambiguous-role.directive.ts" visibleRegion="cross-validation-validator"/>
+<docs-code header="unambiguous-role.directive.ts" path="adev/src/content/examples/form-validation/src/app/shared/unambiguous-role.directive.ts" region="cross-validation-validator"/>
 
 Валидатор `unambiguousRoleValidator` реализует интерфейс `ValidatorFn`.
 Он принимает объект элемента управления Angular в качестве аргумента и возвращает либо null, если форма валидна, либо
@@ -244,7 +244,7 @@ const actorForm = new FormGroup(
 
 Для улучшения пользовательского опыта шаблон показывает соответствующее сообщение об ошибке, когда форма невалидна.
 
-<docs-code header="actor-form-template.component.html" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.html" visibleRegion="cross-validation-error-message"/>
+<docs-code header="actor-form-template.component.html" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.html" region="cross-validation-error-message"/>
 
 Этот `@if` отображает ошибку, если `FormGroup` имеет ошибку кросс-валидации, возвращенную валидатором
 `unambiguousRoleValidator`, но только если пользователь закончил [взаимодействие с формой](#control-status-css-classes).
@@ -255,17 +255,17 @@ const actorForm = new FormGroup(
 Вы предоставляете эту директиву в качестве валидатора, используя токен [`NG_VALIDATORS`](/api/forms/NG_VALIDATORS), как
 показано в следующем примере.
 
-<docs-code header="unambiguous-role.directive.ts" path="adev/src/content/examples/form-validation/src/app/shared/unambiguous-role.directive.ts" visibleRegion="cross-validation-directive"/>
+<docs-code header="unambiguous-role.directive.ts" path="adev/src/content/examples/form-validation/src/app/shared/unambiguous-role.directive.ts" region="cross-validation-directive"/>
 
 Вы должны добавить новую директиву в HTML-шаблон.
 Поскольку валидатор должен быть зарегистрирован на самом высоком уровне формы, следующий шаблон помещает директиву на
 тег `form`.
 
-<docs-code header="actor-form-template.component.html" path="adev/src/content/examples/form-validation/src/app/template/actor-form-template.component.html" visibleRegion="cross-validation-register-validator"/>
+<docs-code header="actor-form-template.component.html" path="adev/src/content/examples/form-validation/src/app/template/actor-form-template.component.html" region="cross-validation-register-validator"/>
 
 Для улучшения пользовательского опыта соответствующее сообщение об ошибке появляется, когда форма невалидна.
 
-<docs-code header="actor-form-template.component.html" path="adev/src/content/examples/form-validation/src/app/template/actor-form-template.component.html" visibleRegion="cross-validation-error-message"/>
+<docs-code header="actor-form-template.component.html" path="adev/src/content/examples/form-validation/src/app/template/actor-form-template.component.html" region="cross-validation-error-message"/>
 
 Это одинаково как для шаблонных, так и для реактивных форм.
 
@@ -309,7 +309,7 @@ HTTP-запрос), если более простые методы валида
 
 Следующий код создает класс валидатора `UniqueRoleValidator`, который реализует интерфейс `AsyncValidator`.
 
-<docs-code header="role.directive.ts" path="adev/src/content/examples/form-validation/src/app/shared/role.directive.ts" visibleRegion="async-validator"/>
+<docs-code header="role.directive.ts" path="adev/src/content/examples/form-validation/src/app/shared/role.directive.ts" region="async-validator"/>
 
 Свойство `actorsService` инициализируется экземпляром токена `ActorsService`, который определяет следующий интерфейс.
 
@@ -347,7 +347,7 @@ Observable, возвращенная из метода `validate()`, не зав
 Чтобы использовать асинхронный валидатор в реактивных формах, начните с внедрения валидатора в свойство класса
 компонента.
 
-<docs-code header="actor-form-reactive.component.2.ts" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.2.ts" visibleRegion="async-validator-inject"/>
+<docs-code header="actor-form-reactive.component.2.ts" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.2.ts" region="async-validator-inject"/>
 
 Затем передайте функцию-валидатор непосредственно в `FormControl`, чтобы применить ее.
 
@@ -358,7 +358,7 @@ Observable, возвращенная из метода `validate()`, не зав
 Чтобы узнать больше об опциях `FormControl`, см. справочник
 API [AbstractControlOptions](api/forms/AbstractControlOptions).
 
-<docs-code header="actor-form-reactive.component.2.ts" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.2.ts" visibleRegion="async-validator-usage"/>
+<docs-code header="actor-form-reactive.component.2.ts" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.2.ts" region="async-validator-usage"/>
 
 ### Добавление асинхронных валидаторов в формы на основе шаблонов
 
@@ -368,11 +368,11 @@ API [AbstractControlOptions](api/forms/AbstractControlOptions).
 В примере ниже директива внедряет класс `UniqueRoleValidator`, который содержит фактическую логику валидации, и вызывает
 его в функции `validate`, запускаемой Angular, когда должна произойти валидация.
 
-<docs-code header="role.directive.ts" path="adev/src/content/examples/form-validation/src/app/shared/role.directive.ts" visibleRegion="async-validator-directive"/>
+<docs-code header="role.directive.ts" path="adev/src/content/examples/form-validation/src/app/shared/role.directive.ts" region="async-validator-directive"/>
 
 Затем, как и в случае с синхронными валидаторами, добавьте селектор директивы к input, чтобы активировать ее.
 
-<docs-code header="actor-form-template.component.html (unique-unambiguous-role-input)" path="adev/src/content/examples/form-validation/src/app/template/actor-form-template.component.html" visibleRegion="role-input"/>
+<docs-code header="actor-form-template.component.html (unique-unambiguous-role-input)" path="adev/src/content/examples/form-validation/src/app/template/actor-form-template.component.html" region="role-input"/>
 
 ### Оптимизация производительности асинхронных валидаторов
 

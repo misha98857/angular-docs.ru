@@ -20,7 +20,7 @@ _Атрибутивная директива_ изменяет поведени�
 в разделе ["Тестирование вложенных компонентов"](guide/testing/components-scenarios#nested-component-tests)
 руководства [Сценарии тестирования компонентов](guide/testing/components-scenarios).
 
-<docs-code header="about.component.spec.ts" path="adev/src/content/examples/testing/src/app/about/about.component.spec.ts" visibleRegion="tests"/>
+<docs-code header="about.component.spec.ts" path="adev/src/content/examples/testing/src/app/about/about.component.spec.ts" region="tests"/>
 
 Однако тестирование одного варианта использования вряд ли раскроет весь спектр возможностей директивы.
 Поиск и тестирование всех компонентов, использующих директиву, утомительны, ненадежны и вряд ли обеспечат полное
@@ -32,7 +32,7 @@ _Тесты только класса_ (class-only tests) могут быть п
 
 Лучшее решение — создать искусственный тестовый компонент, демонстрирующий все способы применения директивы.
 
-<docs-code header="highlight.directive.spec.ts (TestComponent)" path="adev/src/content/examples/testing/src/app/shared/highlight.directive.spec.ts" visibleRegion="test-component"/>
+<docs-code header="highlight.directive.spec.ts (TestComponent)" path="adev/src/content/examples/testing/src/app/shared/highlight.directive.spec.ts" region="test-component"/>
 
 <img alt="HighlightDirective spec in action" src="assets/images/guide/testing/highlight-directive-spec.png">
 
@@ -41,7 +41,7 @@ _Тесты только класса_ (class-only tests) могут быть п
 
 Вот несколько тестов этого компонента:
 
-<docs-code header="highlight.directive.spec.ts (selected tests)" path="adev/src/content/examples/testing/src/app/shared/highlight.directive.spec.ts" visibleRegion="selected-tests"/>
+<docs-code header="highlight.directive.spec.ts (selected tests)" path="adev/src/content/examples/testing/src/app/shared/highlight.directive.spec.ts" region="selected-tests"/>
 
 Стоит отметить несколько техник:
 

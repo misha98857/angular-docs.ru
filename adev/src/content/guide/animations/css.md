@@ -22,7 +22,7 @@ CSS предлагает мощный набор инструментов для
 Вы можете создавать повторно используемые анимации, общие для всего приложения, используя `@keyframes`. Определите
 анимации ключевых кадров в общем CSS-файле, и вы сможете повторно использовать их в любом месте вашего приложения.
 
-<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" visibleRegion="animation-shared"/>
+<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" region="animation-shared"/>
 
 Добавление класса `animated-class` к элементу запустит анимацию на этом элементе.
 
@@ -33,7 +33,7 @@ CSS предлагает мощный набор инструментов для
 Возможно, вы захотите анимировать переход между двумя различными состояниями, например, когда элемент открывается или
 закрывается. Этого можно достичь с помощью CSS-классов, используя анимацию ключевых кадров или стилизацию переходов.
 
-<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" visibleRegion="animation-states"/>
+<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" region="animation-states"/>
 
 Переключение состояний `open` или `closed` выполняется путем переключения классов на элементе в вашем компоненте.
 Примеры того, как это сделать, можно найти в
@@ -50,12 +50,12 @@ CSS предлагает мощный набор инструментов для
 Укажите `animation-duration`, `animation-delay` и `animation-timing-function` для анимации ключевых кадров в CSS или
 используйте сокращенное свойство `animation`.
 
-<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" visibleRegion="animation-timing"/>
+<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" region="animation-timing"/>
 
 Аналогично, вы можете использовать `transition-duration`, `transition-delay`, `transition-timing-function` и сокращение
 `transition` для анимаций, которые не используют `@keyframes`.
 
-<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" visibleRegion="transition-timing"/>
+<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" region="transition-timing"/>
 
 ### Запуск анимации
 

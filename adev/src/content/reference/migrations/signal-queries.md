@@ -29,7 +29,7 @@ VSCode.
 
 **До**
 
-```typescript
+```angular-ts
 import {Component, ContentChild} from '@angular/core';
 
 @Component({
@@ -48,7 +48,7 @@ export class MyComponent {
 
 **После**
 
-```typescript
+```angular-ts
 import {Component, contentChild} from '@angular/core';
 
 @Component({

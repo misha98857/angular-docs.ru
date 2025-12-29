@@ -63,7 +63,7 @@ ng generate component heroes-list
 
 1. В редакторе кода откройте файл `app.component.html` и замените его содержимое следующим HTML.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/router-tutorial/src/app/app.component.html" visibleRegion="setup"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/router-tutorial/src/app/app.component.html" region="setup"/>
 
 1. Убедитесь, что новое приложение работает должным образом, выполнив команду `ng serve`.
 
@@ -141,11 +141,11 @@ ng serve
 1. В редакторе кода откройте файл `app.component.html`.
 1. Удалите следующие строки.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/router-tutorial/src/app/app.component.html" visibleRegion="components"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/router-tutorial/src/app/app.component.html" region="components"/>
 
 1. Добавьте директиву `router-outlet`.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/router-tutorial/src/app/app.component.html" visibleRegion="router-outlet"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/router-tutorial/src/app/app.component.html" region="router-outlet"/>
 
 1. Добавьте `RouterOutlet` в импорты `AppComponent` в `app.component.ts`
 
@@ -182,7 +182,7 @@ http://localhost:4200/heroes-list
 
 1. Откройте файл `app.component.html` и добавьте следующий HTML под заголовком.
 
-   <docs-code header="app.component.html" path="adev/src/content/examples/router-tutorial/src/app/app.component.html" visibleRegion="nav"/>
+   <docs-code header="app.component.html" path="adev/src/content/examples/router-tutorial/src/app/app.component.html" region="nav"/>
 
    Этот HTML использует директиву Angular `routerLink`.
    Эта директива связывает определенные вами маршруты с файлами шаблонов.
@@ -205,7 +205,7 @@ http://localhost:4200/heroes-list
 1. В редакторе кода откройте файл `app.component.html`.
 1. Обновите теги ссылок (anchor tags), включив в них директиву `routerLinkActive`.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/router-tutorial/src/app/app.component.html" visibleRegion="routeractivelink"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/router-tutorial/src/app/app.component.html" region="routeractivelink"/>
 
 1. Добавьте директиву `RouterLinkActive` в список `imports` компонента `AppComponent` в `app.component.ts`.
 

@@ -72,7 +72,7 @@ HTML5».
 Если папка `app` является корнем приложения, как в данном случае, установите значение `href` в `index.html`, как
 показано здесь.
 
-<docs-code header="index.html (base-href)" path="adev/src/content/examples/router/src/index.html" visibleRegion="base-href"/>
+<docs-code header="index.html (base-href)" path="adev/src/content/examples/router/src/index.html" region="base-href"/>
 
 ### HTML5 URL и `<base href>`
 

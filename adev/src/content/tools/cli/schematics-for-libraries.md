@@ -27,7 +27,7 @@ Angular CLI.
 1. В файле `package.json` вашего проекта библиотеки добавьте запись "schematics" с путем к вашему файлу схемы.
    Angular CLI использует эту запись для поиска именованных схем в вашей коллекции при запуске команд.
 
-<docs-code header="projects/my-lib/package.json (Schematics Collection Reference)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/package.json" visibleRegion="collection"/>
+<docs-code header="projects/my-lib/package.json (Schematics Collection Reference)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/package.json" region="collection"/>
 
 Созданная вами начальная схема сообщает CLI, где найти схему, поддерживающую команду `ng add`.
 Теперь вы готовы создать эту схему.
@@ -53,7 +53,7 @@ Angular CLI автоматически установит последнюю в�
 Используйте опцию `save` команды `ng-add`, чтобы настроить, должна ли библиотека быть добавлена в `dependencies`,
 `devDependencies` или вообще не сохраняться в конфигурационном файле `package.json` проекта.
 
-<docs-code header="projects/my-lib/package.json (ng-add Reference)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/package.json" visibleRegion="ng-add"/>
+<docs-code header="projects/my-lib/package.json (ng-add Reference)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/package.json" region="ng-add"/>
 
 Возможные значения:
 
@@ -190,15 +190,15 @@ ng generate my-lib:my-service
 1. Сначала импортируйте определения Schematics, которые вам понадобятся.
    Фреймворк Schematics предлагает множество утилитарных функций для создания и использования правил при запуске схемы.
 
-<docs-code header="projects/my-lib/schematics/my-service/index.ts (Imports)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" visibleRegion="schematics-imports"/>
+<docs-code header="projects/my-lib/schematics/my-service/index.ts (Imports)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" region="schematics-imports"/>
 
 1. Импортируйте определенный интерфейс схемы, который предоставляет информацию о типах для опций вашей схемы.
 
-<docs-code header="projects/my-lib/schematics/my-service/index.ts (Schema Import)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" visibleRegion="schema-imports"/>
+<docs-code header="projects/my-lib/schematics/my-service/index.ts (Schema Import)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" region="schema-imports"/>
 
 1. Чтобы создать схему генерации, начните с пустой фабрики правил.
 
-<docs-code header="projects/my-lib/schematics/my-service/index.ts (Initial Rule)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.1.ts" visibleRegion="factory"/>
+<docs-code header="projects/my-lib/schematics/my-service/index.ts (Initial Rule)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.1.ts" region="factory"/>
 
 Эта фабрика правил возвращает дерево без изменений.
 `options` — это значения опций, переданные через команду `ng generate`.
@@ -225,13 +225,13 @@ ng generate my-lib:my-service
    Для использования `workspaces.readWorkspace` вам необходимо создать `workspaces.WorkspaceHost` из `Tree`.
    Добавьте следующий код в вашу фабричную функцию.
 
-   <docs-code header="projects/my-lib/schematics/my-service/index.ts (Schema Import)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" visibleRegion="workspace"/>
+   <docs-code header="projects/my-lib/schematics/my-service/index.ts (Schema Import)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" region="workspace"/>
 
    Убедитесь, что контекст существует, и выбросьте соответствующую ошибку.
 
 1. Теперь, когда у вас есть имя проекта, используйте его для получения информации о конфигурации конкретного проекта.
 
-   <docs-code header="projects/my-lib/schematics/my-service/index.ts (Project)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" visibleRegion="project-info"/>
+   <docs-code header="projects/my-lib/schematics/my-service/index.ts (Project)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" region="project-info"/>
 
    Объект `workspace.projects` содержит всю информацию о конфигурации конкретного проекта.
 
@@ -240,7 +240,7 @@ ng generate my-lib:my-service
    Опция `path` в схеме Schematics по умолчанию заменяется текущим рабочим каталогом.
    Если `path` не определен, используйте `sourceRoot` из конфигурации проекта вместе с `projectType`.
 
-   <docs-code header="projects/my-lib/schematics/my-service/index.ts (Project Info)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" visibleRegion="path"/>
+   <docs-code header="projects/my-lib/schematics/my-service/index.ts (Project Info)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" region="path"/>
 
 ### Определение правила
 
@@ -250,7 +250,7 @@ ng generate my-lib:my-service
 
 1. Добавьте следующий код в вашу фабричную функцию.
 
-   <docs-code header="projects/my-lib/schematics/my-service/index.ts (Template transform)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" visibleRegion="template"/>
+   <docs-code header="projects/my-lib/schematics/my-service/index.ts (Template transform)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" region="template"/>
 
    | Методы             | Подробности                                                                                                                                                                                                                   |
    | :----------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -263,7 +263,7 @@ ng generate my-lib:my-service
 
 1. Наконец, фабрика правил должна вернуть правило.
 
-   <docs-code header="projects/my-lib/schematics/my-service/index.ts (Chain Rule)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" visibleRegion="chain"/>
+   <docs-code header="projects/my-lib/schematics/my-service/index.ts (Chain Rule)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" region="chain"/>
 
    Метод `chain()` позволяет объединить несколько правил в одно, чтобы вы могли выполнять несколько операций в одной
    схеме.

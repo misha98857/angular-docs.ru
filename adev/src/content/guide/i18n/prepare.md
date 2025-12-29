@@ -23,11 +23,11 @@
 
 Следующий тег `<h1>` отображает простое приветствие на английском языке: "Hello i18n!".
 
-<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="greeting"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" region="greeting"/>
 
 Чтобы пометить приветствие для перевода, добавьте атрибут `i18n` к тегу `<h1>`.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="i18n-attribute"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" region="i18n-attribute"/>
 
 ### Использование условных операторов с `i18n`
 
@@ -35,7 +35,7 @@
 переключателя.
 
 <docs-code-multifile>
-    <docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html"  visibleRegion="i18n-conditional"/>
+    <docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html"  region="i18n-conditional"/>
     <docs-code header="app.component.ts" path="adev/src/content/examples/i18n/src/app/app.component.ts" visibleLines="[[14,21],[33,37]]"/>
 </docs-code-multifile>
 
@@ -48,7 +48,7 @@
 Чтобы избежать создания нового DOM-элемента, оберните текст в элемент `<ng-container>`.
 В следующем примере показано, как элемент `<ng-container>` преобразуется в неотображаемый HTML-комментарий.
 
-<docs-code path="adev/src/content/examples/i18n/src/app/app.component.html" visibleRegion="i18n-ng-container"/>
+<docs-code path="adev/src/content/examples/i18n/src/app/app.component.html" region="i18n-ng-container"/>
 
 ## Разметка атрибутов элементов для перевода
 
@@ -75,7 +75,7 @@ i18n-{attribute_name}="{meaning}|{description}@@{id}"
 Чтобы перевести заголовок изображения, рассмотрите этот пример.
 Следующий пример отображает изображение с атрибутом `title`.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="i18n-title"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" region="i18n-title"/>
 
 Чтобы пометить атрибут title для перевода, выполните следующее действие.
 
@@ -83,7 +83,7 @@ i18n-{attribute_name}="{meaning}|{description}@@{id}"
 
    В следующем примере показано, как пометить атрибут `title` тега `img`, добавив `i18n-title`.
 
-   <docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" visibleRegion="i18n-title-translate"/>
+   <docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" region="i18n-title-translate"/>
 
 ## Разметка текста в коде компонента
 
@@ -157,7 +157,7 @@ return this.show ? $localize`Show Tabs` : $localize`Hide tabs`;
 
 В следующем примере показано значение атрибута `i18n`.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="i18n-attribute-desc"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" region="i18n-attribute-desc"/>
 
 В следующем примере показано значение тегированной строки сообщения [`$localize`][ApiLocalizeInitLocalize] с описанием.
 
@@ -182,7 +182,7 @@ $localize`:An introduction header for this sample:Hello i18n!`;
 В следующем примере показано, как указать, что тег `<h1>` должен переводиться как заголовок или упоминаться в другом
 месте.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="i18n-attribute-meaning"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" region="i18n-attribute-meaning"/>
 
 В результате любой текст, помеченный как `site header` (заголовок сайта), поскольку _значение_ переводится абсолютно
 одинаково.
@@ -346,7 +346,7 @@ updated one minute ago
 В следующем примере кода показано, как использовать предложение `plural` для выражения трех предыдущих ситуаций в
 элементе `<span>`.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" visibleRegion="i18n-plural"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" region="i18n-plural"/>
 
 Рассмотрите следующие детали в предыдущем примере кода.
 
@@ -435,14 +435,14 @@ The author is male
 Предложение `select` сопоставляет значения с соответствующими переводами.
 В следующем примере кода показано свойство `gender`, используемое с предложением select.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" visibleRegion="i18n-select"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" region="i18n-select"/>
 
 #### Пример `gender` и `minutes`
 
 Комбинируйте различные предложения вместе, например, предложения `plural` и `select`.
 В следующем примере кода показаны вложенные предложения, основанные на примерах `gender` и `minutes`.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" visibleRegion="i18n-nested"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" region="i18n-nested"/>
 
 ## Что дальше
 

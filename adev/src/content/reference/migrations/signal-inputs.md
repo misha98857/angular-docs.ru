@@ -27,7 +27,7 @@ VSCode.
 
 **До**
 
-```typescript
+```angular-ts
 import {Component, Input} from '@angular/core';
 
 @Component({
@@ -47,24 +47,25 @@ export class MyComponent {
 
 **После**
 
-<docs-code language="angular-ts" highlight="[[4],[7], [10,12]]">
+```angular-ts {[[4],[7], [10,12]]}
 import {Component, input} from '@angular/core';
 
 @Component({
-template: `Name: {{name() ?? ''}}`
+  template: `Name: {{name() ?? ''}}`
 })
 export class MyComponent {
-readonly name = input<string>();
+  readonly name = input<string>();
 
-someMethod(): number {
-const name = this.name();
-if (name) {
-return name.length;
+  someMethod(): number {
+    const name = this.name();
+    if (name) {
+      return name.length;
+    }
+    return -1;
+  }
+
 }
-return -1;
-}
-}
-</docs-code>
+```
 
 ## Опции конфигурации
 

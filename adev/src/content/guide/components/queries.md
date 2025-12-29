@@ -20,7 +20,7 @@ TIP: В этом руководстве предполагается, что в�
 View-запросы извлекают результаты из элементов _представления_ (view) компонента — элементов, определенных в собственном
 шаблоне компонента. Вы можете запросить одиночный результат с помощью функции `viewChild`.
 
-```typescript {highlight: [14, 15]}
+```angular-ts {highlight: [14, 15]}
 @Component({
   selector: 'custom-card-header',
   /*...*/
@@ -48,7 +48,7 @@ export class CustomCard {
 
 Вы также можете запросить несколько результатов с помощью функции `viewChildren`.
 
-```typescript {highlight: [17]}
+```angular-ts {highlight: [17]}
 @Component({
   selector: 'custom-card-action',
   /*...*/
@@ -59,13 +59,14 @@ export class CustomCardAction {
 
 @Component({
   selector: 'custom-card',
-  template: `<custom-card-action>Save</custom-card-action>
+  template: `
+    <custom-card-action>Save</custom-card-action>
     <custom-card-action>Cancel</custom-card-action>
   `,
 })
 export class CustomCard {
   actions = viewChildren(CustomCardAction);
-  actionsTexts = computed(() => this.actions().map(action => action.text);
+  actionsTexts = computed(() => this.actions().map(action => action.text));
 }
 ```
 
@@ -79,7 +80,7 @@ export class CustomCard {
 Content-запросы извлекают результаты из элементов _контента_ компонента — элементов, вложенных внутрь компонента в
 шаблоне, где он используется. Вы можете запросить одиночный результат с помощью функции `contentChild`.
 
-```typescript {highlight: [14, 15]}
+```angular-ts {highlight: [14, 15]}
 @Component({
   selector: 'custom-toggle',
   /*...*/
@@ -118,7 +119,7 @@ export class UserProfile { }
 
 Вы также можете запросить несколько результатов с помощью функции `contentChildren`.
 
-```typescript {highlight: [14, 16, 17, 18, 19, 20]}
+```angular-ts {highlight: [14, 16, 17, 18, 19, 20]}
 @Component({
   selector: 'custom-menu-item',
   /*...*/
@@ -164,7 +165,7 @@ export class UserProfile { }
 случаях вы можете захотеть строго потребовать наличие конкретного дочернего элемента. Для таких случаев можно
 использовать _обязательный запрос_ (required query).
 
-```angular-ts
+```ts
 @Component({/* ... */})
 export class CustomCard {
   header = viewChild.required(CustomCardHeader);
@@ -255,7 +256,7 @@ export class CustomExpando {
 По умолчанию запросы `contentChildren` находят только _прямых_ потомков компонента и не углубляются в дерево потомков.
 Запросы `contentChild` по умолчанию просматривают потомков.
 
-```typescript {highlight: [13, 14, 15, 16]}
+```angular-ts {highlight: [13, 14, 15, 16]}
 @Component({
   selector: 'custom-expando',
   /*...*/
@@ -267,7 +268,8 @@ export class CustomExpando {
 
 @Component({
   selector: 'user-profile',
-  template: `     <custom-expando>
+  template: `
+    <custom-expando>
       <some-other-component>
         <custom-toggle>Show</custom-toggle>
       </some-other-component>
@@ -295,7 +297,7 @@ API запросов на основе декораторов остаются �
 
 Вы можете запросить одиночный результат с помощью декоратора `@ViewChild`.
 
-```typescript {highlight: [14, 16, 17, 18]}
+```angular-ts {highlight: [14, 16, 17, 18]}
 @Component({
   selector: 'custom-card-header',
   /*...*/
@@ -328,7 +330,7 @@ Angular поддерживает результат `@ViewChild` в актуал
 
 Вы также можете запросить несколько результатов с помощью декоратора `@ViewChildren`.
 
-```typescript {highlight: [17, 19, 20, 21, 22, 23]}
+```angular-ts {highlight: [17, 19, 20, 21, 22, 23]}
 @Component({
   selector: 'custom-card-action',
   /*...*/
@@ -362,7 +364,7 @@ export class CustomCard {
 
 Вы можете запросить одиночный результат с помощью декоратора `@ContentChild`.
 
-```typescript {highlight: [14, 16, 17, 18, 25]}
+```angular-ts {highlight: [14, 16, 17, 18, 25]}
 @Component({
   selector: 'custom-toggle',
   /*...*/
@@ -406,7 +408,7 @@ Angular поддерживает результат `@ContentChild` в акту�
 
 Вы также можете запросить несколько результатов с помощью декоратора `@ContentChildren`.
 
-```typescript {highlight: [15, 17, 18, 19, 20, 21]}
+```angular-ts {highlight: [15, 17, 18, 19, 20, 21]}
 @Component({
   selector: 'custom-menu-item',
   /*...*/

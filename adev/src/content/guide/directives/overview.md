@@ -40,7 +40,7 @@ HELPFUL: Чтобы добавить или удалить _один_ класс
 
 Чтобы использовать `NgClass`, добавьте его в список `imports` компонента.
 
-<docs-code header="app.component.ts (NgClass import)" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" visibleRegion="import-ng-class"/>
+<docs-code header="app.component.ts (NgClass import)" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" region="import-ng-class"/>
 
 ### Использование `NgClass` с выражением
 
@@ -48,7 +48,7 @@ HELPFUL: Чтобы добавить или удалить _один_ класс
 В этом случае `isSpecial` — это булево значение, установленное в `true` в `app.component.ts`.
 Поскольку `isSpecial` имеет значение `true`, `ngClass` применяет класс `special` к `<div>`.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" visibleRegion="special-div"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" region="special-div"/>
 
 ### Использование `NgClass` с методом
 
@@ -60,11 +60,11 @@ HELPFUL: Чтобы добавить или удалить _один_ класс
    Если значение ключа — `true`, `ngClass` добавляет класс.
    Если значение ключа — `false`, `ngClass` удаляет класс.
 
-   <docs-code header="app.component.ts" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" visibleRegion="setClasses"/>
+   <docs-code header="app.component.ts" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" region="setClasses"/>
 
 1. В шаблоне добавьте привязку свойства `ngClass` к `currentClasses`, чтобы установить классы элемента:
 
-<docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" visibleRegion="NgClass-1"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" region="NgClass-1"/>
 
 В этом случае Angular применяет классы при инициализации и при изменениях, вызванных переназначением объекта
 `currentClasses`.
@@ -81,7 +81,7 @@ HELPFUL: Чтобы добавить или удалить _один_ стиль
 
 Чтобы использовать `NgStyle`, добавьте его в список `imports` компонента.
 
-<docs-code header="app.component.ts (NgStyle import)" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" visibleRegion="import-ng-style"/>
+<docs-code header="app.component.ts (NgStyle import)" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" region="import-ng-style"/>
 
 Используйте `NgStyle` для одновременной установки нескольких встроенных стилей на основе состояния компонента.
 
@@ -90,11 +90,11 @@ HELPFUL: Чтобы добавить или удалить _один_ стиль
    В следующем примере `setCurrentStyles()` присваивает свойству `currentStyles` объект, который определяет три стиля на
    основе состояния трех других свойств компонента.
 
-   <docs-code header="app.component.ts" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" visibleRegion="setStyles"/>
+   <docs-code header="app.component.ts" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" region="setStyles"/>
 
 1. Чтобы установить стили элемента, добавьте привязку свойства `ngStyle` к `currentStyles`.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" visibleRegion="NgStyle-2"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" region="NgStyle-2"/>
 
 В этом случае Angular применяет стили при инициализации и при изменениях.
 Для этого в полном примере `setCurrentStyles()` вызывается при инициализации в `ngOnInit()` и при изменении зависимых
@@ -110,7 +110,7 @@ Angular `<ng-container>` — это группирующий элемент, к�
 
 Ниже приведен пример условного отображения абзаца с использованием `<ng-container>`.
 
-<docs-code header="app.component.html (ngif-ngcontainer)" path="adev/src/content/examples/structural-directives/src/app/app.component.html" visibleRegion="ngif-ngcontainer"/>
+<docs-code header="app.component.html (ngif-ngcontainer)" path="adev/src/content/examples/structural-directives/src/app/app.component.html" region="ngif-ngcontainer"/>
 
 <img alt="ngcontainer paragraph with proper style" src="assets/images/guide/structural-directives/good-paragraph.png">
 
@@ -120,7 +120,7 @@ Angular `<ng-container>` — это группирующий элемент, к�
 
 1. Чтобы условно исключить `<option>`, оберните `<option>` в `<ng-container>`.
 
-   <docs-code header="app.component.html (select-ngcontainer)" path="adev/src/content/examples/structural-directives/src/app/app.component.html" visibleRegion="select-ngcontainer"/>
+   <docs-code header="app.component.html (select-ngcontainer)" path="adev/src/content/examples/structural-directives/src/app/app.component.html" region="select-ngcontainer"/>
 
    <img alt="ngcontainer options work properly" src="assets/images/guide/structural-directives/select-ngcontainer-anim.gif">
 

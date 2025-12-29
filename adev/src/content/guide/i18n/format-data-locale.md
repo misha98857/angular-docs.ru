@@ -14,13 +14,9 @@ Angular предоставляет следующие встроенные [Pipe
 
 Чтобы отобразить текущую дату в формате для текущей локали, используйте следующий формат для `DatePipe`.
 
-<!--todo: replace with docs-code -->
-
-<docs-code language="typescript">
-
+```angular-html
 {{ today | date }}
-
-</docs-code>
+```
 
 ## Переопределение текущей локали для CurrencyPipe
 
@@ -29,13 +25,9 @@ Angular предоставляет следующие встроенные [Pipe
 Чтобы принудительно использовать американский английский \(`en-US`\) для валюты, используйте следующий формат для
 `CurrencyPipe`
 
-<!--todo: replace with docs-code -->
-
-<docs-code language="typescript">
-
+```angular-html
 {{ amount | currency : 'en-US' }}
-
-</docs-code>
+```
 
 HELPFUL: Локаль, указанная для `CurrencyPipe`, переопределяет глобальный токен `LOCALE_ID` вашего приложения.
 

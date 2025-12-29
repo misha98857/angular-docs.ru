@@ -5,25 +5,25 @@ TIP: Это руководство предполагает, что вы уже 
 
 Компоненты могут опционально включать CSS-стили, которые применяются к DOM этого компонента:
 
-<docs-code language="angular-ts" highlight="[4]">
+```angular-ts {highlight:[4]}
 @Component({
   selector: 'profile-photo',
   template: `<img src="profile-photo.jpg" alt="Your profile photo">`,
   styles: ` img { border-radius: 50%; } `,
 })
 export class ProfilePhoto { }
-</docs-code>
+```
 
 Вы также можете писать стили в отдельных файлах:
 
-<docs-code language="angular-ts" highlight="[4]">
+```angular-ts {highlight:[4]}
 @Component({
   selector: 'profile-photo',
   templateUrl: 'profile-photo.html',
   styleUrl: 'profile-photo.css',
 })
 export class ProfilePhoto { }
-</docs-code>
+```
 
 Когда Angular компилирует ваш компонент, эти стили включаются в JavaScript-вывод компонента. Это означает, что стили
 компонента участвуют в системе модулей JavaScript. При рендеринге компонента Angular фреймворк автоматически включает
@@ -39,13 +39,13 @@ Angular работает с любым инструментом, который 
 `Emulated`, `ShadowDom`, `ExperimentalIsolatedShadowDom` и `None`.
 Вы можете указать режим в декораторе `@Component`:
 
-<docs-code language="angular-ts" highlight="[3]">
+```angular-ts {highlight:[3]}
 @Component({
   ...,
   encapsulation: ViewEncapsulation.None,
 })
 export class ProfilePhoto { }
-</docs-code>
+```
 
 ### ViewEncapsulation.Emulated
 

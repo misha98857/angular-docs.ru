@@ -27,7 +27,7 @@
 | `VersionInstallationFailedEvent` | Генерируется, когда установка новой версии завершилась неудачей. Может использоваться для целей логирования/мониторинга.                                                                                 |
 | `VersionFailedEvent`             | Генерируется, когда версия сталкивается с критическим сбоем (например, ошибки хеша), который затрагивает всех клиентов, использующих эту версию. Предоставляет детали ошибки для отладки и прозрачности. |
 
-<docs-code header="log-update.service.ts" path="adev/src/content/examples/service-worker-getting-started/src/app/log-update.service.ts" visibleRegion="sw-update"/>
+<docs-code header="log-update.service.ts" path="adev/src/content/examples/service-worker-getting-started/src/app/log-update.service.ts" region="sw-update"/>
 
 ### Проверка обновлений
 
@@ -68,7 +68,7 @@ ServiceWorker не регистрируется в браузере до тех 
 Чтобы не прерывать работу пользователя, обычно хорошей идеей является спросить пользователя и позволить ему подтвердить,
 что можно перезагрузить страницу и обновиться до последней версии:
 
-<docs-code header="prompt-update.service.ts" path="adev/src/content/examples/service-worker-getting-started/src/app/prompt-update.service.ts" visibleRegion="sw-version-ready"/>
+<docs-code header="prompt-update.service.ts" path="adev/src/content/examples/service-worker-getting-started/src/app/prompt-update.service.ts" region="sw-version-ready"/>
 
 <docs-callout important title="Безопасность обновления без перезагрузки">
 Вызов `activateUpdate()` обновляет вкладку до последней версии без перезагрузки страницы, но это может нарушить работу приложения.
@@ -115,7 +115,7 @@ ServiceWorker не регистрируется в браузере до тех 
 В таких случаях Service Worker уведомляет клиента, отправляя событие `UnrecoverableStateEvent`.
 Подпишитесь на `SwUpdate#unrecoverable`, чтобы получать уведомления и обрабатывать эти ошибки.
 
-<docs-code header="handle-unrecoverable-state.service.ts" path="adev/src/content/examples/service-worker-getting-started/src/app/handle-unrecoverable-state.service.ts" visibleRegion="sw-unrecoverable-state"/>
+<docs-code header="handle-unrecoverable-state.service.ts" path="adev/src/content/examples/service-worker-getting-started/src/app/handle-unrecoverable-state.service.ts" region="sw-unrecoverable-state"/>
 
 ## Подробнее об Angular Service Worker
 

@@ -6,17 +6,17 @@
 Каждый компонент задает [CSS-селектор](https://developer.mozilla.org/docs/Web/CSS/CSS_selectors), который определяет
 способ использования компонента:
 
-<docs-code language="angular-ts" highlight="[2]">
+```angular-ts {highlight: [2]}
 @Component({
   selector: 'profile-photo',
   ...
 })
 export class ProfilePhoto { }
-</docs-code>
+```
 
 Вы используете компонент, создавая соответствующий HTML-элемент в шаблонах _других_ компонентов:
 
-<docs-code language="angular-ts" highlight="[3]">
+```angular-ts {highlight: [3]}
 @Component({
   template: `
     <profile-photo />
@@ -24,7 +24,7 @@ export class ProfilePhoto { }
   ...,
 })
 export class UserProfile { }
-</docs-code>
+```
 
 **Angular сопоставляет селекторы статически во время компиляции.** Изменение DOM во время выполнения (через привязки
 Angular или DOM API) не влияет на отрисованные компоненты.
@@ -63,13 +63,13 @@ Angular поддерживает [псевдокласс `:not`](https://develop
 селектор компонента. Например, можно определить селектор атрибута `[dropzone]` и исключить совпадение с элементами
 `textarea`:
 
-<docs-code language="angular-ts" highlight="[2]">
+```angular-ts {highlight: [2]}
 @Component({
   selector: '[dropzone]:not(textarea)',
   ...
 })
 export class DropZone { }
-</docs-code>
+```
 
 Angular не поддерживает никакие другие псевдоклассы или псевдоэлементы в селекторах компонентов.
 
@@ -78,23 +78,23 @@ Angular не поддерживает никакие другие псевдок
 Вы можете комбинировать несколько селекторов, объединяя их. Например, можно выбрать элементы `<button>`, у которых
 указан `type="reset"`:
 
-<docs-code language="angular-ts" highlight="[2]">
+```angular-ts {highlight: [2]}
 @Component({
   selector: 'button[type="reset"]',
   ...
 })
 export class ResetButton { }
-</docs-code>
+```
 
 Также можно определить несколько селекторов через запятую:
 
-<docs-code language="angular-ts" highlight="[2]">
+```angular-ts {highlight: [2]}
 @Component({
   selector: 'drop-zone, [dropzone]',
   ...
 })
 export class DropZone { }
-</docs-code>
+```
 
 Angular создает компонент для каждого элемента, который соответствует _любому_ из селекторов в списке.
 
@@ -127,13 +127,13 @@ Angular.
 нативного элемента. Например, если вы хотите создать пользовательский компонент кнопки, вы можете воспользоваться
 стандартным элементом `<button>`, используя селектор по атрибуту:
 
-<docs-code language="angular-ts" highlight="[2]">
+```angular-ts {highlight: [2]}
 @Component({
   selector: 'button[yt-upload]',
    ...
 })
 export class YouTubeUploadButton { }
-</docs-code>
+```
 
 Этот подход позволяет потребителям компонента напрямую использовать все стандартные API элемента без дополнительной
 работы. Это особенно ценно для ARIA-атрибутов, таких как `aria-label`.

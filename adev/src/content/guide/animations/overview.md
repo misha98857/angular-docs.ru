@@ -64,7 +64,7 @@ bootstrapApplication(AppComponent, {
 <docs-step title="Импорт функций анимации в файлы компонентов">
 Если вы планируете использовать конкретные функции анимации в файлах компонентов, импортируйте эти функции из `@angular/animations`.
 
-<docs-code header="app.component.ts" path="adev/src/content/examples/animations/src/app/app.component.ts" visibleRegion="imports"/>
+<docs-code header="app.component.ts" path="adev/src/content/examples/animations/src/app/app.component.ts" region="imports"/>
 
 См. все [доступные функции анимации](guide/legacy-animations#animations-api-summary) в конце этого руководства.
 
@@ -73,7 +73,7 @@ bootstrapApplication(AppComponent, {
 В файле компонента добавьте свойство метаданных с именем `animations:` внутри декоратора `@Component()`.
 Триггер, определяющий анимацию, помещается внутри свойства метаданных `animations`.
 
-<docs-code header="app.component.ts" path="adev/src/content/examples/animations/src/app/app.component.ts" visibleRegion="decorator"/>
+<docs-code header="app.component.ts" path="adev/src/content/examples/animations/src/app/app.component.ts" region="decorator"/>
 </docs-step>
 </docs-workflow>
 
@@ -115,11 +115,11 @@ ng g component open-close
 В этом фрагменте кода для состояния устанавливается несколько атрибутов стиля одновременно.
 В состоянии `open` кнопка имеет высоту 200 пикселей, прозрачность 1 и желтый цвет фона.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="state1"/>
+<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" region="state1"/>
 
 В следующем состоянии `closed` кнопка имеет высоту 100 пикселей, прозрачность 0.8 и синий цвет фона.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="state2"/>
+<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" region="state2"/>
 
 ### Переходы и тайминг
 
@@ -199,7 +199,7 @@ HELPFUL: См. тему на веб-сайте Material Design
 
 Этот пример обеспечивает переход состояния из `open` в `closed` с 1-секундным переходом между состояниями.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="transition1"/>
+<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" region="transition1"/>
 
 В предыдущем фрагменте кода оператор `=>` указывает на однонаправленные переходы, а `<=>` — на двунаправленные.
 Внутри перехода `animate()` указывает, сколько времени занимает переход.
@@ -208,7 +208,7 @@ HELPFUL: См. тему на веб-сайте Material Design
 Этот пример добавляет переход состояния из состояния `closed` в состояние `open` с дугой анимации перехода в 0.5
 секунды.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="transition2"/>
+<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" region="transition2"/>
 
 HELPFUL: Некоторые дополнительные замечания по использованию стилей внутри функций [`state`](api/animations/state) и
 `transition`.
@@ -247,7 +247,7 @@ HELPFUL: В рамках каждого вызова функции `trigger()` 
 Анимации определяются в метаданных компонента, который управляет анимируемым HTML-элементом.
 Поместите код, определяющий ваши анимации, в свойство `animations:` внутри декоратора `@Component()`.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="component"/>
+<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" region="component"/>
 
 Когда вы определили триггер анимации для компонента, прикрепите его к элементу в шаблоне этого компонента, заключив имя
 триггера в квадратные скобки и поставив перед ним символ `@`.
@@ -264,7 +264,7 @@ HELPFUL: В рамках каждого вызова функции `trigger()` 
 
 Следующий фрагмент кода привязывает триггер к значению свойства `isOpen`.
 
-<docs-code header="open-close.component.html" path="adev/src/content/examples/animations/src/app/open-close.component.1.html" visibleRegion="trigger"/>
+<docs-code header="open-close.component.html" path="adev/src/content/examples/animations/src/app/open-close.component.1.html" region="trigger"/>
 
 В этом примере, когда выражение `isOpen` вычисляется в определенное состояние `open` или `closed`, оно уведомляет
 триггер `openClose` об изменении состояния.
@@ -284,8 +284,8 @@ HELPFUL: В файле компонента установите триггер,
 Вот файлы кода, обсуждаемые в примере с переходом.
 
 <docs-code-multifile>
-    <docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="component"/>
-    <docs-code header="open-close.component.html" path="adev/src/content/examples/animations/src/app/open-close.component.1.html" visibleRegion="trigger"/>
+    <docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" region="component"/>
+    <docs-code header="open-close.component.html" path="adev/src/content/examples/animations/src/app/open-close.component.1.html" region="trigger"/>
     <docs-code header="open-close.component.css" path="adev/src/content/examples/animations/src/app/open-close.component.css"/>
 </docs-code-multifile>
 
