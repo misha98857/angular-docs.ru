@@ -1,26 +1,27 @@
-# RouterTestingModule migration
+# Миграция RouterTestingModule
 
-This schematic migrates usages of `RouterTestingModule` inside tests to `RouterModule`.
+Эта схематика переносит использование `RouterTestingModule` в тестах на `RouterModule`.
 
-When a test imports `SpyLocation` from `@angular/common/testing` and uses `urlChanges` property , the schematic will also add `provideLocationMocks()` to preserve the original behavior.
+Если тест импортирует `SpyLocation` из `@angular/common/testing` и использует свойство `urlChanges`, схематика также
+добавит `provideLocationMocks()` для сохранения исходного поведения.
 
-Run the schematic with:
+Запустите схематику с помощью команды:
 
 ```shell
 ng generate @angular/core:router-testing-module-migration
 ```
 
-## Options
+## Опции
 
-| Option | Details                                                                                                                       |
-| :----- | :---------------------------------------------------------------------------------------------------------------------------- |
-| `path` | The path (relative to project root) to migrate. Defaults to `./`. Use this to incrementally migrate a subset of your project. |
+| Опция  | Описание                                                                                                                        |
+| :----- | :------------------------------------------------------------------------------------------------------------------------------ |
+| `path` | Путь (относительно корня проекта) для миграции. По умолчанию `./`. Используйте это для поэтапной миграции части вашего проекта. |
 
-## Examples
+## Примеры
 
-### Preserve router options
+### Сохранение настроек маршрутизатора
 
-Before:
+До:
 
 ```ts
 import { RouterTestingModule } from '@angular/router/testing';
@@ -37,7 +38,7 @@ describe('test', () => {
 });
 ```
 
-After:
+После:
 
 ```ts
 import { RouterModule } from '@angular/router';
@@ -54,9 +55,9 @@ describe('test', () => {
 });
 ```
 
-### Add provideLocationMocks when `SpyLocation` is imported and `urlChanges` is used
+### Добавление provideLocationMocks при импорте `SpyLocation` и использовании `urlChanges`
 
-Before:
+До:
 
 ```ts
 import { RouterTestingModule } from '@angular/router/testing';
@@ -78,7 +79,7 @@ describe('test', () => {
 });
 ```
 
-After:
+После:
 
 ```ts
 import { RouterModule } from '@angular/router';

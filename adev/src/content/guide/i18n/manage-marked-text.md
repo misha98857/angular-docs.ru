@@ -1,83 +1,92 @@
-# Manage marked text with custom IDs
+# Управление помеченным текстом с помощью пользовательских ID
 
-The Angular extractor generates a file with a translation unit entry each of the following instances.
+Экстрактор Angular генерирует файл с записью единицы перевода для каждого из следующих случаев:
 
-- Each `i18n` attribute in a component template
-- Each [`$localize`][ApiLocalizeInitLocalize] tagged message string in component code
+- Каждый атрибут `i18n` в шаблоне компонента
+- Каждая строка сообщения, помеченная тегом [`$localize`][ApiLocalizeInitLocalize] в коде компонента
 
-As described in [How meanings control text extraction and merges][GuideI18nCommonPrepareHowMeaningsControlTextExtractionAndMerges], Angular assigns each translation unit a unique ID.
+Как описано в
+разделе [Как смысловые значения управляют извлечением текста и слияниями][GuideI18nCommonPrepareHowMeaningsControlTextExtractionAndMerges],
+Angular присваивает каждой единице перевода уникальный ID.
 
-The following example displays translation units with unique IDs.
+В следующем примере показаны единицы перевода с уникальными ID.
 
 <docs-code header="messages.fr.xlf.html" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" region="generated-id"/>
 
-When you change the translatable text, the extractor generates a new ID for that translation unit.
-In most cases, changes in the source text also require a change to the translation.
-Therefore, using a new ID keeps the text change in sync with translations.
+При изменении переводимого текста экстрактор генерирует новый ID для этой единицы перевода.
+В большинстве случаев изменения в исходном тексте также требуют изменения перевода.
+Поэтому использование нового ID позволяет синхронизировать изменения текста с переводами.
 
-However, some translation systems require a specific form or syntax for the ID.
-To address the requirement, use a custom ID to mark text.
-Most developers don't need to use a custom ID.
-If you want to use a unique syntax to convey additional metadata, use a custom ID.
-Additional metadata may include the library, component, or area of the application in which the text appears.
+Однако некоторые системы перевода требуют определенной формы или синтаксиса для ID.
+Чтобы выполнить это требование, используйте пользовательский ID для маркировки текста.
+Большинству разработчиков не нужно использовать пользовательский ID.
+Если вы хотите использовать уникальный синтаксис для передачи дополнительных метаданных, используйте пользовательский
+ID.
+Дополнительные метаданные могут включать библиотеку, компонент или область приложения, в которой появляется текст.
 
-To specify a custom ID in the `i18n` attribute or [`$localize`][ApiLocalizeInitLocalize] tagged message string, use the `@@` prefix.
-The following example defines the `introductionHeader` custom ID in a heading element.
+Чтобы указать пользовательский ID в атрибуте `i18n` или строке сообщения с тегом [`$localize`][ApiLocalizeInitLocalize],
+используйте префикс `@@`.
+В следующем примере определяется пользовательский ID `introductionHeader` в элементе заголовка.
 
 <docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" region="i18n-attribute-solo-id"/>
 
-The following example defines the `introductionHeader` custom ID for a variable.
+В следующем примере определяется пользовательский ID `introductionHeader` для переменной.
 
 ```ts
 variableText1 = $localize`:@@introductionHeader:Hello i18n!`;
 ```
 
-When you specify a custom ID, the extractor generates a translation unit with the custom ID.
+Когда вы указываете пользовательский ID, экстрактор генерирует единицу перевода с этим ID.
 
 <docs-code header="messages.fr.xlf.html" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" region="custom-id"/>
 
-If you change the text, the extractor does not change the ID.
-As a result, you don't have to take the extra step to update the translation.
-The drawback of using custom IDs is that if you change the text, your translation may be out-of-sync with the newly changed source text.
+Если вы измените текст, экстрактор не изменит ID.
+В результате вам не нужно предпринимать дополнительных шагов для обновления перевода.
+Недостатком использования пользовательских ID является то, что при изменении текста ваш перевод может
+рассинхронизироваться с новым исходным текстом.
 
-## Use a custom ID with a description
+## Использование пользовательского ID с описанием
 
-Use a custom ID in combination with a description and a meaning to further help the translator.
+Используйте пользовательский ID в сочетании с описанием и смысловым значением (meaning), чтобы дополнительно помочь
+переводчику.
 
-The following example includes a description, followed by the custom ID.
+Следующий пример включает описание, за которым следует пользовательский ID.
 
 <docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" region="i18n-attribute-id"/>
 
-The following example defines the `introductionHeader` custom ID and description for a variable.
+В следующем примере определяются пользовательский ID `introductionHeader` и описание для переменной.
 
 ```ts
 variableText2 = $localize`:An introduction header for this sample@@introductionHeader:Hello i18n!`;
 ```
 
-The following example adds a meaning.
+В следующем примере добавляется смысловое значение.
 
 <docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" region="i18n-attribute-meaning-and-id"/>
 
-The following example defines the `introductionHeader` custom ID for a variable.
+В следующем примере определяется пользовательский ID `introductionHeader` для переменной.
 
 ```ts
 variableText3 = $localize`:site header|An introduction header for this sample@@introductionHeader:Hello i18n!`;
 ```
 
-### Define unique custom IDs
+### Определение уникальных пользовательских ID
 
-Be sure to define custom IDs that are unique.
-If you use the same ID for two different text elements, the extraction tool extracts only the first one, and Angular uses the translation in place of both original text elements.
+Убедитесь, что определяемые вами пользовательские ID уникальны.
+Если вы используете один и тот же ID для двух разных текстовых элементов, инструмент извлечения извлечет только первый
+из них, и Angular будет использовать перевод вместо обоих исходных текстовых элементов.
 
-For example, in the following code snippet the same `myId` custom ID is defined for two different text elements.
+Например, в следующем фрагменте кода один и тот же пользовательский ID `myId` определен для двух разных текстовых
+элементов.
 
 <docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" region="i18n-duplicate-custom-id"/>
 
-The following displays the translation in French.
+Ниже показан перевод на французский язык.
 
 <docs-code header="src/locale/messages.fr.xlf" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" region="i18n-duplicate-custom-id"/>
 
-Both elements now use the same translation \(`Bonjour`\), because both were defined with the same custom ID.
+Оба элемента теперь используют один и тот же перевод \(`Bonjour`\), так как оба были определены с одним и тем же
+пользовательским ID.
 
 <docs-code path="adev/src/content/examples/i18n/doc-files/rendered-output.html"/>
 

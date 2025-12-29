@@ -1,25 +1,26 @@
-# Set up the form model
+# Настройка модели формы
 
-Every Signal Form starts with a form data model - a signal that defines the shape of your data, and stores your form data.
+Каждая форма на сигналах (Signal Form) начинается с модели данных формы — сигнала, который определяет структуру ваших
+данных и хранит данные формы.
 
-In this lesson, you'll learn how to:
+В этом уроке вы узнаете, как:
 
-- Define a TypeScript interface for your form data
-- Create a signal to hold form values
-- Use the `form()` function to create a Signal Form
+- Определить интерфейс TypeScript для данных формы
+- Создать сигнал для хранения значений формы
+- Использовать функцию `form()` для создания формы на сигналах
 
-Let's build the foundation for our login form!
+Давайте заложим основу для нашей формы входа!
 
 <hr />
 
 <docs-workflow>
 
-<docs-step title="Define the LoginData interface">
-Create a TypeScript interface that defines the structure of your login form data. The form will have:
+<docs-step title="Определение интерфейса LoginData">
+Создайте интерфейс TypeScript, определяющий структуру данных вашей формы входа. Форма будет содержать:
 
-- An `email` field (string)
-- A `password` field (string)
-- A `rememberMe` field (boolean)
+- Поле `email` (строка)
+- Поле `password` (строка)
+- Поле `rememberMe` (логическое значение)
 
 ```ts
 interface LoginData {
@@ -29,11 +30,11 @@ interface LoginData {
 }
 ```
 
-Add this interface above the `@Component` decorator.
+Добавьте этот интерфейс над декоратором `@Component`.
 </docs-step>
 
-<docs-step title="Import signal and form">
-Import the `signal` function from `@angular/core` and the `form` function from `@angular/forms/signals`:
+<docs-step title="Импорт signal и form">
+Импортируйте функцию `signal` из `@angular/core` и функцию `form` из `@angular/forms/signals`:
 
 ```ts
 import { Component, signal } from '@angular/core';
@@ -42,8 +43,8 @@ import { form } from '@angular/forms/signals';
 
 </docs-step>
 
-<docs-step title="Create the form model signal">
-In your component class, create a `loginModel` signal with initial values. Use the `LoginData` interface as the type parameter:
+<docs-step title="Создание сигнала модели формы">
+В классе компонента создайте сигнал `loginModel` с начальными значениями. Используйте интерфейс `LoginData` в качестве параметра типа:
 
 ```ts
 loginModel = signal<LoginData>({
@@ -53,21 +54,22 @@ loginModel = signal<LoginData>({
 });
 ```
 
-The initial values start as empty strings for text fields and `false` for the checkbox.
+Начальные значения задаются как пустые строки для текстовых полей и `false` для чекбокса.
 </docs-step>
 
-<docs-step title="Create the form">
-Now create the form by passing your model signal to the `form()` function:
+<docs-step title="Создание формы">
+Теперь создайте форму, передав сигнал модели в функцию `form()`:
 
 ```ts
 loginForm = form(this.loginModel);
 ```
 
-The `form()` function creates a form from your model, giving you access to field state and validation.
+Функция `form()` создает форму на основе вашей модели, предоставляя доступ к состоянию полей и валидации.
 </docs-step>
 
 </docs-workflow>
 
-Excellent! You've set up your form model. The `loginModel` signal holds your form data, and the `loginForm` provides access to each field with type safety.
+Отлично! Вы настроили модель формы. Сигнал `loginModel` хранит данные формы, а `loginForm` предоставляет доступ к
+каждому полю с соблюдением строгой типизации.
 
-Next, you'll learn [how to connect your form to the template](/tutorials/signal-forms/2-connect-form-template)!
+Далее вы узнаете, [как подключить форму к шаблону](/tutorials/signal-forms/2-connect-form-template)!

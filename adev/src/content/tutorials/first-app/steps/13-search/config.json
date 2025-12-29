@@ -1,5 +1,5 @@
 {
-  "title": "Add search functionality",
+  "title": "Добавление функционала поиска",
   "type": "local",
   "answerSrc": "../14-http/src",
   "answerRootDir": "../14-http/",

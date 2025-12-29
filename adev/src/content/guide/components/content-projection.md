@@ -1,9 +1,10 @@
-# Content projection with ng-content
+# Проекция контента с помощью ng-content
 
-TIP: This guide assumes you've already read the [Essentials Guide](essentials). Read that first if you're new to Angular.
+TIP: В этом руководстве предполагается, что вы уже ознакомились с [Руководством по основам](essentials). Прочитайте его
+в первую очередь, если вы новичок в Angular.
 
-You often need to create components that act as containers for different types of content. For
-example, you may want to create a custom card component:
+Часто возникает необходимость создавать компоненты, которые действуют как контейнеры для различных типов контента.
+Например, вы можете захотеть создать пользовательский компонент карточки:
 
 ```angular-ts
 @Component({
@@ -13,7 +14,8 @@ example, you may want to create a custom card component:
 export class CustomCard {/* ... */}
 ```
 
-**You can use the `<ng-content>` element as a placeholder to mark where content should go**:
+**Вы можете использовать элемент `<ng-content>` в качестве заполнителя, чтобы отметить место, где должен располагаться
+контент**:
 
 ```angular-ts
 @Component({
@@ -23,12 +25,12 @@ export class CustomCard {/* ... */}
 export class CustomCard {/* ... */}
 ```
 
-TIP: `<ng-content>` works similarly
-to [the native `<slot>` element](https://developer.mozilla.org/docs/Web/HTML/Element/slot),
-but with some Angular-specific functionality.
+TIP: `<ng-content>` работает аналогично [нативному элементу
+`<slot>`](https://developer.mozilla.org/docs/Web/HTML/Element/slot), но с некоторой специфичной для Angular
+функциональностью.
 
-When you use a component with `<ng-content>`, any children of the component host element are
-rendered, or **projected**, at the location of that `<ng-content>`:
+Когда вы используете компонент с `<ng-content>`, любые дочерние элементы хост-элемента компонента рендерятся (или \*
+\*проецируются\*\*) в месте расположения этого `<ng-content>`:
 
 ```angular-ts
 // Component source
@@ -59,25 +61,23 @@ export class CustomCard {/* ... */}
 </custom-card>
 ```
 
-Angular refers to any children of a component passed this way as that component's **content**. This
-is distinct from the component's **view**, which refers to the elements defined in the component's
-template.
+Angular называет любые дочерние элементы компонента, переданные таким образом, **контентом** этого компонента. Это
+отличается от **представления (view)** компонента, которое относится к элементам, определенным в шаблоне компонента.
 
-**The `<ng-content>` element is neither a component nor DOM element**. Instead, it is a special
-placeholder that tells Angular where to render content. Angular's compiler processes
-all `<ng-content>` elements at build-time. You cannot insert, remove, or modify `<ng-content>` at
-run time. You cannot add directives, styles, or arbitrary attributes to `<ng-content>`.
+**Элемент `<ng-content>` не является ни компонентом, ни DOM-элементом**. Вместо этого, это специальный заполнитель,
+который сообщает Angular, где нужно отрисовать контент. Компилятор Angular обрабатывает все элементы `<ng-content>` во
+время сборки. Вы не можете вставлять, удалять или изменять `<ng-content>` во время выполнения. Вы не можете добавлять
+директивы, стили или произвольные атрибуты к `<ng-content>`.
 
-IMPORTANT: You should not conditionally include `<ng-content>` with `@if`, `@for`, or `@switch`. Angular always
-instantiates and creates DOM nodes for content rendered to a `<ng-content>` placeholder, even if
-that `<ng-content>` placeholder is hidden. For conditional rendering of component content,
-see [Template fragments](api/core/ng-template).
+IMPORTANT: Не следует условно включать `<ng-content>` с помощью `@if`, `@for` или `@switch`. Angular всегда создает
+экземпляры и DOM-узлы для контента, отрисованного в заполнителе `<ng-content>`, даже если этот заполнитель
+`<ng-content>` скрыт. Для условного рендеринга контента компонента см. [Фрагменты шаблона](api/core/ng-template).
 
-## Multiple content placeholders
+## Множественные заполнители контента
 
-Angular supports projecting multiple different elements into different `<ng-content>` placeholders
-based on CSS selector. Expanding the card example from above, you could create two placeholders for
-a card title and a card body by using the `select` attribute:
+Angular поддерживает проекцию нескольких различных элементов в разные заполнители `<ng-content>` на основе
+CSS-селектора. Расширяя пример с карточкой выше, вы можете создать два заполнителя: для заголовка карточки и для тела
+карточки, используя атрибут `select`:
 
 ```angular-ts
 @Component({
@@ -134,12 +134,10 @@ export class App {}
 </custom-card>
 ```
 
-The `<ng-content>` placeholder supports the same CSS selectors
-as [component selectors](guide/components/selectors).
+Заполнитель `<ng-content>` поддерживает те же CSS-селекторы, что и [селекторы компонентов](guide/components/selectors).
 
-If you include one or more `<ng-content>` placeholders with a `select` attribute and
-one `<ng-content>` placeholder without a `select` attribute, the latter captures all elements that
-did not match a `select` attribute:
+Если вы включите один или несколько заполнителей `<ng-content>` с атрибутом `select` и один заполнитель `<ng-content>`
+без атрибута `select`, последний захватит все элементы, которые не соответствовали ни одному атрибуту `select`:
 
 ```angular-html
 <!-- Component template -->
@@ -172,12 +170,14 @@ did not match a `select` attribute:
 </custom-card>
 ```
 
-If a component does not include an `<ng-content>` placeholder without a `select` attribute, any
-elements that don't match one of the component's placeholders do not render into the DOM.
+Если компонент не содержит заполнитель `<ng-content>` без атрибута `select`, любые элементы, которые не соответствуют ни
+одному из заполнителей компонента, не будут отрисованы в DOM.
 
-## Fallback content
+## Резервный контент
 
-Angular can show _fallback content_ for a component's `<ng-content>` placeholder if that component doesn't have any matching child content. You can specify fallback content by adding child content to the `<ng-content>` element itself.
+Angular может показывать _резервный контент_ для заполнителя `<ng-content>` компонента, если у этого компонента нет
+соответствующего дочернего контента. Вы можете указать резервный контент, добавив дочерний контент непосредственно
+внутрь элемента `<ng-content>`.
 
 ```angular-html
 <!-- Component template -->
@@ -207,11 +207,11 @@ Angular can show _fallback content_ for a component's `<ng-content>` placeholder
 </custom-card>
 ```
 
-## Aliasing content for projection
+## Псевдонимы контента для проекции
 
-Angular supports a special attribute, `ngProjectAs`, that allows you to specify a CSS selector on
-any element. Whenever an element with `ngProjectAs` is checked against an `<ng-content>`
-placeholder, Angular compares against the `ngProjectAs` value instead of the element's identity:
+Angular поддерживает специальный атрибут `ngProjectAs`, который позволяет указать CSS-селектор для любого элемента.
+Когда элемент с `ngProjectAs` проверяется на соответствие заполнителю `<ng-content>`, Angular сравнивает значение
+`ngProjectAs` вместо идентификатора самого элемента:
 
 ```angular-html
 <!-- Component template -->
@@ -242,4 +242,4 @@ placeholder, Angular compares against the `ngProjectAs` value instead of the ele
 </custom-card>
 ```
 
-`ngProjectAs` supports only static values and cannot be bound to dynamic expressions.
+`ngProjectAs` поддерживает только статические значения и не может быть привязан к динамическим выражениям.

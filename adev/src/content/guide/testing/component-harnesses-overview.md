@@ -1,31 +1,43 @@
-# Component harnesses overview
+# Обзор тестовых обвязок компонентов
 
-A <strong>component harness</strong> is a class that allows tests to interact with components the way an end user does via a supported API. You can create test harnesses for any component, ranging from small reusable widgets to full pages.
+<strong>Тестовая обвязка компонента</strong> (component harness) — это класс, который позволяет тестам взаимодействовать
+с компонентами так же, как это делает конечный пользователь, через поддерживаемый API. Вы можете создавать тестовые
+обвязки для любого компонента, от небольших переиспользуемых виджетов до целых страниц.
 
-Harnesses offer several benefits:
+Обвязки предлагают несколько преимуществ:
 
-- They make tests less brittle by insulating themselves against implementation details of a component, such as its DOM structure
-- They make tests become more readable and easier to maintain
-- They can be used across multiple testing environments
+- Они делают тесты менее хрупкими, изолируя их от деталей реализации компонента, таких как структура DOM.
+- Они делают тесты более читаемыми и простыми в поддержке.
+- Их можно использовать в различных средах тестирования.
 
-```ts
-// Example of test with a harness for a component called MyButtonComponent
+<docs-code language="typescript">
+// Пример теста с использованием обвязки для компонента MyButtonComponent
 it('should load button with exact text', async () => {
   const button = await loader.getHarness(MyButtonComponentHarness);
   expect(await button.getText()).toBe('Confirm');
 });
-```
+</docs-code>
 
-Component harnesses are especially useful for shared UI widgets. Developers often write tests that depend on private implementation details of widgets, such as DOM structure and CSS classes. Those dependencies make tests brittle and hard to maintain. Harnesses offer an alternative— a supported API that interacts with the widget the same way an end-user does. Widget implementation changes now become less likely to break user tests. For example, [Angular Material](https://material.angular.dev/components/categories) provides a test harness for each component in the library.
+Тестовые обвязки компонентов особенно полезны для общих виджетов пользовательского интерфейса (UI). Разработчики часто
+пишут тесты, зависящие от внутренних деталей реализации виджетов, таких как структура DOM и CSS-классы. Эти зависимости
+делают тесты хрупкими и сложными в поддержке. Обвязки предлагают альтернативу — поддерживаемый API, который
+взаимодействует с виджетом так же, как конечный пользователь. Теперь изменения в реализации виджета с меньшей
+вероятностью сломают пользовательские тесты.
+Например, [Angular Material](https://material.angular.dev/components/categories) предоставляет тестовую обвязку для
+каждого компонента в библиотеке.
 
-Component harnesses support multiple testing environments. You can use the same harness implementation in both unit and end-to-end tests. Test authors only need to learn one API and component authors don't have to maintain separate unit and end-to-end test implementations.
+Тестовые обвязки компонентов поддерживают несколько сред тестирования. Вы можете использовать одну и ту же реализацию
+обвязки как в модульных (unit), так и в сквозных (end-to-end) тестах. Авторам тестов нужно изучить только один API, а
+авторам компонентов не нужно поддерживать отдельные реализации для модульных и сквозных тестов.
 
-Many developers can be categorized by one of the following developer type categories: test authors, component harness authors, and harness environment authors. Use the table below to find the most relevant section in this guide based on these categories:
+Многих разработчиков можно отнести к одной из следующих категорий: авторы тестов, авторы тестовых обвязок компонентов и
+авторы сред для обвязок. Используйте таблицу ниже, чтобы найти наиболее подходящий раздел в этом руководстве в
+зависимости от категории:
 
-| Developer Type              | Description                                                                                                                                                                                                                                                                                            | Relevant Section                                                                                             |
-| :-------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------- |
-| Test Authors                | Developers that use component harnesses written by someone else to test their application. For example, this could be an app developer who uses a third-party menu component and needs to interact with the menu in a unit test.                                                                       | [Using component harnesses in tests](guide/testing/using-component-harnesses)                                |
-| Component harness authors   | Developers who maintain some reusable Angular components and want to create a test harness for its users to use in their tests. For example, an author of a third party Angular component library or a developer who maintains a set of common components for a large Angular application.             | [Creating component harnesses for your components](guide/testing/creating-component-harnesses)               |
-| Harness environment authors | Developers who want to add support for using component harnesses in additional testing environments. For information on supported testing environments out-of-the-box, see the [test harness environments and loaders](guide/testing/using-component-harnesses#test-harness-environments-and-loaders). | [Adding support for additional testing environments](guide/testing/component-harnesses-testing-environments) |
+| Тип разработчика                    | Описание                                                                                                                                                                                                                                                                                                                      | Соответствующий раздел                                                                                          |
+| :---------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------- |
+| Авторы тестов                       | Разработчики, которые используют тестовые обвязки компонентов, написанные кем-то другим, для тестирования своего приложения. Например, это может быть разработчик приложения, использующий сторонний компонент меню и которому необходимо взаимодействовать с меню в модульном тесте.                                         | [Использование тестовых обвязок компонентов в тестах](guide/testing/using-component-harnesses)                  |
+| Авторы тестовых обвязок компонентов | Разработчики, которые поддерживают переиспользуемые компоненты Angular и хотят создать тестовую обвязку, чтобы пользователи могли использовать её в своих тестах. Например, автор сторонней библиотеки компонентов Angular или разработчик, поддерживающий набор общих компонентов для крупного приложения Angular.           | [Создание тестовых обвязок для ваших компонентов](guide/testing/creating-component-harnesses)                   |
+| Авторы сред для обвязок             | Разработчики, желающие добавить поддержку использования тестовых обвязок компонентов в дополнительных средах тестирования. Информацию о средах тестирования, поддерживаемых «из коробки», см. в разделе [среды и загрузчики тестовых обвязок](guide/testing/using-component-harnesses#test-harness-environments-and-loaders). | [Добавление поддержки дополнительных сред тестирования](guide/testing/component-harnesses-testing-environments) |
 
-For the full API reference, please see the [Angular CDK's component harness API reference page](/api#angular_cdk_testing).
+Полный справочник API см. на странице [API тестовых обвязок компонентов Angular CDK](/api#angular_cdk_testing).

@@ -1,13 +1,16 @@
-# Creating libraries
+# Создание библиотек
 
-This page provides a conceptual overview of how to create and publish new libraries to extend Angular functionality.
+Эта страница содержит концептуальный обзор того, как создавать и публиковать новые библиотеки для расширения
+функциональности Angular.
 
-If you find that you need to solve the same problem in more than one application \(or want to share your solution with other developers\), you have a candidate for a library.
-A simple example might be a button that sends users to your company website, that would be included in all applications that your company builds.
+Если вам приходится решать одну и ту же задачу в нескольких приложениях (или вы хотите поделиться своим решением с
+другими разработчиками), то это кандидат для создания библиотеки.
+Простым примером может быть кнопка, перенаправляющая пользователей на веб-сайт вашей компании, которая будет включена во
+все приложения, создаваемые вашей компанией.
 
-## Getting started
+## Начало работы
 
-Use the Angular CLI to generate a new library skeleton in a new workspace with the following commands.
+Используйте Angular CLI для создания скелета новой библиотеки в новом рабочем пространстве с помощью следующих команд.
 
 ```shell
 
@@ -17,26 +20,31 @@ ng generate library my-lib
 
 ```
 
-<docs-callout title="Naming your library">
+<docs-callout title="Именование вашей библиотеки">
 
-You should be very careful when choosing the name of your library if you want to publish it later in a public package registry such as npm.
-See [Publishing your library](tools/libraries/creating-libraries#publishing-your-library).
+Вам следует очень внимательно подходить к выбору имени библиотеки, если вы планируете опубликовать её в публичном
+реестре пакетов, таком как npm.
+См. [Публикация вашей библиотеки](tools/libraries/creating-libraries#publishing-your-library).
 
-Avoid using a name that is prefixed with `ng-`, such as `ng-library`.
-The `ng-` prefix is a reserved keyword used from the Angular framework and its libraries.
-The `ngx-` prefix is preferred as a convention used to denote that the library is suitable for use with Angular.
-It is also an excellent indication to consumers of the registry to differentiate between libraries of different JavaScript frameworks.
+Избегайте использования имен с префиксом `ng-`, например `ng-library`.
+Префикс `ng-` зарезервирован для фреймворка Angular и его библиотек.
+Предпочтительным является префикс `ngx-`, который принято использовать для обозначения того, что библиотека подходит для
+использования с Angular.
+Это также отличный способ для пользователей реестра отличить библиотеки для разных JavaScript-фреймворков.
 
 </docs-callout>
 
-The `ng generate` command creates the `projects/my-lib` folder in your workspace, which contains a component.
+Команда `ng generate` создает папку `projects/my-lib` в вашем рабочем пространстве, которая содержит компонент.
 
-HELPFUL: For more details on how a library project is structured, refer to the [Library project files](reference/configs/file-structure#library-project-files) section of the [Project File Structure guide](reference/configs/file-structure).
+HELPFUL: Для получения более подробной информации о структуре проекта библиотеки обратитесь к
+разделу [Файлы проекта библиотеки](reference/configs/file-structure#library-project-files)
+руководства [Структура файлов проекта](reference/configs/file-structure).
 
-Use the monorepo model to use the same workspace for multiple projects.
-See [Setting up for a multi-project workspace](reference/configs/file-structure#multiple-projects).
+Используйте модель монорепозитория, чтобы использовать одно рабочее пространство для нескольких проектов.
+См. [Настройка рабочего пространства для нескольких проектов](reference/configs/file-structure#multiple-projects).
 
-When you generate a new library, the workspace configuration file, `angular.json`, is updated with a project of type `library`.
+При генерации новой библиотеки файл конфигурации рабочего пространства `angular.json` обновляется проектом типа
+`library`.
 
 ```json
 
@@ -54,7 +62,7 @@ When you generate a new library, the workspace configuration file, `angular.json
 
 ```
 
-Build, test, and lint the project with CLI commands:
+Соберите, протестируйте и проверьте проект с помощью команд CLI:
 
 ```shell
 
@@ -64,79 +72,109 @@ ng lint my-lib
 
 ```
 
-Notice that the configured builder for the project is different from the default builder for application projects.
-This builder, among other things, ensures that the library is always built with the [AOT compiler](tools/cli/aot-compiler).
+Обратите внимание, что настроенный билдер для проекта отличается от билдера по умолчанию для проектов приложений.
+Этот билдер, помимо прочего, гарантирует, что библиотека всегда собирается с
+помощью [AOT-компилятора](tools/cli/aot-compiler).
 
-To make library code reusable you must define a public API for it.
-This "user layer" defines what is available to consumers of your library.
-A user of your library should be able to access public functionality \(such as service providers and general utility functions\) through a single import path.
+Чтобы сделать код библиотеки пригодным для повторного использования, вы должны определить для него публичный API.
+Этот «пользовательский слой» определяет, что доступно потребителям вашей библиотеки.
+Пользователь вашей библиотеки должен иметь возможность доступа к публичной функциональности (такой как провайдеры
+сервисов и общие утилитарные функции) через единый путь импорта.
 
-The public API for your library is maintained in the `public-api.ts` file in your library folder.
-Anything exported from this file is made public when your library is imported into an application.
+Публичный API вашей библиотеки поддерживается в файле `public-api.ts` в папке вашей библиотеки.
+Все, что экспортируется из этого файла, становится публичным при импорте вашей библиотеки в приложение.
 
-Your library should supply documentation \(typically a README file\) for installation and maintenance.
+Ваша библиотека должна предоставлять документацию (обычно файл README) по установке и обслуживанию.
 
-## Refactoring parts of an application into a library
+## Рефакторинг частей приложения в библиотеку
 
-To make your solution reusable, you need to adjust it so that it does not depend on application-specific code.
-Here are some things to consider in migrating application functionality to a library.
+Чтобы сделать ваше решение пригодным для повторного использования, необходимо адаптировать его так, чтобы оно не
+зависело от специфичного для приложения кода.
+Вот некоторые моменты, которые следует учитывать при переносе функциональности приложения в библиотеку.
 
-- Declarations such as components and pipes should be designed as stateless, meaning they don't rely on or alter external variables.
-  If you do rely on state, you need to evaluate every case and decide whether it is application state or state that the library would manage.
+- Объявления, такие как компоненты и Pipe, должны быть спроектированы как stateless (без состояния), то есть они не
+  должны зависеть от внешних переменных или изменять их.
+  Если вы полагаетесь на состояние, вам нужно оценить каждый случай и решить, является ли это состоянием приложения или
+  состоянием, которым должна управлять библиотека.
 
-- Any observables that the components subscribe to internally should be cleaned up and disposed of during the lifecycle of those components
-- Components should expose their interactions through inputs for providing context, and outputs for communicating events to other components
+- Любые Observable, на которые компоненты подписываются внутри, должны быть очищены и удалены в течение жизненного цикла
+  этих компонентов.
+- Компоненты должны предоставлять свои взаимодействия через Input-свойства для передачи контекста и Output-свойства для
+  сообщения о событиях другим компонентам.
 
-- Check all internal dependencies.
-  - For custom classes or interfaces used in components or service, check whether they depend on additional classes or interfaces that also need to be migrated
-  - Similarly, if your library code depends on a service, that service needs to be migrated
-  - If your library code or its templates depend on other libraries \(such as Angular Material, for instance\), you must configure your library with those dependencies
+- Проверьте все внутренние зависимости.
+  - Для пользовательских классов или интерфейсов, используемых в компонентах или сервисах, проверьте, зависят ли они от
+    дополнительных классов или интерфейсов, которые также необходимо перенести.
+  - Аналогично, если код вашей библиотеки зависит от сервиса, этот сервис также необходимо перенести.
+  - Если код вашей библиотеки или её шаблоны зависят от других библиотек (например, Angular Material), вы должны
+    настроить вашу библиотеку с учетом этих зависимостей.
 
-- Consider how you provide services to client applications.
-  - Services should declare their own providers, rather than declaring providers in the NgModule or a component.
-    Declaring a provider makes that service _tree-shakable_.
-    This practice lets the compiler leave the service out of the bundle if it never gets injected into the application that imports the library.
-    For more about this, see [Tree-shakable providers](guide/di/lightweight-injection-tokens).
+- Подумайте, как вы предоставляете сервисы клиентским приложениям.
+  - Сервисы должны объявлять свои собственные провайдеры, а не объявлять провайдеры в NgModule или компоненте.
+    Объявление провайдера делает этот сервис поддерживающим _Tree Shaking_.
+    Эта практика позволяет компилятору исключить сервис из бандла, если он никогда не внедряется в приложение,
+    импортирующее библиотеку.
+    Подробнее об этом см. в разделе [Tree-shakable провайдеры](guide/di/lightweight-injection-tokens).
 
-  - If you register global service providers expose a `provideXYZ()` provider function.
-  - If your library provides optional services that might not be used by all client applications, support proper tree-shaking for that case by using the [lightweight token design pattern](guide/di/lightweight-injection-tokens)
+  - Если вы регистрируете глобальные провайдеры сервисов, предоставьте функцию-провайдер `provideXYZ()`.
+  - Если ваша библиотека предоставляет необязательные сервисы, которые могут использоваться не всеми клиентскими
+    приложениями, обеспечьте правильную поддержку Tree Shaking для этого случая,
+    используя [шаблон проектирования легковесных токенов](guide/di/lightweight-injection-tokens).
 
-## Integrating with the CLI using code-generation schematics
+## Интеграция с CLI с использованием схем генерации кода
 
-A library typically includes _reusable code_ that defines components, services, and other Angular artifacts \(pipes, directives\) that you import into a project.
-A library is packaged into an npm package for publishing and sharing.
-This package can also include schematics that provide instructions for generating or transforming code directly in your project, in the same way that the CLI creates a generic new component with `ng generate component`.
-A schematic that is packaged with a library can, for example, provide the Angular CLI with the information it needs to generate a component that configures and uses a particular feature, or set of features, defined in that library.
-One example of this is [Angular Material's navigation schematic](https://material.angular.dev/guide/schematics#navigation-schematic) which configures the CDK's [BreakpointObserver](https://material.angular.dev/cdk/layout/overview#breakpointobserver) and uses it with Material's [MatSideNav](https://material.angular.dev/components/sidenav/overview) and [MatToolbar](https://material.angular.dev/components/toolbar/overview) components.
+Библиотека обычно содержит _повторно используемый код_, определяющий компоненты, сервисы и другие артефакты Angular (
+Pipe, директивы), которые вы импортируете в проект.
+Библиотека упаковывается в npm-пакет для публикации и распространения.
+Этот пакет также может включать схемы (schematics), которые предоставляют инструкции для генерации или преобразования
+кода непосредственно в вашем проекте, так же как CLI создает новый типовой компонент с помощью `ng generate component`.
+Схема, упакованная вместе с библиотекой, может, например, предоставить Angular CLI информацию, необходимую для генерации
+компонента, который настраивает и использует определенную функцию или набор функций, определенных в этой библиотеке.
+Одним из примеров этого
+является [схема навигации Angular Material](https://material.angular.dev/guide/schematics#navigation-schematic), которая
+настраивает [BreakpointObserver](https://material.angular.dev/cdk/layout/overview#breakpointobserver) из CDK и
+использует его с компонентами [MatSideNav](https://material.angular.dev/components/sidenav/overview)
+и [MatToolbar](https://material.angular.dev/components/toolbar/overview) из Material.
 
-Create and include the following kinds of schematics:
+Создайте и включите следующие виды схем:
 
-- Include an installation schematic so that `ng add` can add your library to a project
-- Include generation schematics in your library so that `ng generate` can scaffold your defined artifacts \(components, services, tests\) in a project
-- Include an update schematic so that `ng update` can update your library's dependencies and provide migrations for breaking changes in new releases
+- Включите схему установки, чтобы `ng add` могла добавить вашу библиотеку в проект.
+- Включите схемы генерации в вашу библиотеку, чтобы `ng generate` могла создавать каркас ваших определенных артефактов (
+  компонентов, сервисов, тестов) в проекте.
+- Включите схему обновления, чтобы `ng update` могла обновлять зависимости вашей библиотеки и предоставлять миграции для
+  критических изменений в новых версиях.
 
-What you include in your library depends on your task.
-For example, you could define a schematic to create a dropdown that is pre-populated with canned data to show how to add it to an application.
-If you want a dropdown that would contain different passed-in values each time, your library could define a schematic to create it with a given configuration.
-Developers could then use `ng generate` to configure an instance for their own application.
+То, что вы включите в свою библиотеку, зависит от вашей задачи.
+Например, вы можете определить схему для создания выпадающего списка, предварительно заполненного готовыми данными,
+чтобы показать, как добавить его в приложение.
+Если вам нужен выпадающий список, который каждый раз будет содержать разные передаваемые значения, ваша библиотека может
+определить схему для его создания с заданной конфигурацией.
+Разработчики затем смогут использовать `ng generate` для настройки экземпляра для своего собственного приложения.
 
-Suppose you want to read a configuration file and then generate a form based on that configuration.
-If that form needs additional customization by the developer who is using your library, it might work best as a schematic.
-However, if the form will always be the same and not need much customization by developers, then you could create a dynamic component that takes the configuration and generates the form.
-In general, the more complex the customization, the more useful the schematic approach.
+Предположим, вы хотите прочитать файл конфигурации, а затем сгенерировать форму на основе этой конфигурации.
+Если эта форма требует дополнительной настройки разработчиком, использующим вашу библиотеку, то лучше всего подойдет
+схема.
+Однако, если форма всегда будет одинаковой и не потребует особой настройки разработчиками, то вы можете создать
+динамический компонент, который принимает конфигурацию и генерирует форму.
+В целом, чем сложнее настройка, тем полезнее подход со схемами.
 
-For more information, see [Schematics Overview](tools/cli/schematics) and [Schematics for Libraries](tools/cli/schematics-for-libraries).
+Для получения дополнительной информации см. [Обзор схем](tools/cli/schematics)
+и [Схемы для библиотек](tools/cli/schematics-for-libraries).
 
-## Publishing your library
+## Публикация вашей библиотеки
 
-Use the Angular CLI and the npm package manager to build and publish your library as an npm package.
+Используйте Angular CLI и менеджер пакетов npm для сборки и публикации вашей библиотеки в виде npm-пакета.
 
-Angular CLI uses a tool called [ng-packagr](https://github.com/ng-packagr/ng-packagr/blob/master/README.md) to create packages from your compiled code that can be published to npm.
-See [Building libraries with Ivy](tools/libraries/creating-libraries#publishing-libraries) for information on the distribution formats supported by `ng-packagr` and guidance on how
-to choose the right format for your library.
+Angular CLI использует инструмент под
+названием [ng-packagr](https://github.com/ng-packagr/ng-packagr/blob/master/README.md) для создания пакетов из вашего
+скомпилированного кода, которые можно опубликовать в npm.
+См. [Сборка библиотек с Ivy](tools/libraries/creating-libraries#publishing-libraries) для получения информации о
+форматах распространения, поддерживаемых `ng-packagr`, и рекомендаций по выбору правильного формата для вашей
+библиотеки.
 
-You should always build libraries for distribution using the `production` configuration.
-This ensures that generated output uses the appropriate optimizations and the correct package format for npm.
+Всегда следует собирать библиотеки для распространения, используя конфигурацию `production`.
+Это гарантирует, что сгенерированный результат использует соответствующие оптимизации и правильный формат пакета для
+npm.
 
 ```shell
 
@@ -146,15 +184,20 @@ npm publish
 
 ```
 
-## Managing assets in a library
+## Управление ассетами в библиотеке
 
-In your Angular library, the distributable can include additional assets like theming files, Sass mixins, or documentation \(like a changelog\).
-For more information [copy assets into your library as part of the build](https://github.com/ng-packagr/ng-packagr/blob/master/docs/copy-assets.md) and [embed assets in component styles](https://github.com/ng-packagr/ng-packagr/blob/master/docs/embed-assets-css.md).
+В вашей библиотеке Angular дистрибутив может включать дополнительные ассеты, такие как файлы тем, миксины Sass или
+документацию (например, журнал изменений).
+Для получения дополнительной информации
+см. [копирование ассетов в библиотеку как часть сборки](https://github.com/ng-packagr/ng-packagr/blob/master/docs/copy-assets.md)
+и [встраивание ассетов в стили компонентов](https://github.com/ng-packagr/ng-packagr/blob/master/docs/embed-assets-css.md).
 
-IMPORTANT: When including additional assets like Sass mixins or pre-compiled CSS.
-You need to add these manually to the conditional ["exports"](tools/libraries/angular-package-format#quotexportsquot) in the `package.json` of the primary entrypoint.
+IMPORTANT: При включении дополнительных ассетов, таких как миксины Sass или предварительно скомпилированный CSS.
+Вам необходимо добавить их вручную в условные ["exports"](tools/libraries/angular-package-format#quotexportsquot) в
+файле `package.json` основной точки входа.
 
-`ng-packagr` will merge handwritten `"exports"` with the auto-generated ones, allowing for library authors to configure additional export subpaths, or custom conditions.
+`ng-packagr` объединит написанные вручную `"exports"` с автоматически сгенерированными, позволяя авторам библиотек
+настраивать дополнительные подпути экспорта или пользовательские условия.
 
 ```json
 
@@ -172,53 +215,60 @@ You need to add these manually to the conditional ["exports"](tools/libraries/an
 
 ```
 
-The above is an extract from the [@angular/material](https://unpkg.com/browse/@angular/material/package.json) distributable.
+Выше приведен фрагмент из дистрибутива [@angular/material](https://unpkg.com/browse/@angular/material/package.json).
 
-## Peer dependencies
+## Peer dependencies (Партнерские зависимости)
 
-Angular libraries should list any `@angular/*` dependencies the library depends on as peer dependencies.
-This ensures that when modules ask for Angular, they all get the exact same module.
-If a library lists `@angular/core` in `dependencies` instead of `peerDependencies`, it might get a different Angular module instead, which would cause your application to break.
+Библиотеки Angular должны указывать любые зависимости `@angular/*`, от которых зависит библиотека, как
+`peerDependencies`.
+Это гарантирует, что когда модули запрашивают Angular, они все получают один и тот же модуль.
+Если библиотека указывает `@angular/core` в `dependencies` вместо `peerDependencies`, она может получить другой модуль
+Angular, что приведет к поломке вашего приложения.
 
-## Using your own library in applications
+## Использование собственной библиотеки в приложениях
 
-You don't have to publish your library to the npm package manager to use it in the same workspace, but you do have to build it first.
+Вам не обязательно публиковать библиотеку в менеджере пакетов npm, чтобы использовать её в том же рабочем пространстве,
+но сначала её нужно собрать.
 
-To use your own library in an application:
+Чтобы использовать собственную библиотеку в приложении:
 
-- Build the library.
-  You cannot use a library before it is built.
+- Соберите библиотеку.
+  Вы не можете использовать библиотеку до того, как она будет собрана.
 
 ```shell
   ng build my-lib
 ```
 
-- In your applications, import from the library by name:
+- В ваших приложениях импортируйте библиотеку по имени:
 
 ```ts
   import { myExport } from 'my-lib';
 ```
 
-### Building and rebuilding your library
+### Сборка и пересборка вашей библиотеки
 
-The build step is important if you haven't published your library as an npm package and then installed the package back into your application from npm.
-For instance, if you clone your git repository and run `npm install`, your editor shows the `my-lib` imports as missing if you haven't yet built your library.
+Этап сборки важен, если вы не опубликовали свою библиотеку как npm-пакет и затем не установили пакет обратно в свое
+приложение из npm.
+Например, если вы клонируете свой git-репозиторий и запускаете `npm install`, ваш редактор покажет импорты `my-lib` как
+отсутствующие, если вы еще не собрали свою библиотеку.
 
-HELPFUL: When you import something from a library in an Angular application, Angular looks for a mapping between the library name and a location on disk.
-When you install a library package, the mapping is in the `node_modules` folder.
-When you build your own library, it has to find the mapping in your `tsconfig` paths.
+HELPFUL: Когда вы импортируете что-то из библиотеки в приложении Angular, Angular ищет сопоставление между именем
+библиотеки и расположением на диске.
+Когда вы устанавливаете пакет библиотеки, сопоставление находится в папке `node_modules`.
+Когда вы собираете свою собственную библиотеку, он должен найти сопоставление в путях `tsconfig`.
 
-Generating a library with the Angular CLI automatically adds its path to the `tsconfig` file.
-The Angular CLI uses the `tsconfig` paths to tell the build system where to find the library.
+Генерация библиотеки с помощью Angular CLI автоматически добавляет её путь в файл `tsconfig`.
+Angular CLI использует пути `tsconfig`, чтобы сообщить системе сборки, где найти библиотеку.
 
-For more information, see [Path mapping overview](https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping).
+Для получения дополнительной информации
+см. [Обзор сопоставления путей](https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping).
 
-You can rebuild your library whenever you make changes to it, but this extra step takes time.
-_Incremental builds_ functionality improves the library-development experience.
-Every time a file is changed a partial build is performed that emits the amended files.
+Вы можете пересобирать библиотеку всякий раз, когда вносите в неё изменения, но этот дополнительный шаг занимает время.
+Функциональность _инкрементальных сборок_ улучшает опыт разработки библиотек.
+Каждый раз при изменении файла выполняется частичная сборка, которая выдает измененные файлы.
 
-Incremental builds can be run as a background process in your development environment.
-To take advantage of this feature add the `--watch` flag to the build command:
+Инкрементальные сборки могут запускаться как фоновый процесс в вашей среде разработки.
+Чтобы воспользоваться этой функцией, добавьте флаг `--watch` к команде сборки:
 
 ```shell
 
@@ -226,32 +276,42 @@ ng build my-lib --watch
 
 ```
 
-IMPORTANT: The CLI `build` command uses a different builder and invokes a different build tool for libraries than it does for applications.
+IMPORTANT: Команда CLI `build` использует другой билдер и вызывает другой инструмент сборки для библиотек, чем для
+приложений.
 
-- The build system for applications, `@angular-devkit/build-angular`, is based on `webpack`, and is included in all new Angular CLI projects
-- The build system for libraries is based on `ng-packagr`.
-  It is only added to your dependencies when you add a library using `ng generate library my-lib`.
+- Система сборки для приложений, `@angular-devkit/build-angular`, основана на `webpack` и включена во все новые проекты
+  Angular CLI.
+- Система сборки для библиотек основана на `ng-packagr`.
+  Она добавляется в ваши зависимости только тогда, когда вы добавляете библиотеку с помощью
+  `ng generate library my-lib`.
 
-The two build systems support different things, and even where they support the same things, they do those things differently.
-This means that the TypeScript source can result in different JavaScript code in a built library than it would in a built application.
+Две системы сборки поддерживают разные вещи, и даже там, где они поддерживают одни и те же вещи, они делают это
+по-разному.
+Это означает, что исходный код TypeScript может привести к другому коду JavaScript в собранной библиотеке, чем в
+собранном приложении.
 
-For this reason, an application that depends on a library should only use TypeScript path mappings that point to the _built library_.
-TypeScript path mappings should _not_ point to the library source `.ts` files.
+По этой причине приложение, зависящее от библиотеки, должно использовать только сопоставления путей TypeScript,
+указывающие на _собранную библиотеку_.
+Сопоставления путей TypeScript _не должны_ указывать на исходные `.ts` файлы библиотеки.
 
-### Linking libraries for local development
+### Линковка библиотек для локальной разработки
 
-This section explains how to use your package manager's local linking feature
-(such as [`npm link`](https://docs.npmjs.com/cli/v11/commands/npm-link) or [`pnpm link`](https://pnpm.io/cli/link)) to test a standalone Angular library with an external application during
-local development, without relying on the monorepo workspace structure or publishing to the NPM registry.
+В этом разделе объясняется, как использовать функцию локальной линковки вашего менеджера пакетов
+(например, [`npm link`](https://pnpm.io/cli/link) или [`pnpm link`](https://pnpm.io/cli/link)) для тестирования
+standalone-библиотеки Angular с внешним приложением во время
+локальной разработки, не полагаясь на структуру монорепозитория и не публикуя её в реестре NPM.
 
-NOTE: If your library and application are in the same Angular workspace (a monorepo setup), the standard monorepo workflow automatically handles the linking and is generally more efficient. This local linking approach is best when:
+NOTE: Если ваша библиотека и приложение находятся в одном рабочем пространстве Angular (настройка монорепозитория),
+стандартный рабочий процесс монорепозитория автоматически обрабатывает линковку и, как правило, более эффективен. Этот
+подход локальной линковки лучше всего подходит, когда:
 
-- You are developing a standalone library and need to test changes with an external, consuming application.
-- You are testing library changes in a consuming application outside the monorepo workspace.
+- Вы разрабатываете standalone-библиотеку и вам нужно протестировать изменения с внешним потребляющим приложением.
+- Вы тестируете изменения библиотеки в потребляющем приложении за пределами рабочего пространства монорепозитория.
 
-#### Configuring the consuming application
+#### Настройка потребляющего приложения
 
-To use linked libraries, you need to configure your application's `angular.json` file with the following settings:
+Чтобы использовать прилинкованные библиотеки, вам необходимо настроить файл `angular.json` вашего приложения со
+следующими параметрами:
 
 ```json
 {
@@ -289,53 +349,69 @@ To use linked libraries, you need to configure your application's `angular.json`
 }
 ```
 
-**Configuration options explained:**
+**Пояснение параметров конфигурации:**
 
-- `preserveSymlinks: true`: Instructs the build system to follow the symlinks created by your package manager's linking command instead of resolving to the symlink's original location. This is essential to to avoid multiple copies of the dependent node packages.
-- `sourceMap.vendor`: Enabling vendor source maps (especially `vendor: true`) for easier debugging of linked library code.
-- `prebundle.exclude`: By default, the Angular CLI can pre-bundle all node dependencies. Excluding your library ensures that the linked source code is properly watched and rebuilt when changes occur.
+- `preserveSymlinks: true`: Указывает системе сборки следовать по символическим ссылкам, созданным командой линковки
+  вашего менеджера пакетов, вместо разрешения исходного местоположения символической ссылки. Это необходимо, чтобы
+  избежать создания нескольких копий зависимых node-пакетов.
+- `sourceMap.vendor`: Включение карт кода (source maps) поставщиков (особенно `vendor: true`) для упрощения отладки кода
+  прилинкованной библиотеки.
+- `prebundle.exclude`: По умолчанию Angular CLI может предварительно собирать все node-зависимости. Исключение вашей
+  библиотеки гарантирует, что прилинкованный исходный код будет правильно отслеживаться и пересобираться при
+  возникновении изменений.
 
-## Publishing libraries
+## Публикация библиотек
 
-There are two distribution formats to use when publishing a library:
+Существует два формата распространения, используемых при публикации библиотеки:
 
-| Distribution formats        | Details                                                                                                                                                                                                                                                                                                                                  |
-| :-------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Partial-Ivy \(recommended\) | Contains portable code that can be consumed by Ivy applications built with any version of Angular from v12 onwards.                                                                                                                                                                                                                      |
-| Full-Ivy                    | Contains private Angular Ivy instructions, which are not guaranteed to work across different versions of Angular. This format requires that the library and application are built with the _exact_ same version of Angular. This format is useful for environments where all library and application code is built directly from source. |
+| Форматы распространения     | Подробности                                                                                                                                                                                                                                                                                                                             |
+| :-------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Partial-Ivy (рекомендуется) | Содержит переносимый код, который может использоваться Ivy-приложениями, созданными с любой версией Angular, начиная с v12.                                                                                                                                                                                                             |
+| Full-Ivy                    | Содержит приватные инструкции Angular Ivy, работа которых не гарантируется в разных версиях Angular. Этот формат требует, чтобы библиотека и приложение были собраны с использованием _одной и той же_ версии Angular. Этот формат полезен для сред, где весь код библиотеки и приложения собирается непосредственно из исходного кода. |
 
-For publishing to npm use the partial-Ivy format as it is stable between patch versions of Angular.
+Для публикации в npm используйте формат partial-Ivy, так как он стабилен между патч-версиями Angular.
 
-Avoid compiling libraries with full-Ivy code if you are publishing to npm because the generated Ivy instructions are not part of Angular's public API, and so might change between patch versions.
+Избегайте компиляции библиотек с кодом full-Ivy, если вы публикуете их в npm, поскольку сгенерированные инструкции Ivy
+не являются частью публичного API Angular и могут изменяться между патч-версиями.
 
-## Ensuring library version compatibility
+## Обеспечение совместимости версий библиотеки
 
-The Angular version used to build an application should always be the same or greater than the Angular versions used to build any of its dependent libraries.
-For example, if you had a library using Angular version 13, the application that depends on that library should use Angular version 13 or later.
-Angular does not support using an earlier version for the application.
+Версия Angular, используемая для сборки приложения, всегда должна быть такой же или новее, чем версии Angular,
+используемые для сборки любой из его зависимых библиотек.
+Например, если у вас есть библиотека, использующая Angular версии 13, приложение, зависящее от этой библиотеки, должно
+использовать Angular версии 13 или новее.
+Angular не поддерживает использование более ранней версии для приложения.
 
-If you intend to publish your library to npm, compile with partial-Ivy code by setting `"compilationMode": "partial"` in `tsconfig.prod.json`.
-This partial format is stable between different versions of Angular, so is safe to publish to npm.
-Code with this format is processed during the application build using the same version of the Angular compiler, ensuring that the application and all of its libraries use a single version of Angular.
+Если вы намерены опубликовать свою библиотеку в npm, скомпилируйте её с кодом partial-Ivy, установив
+`"compilationMode": "partial"` в `tsconfig.prod.json`.
+Этот частичный формат стабилен между различными версиями Angular, поэтому его безопасно публиковать в npm.
+Код в этом формате обрабатывается во время сборки приложения с использованием той же версии компилятора Angular,
+гарантируя, что приложение и все его библиотеки используют единую версию Angular.
 
-Avoid compiling libraries with full-Ivy code if you are publishing to npm because the generated Ivy instructions are not part of Angular's public API, and so might change between patch versions.
+Избегайте компиляции библиотек с кодом full-Ivy, если вы публикуете их в npm, поскольку сгенерированные инструкции Ivy
+не являются частью публичного API Angular и могут изменяться между патч-версиями.
 
-If you've never published a package in npm before, you must create a user account.
-Read more in [Publishing npm Packages](https://docs.npmjs.com/getting-started/publishing-npm-packages).
+Если вы никогда раньше не публиковали пакет в npm, вам необходимо создать учетную запись пользователя.
+Подробнее читайте в [Публикация пакетов npm](https://docs.npmjs.com/getting-started/publishing-npm-packages).
 
-## Consuming partial-Ivy code outside the Angular CLI
+## Использование кода partial-Ivy вне Angular CLI
 
-An application installs many Angular libraries from npm into its `node_modules` directory.
-However, the code in these libraries cannot be bundled directly along with the built application as it is not fully compiled.
-To finish compilation, use the Angular linker.
+Приложение устанавливает множество библиотек Angular из npm в свой каталог `node_modules`.
+Однако код в этих библиотеках не может быть упакован непосредственно вместе с собранным приложением, так как он не
+полностью скомпилирован.
+Для завершения компиляции используйте линкер Angular.
 
-For applications that don't use the Angular CLI, the linker is available as a [Babel](https://babeljs.io) plugin.
-The plugin is to be imported from `@angular/compiler-cli/linker/babel`.
+Для приложений, которые не используют Angular CLI, линкер доступен как плагин [Babel](https://babeljs.io).
+Плагин следует импортировать из `@angular/compiler-cli/linker/babel`.
 
-The Angular linker Babel plugin supports build caching, meaning that libraries only need to be processed by the linker a single time, regardless of other npm operations.
+Плагин линкера Angular для Babel поддерживает кэширование сборки, что означает, что библиотеки должны обрабатываться
+линкером только один раз, независимо от других операций npm.
 
-Example of integrating the plugin into a custom [webpack](https://webpack.js.org) build by registering the linker as a [Babel](https://babeljs.io) plugin using [babel-loader](https://webpack.js.org/loaders/babel-loader/#options).
+Пример интеграции плагина в пользовательскую сборку [webpack](https://webpack.js.org) путем регистрации линкера как
+плагина [Babel](https://babeljs.io) с
+использованием [babel-loader](https://webpack.js.org/loaders/babel-loader/#options).
 
-<docs-code header="webpack.config.mjs" path="adev/src/content/examples/angular-linker-plugin/webpack.config.mjs" region="webpack-config"/>
+<docs-code header="webpack.config.mjs" path="adev/src/content/examples/angular-linker-plugin/webpack.config.mjs" visibleRegion="webpack-config"/>
 
-HELPFUL: The Angular CLI integrates the linker plugin automatically, so if consumers of your library are using the CLI, they can install Ivy-native libraries from npm without any additional configuration.
+HELPFUL: Angular CLI интегрирует плагин линкера автоматически, поэтому, если потребители вашей библиотеки используют
+CLI, они могут устанавливать Ivy-native библиотеки из npm без какой-либо дополнительной настройки.

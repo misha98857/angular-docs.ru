@@ -1,13 +1,15 @@
-# Learn Angular signals
+# Изучение сигналов в Angular
 
-This interactive tutorial will teach you the fundamentals of Angular signals and how to use them to build reactive applications.
+В этом интерактивном руководстве вы изучите основы сигналов (Signals) в Angular и узнаете, как использовать их для
+создания реактивных приложений.
 
-## How to use this tutorial
+## Как пользоваться этим руководством
 
-This tutorial assumes you understand Angular's core concepts. If you're new to Angular, read our [essentials guide](/essentials).
+Это руководство рассчитано на то, что вы уже понимаете основные концепции Angular. Если вы новичок в Angular,
+ознакомьтесь с нашим [руководством по основам](/essentials).
 
-Each step represents a concept in Angular signals. You can do one, or all of them.
+Каждый шаг посвящен отдельной концепции сигналов Angular. Вы можете пройти только один шаг или все сразу.
 
-If you get stuck, click "Reveal answer" at the top.
+Если вы застряли, нажмите кнопку "Reveal answer" (Показать ответ) вверху страницы.
 
-Alright, let's [get started](/tutorials/signals/1-creating-your-first-signal)!
+Итак, [начнем](/tutorials/signals/1-creating-your-first-signal)!

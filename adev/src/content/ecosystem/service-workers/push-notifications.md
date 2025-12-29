@@ -1,27 +1,33 @@
-# Push notifications
+# Push-уведомления
 
-Push notifications are a compelling way to engage users.
-Through the power of service workers, notifications can be delivered to a device even when your application is not in focus.
+Push-уведомления — это эффективный способ вовлечения пользователей.
+Благодаря возможностям Service Worker-ов, уведомления могут быть доставлены на устройство, даже когда ваше приложение не
+находится в фокусе.
 
-The Angular service worker enables the display of push notifications and the handling of notification click events.
+Service Worker в Angular позволяет отображать push-уведомления и обрабатывать события клика по ним.
 
-HELPFUL: When using the Angular service worker, push notification interactions are handled using the `SwPush` service.
-To learn more about the browser APIs involved see [Push API](https://developer.mozilla.org/docs/Web/API/Push_API) and [Using the Notifications API](https://developer.mozilla.org/docs/Web/API/Notifications_API/Using_the_Notifications_API).
+HELPFUL: При использовании Service Worker в Angular взаимодействие с push-уведомлениями обрабатывается с помощью сервиса
+`SwPush`.
+Чтобы узнать больше о задействованных браузерных API,
+см. [Push API](https://developer.mozilla.org/docs/Web/API/Push_API)
+и [Использование Notifications API](https://developer.mozilla.org/docs/Web/API/Notifications_API/Using_the_Notifications_API).
 
-## Notification payload
+## Полезная нагрузка уведомления
 
-Invoke push notifications by pushing a message with a valid payload.
-See `SwPush` for guidance.
+Вызывайте push-уведомления, отправляя сообщение с корректной полезной нагрузкой (payload).
+См. `SwPush` для получения инструкций.
 
-HELPFUL: In Chrome, you can test push notifications without a backend.
-Open Devtools -> Application -> Service Workers and use the `Push` input to send a JSON notification payload.
+HELPFUL: В Chrome вы можете тестировать push-уведомления без бэкенда.
+Откройте Devtools -> Application -> Service Workers и используйте поле ввода `Push` для отправки полезной нагрузки
+уведомления в формате JSON.
 
-## Notification click handling
+## Обработка кликов по уведомлениям
 
-The default behavior for the `notificationclick` event is to close the notification and notify `SwPush.notificationClicks`.
+Поведение по умолчанию для события `notificationclick` — закрыть уведомление и оповестить `SwPush.notificationClicks`.
 
-You can specify an additional operation to be executed on `notificationclick` by adding an `onActionClick` property to the `data` object, and providing a `default` entry.
-This is especially useful for when there are no open clients when a notification is clicked.
+Вы можете указать дополнительную операцию, которая будет выполнена при `notificationclick`, добавив свойство
+`onActionClick` в объект `data` и предоставив запись `default`.
+Это особенно полезно, когда в момент клика по уведомлению нет открытых клиентов.
 
 ```json
 {
@@ -36,27 +42,29 @@ This is especially useful for when there are no open clients when a notification
 }
 ```
 
-### Operations
+### Операции
 
-The Angular service worker supports the following operations:
+Service Worker в Angular поддерживает следующие операции:
 
-| Operations                  | Details                                                                                                                                          |
-| :-------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `openWindow`                | Opens a new tab at the specified URL.                                                                                                            |
-| `focusLastFocusedOrOpen`    | Focuses the last focused client. If there is no client open, then it opens a new tab at the specified URL.                                       |
-| `navigateLastFocusedOrOpen` | Focuses the last focused client and navigates it to the specified URL. If there is no client open, then it opens a new tab at the specified URL. |
-| `sendRequest`               | Send a simple GET request to the specified URL.                                                                                                  |
+| Операции                    | Подробности                                                                                                                                         |
+| :-------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `openWindow`                | Открывает новую вкладку по указанному URL.                                                                                                          |
+| `focusLastFocusedOrOpen`    | Фокусирует последний активный клиент. Если открытых клиентов нет, открывает новую вкладку по указанному URL.                                        |
+| `navigateLastFocusedOrOpen` | Фокусирует последний активный клиент и перенаправляет его по указанному URL. Если открытых клиентов нет, открывает новую вкладку по указанному URL. |
+| `sendRequest`               | Отправляет простой GET-запрос по указанному URL.                                                                                                    |
 
-IMPORTANT: URLs are resolved relative to the service worker's registration scope.<br />If an `onActionClick` item does not define a `url`, then the service worker's registration scope is used.
+IMPORTANT: URL-адреса разрешаются относительно области регистрации (scope) Service Worker-а.<br />Если элемент
+`onActionClick` не определяет `url`, используется область регистрации Service Worker-а.
 
-### Actions
+### Действия (Actions)
 
-Actions offer a way to customize how the user can interact with a notification.
+Действия предлагают способ настройки того, как пользователь может взаимодействовать с уведомлением.
 
-Using the `actions` property, you can define a set of available actions.
-Each action is represented as an action button that the user can click to interact with the notification.
+Используя свойство `actions`, вы можете определить набор доступных действий.
+Каждое действие представлено в виде кнопки, на которую пользователь может нажать для взаимодействия с уведомлением.
 
-In addition, using the `onActionClick` property on the `data` object, you can tie each action to an operation to be performed when the corresponding action button is clicked:
+Кроме того, используя свойство `onActionClick` в объекте `data`, вы можете связать каждое действие с операцией, которая
+будет выполнена при нажатии соответствующей кнопки действия:
 
 ```json
 {
@@ -82,13 +90,14 @@ In addition, using the `onActionClick` property on the `data` object, you can ti
 }
 ```
 
-IMPORTANT: If an action does not have a corresponding `onActionClick` entry, then the notification is closed and `SwPush.notificationClicks` is notified on existing clients.
+IMPORTANT: Если у действия нет соответствующей записи `onActionClick`, уведомление закрывается, и существующие клиенты
+получают оповещение через `SwPush.notificationClicks`.
 
-## More on Angular service workers
+## Подробнее о Service Worker-ах в Angular
 
-You might also be interested in the following:
+Вас также может заинтересовать следующее:
 
 <docs-pill-row>
-  <docs-pill href="ecosystem/service-workers/communications" title="Communicating with the Service Worker"/>
-  <docs-pill href="ecosystem/service-workers/devops" title="Service Worker devops"/>
+  <docs-pill href="ecosystem/service-workers/communications" title="Взаимодействие с Service Worker"/>
+  <docs-pill href="ecosystem/service-workers/devops" title="DevOps для Service Worker"/>
 </docs-pill-row>

@@ -1,30 +1,33 @@
-# Migration to signal queries
+# Миграция на сигнальные запросы
 
-Angular introduced improved APIs for queries that are considered
-production ready as of v19.
-Read more about signal queries and their benefits in the [dedicated guide](guide/signals/queries).
+В Angular представлены улучшенные API для запросов, которые считаются готовыми к использованию в продакшене начиная с
+версии v19.
+Подробнее о сигнальных запросах и их преимуществах читайте в [специальном руководстве](guide/signals/queries).
 
-To support existing teams that would like to use signal queries, the Angular team
-provides an automated migration that converts existing decorator query fields to the new API.
+Чтобы поддержать команды, желающие использовать сигнальные запросы, команда Angular предоставляет автоматическую
+миграцию, которая преобразует существующие поля с декораторами запросов в новый API.
 
-Run the schematic using the following command:
+Запустите схематик, используя следующую команду:
 
 ```bash
 ng generate @angular/core:signal-queries-migration
 ```
 
-Alternatively, the migration is available as a [code refactor action](https://code.visualstudio.com/docs/typescript/typescript-refactoring#_refactoring) in VSCode.
-Install the latest version of the VSCode extension and click onto e.g. a `@ViewChild` field.
-See more details in the section [below](#vscode-extension).
+Кроме того, миграция доступна
+как [действие по рефакторингу кода](https://code.visualstudio.com/docs/typescript/typescript-refactoring#_refactoring) в
+VSCode.
+Установите последнюю версию расширения VSCode и нажмите, например, на поле `@ViewChild`.
+Подробнее см. в разделе [ниже](#vscode-extension).
 
-## What does the migration change?
+## Что меняет миграция?
 
-1. `@ViewChild()`, `@ViewChildren`, `@ContentChild` and `@ContentChildren` class members
-   are updated to their signal equivalents.
-2. References in your application to migrated queries are updated to call the signal.
-   - This includes references in templates, host bindings or TypeScript code.
+1. Члены класса с `@ViewChild()`, `@ViewChildren`, `@ContentChild` и `@ContentChildren` обновляются до их сигнальных
+   эквивалентов.
+2. Ссылки на мигрированные запросы в вашем приложении обновляются для вызова сигнала.
 
-**Before**
+- Это включает ссылки в шаблонах, привязках хоста (host bindings) или TypeScript-коде.
+
+**До**
 
 ```angular-ts
 import {Component, ContentChild} from '@angular/core';
@@ -43,7 +46,7 @@ export class MyComponent {
 }
 ```
 
-**After**
+**После**
 
 ```angular-ts
 import {Component, contentChild} from '@angular/core';
@@ -63,53 +66,59 @@ export class MyComponent {
 }
 ```
 
-## Configuration options
+## Опции конфигурации
 
-The migration supports a few options for fine tuning the migration to your specific needs.
+Миграция поддерживает несколько опций для тонкой настройки процесса под ваши конкретные нужды.
 
 ### `--path`
 
-By default, the migration will update your whole Angular CLI workspace.
-You can limit the migration to a specific sub-directory using this option.
+По умолчанию миграция обновляет всё рабочее пространство Angular CLI.
+Вы можете ограничить миграцию конкретным подкаталогом, используя эту опцию.
 
 ### `--best-effort-mode`
 
-By default, the migration skips queries that cannot be safely migrated.
-The migration tries to refactor code as safely as possible.
+По умолчанию миграция пропускает запросы, которые нельзя безопасно мигрировать.
+Миграция пытается рефакторить код максимально безопасно.
 
-When the `--best-effort-mode` flag is enabled, the migration eagerly
-tries to migrate as much as possible, even if it could break your build.
+Когда включен флаг `--best-effort-mode`, миграция активно пытается мигрировать как можно больше кода, даже если это
+может сломать вашу сборку.
 
 ### `--insert-todos`
 
-When enabled, the migration will add TODOs to queries that couldn't be migrated.
-The TODOs will include reasoning on why queries were skipped. E.g.
+Если эта опция включена, миграция добавит комментарии `TODO` к запросам, которые не удалось мигрировать.
+Эти `TODO` будут содержать причину, по которой запросы были пропущены. Например:
 
 ```ts
 // TODO: Skipped for migration because:
 //  Your application code writes to the query. This prevents migration.
+// (TODO: Пропущено при миграции, так как:
+//  Ваш код приложения записывает данные в запрос. Это препятствует миграции.)
 @ViewChild('ref') ref?: ElementRef;
 ```
 
 ### `--analysis-dir`
 
-In large projects you may use this option to reduce the amount of files being analyzed.
-By default, the migration analyzes the whole workspace, regardless of the `--path` option, in
-order to update all references affected by a query declaration being migrated.
+В больших проектах вы можете использовать эту опцию, чтобы уменьшить количество анализируемых файлов.
+По умолчанию миграция анализирует всё рабочее пространство, независимо от опции `--path`, чтобы обновить все ссылки,
+затронутые миграцией объявления запроса.
 
-With this option, you can limit analysis to a sub-folder. Note that this means that any
-references outside this directory are silently skipped, potentially breaking your build.
+С помощью этой опции можно ограничить анализ подпапкой. Обратите внимание: это означает, что любые ссылки за пределами
+этой директории будут молча пропущены, что потенциально может сломать вашу сборку.
 
-## VSCode extension
+## Расширение VSCode {#vscode-extension}
 
-![Screenshot of the VSCode extension and clicking on an `@ViewChild` field](assets/images/migrations/signal-queries-vscode.png 'Screenshot of the VSCode extension and clicking on an `@ViewChild` field.')
+![Скриншот расширения VSCode и клика по полю
+`@ViewChild`](assets/images/migrations/signal-queries-vscode.png 'Скриншот расширения VSCode и клика по полю
+`@ViewChild`.')
 
-The migration is available as a [code refactor action](https://code.visualstudio.com/docs/typescript/typescript-refactoring#_refactoring) in VSCode.
+Миграция доступна
+как [действие по рефакторингу кода](https://code.visualstudio.com/docs/typescript/typescript-refactoring#_refactoring) в
+VSCode.
 
-To make use of the migration via VSCode, install the latest version of the VSCode extension and either click:
+Чтобы воспользоваться миграцией через VSCode, установите последнюю версию расширения VSCode и нажмите либо:
 
-- on a `@ViewChild`, `@ViewChildren`, `@ContentChild`, or `@ContentChildren` field.
-- on a directive/component
+- на поле `@ViewChild`, `@ViewChildren`, `@ContentChild` или `@ContentChildren`.
+- на директиву или компонент.
 
-Then, wait for the yellow lightbulb VSCode refactoring button to appear.
-Via this button you can then select the signal queries migration.
+Затем дождитесь появления желтой лампочки (кнопки рефакторинга VSCode).
+Через эту кнопку вы сможете выбрать миграцию на сигнальные запросы.

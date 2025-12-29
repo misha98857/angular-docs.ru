@@ -1,22 +1,23 @@
-# Add form submission
+# Добавление отправки формы
 
-Finally, let's learn how to handle form submission. You'll learn how to use the `submit()` function to run async operations when the form is valid, and disable the submit button when the form has errors.
+Наконец, давайте узнаем, как обрабатывать отправку формы. Вы научитесь использовать функцию `submit()` для выполнения
+асинхронных операций, когда форма валидна, и отключать кнопку отправки, если в форме есть ошибки.
 
-In this activity, you'll learn how to:
+В этом упражнении вы узнаете, как:
 
-- Import the `submit()` function
-- Create a submission handler method
-- Use `submit()` to run logic only when valid
-- Disable the submit button based on form state
+- Импортировать функцию `submit()`
+- Создать метод-обработчик отправки
+- Использовать `submit()` для выполнения логики только при валидной форме
+- Отключать кнопку отправки в зависимости от состояния формы
 
-Let's complete the form!
+Давайте завершим создание формы!
 
 <hr />
 
 <docs-workflow>
 
-<docs-step title="Import the submit function">
-Import the `submit` function from `@angular/forms/signals`:
+<docs-step title="Импорт функции submit">
+Импортируйте функцию `submit` из `@angular/forms/signals`:
 
 ```ts
 import { form, Field, required, email, submit } from '@angular/forms/signals';
@@ -24,8 +25,8 @@ import { form, Field, required, email, submit } from '@angular/forms/signals';
 
 </docs-step>
 
-<docs-step title="Add the onSubmit method">
-In your component class, add an `onSubmit()` method that handles form submission:
+<docs-step title="Добавление метода onSubmit">
+В класс вашего компонента добавьте метод `onSubmit()`, который обрабатывает отправку формы:
 
 ```ts
 onSubmit(event: Event) {
@@ -38,11 +39,12 @@ onSubmit(event: Event) {
 }
 ```
 
-The `submit()` function only runs your async callback if the form is valid. It also handles the form's submission state automatically.
+Функция `submit()` запускает ваш асинхронный колбэк только в том случае, если форма валидна. Она также автоматически
+управляет состоянием отправки формы.
 </docs-step>
 
-<docs-step title="Bind the submit handler to the form">
-In your template, bind the `onSubmit()` method to the form's submit event:
+<docs-step title="Привязка обработчика отправки к форме">
+В вашем шаблоне привяжите метод `onSubmit()` к событию отправки формы:
 
 ```html
 <form (submit)="onSubmit($event)">
@@ -50,8 +52,8 @@ In your template, bind the `onSubmit()` method to the form's submit event:
 
 </docs-step>
 
-<docs-step title="Disable the button when form is invalid">
-Update the submit button to be disabled when the form is invalid:
+<docs-step title="Отключение кнопки, когда форма невалидна">
+Обновите кнопку отправки, чтобы она была отключена, когда форма невалидна:
 
 ```html
 <button type="submit" [disabled]="loginForm().invalid()">
@@ -59,11 +61,12 @@ Update the submit button to be disabled when the form is invalid:
 </button>
 ```
 
-This prevents submission when the form has validation errors.
+Это предотвращает отправку, если в форме есть ошибки валидации.
 </docs-step>
 
 </docs-workflow>
 
-Congratulations! You've built a complete login form with Signal Forms.
+Поздравляем! Вы создали полноценную форму входа с помощью Signal Forms.
 
-Ready to see what you've learned and explore advanced topics? Continue to [the next steps](/tutorials/signal-forms/6-next-steps)!
+Готовы посмотреть, чему вы научились, и изучить продвинутые темы? Переходите
+к [следующим шагам](/tutorials/signal-forms/6-next-steps)!

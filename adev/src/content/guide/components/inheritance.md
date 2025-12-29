@@ -1,11 +1,11 @@
-# Inheritance
+# Наследование
 
-TIP: This guide assumes you've already read the [Essentials Guide](essentials). Read that first if you're new to Angular.
+TIP: Это руководство предполагает, что вы уже ознакомились с [Руководством по основам](essentials). Если вы новичок в
+Angular, начните с него.
 
-Angular components are TypeScript classes and participate in standard JavaScript inheritance
-semantics.
+Компоненты Angular представляют собой классы TypeScript и используют стандартные механизмы наследования JavaScript.
 
-A component can extend any base class:
+Компонент может расширять любой базовый класс:
 
 ```ts
 export class ListboxBase {
@@ -14,15 +14,15 @@ export class ListboxBase {
 
 @Component({ ... })
 export class CustomListbox extends ListboxBase {
-  // CustomListbox inherits the `value` property.
+  // CustomListbox наследует свойство `value`.
 }
 ```
 
-## Extending other components and directives
+## Наследование от других компонентов и директив
 
-When a component extends another component or a directive, it inherits some of the metadata defined in
-the base class's decorator and the base class's decorated members. This includes
-host bindings, inputs, outputs, lifecycle methods.
+Когда компонент расширяет другой компонент или директиву, он наследует часть метаданных, определенных в декораторе
+базового класса, а также декорированные члены этого класса. Сюда входят привязки к хосту (host bindings), Input и Output
+свойства, а также методы жизненного цикла.
 
 ```angular-ts
 @Component({
@@ -58,16 +58,17 @@ export class CustomListbox extends ListboxBase {
 }
 ```
 
-In the example above, `CustomListbox` inherits all the information associated with `ListboxBase`,
-overriding the selector and template with its own values. `CustomListbox` has two inputs (`value`
-and `disabled`) and two event listeners (`keydown` and `click`).
+В приведенном выше примере `CustomListbox` наследует всю информацию, связанную с `ListboxBase`, переопределяя селектор и
+шаблон собственными значениями. `CustomListbox` имеет два Input-свойства (`value` и `disabled`) и два слушателя
+событий (`keydown` и `click`).
 
-Child classes end up with the _union_ of all of their ancestors' inputs, outputs, and host bindings
-and their own.
+Дочерние классы в итоге получают _объединение_ всех Input и Output свойств, а также привязок к хосту своих предков и
+своих собственных.
 
-### Forwarding injected dependencies
+### Передача внедряемых зависимостей
 
-If a base class injects dependencies as constructor parameters, the child class must explicitly class these dependencies to `super`.
+Если базовый класс внедряет зависимости через параметры конструктора, дочерний класс должен явно передать эти
+зависимости в `super`.
 
 ```ts
 @Component({ ... })
@@ -83,11 +84,11 @@ export class CustomListbox extends ListboxBase {
 }
 ```
 
-### Overriding lifecycle methods
+### Переопределение методов жизненного цикла
 
-If a base class defines a lifecycle method, such as `ngOnInit`, a child class that also
-implements `ngOnInit` _overrides_ the base class's implementation. If you want to preserve the base
-class's lifecycle method, explicitly call the method with `super`:
+Если базовый класс определяет метод жизненного цикла, например `ngOnInit`, то дочерний класс, который также реализует
+`ngOnInit`, _переопределяет_ реализацию базового класса. Если вы хотите сохранить выполнение метода жизненного цикла
+базового класса, явно вызовите этот метод через `super`:
 
 ```ts
 @Component({ ... })

@@ -1,40 +1,48 @@
-# Deploy multiple locales
+# Развертывание нескольких локалей
 
-If `myapp` is the directory that contains the distributable files of your project, you typically make different versions available for different locales in locale directories.
-For example, your French version is located in the `myapp/fr` directory and the Spanish version is located in the `myapp/es` directory.
+Если `myapp` — это каталог, содержащий файлы дистрибутива вашего проекта, вы обычно размещаете разные версии для разных
+локалей в соответствующих каталогах локалей.
+Например, французская версия находится в каталоге `myapp/fr`, а испанская — в `myapp/es`.
 
-The HTML `base` tag with the `href` attribute specifies the base URI, or URL, for relative links.
-If you set the `"localize"` option in [`angular.json`][GuideWorkspaceConfig] workspace build configuration file to `true` or to an array of locale IDs, the CLI adjusts the base `href` for each version of the application.
-To adjust the base `href` for each version of the application, the CLI adds the locale to the configured `"subPath"`.
-Specify the `"subPath"` for each locale in your [`angular.json`][GuideWorkspaceConfig] workspace build configuration file.
-The following example displays `"subPath"` set to an empty string.
+HTML-тег `base` с атрибутом `href` определяет базовый URI или URL для относительных ссылок.
+Если вы установите опцию `"localize"` в файле конфигурации сборки рабочего пространства [
+`angular.json`][GuideWorkspaceConfig] в значение `true` или передадите массив идентификаторов локалей, CLI скорректирует
+базовый `href` для каждой версии приложения.
+Чтобы скорректировать базовый `href` для каждой версии приложения, CLI добавляет локаль к настроенному `"subPath"`.
+Укажите `"subPath"` для каждой локали в вашем файле конфигурации сборки рабочего пространства [
+`angular.json`][GuideWorkspaceConfig].
+В следующем примере `"subPath"` задан как пустая строка.
 
 <docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" region="i18n-subPath"/>
 
-## Configure a server
+## Настройка сервера
 
-Typical deployment of multiple languages serve each language from a different subdirectory.
-Users are redirected to the preferred language defined in the browser using the `Accept-Language` HTTP header.
-If the user has not defined a preferred language, or if the preferred language is not available, then the server falls back to the default language.
-To change the language, change your current location to another subdirectory.
-The change of subdirectory often occurs using a menu implemented in the application.
+При типичном развертывании нескольких языков каждая языковая версия обслуживается из отдельного подкаталога.
+Пользователи перенаправляются на предпочитаемый язык, определенный в браузере, с помощью HTTP-заголовка
+`Accept-Language`.
+Если пользователь не определил предпочитаемый язык или если этот язык недоступен, сервер использует язык по умолчанию.
+Чтобы сменить язык, необходимо перейти в другой подкаталог.
+Смена подкаталога часто реализуется через меню в приложении.
 
-For more information on how to deploy apps to a remote server, see [Deployment][GuideDeployment].
+Для получения дополнительной информации о развертывании приложений на удаленном сервере см.
+раздел [Развертывание][GuideDeployment].
 
-IMPORTANT: If you are using [Server rendering](guide/ssr) with `outputMode` set to `server`, Angular automatically handles redirection dynamically based on the `Accept-Language` HTTP header. This simplifies deployment by eliminating the need for manual server or configuration adjustments.
+ВАЖНО: Если вы используете [Рендеринг на стороне сервера (SSR)](guide/ssr) с `outputMode`, установленным в `server`,
+Angular автоматически и динамически обрабатывает перенаправление на основе HTTP-заголовка `Accept-Language`. Это
+упрощает развертывание, устраняя необходимость в ручной настройке сервера или конфигурации.
 
-### Nginx example
+### Пример для Nginx
 
-The following example displays an Nginx configuration.
+В следующем примере показана конфигурация Nginx.
 
 <docs-code path="adev/src/content/examples/i18n/doc-files/nginx.conf" language="nginx"/>
 
-### Apache example
+### Пример для Apache
 
-The following example displays an Apache configuration.
+В следующем примере показана конфигурация Apache.
 
 <docs-code path="adev/src/content/examples/i18n/doc-files/apache2.conf" language="apache"/>
 
 [CliBuild]: cli/build 'ng build | CLI | Angular'
-[GuideDeployment]: tools/cli/deployment 'Deployment | Angular'
-[GuideWorkspaceConfig]: reference/configs/workspace-config 'Angular workspace configuration | Angular'
+[GuideDeployment]: tools/cli/deployment 'Развертывание | Angular'
+[GuideWorkspaceConfig]: reference/configs/workspace-config 'Конфигурация рабочего пространства Angular | Angular'

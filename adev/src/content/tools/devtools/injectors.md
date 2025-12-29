@@ -1,23 +1,31 @@
-## Inspect your injectors
+## Инспектирование инжекторов
 
-NOTE: The Injector Tree is available for Angular Applications built with version 17 or higher.
+ПРИМЕЧАНИЕ: Дерево инжекторов (Injector Tree) доступно для приложений Angular, созданных с использованием версии 17 или
+выше.
 
-### View the injector hierarchy of your application
+### Просмотр иерархии инжекторов приложения
 
-The **Injector Tree** tab lets you explore the structure of the Injectors configured in your application. Here you will see two trees representing the [injector hierarchy](guide/di/hierarchical-dependency-injection) of your application. One tree is your environment hierarchy, the other is your element hierarchy.
+Вкладка **Injector Tree** позволяет изучить структуру инжекторов, настроенных в вашем приложении. Здесь отображаются два
+дерева, представляющих [иерархию инжекторов](guide/di/hierarchical-dependency-injection) приложения. Одно дерево — это
+иерархия окружения (environment hierarchy), другое — иерархия элементов (element hierarchy).
 
-<img src="assets/images/guide/devtools/di-injector-tree.png" alt="A screenshot of the 'Profiler' tab displaying the injector tree tab in Angular Devtools visualizing the injector graph for an example application.">
+<img src="assets/images/guide/devtools/di-injector-tree.png" alt="Скриншот вкладки 'Profiler' в Angular Devtools, отображающий вкладку дерева инжекторов с визуализацией графа инжекторов для примера приложения.">
 
-### Visualize resolution paths
+### Визуализация путей разрешения
 
-When a specific injector is selected, the path that Angular's dependency injection algorithm traverses from that injector to the root is highlighted. For element injectors, this includes highlighting the environment injectors that the dependency injection algorithm jumps to when a dependency cannot be resolved in the element hierarchy.
+При выборе конкретного инжектора подсвечивается путь, который алгоритм внедрения зависимостей (DI) Angular проходит от
+этого инжектора до корня. Для инжекторов элементов это включает подсветку инжекторов окружения, к которым переходит
+алгоритм DI, если зависимость не удается разрешить в иерархии элементов.
 
-See [resolution rules](guide/di/hierarchical-dependency-injection#resolution-rules) for more details about how Angular resolves resolution paths.
+Подробнее о том, как Angular определяет пути разрешения, см. в
+разделе [правила разрешения](guide/di/hierarchical-dependency-injection#resolution-rules).
 
-<img src="assets/images/guide/devtools/di-injector-tree-selected.png" alt="A screenshot of the 'Profiler' tab displaying how the injector tree visualize highlights resolution paths when an injector is selected.">
+<img src="assets/images/guide/devtools/di-injector-tree-selected.png" alt="Скриншот вкладки 'Profiler', показывающий, как дерево инжекторов подсвечивает пути разрешения при выборе инжектора.">
 
-### View injector providers
+### Просмотр провайдеров инжектора
 
-Clicking an injector that has configured providers will display those providers in a list on the right of the injector tree view. Here you can view the provided token and it's type. The button on the right of each provider allows you to log the provider in the console.
+При нажатии на инжектор, имеющий настроенные провайдеры, справа от дерева инжекторов отобразится список этих
+провайдеров. Здесь можно увидеть предоставленный токен и его тип. Кнопка справа от каждого провайдера позволяет вывести
+его в консоль.
 
-<img src="assets/images/guide/devtools/di-injector-tree-providers.png" alt="A screenshot of the 'Profiler' tab displaying how providers are made visible when an injector is selected.">
+<img src="assets/images/guide/devtools/di-injector-tree-providers.png" alt="Скриншот вкладки 'Profiler', показывающий отображение провайдеров при выборе инжектора.">

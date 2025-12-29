@@ -1,16 +1,17 @@
-# Migration to the `inject` function
+# Миграция на функцию `inject`
 
-Angular's [`inject`](/api/core/inject) function offers more accurate types and better compatibility with standard decorators, compared to constructor-based injection.
+Функция `inject` в Angular предлагает более точные типы и лучшую совместимость со стандартными декораторами по сравнению
+с внедрением зависимостей через конструктор.
 
-This schematic converts constructor-based injection in your classes to use the [`inject`](/api/core/inject) function instead.
+Эта схематика преобразует внедрение через конструктор в ваших классах для использования функции `inject`.
 
-Run the schematic using the following command:
+Запустите схематику, используя следующую команду:
 
 ```shell
 ng generate @angular/core:inject
 ```
 
-#### Before
+#### До (Before)
 
 ```typescript
 import { Component, Inject, Optional } from '@angular/core';
@@ -26,7 +27,7 @@ export class MyComp {
 }
 ```
 
-#### After
+#### После (After)
 
 ```typescript
 import { Component, inject } from '@angular/core';
@@ -40,31 +41,29 @@ export class MyComp {
 }
 ```
 
-## Migration options
+## Опции миграции
 
-The migration includes several options to customize its output.
+Миграция включает несколько опций для настройки результата.
 
 ### `path`
 
-Determines which sub-path in your project should be migrated. Pass in `.` or leave it blank to
-migrate the entire directory.
+Определяет, какой подпуть в вашем проекте следует мигрировать. Передайте `.` или оставьте поле пустым, чтобы мигрировать
+весь каталог.
 
 ### `migrateAbstractClasses`
 
-Angular doesn't validate that parameters of abstract classes are injectable. This means that the
-migration can't reliably migrate them to [`inject`](/api/core/inject) without risking breakages which is why they're
-disabled by default. Enable this option if you want abstract classes to be migrated, but note
-that you may have to **fix some breakages manually**.
+Angular не проверяет, что параметры абстрактных классов доступны для внедрения. Это означает, что миграция не может
+надежно перевести их на `inject` без риска поломок, поэтому по умолчанию эта опция отключена. Включите эту опцию, если
+хотите мигрировать абстрактные классы, но учтите, что вам, возможно, придется **исправлять некоторые ошибки вручную**.
 
 ### `backwardsCompatibleConstructors`
 
-By default the migration tries to clean up the code as much as it can, which includes deleting
-parameters from the constructor, or even the entire constructor if it doesn't include any code.
-In some cases this can lead to compilation errors when classes with Angular decorators inherit from
-other classes with Angular decorators. If you enable this option, the migration will generate an
-additional constructor signature to keep it backwards compatible, at the expense of more code.
+По умолчанию миграция пытается максимально очистить код, что включает удаление параметров из конструктора или даже всего
+конструктора, если он не содержит кода. В некоторых случаях это может привести к ошибкам компиляции, когда классы с
+декораторами Angular наследуются от других классов с декораторами Angular. Если вы включите эту опцию, миграция
+сгенерирует дополнительную сигнатуру конструктора для сохранения обратной совместимости ценой увеличения объема кода.
 
-#### Before
+#### До (Before)
 
 ```typescript
 import { Component } from '@angular/core';
@@ -76,9 +75,9 @@ export class MyComp {
 }
 ```
 
-#### After
+#### После (After)
 
-```ts
+```typescript
 import { Component } from '@angular/core';
 import { MyService } from './service';
 
@@ -86,26 +85,25 @@ import { MyService } from './service';
 export class MyComp {
 private service = inject(MyService);
 
-  /\*_ Inserted by Angular inject() migration for backwards compatibility _/
-  constructor(...args: unknown[]);
+/\*_ Inserted by Angular inject() migration for backwards compatibility _/
+constructor(...args: unknown[]);
 
-  constructor() {}
+constructor() {}
 }
 ```
 
 ### `nonNullableOptional`
 
-If injection fails for a parameter with the `@Optional` decorator, Angular returns `null` which
-means that the real type of any `@Optional` parameter will be `| null`. However, because decorators
-cannot influence their types, there is a lot of existing code whose type is incorrect. The type is
-fixed in `inject()` which can cause new compilation errors to show up. If you enable this option,
-the migration will produce a non-null assertion after the `inject()` call to match the old type,
-at the expense of potentially hiding type errors.
+Если внедрение не удается для параметра с декоратором `@Optional`, Angular возвращает `null`, что означает, что реальный
+тип любого параметра `@Optional` будет `| null`. Однако, поскольку декораторы не могут влиять на свои типы, существует
+много кода с некорректными типами. Тип исправляется при использовании `inject()`, что может привести к появлению новых
+ошибок компиляции. Если вы включите эту опцию, миграция добавит утверждение non-null (оператор `!`) после вызова
+`inject()`, чтобы соответствовать старому типу, ценой потенциального сокрытия ошибок типизации.
 
-**NOTE:** non-null assertions won't be added to parameters that are already typed to be nullable,
-because the code that depends on them likely already accounts for their nullability.
+**ПРИМЕЧАНИЕ:** Утверждения non-null не будут добавлены к параметрам, которые уже типизированы как допускающие null,
+поскольку код, зависящий от них, вероятно, уже учитывает их возможность быть null.
 
-#### Before
+#### До (Before)
 
 ```typescript
 import { Component, Inject, Optional } from '@angular/core';
@@ -120,7 +118,7 @@ export class MyComp {
 }
 ```
 
-#### After
+#### После (After)
 
 ```typescript
 import { Component, inject } from '@angular/core';

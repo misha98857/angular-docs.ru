@@ -1,18 +1,20 @@
-# Getting form control value
+# Получение значения элемента управления формы
 
-Now that your forms are set up with Angular, the next step is to access the values from the form controls.
+Теперь, когда ваши формы настроены в Angular, следующий шаг — получить доступ к значениям из элементов управления формы.
 
-NOTE: Learn more about [adding a basic form control in the in-depth guide](/guide/forms/reactive-forms#adding-a-basic-form-control).
+Примечание: Узнайте больше
+о [добавлении базового элемента управления формы в подробном руководстве](/guide/forms/reactive-forms#adding-a-basic-form-control).
 
-In this activity, you'll learn how to get the value from your form input.
+В этом задании вы узнаете, как получить значение из поля ввода вашей формы.
 
 <hr>
 
 <docs-workflow>
 
-<docs-step title="Show the value of the input field in the template">
+<docs-step title="Отображение значения поля ввода в шаблоне">
 
-To display the input value in a template, you can use the interpolation syntax `{{}}` just like any other class property of the component:
+Чтобы отобразить значение поля ввода в шаблоне, вы можете использовать синтаксис интерполяции `{{}}`, как и для любого
+другого свойства класса компонента:
 
 <docs-code language="angular-ts" highlight="[5]">
 @Component({
@@ -33,9 +35,10 @@ export class User {
 
 </docs-step>
 
-<docs-step title="Retrieve the value of an input field">
+<docs-step title="Получение значения поля ввода">
 
-When you need to reference the input field value in the component class, you can do so by accessing the class property with the `this` syntax.
+Когда вам нужно обратиться к значению поля ввода в классе компонента, вы можете сделать это, обратившись к свойству
+класса с помощью синтаксиса `this`.
 
 <docs-code language="angular-ts" highlight="[15]">
 ...
@@ -61,6 +64,8 @@ alert(this.favoriteFramework);
 
 </docs-workflow>
 
-Great job learning how to display the input values in your template and access them programmatically.
+Отличная работа! Вы научились отображать значения полей ввода в шаблоне и получать к ним программный доступ.
 
-Time to progress onto the next way of managing forms with Angular: reactive forms. If you'd like to learn more about template-driven forms, please refer to the [Angular forms documentation](guide/forms/template-driven-forms).
+Пришло время перейти к следующему способу управления формами в Angular: реактивным формам (reactive forms). Если вы
+хотите узнать больше о формах на основе шаблонов (template-driven forms), пожалуйста, обратитесь
+к [документации по формам Angular](guide/forms/template-driven-forms).

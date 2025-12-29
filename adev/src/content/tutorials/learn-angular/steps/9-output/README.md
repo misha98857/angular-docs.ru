@@ -1,16 +1,19 @@
-# Component output properties
+# Выходные свойства компонента
 
-When working with components it may be required to notify other components that something has happened. Perhaps a button has been clicked, an item has been added/removed from a list or some other important update has occurred. In this scenario components need to communicate with parent components.
+При работе с компонентами может потребоваться уведомить другие компоненты о том, что что-то произошло. Возможно, была
+нажата кнопка, элемент был добавлен или удален из списка, или произошло какое-то другое важное обновление. В таком
+сценарии компонентам необходимо взаимодействовать с родительскими компонентами.
 
-Angular uses the `output()` function to enable this type of behavior.
+Angular использует функцию `output()` для реализации такого поведения.
 
-NOTE: Learn more about [custom events in the outputs guide](/guide/components/outputs).
+Примечание: Узнайте больше о [пользовательских событиях в руководстве по output](/guide/components/outputs).
 
-In this activity, you'll learn how to use the `output()` function to communicate with components.
+В этом упражнении вы узнаете, как использовать функцию `output()` для взаимодействия с компонентами.
 
 <hr />
 
-To create the communication path from child to parent components, use the `output` function to initialize a class property.
+Чтобы создать канал связи от дочернего компонента к родительскому, используйте функцию `output` для инициализации
+свойства класса.
 
 <docs-code header="child.ts" language="ts">
 @Component({...})
@@ -19,7 +22,8 @@ class Child {
 }
 </docs-code>
 
-Now the component can generate events that can be listened to by the parent component. Trigger events by calling the `emit` method:
+Теперь компонент может генерировать события, которые может прослушивать родительский компонент. События вызываются с
+помощью метода `emit`:
 
 <docs-code header="child.ts" language="ts">
 class Child {
@@ -32,18 +36,18 @@ this.incrementCountEvent.emit(this.count);
 }
 </docs-code>
 
-The emit function will generate an event with the same type as defined by the `output`.
+Функция emit сгенерирует событие того же типа, который был определен в `output`.
 
-Alright, your turn to give this a try. Complete the code by following these tasks:
+Хорошо, теперь ваша очередь попробовать. Допишите код, выполнив следующие задачи:
 
 <docs-workflow>
 
-<docs-step title="Add an `output()` property">
-Update `child.ts` by adding an output property called `addItemEvent`, be sure to set the output type to be `string`.
+<docs-step title="Добавьте свойство `output()`">
+Обновите `child.ts`, добавив output-свойство с именем `addItemEvent`. Убедитесь, что тип output установлен как `string`.
 </docs-step>
 
-<docs-step title="Complete `addItem` method">
-In `child.ts` update the `addItem` method; use the following code as the logic:
+<docs-step title="Завершите метод `addItem`">
+В `child.ts` обновите метод `addItem`; используйте следующий код в качестве логики:
 
 <docs-code header="child.ts" highlight="[2]" language="ts">
 addItem() {
@@ -53,19 +57,19 @@ addItem() {
 
 </docs-step>
 
-<docs-step title="Update the `App` template">
-In `app.ts` update the template to listen to the emitted event by adding the following code:
+<docs-step title="Обновите шаблон `App`">
+В `app.ts` обновите шаблон, чтобы прослушивать генерируемое событие, добавив следующий код:
 
 ```angular-html
 <app-child (addItemEvent)="addItem($event)" />
 ```
 
-Now, the "Add Item" button adds a new item to the list every time the button is clicked.
+Теперь кнопка "Add Item" добавляет новый элемент в список при каждом нажатии.
 
 </docs-step>
 
 </docs-workflow>
 
-Wow, at this point you've completed the component fundamentals - impressive 👏
+Ого, на этом этапе вы освоили основы компонентов — впечатляет 👏
 
-Keep learning to unlock more of Angular's great features.
+Продолжайте обучение, чтобы открыть для себя больше замечательных возможностей Angular.

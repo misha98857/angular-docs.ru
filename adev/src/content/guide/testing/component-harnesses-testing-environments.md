@@ -1,62 +1,97 @@
-# Adding harness support for additional testing environments
+# Добавление поддержки harness для дополнительных сред тестирования
 
-## Before you start
+## Перед началом работы
 
-TIP: This guide assumes you've already read the [component harnesses overview guide](guide/testing/component-harnesses-overview). Read that first if you're new to using component harnesses.
+СОВЕТ: Это руководство предполагает, что вы уже ознакомились
+с [обзором component harnesses](guide/testing/component-harnesses-overview). Прочитайте его в первую очередь, если вы
+новичок в использовании harness для компонентов.
 
-### When does adding support for a test environment make sense?
+### Когда имеет смысл добавлять поддержку среды тестирования?
 
-To use component harnesses in the following environments, you can use Angular CDK's two built-in environments:
+Чтобы использовать component harnesses в следующих средах, вы можете воспользоваться двумя встроенными средами Angular
+CDK:
 
-- Unit tests
-- WebDriver end-to-end tests
+- Юнит-тесты (Unit tests)
+- Сквозные (E2E) тесты WebDriver
 
-To use a supported testing environment, read the [Creating harnesses for your components guide](guide/testing/creating-component-harnesses).
+Чтобы использовать поддерживаемую среду тестирования, ознакомьтесь с
+руководством [Создание harness для ваших компонентов](guide/testing/creating-component-harnesses).
 
-Otherwise, to add support for other environments, you need to define how to interact with a DOM element and how DOM interactions work in your environment. Continue reading to learn more.
+В противном случае, чтобы добавить поддержку других сред, необходимо определить способы взаимодействия с DOM-элементом и
+то, как эти взаимодействия работают в вашей среде. Продолжайте чтение, чтобы узнать больше.
 
-### CDK Installation
+### Установка CDK
 
-The [Component Dev Kit (CDK)](https://material.angular.dev/cdk/categories) is a set of behavior primitives for building components. To use the component harnesses, first install `@angular/cdk` from npm. You can do this from your terminal using the Angular CLI:
+[Component Dev Kit (CDK)](https://material.angular.dev/cdk/categories) — это набор поведенческих примитивов для создания
+компонентов. Чтобы использовать component harnesses, сначала установите `@angular/cdk` из npm. Вы можете сделать это
+через терминал, используя Angular CLI:
 
 ```shell
 ng add @angular/cdk
 ```
 
-## Creating a `TestElement` implementation
+## Создание реализации `TestElement`
 
-Every test environment must define a `TestElement` implementation. The `TestElement` interface serves as an environment-agnostic representation of a DOM element. It enables harnesses to interact with DOM elements regardless of the underlying environment. Because some environments don't support interacting with DOM elements synchronously (e.g. WebDriver), all `TestElement` methods are asynchronous, returning a `Promise` with the result of the operation.
+Каждая среда тестирования должна определять реализацию `TestElement`. Интерфейс `TestElement` служит независимым от
+среды представлением DOM-элемента. Это позволяет harness взаимодействовать с DOM-элементами независимо от используемой
+среды. Поскольку некоторые среды не поддерживают синхронное взаимодействие с DOM-элементами (например, WebDriver), все
+методы `TestElement` являются асинхронными и возвращают `Promise` с результатом операции.
 
-`TestElement` offers a number of methods to interact with the underlying DOM such as `blur()`, `click()`, `getAttribute()`, and more. See the [TestElement API reference page](/api/cdk/testing/TestElement) for the full list of methods.
+`TestElement` предлагает ряд методов для взаимодействия с базовым DOM, таких как `blur()`, `click()`, `getAttribute()` и
+другие. Полный список методов см. на [странице справочника API TestElement](/api/cdk/testing/TestElement).
 
-The `TestElement` interface consists largely of methods that resemble methods available on `HTMLElement`. Similar methods exist in most test environments, which makes implementing the methods fairly straightforward. However, one important difference to note when implementing the `sendKeys` method, is that the key codes in the `TestKey` enum likely differ from the key codes used in the test environment. Environment authors should maintain a mapping from `TestKey` codes to the codes used in the particular testing environment.
+Интерфейс `TestElement` в основном состоит из методов, напоминающих методы, доступные в `HTMLElement`. Подобные методы
+существуют в большинстве сред тестирования, что делает их реализацию довольно простой. Однако важное отличие, которое
+следует учитывать при реализации метода `sendKeys`, заключается в том, что коды клавиш в перечислении `TestKey`,
+вероятно, отличаются от кодов клавиш, используемых в среде тестирования. Авторы сред должны поддерживать сопоставление (
+маппинг) кодов `TestKey` с кодами, используемыми в конкретной среде тестирования.
 
-The [UnitTestElement](/api/cdk/testing/testbed/UnitTestElement) and [SeleniumWebDriverElement](/api/cdk/testing/selenium-webdriver/SeleniumWebDriverElement) implementations in Angular CDK serve as good examples of implementations of this interface.
+Реализации [UnitTestElement](/api/cdk/testing/testbed/UnitTestElement)
+и [SeleniumWebDriverElement](/api/cdk/testing/selenium-webdriver/SeleniumWebDriverElement) в Angular CDK служат хорошими
+примерами реализации этого интерфейса.
 
-## Creating a `HarnessEnvironment` implementation
+## Создание реализации `HarnessEnvironment`
 
-Test authors use `HarnessEnvironment` to create component harness instances for use in tests. `HarnessEnvironment` is an abstract class that must be extended to create a concrete subclass for the new environment. When supporting a new test environment, create a `HarnessEnvironment` subclass that adds concrete implementations for all abstract members.
+Авторы тестов используют `HarnessEnvironment` для создания экземпляров component harness для использования в тестах.
+`HarnessEnvironment` — это абстрактный класс, который необходимо расширить для создания конкретного подкласса для новой
+среды. При добавлении поддержки новой среды тестирования создайте подкласс `HarnessEnvironment`, который добавляет
+конкретные реализации для всех абстрактных членов.
 
-`HarnessEnvironment` has a generic type parameter: `HarnessEnvironment<E>`. This parameter, `E`, represents the raw element type of the environment. For example, this parameter is Element for unit test environments.
+`HarnessEnvironment` имеет параметр универсального типа (generic): `HarnessEnvironment<E>`. Этот параметр, `E`,
+представляет собой тип исходного (raw) элемента среды. Например, для сред юнит-тестирования этим параметром является
+Element.
 
-The following are the abstract methods that must be implemented:
+Ниже приведены абстрактные методы, которые необходимо реализовать:
 
-| Method                                                       | Description                                                                                                                                                          |
-| :----------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `abstract getDocumentRoot(): E`                              | Gets the root element for the environment (e.g. `document.body`).                                                                                                    |
-| `abstract createTestElement(element: E): TestElement`        | Creates a `TestElement` for the given raw element.                                                                                                                   |
-| `abstract createEnvironment(element: E): HarnessEnvironment` | Creates a `HarnessEnvironment` rooted at the given raw element.                                                                                                      |
-| `abstract getAllRawElements(selector: string): Promise<E[]>` | Gets all of the raw elements under the root element of the environment matching the given selector.                                                                  |
-| `abstract forceStabilize(): Promise<void>`                   | Gets a `Promise` that resolves when the `NgZone` is stable. Additionally, if applicable, tells `NgZone` to stabilize (e.g. calling `flush()` in a `fakeAsync` test). |
-| `abstract waitForTasksOutsideAngular(): Promise<void>`       | Gets a `Promise` that resolves when the parent zone of `NgZone` is stable.                                                                                           |
+| Метод                                                        | Описание                                                                                                                                                                                                |
+| :----------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `abstract getDocumentRoot(): E`                              | Получает корневой элемент для среды (например, `document.body`).                                                                                                                                        |
+| `abstract createTestElement(element: E): TestElement`        | Создает `TestElement` для заданного исходного элемента.                                                                                                                                                 |
+| `abstract createEnvironment(element: E): HarnessEnvironment` | Создает `HarnessEnvironment`, корневым элементом которого является заданный исходный элемент.                                                                                                           |
+| `abstract getAllRawElements(selector: string): Promise<E[]>` | Получает все исходные элементы под корневым элементом среды, соответствующие заданному селектору.                                                                                                       |
+| `abstract forceStabilize(): Promise<void>`                   | Возвращает `Promise`, который разрешается, когда `NgZone` становится стабильной. Кроме того, если применимо, дает команду `NgZone` стабилизироваться (например, вызывая `flush()` в тесте `fakeAsync`). |
+| `abstract waitForTasksOutsideAngular(): Promise<void>`       | Возвращает `Promise`, который разрешается, когда родительская зона `NgZone` становится стабильной.                                                                                                      |
 
-In addition to implementing the missing methods, this class should provide a way for test authors to get `ComponentHarness` instances. You should define a protected constructor and provide a static method called `loader` that returns a `HarnessLoader` instance. This allows test authors to write code like: `SomeHarnessEnvironment.loader().getHarness(...)`. Depending on the needs of the particular environment, the class may provide several different static methods or require arguments to be passed. (e.g. the `loader` method on `TestbedHarnessEnvironment` takes a `ComponentFixture`, and the class provides additional static methods called `documentRootLoader` and `harnessForFixture`).
+Помимо реализации недостающих методов, этот класс должен предоставлять авторам тестов способ получения экземпляров
+`ComponentHarness`. Следует определить защищенный (protected) конструктор и предоставить статический метод `loader`,
+возвращающий экземпляр `HarnessLoader`. Это позволяет авторам тестов писать код вида:
+`SomeHarnessEnvironment.loader().getHarness(...)`. В зависимости от потребностей конкретной среды, класс может
+предоставлять несколько различных статических методов или требовать передачи аргументов (например, метод `loader` в
+`TestbedHarnessEnvironment` принимает `ComponentFixture`, а класс предоставляет дополнительные статические методы
+`documentRootLoader` и `harnessForFixture`).
 
-The [`TestbedHarnessEnvironment`](/api/cdk/testing/testbed/TestbedHarnessEnvironment) and [SeleniumWebDriverHarnessEnvironment](/api/cdk/testing/selenium-webdriver/SeleniumWebDriverHarnessEnvironment) implementations in Angular CDK serve as good examples of implementations of this interface.
+Реализации [`TestbedHarnessEnvironment`](/api/cdk/testing/testbed/TestbedHarnessEnvironment)
+и [SeleniumWebDriverHarnessEnvironment](/api/cdk/testing/selenium-webdriver/SeleniumWebDriverHarnessEnvironment) в
+Angular CDK служат хорошими примерами реализации этого интерфейса.
 
-## Handling auto change detection
+## Обработка автоматического обнаружения изменений
 
-In order to support the `manualChangeDetection` and parallel APIs, your environment should install a handler for the auto change detection status.
+Для поддержки `manualChangeDetection` и параллельных API ваша среда должна установить обработчик статуса автоматического
+обнаружения изменений.
 
-When your environment wants to start handling the auto change detection status it can call `handleAutoChangeDetectionStatus(handler)`. The handler function will receive a `AutoChangeDetectionStatus` which has two properties `isDisabled` and `onDetectChangesNow()`. See the [AutoChangeDetectionStatus API reference page](/api/cdk/testing/AutoChangeDetectionStatus) for more information.
-If your environment wants to stop handling auto change detection status it can call `stopHandlingAutoChangeDetectionStatus()`.
+Когда ваша среда хочет начать обработку статуса автоматического обнаружения изменений, она может вызвать
+`handleAutoChangeDetectionStatus(handler)`. Функция-обработчик получит `AutoChangeDetectionStatus`, который имеет два
+свойства: `isDisabled` и `onDetectChangesNow()`. Дополнительную информацию см.
+на [странице справочника API AutoChangeDetectionStatus](/api/cdk/testing/AutoChangeDetectionStatus).
+Если ваша среда хочет прекратить обработку статуса автоматического обнаружения изменений, она может вызвать
+`stopHandlingAutoChangeDetectionStatus()`.

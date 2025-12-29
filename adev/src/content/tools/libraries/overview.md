@@ -1,34 +1,52 @@
-# Overview of Angular libraries
+# Обзор библиотек Angular
 
-Many applications need to solve the same general problems, such as presenting a unified user interface, presenting data, and allowing data entry.
-Developers can create general solutions for particular domains that can be adapted for re-use in different applications.
-Such a solution can be built as Angular _libraries_ and these libraries can be published and shared as _npm packages_.
+Многим приложениям приходится решать одни и те же общие задачи, такие как представление единого пользовательского
+интерфейса, отображение данных и обеспечение ввода данных.
+Разработчики могут создавать общие решения для конкретных предметных областей, которые можно адаптировать для повторного
+использования в различных приложениях.
+Такие решения можно реализовать в виде _библиотек_ Angular, а эти библиотеки можно публиковать и распространять как
+_npm-пакеты_.
 
-An Angular library is an Angular project that differs from an application in that it cannot run on its own.
-A library must be imported and used in an application.
+Библиотека Angular — это проект Angular, который отличается от приложения тем, что не может запускаться самостоятельно.
+Библиотеку необходимо импортировать и использовать внутри приложения.
 
-Libraries extend Angular's base features.
-For example, to add [reactive forms](guide/forms/reactive-forms) to an application, add the library package using `ng add @angular/forms`, then import the `ReactiveFormsModule` from the `@angular/forms` library in your application code.
-Similarly, adding the [service worker](ecosystem/service-workers) library to an Angular application is one of the steps for turning an application into a [Progressive Web App](https://developers.google.com/web/progressive-web-apps) \(PWA\).
-[Angular Material](https://material.angular.dev) is an example of a large, general-purpose library that provides sophisticated, reusable, and adaptable UI components.
+Библиотеки расширяют базовые возможности Angular.
+Например, чтобы добавить [реактивные формы](guide/forms/reactive-forms) в приложение, добавьте пакет библиотеки с
+помощью команды `ng add @angular/forms`, а затем импортируйте `ReactiveFormsModule` из библиотеки `@angular/forms` в
+коде вашего приложения.
+Аналогично, добавление библиотеки [service worker](ecosystem/service-workers) в приложение Angular является одним из
+шагов для превращения приложения в [Progressive Web App](https://developers.google.com/web/progressive-web-apps)
+\(PWA\).
+[Angular Material](https://material.angular.dev) — это пример большой библиотеки общего назначения, которая
+предоставляет продвинутые, повторно используемые и адаптируемые UI-компоненты.
 
-Any application developer can use these and other libraries that have been published as npm packages by the Angular team or by third parties.
-See [Using Published Libraries](tools/libraries/using-libraries).
+Любой разработчик приложений может использовать эти и другие библиотеки, опубликованные в виде npm-пакетов командой
+Angular или сторонними разработчиками.
+См. раздел [Использование опубликованных библиотек](tools/libraries/using-libraries).
 
-HELPFUL: Libraries are intended to be used by Angular applications. To add Angular features to non-Angular web applications, use [Angular custom elements](guide/elements).
+HELPFUL: Библиотеки предназначены для использования приложениями Angular. Чтобы добавить возможности Angular в
+веб-приложения, не использующие Angular,
+используйте [пользовательские элементы Angular (Angular custom elements)](guide/elements).
 
-## Creating libraries
+## Создание библиотек
 
-If you have developed features that are suitable for reuse, you can create your own libraries.
-These libraries can be used locally in your workspace, or you can publish them as [npm packages](reference/configs/npm-packages) to share with other projects or other Angular developers.
-These packages can be published to the npm registry, a private npm Enterprise registry, or a private package management system that supports npm packages.
-See [Creating Libraries](tools/libraries/creating-libraries).
+Если вы разработали функциональность, подходящую для повторного использования, вы можете создавать свои собственные
+библиотеки.
+Эти библиотеки можно использовать локально в вашем рабочем пространстве или публиковать
+как [npm-пакеты](reference/configs/npm-packages), чтобы поделиться ими с другими проектами или другими разработчиками
+Angular.
+Эти пакеты можно публиковать в реестре npm, частном реестре npm Enterprise или в частной системе управления пакетами,
+поддерживающей пакеты npm.
+См. раздел [Создание библиотек](tools/libraries/creating-libraries).
 
-Deciding to package features as a library is an architectural decision. It is comparable to deciding whether a feature is a component or a service, or deciding on the scope of a component.
+Решение упаковать функциональность в библиотеку — это архитектурное решение. Оно сравнимо с решением о том, является ли
+функциональность компонентом или сервисом, или с определением области видимости компонента.
 
-Packaging features as a library forces the artifacts in the library to be decoupled from the application's business logic.
-This can help to avoid various bad practices or architecture mistakes that can make it difficult to decouple and reuse code in the future.
+Упаковка функциональности в библиотеку заставляет артефакты внутри библиотеки быть отделенными от бизнес-логики
+приложения.
+Это помогает избежать различных плохих практик или архитектурных ошибок, которые могут затруднить отделение и повторное
+использование кода в будущем.
 
-Putting code into a separate library is more complex than simply putting everything in one application.
-It requires more of an investment in time and thought for managing, maintaining, and updating the library.
-This complexity can pay off when the library is being used in multiple applications.
+Вынос кода в отдельную библиотеку сложнее, чем простое размещение всего в одном приложении.
+Это требует больших вложений времени и размышлений для управления, поддержки и обновления библиотеки.
+Эта сложность может окупиться, когда библиотека используется в нескольких приложениях.

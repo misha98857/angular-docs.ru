@@ -130,7 +130,7 @@ export const routes: Route[] = [
       {
         path: '',
         loadComponent: () => import('../features/home/home.component'),
-        data: {label: 'Home'},
+        data: {label: 'Главная'},
       },
       {
         path: PAGE_PREFIX.DOCS,

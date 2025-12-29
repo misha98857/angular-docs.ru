@@ -1,20 +1,23 @@
-# Creating and using services
+# Создание и использование сервисов
 
-Services are reusable pieces of code that can be shared across your Angular application. They typically handle data fetching, business logic, or other functionality that multiple components need to access.
+Сервисы — это переиспользуемые фрагменты кода, которые могут использоваться во всем вашем Angular-приложении. Обычно они
+отвечают за получение данных, бизнес-логику или другую функциональность, к которой необходим доступ из нескольких
+компонентов.
 
-## Creating a service
+## Создание сервиса
 
-You can create a service with the [Angular CLI](tools/cli) with the following command:
+Вы можете создать сервис с помощью [Angular CLI](tools/cli), используя следующую команду:
 
 ```bash
 ng generate service CUSTOM_NAME
 ```
 
-This creates a dedicated `CUSTOM_NAME.ts` file in your `src` directory.
+Это создаст отдельный файл `CUSTOM_NAME.ts` в вашей директории `src`.
 
-You can also manually create a service by adding the `@Injectable()` decorator to a TypeScript class. This tells Angular that the service can be injected as a dependency.
+Вы также можете создать сервис вручную, добавив декоратор `@Injectable()` к классу TypeScript. Это сообщает Angular, что
+сервис может быть внедрен как зависимость.
 
-Here is an example of a service that allows users to add and request data:
+Вот пример сервиса, который позволяет пользователям добавлять и запрашивать данные:
 
 ```ts
 // 📄 src/app/basic-data-store.ts
@@ -34,21 +37,23 @@ export class BasicDataStore {
 }
 ```
 
-## How services become available
+## Как сервисы становятся доступными
 
-When you use `@Injectable({ providedIn: 'root' })` in your service, Angular:
+Когда вы используете `@Injectable({ providedIn: 'root' })` в своем сервисе, Angular:
 
-- **Creates a single instance** (singleton) for your entire application
-- **Makes it available everywhere** without any additional configuration
-- **Enables tree-shaking** so the service is only included in your JavaScript bundle if it's actually used
+- **Создает единственный экземпляр** (синглтон) для всего вашего приложения
+- **Делает его доступным везде** без какой-либо дополнительной настройки
+- **Включает Tree Shaking**, чтобы сервис попадал в ваш JavaScript-бандл только в том случае, если он действительно
+  используется
 
-This is the recommended approach for most services.
+Это рекомендуемый подход для большинства сервисов.
 
-## Injecting a service
+## Внедрение сервиса
 
-Once you've created a service with `providedIn: 'root'`, you can inject it anywhere in your application using the `inject()` function from `@angular/core`.
+После создания сервиса с `providedIn: 'root'`, вы можете внедрить его в любом месте вашего приложения, используя функцию
+`inject()` из `@angular/core`.
 
-### Injecting into a component
+### Внедрение в компонент
 
 ```angular-ts
 import { Component, inject } from '@angular/core';
@@ -70,7 +75,7 @@ export class ExampleComponent {
 }
 ```
 
-### Injecting into another service
+### Внедрение в другой сервис
 
 ```ts
 import { inject, Injectable } from '@angular/core';
@@ -93,13 +98,15 @@ export class BasicDataStore {
 }
 ```
 
-## Next steps
+## Следующие шаги
 
-While `providedIn: 'root'` covers most use cases, Angular offers additional ways to provide services for specialized scenarios:
+Хотя `providedIn: 'root'` покрывает большинство случаев использования, Angular предлагает дополнительные способы
+предоставления сервисов для специализированных сценариев:
 
-- **Component-specific instances** - When components need their own isolated service instances
-- **Manual configuration** - For services that require runtime configuration
-- **Factory providers** - For dynamic service creation based on runtime conditions
-- **Value providers** - For providing configuration objects or constants
+- **Экземпляры, специфичные для компонентов** — когда компонентам нужны собственные изолированные экземпляры сервисов
+- **Ручная настройка** — для сервисов, требующих настройки во время выполнения
+- **Factory-провайдеры** — для динамического создания сервисов на основе условий времени выполнения
+- **Value-провайдеры** — для предоставления объектов конфигурации или констант
 
-You can learn more about these advanced patterns in the next guide: [defining dependency providers](/guide/di/defining-dependency-providers).
+Вы можете узнать больше об этих продвинутых паттернах в следующем
+руководстве: [определение провайдеров зависимостей](/guide/di/defining-dependency-providers).

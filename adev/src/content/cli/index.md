@@ -1,12 +1,14 @@
-# CLI Overview and Command Reference
+# Обзор CLI и справочник команд
 
-The Angular CLI is a command-line interface tool that you use to initialize, develop, scaffold, and maintain Angular applications directly from a command shell.
+Angular CLI — это инструмент интерфейса командной строки, который используется для инициализации, разработки, создания
+каркаса и поддержки приложений Angular непосредственно из командной оболочки.
 
-## Installing Angular CLI
+## Установка Angular CLI
 
-Major versions of Angular CLI follow the supported major version of Angular, but minor versions can be released separately.
+Мажорные версии Angular CLI соответствуют поддерживаемой мажорной версии Angular, однако минорные версии могут
+выпускаться отдельно.
 
-Install the CLI using the `npm` package manager:
+Установите CLI с помощью пакетного менеджера `npm`:
 
 <code-example format="shell" language="shell">
 
@@ -14,13 +16,15 @@ npm install -g @angular/cli<aio-angular-dist-tag class="pln"></aio-angular-dist-
 
 </code-example>
 
-For details about changes between versions, and information about updating from previous releases, see the Releases tab on GitHub: https://github.com/angular/angular-cli/releases
+Подробную информацию об изменениях между версиями и обновлении с предыдущих релизов см. на вкладке Releases на
+GitHub: https://github.com/angular/angular-cli/releases
 
-## Basic workflow
+## Базовый рабочий процесс
 
-Invoke the tool on the command line through the `ng` executable.
-Online help is available on the command line.
-Enter the following to list commands or options for a given command \(such as [new](cli/new)\) with a short description.
+Инструмент запускается в командной строке через исполняемый файл `ng`.
+В командной строке доступна встроенная справка.
+Введите следующее, чтобы вывести список команд или опций для конкретной команды (например, [new](cli/new)) с кратким
+описанием.
 
 <code-example format="shell" language="shell">
 
@@ -29,7 +33,8 @@ ng new --help
 
 </code-example>
 
-To create, build, and serve a new, basic Angular project on a development server, go to the parent directory of your new workspace use the following commands:
+Чтобы создать, собрать и запустить новый базовый проект Angular на сервере разработки, перейдите в родительскую
+директорию вашего нового рабочего пространства и используйте следующие команды:
 
 <code-example format="shell" language="shell">
 
@@ -39,63 +44,72 @@ ng serve
 
 </code-example>
 
-In your browser, open http://localhost:4200/ to see the new application run.
-When you use the [ng serve](cli/serve) command to build an application and serve it locally, the server automatically rebuilds the application and reloads the page when you change any of the source files.
+Откройте http://localhost:4200/ в браузере, чтобы увидеть запущенное приложение.
+Когда вы используете команду [ng serve](cli/serve) для сборки и локального запуска приложения, сервер автоматически
+пересобирает приложение и перезагружает страницу при изменении любого из исходных файлов.
 
 <div class="docs-alert docs-alert-helpful">
 
-When you run `ng new my-first-project` a new folder, named `my-first-project`, will be created in the current working directory.
-Since you want to be able to create files inside that folder, make sure you have sufficient rights in the current working directory before running the command.
+При запуске `ng new my-first-project` в текущей рабочей директории будет создана новая папка с именем
+`my-first-project`.
+Поскольку вам потребуется создавать файлы внутри этой папки, убедитесь, что у вас достаточно прав в текущей рабочей
+директории перед запуском команды.
 
-If the current working directory is not the right place for your project, you can change to a more appropriate directory by running `cd <path-to-other-directory>`.
+Если текущая рабочая директория не подходит для вашего проекта, вы можете перейти в более подходящую директорию,
+выполнив команду `cd <путь-к-другой-директории>`.
 
 </div>
 
-## Workspaces and project files
+## Рабочие пространства и файлы проекта
 
-The [ng new](cli/new) command creates an _Angular workspace_ folder and generates a new application skeleton.
-A workspace can contain multiple applications and libraries.
-The initial application created by the [ng new](cli/new) command is at the top level of the workspace.
-When you generate an additional application or library in a workspace, it goes into a `projects/` subfolder.
+Команда [ng new](cli/new) создает папку _рабочего пространства Angular_ и генерирует каркас нового приложения.
+Рабочее пространство может содержать несколько приложений и библиотек.
+Начальное приложение, созданное командой [ng new](cli/new), находится на верхнем уровне рабочего пространства.
+При генерации дополнительного приложения или библиотеки в рабочем пространстве, они помещаются в подпапку `projects/`.
 
-A newly generated application contains the source files for a root module, with a root component and template.
-Each application has a `src` folder that contains the logic, data, and assets.
+Вновь созданное приложение содержит исходные файлы корневого модуля с корневым компонентом и шаблоном.
+У каждого приложения есть папка `src`, содержащая логику, данные и ресурсы.
 
-You can edit the generated files directly, or add to and modify them using CLI commands.
-Use the [ng generate](cli/generate) command to add new files for additional components and services, and code for new pipes, directives, and so on.
-Commands such as [add](cli/add) and [generate](cli/generate), which create or operate on applications and libraries, must be executed from within a workspace or project folder.
+Вы можете редактировать созданные файлы напрямую или добавлять и изменять их с помощью команд CLI.
+Используйте команду [ng generate](cli/generate) для добавления новых файлов для дополнительных компонентов и сервисов, а
+также кода для новых Pipe, директив и так далее.
+Команды, такие как [add](cli/add) и [generate](cli/generate), которые создают или работают с приложениями и
+библиотеками, должны выполняться из папки рабочего пространства или проекта.
 
-- See more about the [Workspace file structure](guide/file-structure).
+- Подробнее о [структуре файлов рабочего пространства](guide/file-structure).
 
-### Workspace and project configuration
+### Конфигурация рабочего пространства и проекта
 
-A single workspace configuration file, `angular.json`, is created at the top level of the workspace.
-This is where you can set per-project defaults for CLI command options, and specify configurations to use when the CLI builds a project for different targets.
+Единый файл конфигурации рабочего пространства, `angular.json`, создается на верхнем уровне рабочего пространства.
+Здесь вы можете задать настройки по умолчанию для опций команд CLI для каждого проекта, а также указать конфигурации,
+используемые CLI при сборке проекта для различных целей.
 
-The [ng config](cli/config) command lets you set and retrieve configuration values from the command line, or you can edit the `angular.json` file directly.
+Команда [ng config](cli/config) позволяет устанавливать и получать значения конфигурации из командной строки; также вы
+можете редактировать файл `angular.json` напрямую.
 
 <div class="alert is-helpful">
 
-**NOTE**: <br />
-Option names in the configuration file must use [camelCase](guide/glossary#case-types), while option names supplied to commands must be dash-case.
+**ПРИМЕЧАНИЕ**: <br />
+Имена опций в файле конфигурации должны использовать [camelCase](guide/glossary#case-types), в то время как имена опций,
+передаваемые командам, должны быть в dash-case.
 
 </div>
 
-- See more about [Workspace Configuration](guide/workspace-config).
+- Подробнее о [конфигурации рабочего пространства](guide/workspace-config).
 
-## CLI command-language syntax
+## Синтаксис командного языка CLI
 
-Command syntax is shown as follows:
+Синтаксис команд выглядит следующим образом:
 
-`ng` _<command-name>_ _<required-arg>_ [*optional-arg*] `[options]`
+`ng` _<имя-команды>_ _<обязательный-аргумент>_ [*необязательный-аргумент*] `[опции]`
 
-- Most commands, and some options, have aliases.
-  Aliases are shown in the syntax statement for each command.
+- Большинство команд и некоторые опции имеют псевдонимы (алиасы).
+  Псевдонимы указаны в описании синтаксиса каждой команды.
 
-- Option names are prefixed with a double dash \(`--`\) characters.
-  Option aliases are prefixed with a single dash \(`-`\) character.
-  Arguments are not prefixed.
-  For example:
+- Имена опций начинаются с двойного дефиса \(`--`\).
+  Псевдонимы опций начинаются с одинарного дефиса \(`-`\).
+  Аргументы не имеют префиксов.
+  Например:
 
   <code-example format="shell" language="shell">
 
@@ -103,29 +117,32 @@ Command syntax is shown as follows:
 
   </code-example>
 
-- Typically, the name of a generated artifact can be given as an argument to the command or specified with the `--name` option.
+- Как правило, имя генерируемого артефакта можно передать как аргумент команды или указать с помощью опции `--name`.
 
-- Arguments and option names must be given in [dash-case](guide/glossary#case-types).
-  For example: `--my-option-name`
+- Аргументы и имена опций должны быть указаны в [dash-case](guide/glossary#case-types).
+  Например: `--my-option-name`
 
-### Boolean options
+### Булевы опции
 
-Boolean options have two forms: `--this-option` sets the flag to `true`, `--no-this-option` sets it to `false`.
-If neither option is supplied, the flag remains in its default state, as listed in the reference documentation.
+Булевы опции имеют две формы: `--this-option` устанавливает флаг в `true`, `--no-this-option` устанавливает его в
+`false`.
+Если ни одна из опций не указана, флаг остается в состоянии по умолчанию, как указано в справочной документации.
 
-### Array options
+### Опции-массивы
 
-Array options can be provided in two forms: `--option value1 value2` or `--option value1 --option value2`.
+Опции-массивы могут быть указаны в двух формах: `--option value1 value2` или `--option value1 --option value2`.
 
-### Relative paths
+### Относительные пути
 
-Options that specify files can be given as absolute paths, or as paths relative to the current working directory, which is generally either the workspace or project root.
+Опции, указывающие на файлы, могут быть заданы как абсолютные пути или как пути относительно текущей рабочей директории,
+которой обычно является корень рабочего пространства или проекта.
 
-### Schematics
+### Схематики (Schematics)
 
-The [ng generate](cli/generate) and [ng add](cli/add) commands take, as an argument, the artifact or library to be generated or added to the current project.
-In addition to any general options, each artifact or library defines its own options in a _schematic_.
-Schematic options are supplied to the command in the same format as immediate command options.
+Команды [ng generate](cli/generate) и [ng add](cli/add) принимают в качестве аргумента артефакт или библиотеку, которые
+нужно сгенерировать или добавить в текущий проект.
+В дополнение к общим опциям, каждый артефакт или библиотека определяет свои собственные опции в _схематике_ (schematic).
+Опции схематика передаются команде в том же формате, что и непосредственные опции команды.
 
 <!-- links -->
 

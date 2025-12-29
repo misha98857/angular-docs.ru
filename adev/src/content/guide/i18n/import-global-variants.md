@@ -1,6 +1,7 @@
-# Import global variants of the locale data
+# Импорт глобальных вариантов данных локали
 
-The [Angular CLI][CliMain] automatically includes locale data if you run the [`ng build`][CliBuild] command with the `--localize` option.
+[Angular CLI][CliMain] автоматически включает данные локали, если вы запускаете команду [`ng build`][CliBuild] с опцией
+`--localize`.
 
 <!--todo: replace with docs-code -->
 
@@ -8,19 +9,21 @@ The [Angular CLI][CliMain] automatically includes locale data if you run the [`n
 ng build --localize
 ```
 
-HELPFUL: The initial installation of Angular already contains locale data for English in the United States \(`en-US`\).
-The [Angular CLI][CliMain] automatically includes the locale data and sets the `LOCALE_ID` value when you use the `--localize` option with [`ng build`][CliBuild] command.
+HELPFUL: Базовая установка Angular уже содержит данные локали для английского языка в США \(`en-US`\).
+[Angular CLI][CliMain] автоматически включает данные локали и устанавливает значение `LOCALE_ID`, когда вы используете
+опцию `--localize` с командой [`ng build`][CliBuild].
 
-The `@angular/common` package on npm contains the locale data files.
-Global variants of the locale data are available in `@angular/common/locales/global`.
+Пакет `@angular/common` в npm содержит файлы данных локали.
+Глобальные варианты данных локали доступны в `@angular/common/locales/global`.
 
-## `import` example for French
+## Пример `import` для французского языка
 
-For example, you could import the global variants for French \(`fr`\) in `main.ts` where you bootstrap the application.
+Например, вы можете импортировать глобальные варианты для французского языка \(`fr`\) в файле `main.ts`, где происходит
+инициализация (bootstrap) приложения.
 
-<docs-code header="src/main.ts (import locale)" path="adev/src/content/examples/i18n/src/main.ts" region="global-locale"/>
+<docs-code header="src/main.ts (импорт локали)" path="adev/src/content/examples/i18n/src/main.ts" visibleRegion="global-locale"/>
 
-HELPFUL: In an `NgModules` application, you would import it in your `app.module`.
+HELPFUL: В приложении на основе `NgModules` импорт следует выполнять в вашем `app.module`.
 
-[CliMain]: cli 'CLI Overview and Command Reference | Angular'
+[CliMain]: cli 'Обзор CLI и справочник команд | Angular'
 [CliBuild]: cli/build 'ng build | CLI | Angular'

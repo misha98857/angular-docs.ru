@@ -1,10 +1,12 @@
-# Create template fragments with ng-template
+# Создание фрагментов шаблона с помощью ng-template
 
-Inspired by the [native `<template>` element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template), the `<ng-template>` element lets you declare a **template fragment** – a section of content that you can dynamically or programmatically render.
+Вдохновленный [нативным элементом `<template>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template),
+элемент `<ng-template>` позволяет объявлять **фрагмент шаблона** — секцию контента, которую можно рендерить динамически
+или программно.
 
-## Creating a template fragment
+## Создание фрагмента шаблона
 
-You can create a template fragment inside of any component template with the `<ng-template>` element:
+Вы можете создать фрагмент шаблона внутри шаблона любого компонента с помощью элемента `<ng-template>`:
 
 ```angular-html
 <p>This is a normal element</p>
@@ -14,11 +16,12 @@ You can create a template fragment inside of any component template with the `<n
 </ng-template>
 ```
 
-When the above is rendered, the content of the `<ng-template>` element is not rendered on the page. Instead, you can get a reference to the template fragment and write code to dynamically render it.
+При рендеринге приведенного выше кода содержимое элемента `<ng-template>` не отображается на странице. Вместо этого вы
+можете получить ссылку на фрагмент шаблона и написать код для его динамического рендеринга.
 
-### Binding context for fragments
+### Привязка контекста для фрагментов
 
-Template fragments may contain bindings with dynamic expressions:
+Фрагменты шаблона могут содержать привязки с динамическими выражениями:
 
 ```angular-ts
 @Component({
@@ -30,21 +33,24 @@ export class ItemCounter {
 }
 ```
 
-Expressions or statements in a template fragment are evaluated against the component in which the fragment is declared, regardless of where the fragment is rendered.
+Выражения или инструкции во фрагменте шаблона вычисляются в контексте компонента, в котором объявлен фрагмент,
+независимо от того, где этот фрагмент рендерится.
 
-## Getting a reference to a template fragment
+## Получение ссылки на фрагмент шаблона
 
-You can get a reference to a template fragment in one of three ways:
+Вы можете получить ссылку на фрагмент шаблона одним из трех способов:
 
-- By declaring a [template reference variable](/guide/templates/variables#template-reference-variables) on the `<ng-template>` element
-- By querying for the fragment with [a component or directive query](/guide/components/queries)
-- By injecting the fragment in a directive that's applied directly to an `<ng-template>` element.
+- Объявив [переменную ссылки на шаблон](/guide/templates/variables#template-reference-variables) на элементе
+  `<ng-template>`
+- Запросив фрагмент с помощью [запроса компонента или директивы](/guide/components/queries)
+- Внедрив фрагмент в директиву, которая применяется непосредственно к элементу `<ng-template>`.
 
-In all three cases, the fragment is represented by a [TemplateRef](/api/core/TemplateRef) object.
+Во всех трех случаях фрагмент представлен объектом [TemplateRef](/api/core/TemplateRef).
 
-### Referencing a template fragment with a template reference variable
+### Ссылка на фрагмент шаблона с помощью переменной
 
-You can add a template reference variable to an `<ng-template>` element to reference that template fragment in other parts of the same template file:
+Вы можете добавить переменную ссылки на шаблон к элементу `<ng-template>`, чтобы ссылаться на этот фрагмент в других
+частях того же файла шаблона:
 
 ```angular-html
 <p>This is a normal element</p>
@@ -54,13 +60,14 @@ You can add a template reference variable to an `<ng-template>` element to refer
 </ng-template>
 ```
 
-You can then reference this fragment anywhere else in the template via the `myFragment` variable.
+Затем вы можете ссылаться на этот фрагмент в любом другом месте шаблона через переменную `myFragment`.
 
-### Referencing a template fragment with queries
+### Ссылка на фрагмент шаблона с помощью запросов
 
-You can get a reference to a template fragment using any [component or directive query API](/guide/components/queries).
+Вы можете получить ссылку на фрагмент шаблона, используя
+любой [API запросов компонентов или директив](/guide/components/queries).
 
-You can query the `TemplateRef` object directly using a `viewChild` query.
+Вы можете запросить объект `TemplateRef` напрямую, используя запрос `viewChild`.
 
 ```angular-ts
 @Component({
@@ -78,9 +85,11 @@ export class ComponentWithFragment {
 }
 ```
 
-You can then reference this fragment in your component code or the component's template like any other class member.
+Затем вы можете ссылаться на этот фрагмент в коде вашего компонента или в шаблоне компонента, как на любой другой член
+класса.
 
-If a template contains multiple fragments, you can assign a name to each fragment by adding a template reference variable to each `<ng-template>` element and querying for the fragments based on that name:
+Если шаблон содержит несколько фрагментов, вы можете присвоить имя каждому фрагменту, добавив переменную ссылки на
+шаблон к каждому элементу `<ng-template>` и запрашивая фрагменты по этому имени:
 
 ```angular-ts
 @Component({
@@ -103,11 +112,12 @@ export class ComponentWithFragment {
 }
 ```
 
-Again, you can then reference these fragments in your component code or the component's template like any other class members.
+Опять же, вы можете ссылаться на эти фрагменты в коде компонента или в шаблоне компонента, как на любые другие члены
+класса.
 
-### Injecting a template fragment
+### Внедрение фрагмента шаблона
 
-A directive can inject a `TemplateRef` if that directive is applied directly to an `<ng-template>` element:
+Директива может внедрить `TemplateRef`, если эта директива применена непосредственно к элементу `<ng-template>`:
 
 ```angular-ts
 @Directive({
@@ -124,23 +134,28 @@ export class MyDirective {
 </ng-template>
 ```
 
-You can then reference this fragment in your directive code like any other class member.
+Затем вы можете ссылаться на этот фрагмент в коде директивы, как на любой другой член класса.
 
-## Rendering a template fragment
+## Рендеринг фрагмента шаблона
 
-Once you have a reference to a template fragment's `TemplateRef` object, you can render a fragment in one of two ways: in your template with the `NgTemplateOutlet` directive or in your TypeScript code with `ViewContainerRef`.
+Как только у вас есть ссылка на объект `TemplateRef` фрагмента шаблона, вы можете отрендерить фрагмент одним из двух
+способов: в вашем шаблоне с помощью директивы `NgTemplateOutlet` или в вашем TypeScript-коде с помощью
+`ViewContainerRef`.
 
-### Using `NgTemplateOutlet`
+### Использование `NgTemplateOutlet`
 
-The `NgTemplateOutlet` directive from `@angular/common` accepts a `TemplateRef` and renders the fragment as a **sibling** to the element with the outlet. You should generally use `NgTemplateOutlet` on an [`<ng-container>` element](/guide/templates/ng-container).
+Директива `NgTemplateOutlet` из `@angular/common` принимает `TemplateRef` и рендерит фрагмент как **соседний элемент**
+для элемента с аутлетом. Обычно следует использовать `NgTemplateOutlet` на элементе [
+`<ng-container>`](/guide/templates/ng-container).
 
-First, import `NgTemplateOutlet`:
+Сначала импортируйте `NgTemplateOutlet`:
 
 ```typescript
 import { NgTemplateOutlet } from '@angular/common';
 ```
 
-The following example declares a template fragment and renders that fragment to a `<ng-container>` element with `NgTemplateOutlet`:
+Следующий пример объявляет фрагмент шаблона и рендерит этот фрагмент в элемент `<ng-container>` с помощью
+`NgTemplateOutlet`:
 
 ```angular-html
 <p>This is a normal element</p>
@@ -152,20 +167,25 @@ The following example declares a template fragment and renders that fragment to 
 <ng-container *ngTemplateOutlet="myFragment"></ng-container>
 ```
 
-This example produces the following rendered DOM:
+Этот пример создает следующий DOM:
 
 ```angular-html
 <p>This is a normal element</p>
 <p>This is a fragment</p>
 ```
 
-### Using `ViewContainerRef`
+### Использование `ViewContainerRef`
 
-A **view container** is a node in Angular's component tree that can contain content. Any component or directive can inject `ViewContainerRef` to get a reference to a view container corresponding to that component or directive's location in the DOM.
+**Контейнер представления** (view container) — это узел в дереве компонентов Angular, который может содержать контент.
+Любой компонент или директива могут внедрить `ViewContainerRef`, чтобы получить ссылку на контейнер представления,
+соответствующий местоположению этого компонента или директивы в DOM.
 
-You can use the `createEmbeddedView` method on `ViewContainerRef` to dynamically render a template fragment. When you render a fragment with a `ViewContainerRef`, Angular appends it into the DOM as the next sibling of the component or directive that injected the `ViewContainerRef`.
+Вы можете использовать метод `createEmbeddedView` в `ViewContainerRef` для динамического рендеринга фрагмента шаблона.
+Когда вы рендерите фрагмент с помощью `ViewContainerRef`, Angular добавляет его в DOM как следующий соседний элемент
+компонента или директивы, внедрившей `ViewContainerRef`.
 
-The following example shows a component that accepts a reference to a template fragment as an input and renders that fragment into the DOM on a button click.
+Следующий пример показывает компонент, который принимает ссылку на фрагмент шаблона в качестве входного параметра (
+input) и рендерит этот фрагмент в DOM при нажатии кнопки.
 
 ```angular-ts
 @Component({
@@ -198,7 +218,7 @@ export class MyOutlet {
 }
 ```
 
-In the example above, clicking the "Show" button results in the following output:
+В примере выше нажатие кнопки "Show" приводит к следующему выводу:
 
 ```angular-html
 <component-with-fragment>
@@ -210,11 +230,15 @@ In the example above, clicking the "Show" button results in the following output
 </component-with-fragment>
 ```
 
-## Passing parameters when rendering a template fragment
+## Передача параметров при рендеринге фрагмента шаблона
 
-When declaring a template fragment with `<ng-template>`, you can additionally declare parameters accepted by the fragment. When you render a fragment, you can optionally pass a `context` object corresponding to these parameters. You can use data from this context object in binding expressions and statements, in addition to referencing data from the component in which the fragment is declared.
+При объявлении фрагмента шаблона с помощью `<ng-template>` вы можете дополнительно объявить параметры, принимаемые
+фрагментом. При рендеринге фрагмента вы можете опционально передать объект `context`, соответствующий этим параметрам.
+Вы можете использовать данные из этого объекта контекста в выражениях привязки и инструкциях, в дополнение к ссылкам на
+данные из компонента, в котором объявлен фрагмент.
 
-Each parameter is written as an attribute prefixed with `let-` with a value matching a property name in the context object:
+Каждый параметр записывается как атрибут с префиксом `let-`, значение которого соответствует имени свойства в объекте
+контекста:
 
 ```angular-html
 <ng-template let-pizzaTopping="topping">
@@ -222,9 +246,9 @@ Each parameter is written as an attribute prefixed with `let-` with a value matc
 </ng-template>
 ```
 
-### Using `NgTemplateOutlet`
+### Использование `NgTemplateOutlet`
 
-You can bind a context object to the `ngTemplateOutletContext` input:
+Вы можете привязать объект контекста к входному свойству `ngTemplateOutletContext`:
 
 ```angular-html
 <ng-template #myFragment let-pizzaTopping="topping">
@@ -237,22 +261,24 @@ You can bind a context object to the `ngTemplateOutletContext` input:
 />
 ```
 
-### Using `ViewContainerRef`
+### Использование `ViewContainerRef`
 
-You can pass a context object as the second argument to `createEmbeddedView`:
+Вы можете передать объект контекста в качестве второго аргумента в `createEmbeddedView`:
 
 ```angular-ts
 this.viewContainer.createEmbeddedView(this.myFragment, {topping: 'onion'});
 ```
 
-## Structural directives
+## Структурные директивы
 
-A **structural directive** is any directive that:
+**Структурная директива** — это любая директива, которая:
 
-- Injects `TemplateRef`
-- Injects `ViewContainerRef` and programmatically renders the injected `TemplateRef`
+- Внедряет `TemplateRef`
+- Внедряет `ViewContainerRef` и программно рендерит внедренный `TemplateRef`
 
-Angular supports a special convenience syntax for structural directives. If you apply the directive to an element and prefix the directive's selector with an asterisk (`*`) character, Angular interprets the entire element and all of its content as a template fragment:
+Angular поддерживает специальный удобный синтаксис для структурных директив. Если вы применяете директиву к элементу и
+добавляете префикс звездочки (`*`) к селектору директивы, Angular интерпретирует весь элемент и все его содержимое как
+фрагмент шаблона:
 
 ```angular-html
 <section *myDirective>
@@ -260,7 +286,7 @@ Angular supports a special convenience syntax for structural directives. If you 
 </section>
 ```
 
-This is equivalent to:
+Это эквивалентно:
 
 ```angular-html
 <ng-template myDirective>
@@ -270,13 +296,16 @@ This is equivalent to:
 </ng-template>
 ```
 
-Developers typically use structural directives to conditionally render fragments or render fragments multiple times.
+Разработчики обычно используют структурные директивы для условного рендеринга фрагментов или рендеринга фрагментов
+несколько раз.
 
-For more details, see [Structural Directives](/guide/directives/structural-directives).
+Для получения более подробной информации см. [Структурные директивы](/guide/directives/structural-directives).
 
-## Additional resources
+## Дополнительные ресурсы
 
-For examples of how `ng-template` is used in other libraries, check out:
+Примеры использования `ng-template` в других библиотеках можно найти здесь:
 
-- [Tabs from Angular Material](https://material.angular.dev/components/tabs/overview) - nothing gets rendered into the DOM until the tab is activated
-- [Table from Angular Material](https://material.angular.dev/components/table/overview) - allows developers to define different ways to render data
+- [Вкладки из Angular Material](https://material.angular.dev/components/tabs/overview) — ничего не рендерится в DOM,
+  пока вкладка не будет активирована
+- [Таблица из Angular Material](https://material.angular.dev/components/table/overview) — позволяет разработчикам
+  определять различные способы отображения данных

@@ -1,11 +1,11 @@
-# Version compatibility
+# Совместимость версий
 
-The following tables describe the versions of Node.js, TypeScript, and RxJS that each version of
-Angular requires.
+В следующих таблицах описаны версии Node.js, TypeScript и RxJS, которые требуются для каждой версии Angular.
 
-## Actively supported versions
+## Активно поддерживаемые версии
 
-This table covers [Angular versions under active support](reference/releases#actively-supported-versions).
+Эта таблица
+охватывает [версии Angular, находящиеся на активной поддержке](reference/releases#actively-supported-versions).
 
 | Angular            | Node.js                             | TypeScript     | RxJS               |
 | ------------------ | ----------------------------------- | -------------- | ------------------ |
@@ -16,11 +16,11 @@ This table covers [Angular versions under active support](reference/releases#act
 | 19.1.x             | ^18.19.1 \|\| ^20.11.1 \|\| ^22.0.0 | >=5.5.0 <5.8.0 | ^6.5.3 \|\| ^7.4.0 |
 | 19.0.x             | ^18.19.1 \|\| ^20.11.1 \|\| ^22.0.0 | >=5.5.0 <5.7.0 | ^6.5.3 \|\| ^7.4.0 |
 
-## Unsupported Angular versions
+## Неподдерживаемые версии Angular
 
-This table covers Angular versions that are no longer under long-term support (LTS). This
-information was correct when each version went out of LTS and is provided without any further
-guarantees. It is listed here for historical reference.
+В этой таблице представлены версии Angular, срок долгосрочной поддержки (LTS) которых истек. Эта информация была
+актуальна на момент окончания LTS для каждой версии и предоставляется без каких-либо дальнейших гарантий. Она приведена
+здесь для исторической справки.
 
 | Angular            | Node.js                              | TypeScript     | RxJS               |
 | ------------------ | ------------------------------------ | -------------- | ------------------ |
@@ -50,9 +50,9 @@ guarantees. It is listed here for historical reference.
 | 9.1.x              | ^10.13.0 \|\| ^12.11.0               | >=3.6.0 <3.9.0 | ^6.5.3             |
 | 9.0.x              | ^10.13.0 \|\| ^12.11.0               | >=3.6.0 <3.8.0 | ^6.5.3             |
 
-### Before v9
+### До версии 9
 
-Until Angular v9, Angular and Angular CLI versions were not synced.
+До выхода Angular v9 версии Angular и Angular CLI не были синхронизированы.
 
 | Angular                     | Angular CLI                 | Node.js             | TypeScript     | RxJS   |
 | --------------------------- | --------------------------- | ------------------- | -------------- | ------ |
@@ -69,56 +69,58 @@ Until Angular v9, Angular and Angular CLI versions were not synced.
 | 4.0.x \|\| 4.1.x            | 1.0.x \|\| 1.1.x \|\| 1.2.x | ^6.9.0              | >=2.1.6 <2.4.0 | ^5.0.1 |
 | 2.x                         | -                           | ^6.9.0              | >=1.8.0 <2.2.0 | ^5.0.1 |
 
-## Browser support
+## Поддержка браузеров
 
-Angular uses the ["widely available" Baseline](https://web.dev/baseline) to define browser
-support. For each major version, Angular supports browsers included in the Baseline of a
-chosen date near the release date for that major.
+Angular использует стандарт ["widely available" Baseline](https://web.dev/baseline) для определения поддержки браузеров.
+Для каждой мажорной версии Angular поддерживает браузеры, включенные в Baseline на выбранную дату, близкую к дате релиза
+этой версии.
 
-The "widely available" Baseline includes browsers released less than 30 months (2.5 years)
-of the chosen date within Baseline's core browser set (Chrome, Edge, Firefox, Safari) and
-targets supporting approximately 95% of web users.
+Категория "widely available" (широко доступные) в Baseline включает браузеры из основного набора (Chrome, Edge, Firefox,
+Safari), выпущенные менее чем за 30 месяцев (2,5 года) до выбранной даты, и охватывает примерно 95% веб-пользователей.
 
-| Angular | Baseline Date | Browser Set                 |
-| ------- | ------------- | --------------------------- |
-| v21     | 2025-10-20    | [Browser Set][browsers-v21] |
-| v20     | 2025-04-30    | [Browser Set][browsers-v20] |
+| Angular | Дата Baseline | Набор браузеров                 |
+| ------- | ------------- | ------------------------------- |
+| v21     | 2025-10-20    | [Набор браузеров][browsers-v21] |
+| v20     | 2025-04-30    | [Набор браузеров][browsers-v20] |
 
 [browsers-v21]: https://web-platform-dx.github.io/web-features/supported-browsers/?widelyAvailableOnDate=2025-10-20&includeDownstream=false
 [browsers-v20]: https://web-platform-dx.github.io/web-features/supported-browsers/?widelyAvailableOnDate=2025-04-30&includeDownstream=false
 
-Angular versions prior to v20 support the following specific browser versions:
+Версии Angular до v20 поддерживают следующие конкретные версии браузеров:
 
-| Browser | Supported versions                          |
-| :------ | :------------------------------------------ |
-| Chrome  | 2 most recent versions                      |
-| Firefox | latest and extended support release \(ESR\) |
-| Edge    | 2 most recent major versions                |
-| Safari  | 2 most recent major versions                |
-| iOS     | 2 most recent major versions                |
-| Android | 2 most recent major versions                |
+| Браузер | Поддерживаемые версии                                    |
+| :------ | :------------------------------------------------------- |
+| Chrome  | 2 последние версии                                       |
+| Firefox | последняя версия и версия с расширенной поддержкой (ESR) |
+| Edge    | 2 последние мажорные версии                              |
+| Safari  | 2 последние мажорные версии                              |
+| iOS     | 2 последние мажорные версии                              |
+| Android | 2 последние мажорные версии                              |
 
-## Polyfills
+## Полифилы
 
-Angular is built on the latest standards of the web platform.
-Targeting such a wide range of browsers is challenging because they do not support all features of modern browsers.
-You compensate by loading polyfill scripts \("polyfills"\) for the browsers that you must support.
-See instructions on how to include polyfills into your project below.
+Angular построен на новейших стандартах веб-платформы.
+Поддержка такого широкого спектра браузеров является сложной задачей, поскольку они не поддерживают все функции
+современных браузеров.
+Вы компенсируете это загрузкой скриптов-полифилов ("полифилов") для браузеров, которые необходимо поддерживать.
+Инструкции о том, как включить полифилы в ваш проект, приведены ниже.
 
-IMPORTANT: The suggested polyfills are the ones that run full Angular applications.
-You might need additional polyfills to support features not covered by this list.
+ВАЖНО: Предлагаемые полифилы необходимы для запуска полноценных приложений Angular.
+Вам могут понадобиться дополнительные полифилы для поддержки функций, не охваченных этим списком.
 
-HELPFUL: Polyfills cannot magically transform an old, slow browser into a modern, fast one.
+ПОЛЕЗНО: Полифилы не могут волшебным образом превратить старый медленный браузер в современный и быстрый.
 
-## Enabling polyfills with CLI projects
+## Включение полифилов в проектах CLI
 
-The [Angular CLI](tools/cli) provides support for polyfills.
-If you are not using the CLI to create your projects, see [Polyfill instructions for non-CLI users](#polyfills-for-non-cli-users).
+[Angular CLI](tools/cli) обеспечивает поддержку полифилов.
+Если вы не используете CLI для создания проектов,
+см. [инструкции по полифилам для пользователей без CLI](#polyfills-for-non-cli-users).
 
-The `polyfills` options of the [browser and test builder](tools/cli/cli-builder) can be a full path for a file \(Example: `src/polyfills.ts`\) or,
-relative to the current workspace or module specifier \(Example: `zone.js`\).
+Опция `polyfills` в [билдере для браузера и тестов](tools/cli/cli-builder) может представлять собой полный путь к
+файлу (например: `src/polyfills.ts`) или путь относительно текущего рабочего пространства, или спецификатор модуля (
+например: `zone.js`).
 
-If you create a TypeScript file, make sure to include it in the `files` property of your `tsconfig` file.
+Если вы создаете файл TypeScript, убедитесь, что он включен в свойство `files` вашего файла `tsconfig`.
 
 ```json
 
@@ -135,11 +137,11 @@ If you create a TypeScript file, make sure to include it in the `files` property
 }
 ```
 
-## Polyfills for non-CLI users
+## Полифилы для пользователей без CLI {#polyfills-for-non-cli-users}
 
-If you are not using the CLI, add your polyfill scripts directly to the host web page \(`index.html`\).
+Если вы не используете CLI, добавьте скрипты полифилов непосредственно на главную веб-страницу (`index.html`).
 
-For example:
+Например:
 
 <docs-code header="src/index.html" language="html">
 <!-- pre-zone polyfills -->

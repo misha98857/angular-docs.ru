@@ -1,42 +1,65 @@
-# `HttpClient` security
+# Безопасность `HttpClient`
 
-`HttpClient` includes built-in support for two common HTTP security mechanisms: XSSI protection and XSRF/CSRF protection.
+`HttpClient` включает встроенную поддержку двух распространенных механизмов безопасности HTTP: защиты от XSSI и защиты
+от XSRF/CSRF.
 
-TIP: Also consider adopting a [Content Security Policy](https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy) for your APIs.
+TIP: Также рассмотрите возможность
+внедрения [Content Security Policy](https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy) для
+ваших API.
 
-## XSSI protection
+## Защита от XSSI
 
-Cross-Site Script Inclusion (XSSI) is a form of [Cross-Site Scripting](https://en.wikipedia.org/wiki/Cross-site_scripting) attack where an attacker loads JSON data from your API endpoints as `<script>`s on a page they control. Different JavaScript techniques can then be used to access this data.
+Cross-Site Script Inclusion (XSSI) — это разновидность
+атаки [межсайтового скриптинга (Cross-Site Scripting)](https://en.wikipedia.org/wiki/Cross-site_scripting), при которой
+злоумышленник загружает JSON-данные из ваших API-эндпоинтов как `<script>` на подконтрольной ему странице. Затем могут
+использоваться различные методы JavaScript для доступа к этим данным.
 
-A common technique to prevent XSSI is to serve JSON responses with a "non-executable prefix", commonly `)]}',\n`. This prefix prevents the JSON response from being interpreted as valid executable JavaScript. When the API is loaded as data, the prefix can be stripped before JSON parsing.
+Распространенным методом предотвращения XSSI является добавление к JSON-ответам "неисполняемого префикса", обычно
+`)]}',\n`. Этот префикс предотвращает интерпретацию JSON-ответа как валидного исполняемого JavaScript. Когда API
+загружается как данные, префикс может быть удален перед парсингом JSON.
 
-`HttpClient` automatically strips this XSSI prefix (if present) when parsing JSON from a response.
+`HttpClient` автоматически удаляет этот префикс XSSI (если он присутствует) при парсинге JSON из ответа.
 
-## XSRF/CSRF protection
+## Защита от XSRF/CSRF
 
-[Cross-Site Request Forgery (XSRF or CSRF)](https://en.wikipedia.org/wiki/Cross-site_request_forgery) is an attack technique by which the attacker can trick an authenticated user into unknowingly executing actions on your website.
+[Межсайтовая подделка запроса (XSRF или CSRF)](https://en.wikipedia.org/wiki/Cross-site_request_forgery) — это техника
+атаки, с помощью которой злоумышленник может обманом заставить аутентифицированного пользователя неосознанно выполнить
+действия на вашем веб-сайте.
 
-`HttpClient` supports a [common mechanism](https://en.wikipedia.org/wiki/Cross-site_request_forgery#Cookie-to-header_token) used to prevent XSRF attacks. When performing HTTP requests, an interceptor reads a token from a cookie, by default `XSRF-TOKEN`, and sets it as an HTTP header, `X-XSRF-TOKEN`. Because only code that runs on your domain could read the cookie, the backend can be certain that the HTTP request came from your client application and not an attacker.
+`HttpClient`
+поддерживает [распространенный механизм](https://en.wikipedia.org/wiki/Cross-site_request_forgery#Cookie-to-header_token),
+используемый для предотвращения XSRF-атак. При выполнении HTTP-запросов Interceptor считывает токен из cookie (по
+умолчанию `XSRF-TOKEN`) и устанавливает его в качестве HTTP-заголовка `X-XSRF-TOKEN`. Поскольку только код, запущенный
+на вашем домене, может прочитать cookie, бэкенд может быть уверен, что HTTP-запрос пришел из вашего клиентского
+приложения, а не от злоумышленника.
 
-By default, an interceptor sends this header on all mutating requests (such as `POST`) to relative and same origin URLs, but not on `GET` or `HEAD` requests.
+По умолчанию Interceptor отправляет этот заголовок во всех изменяющих запросах (таких как `POST`) к относительным URL,
+но не в запросах GET/HEAD или запросах с абсолютным URL.
 
-<docs-callout helpful title="Why not protect GET requests?">
-CSRF protection is only needed for requests that can change state on the backend. By their nature, CSRF attacks cross domain boundaries, and the web's [same-origin policy](https://developer.mozilla.org/docs/Web/Security/Same-origin_policy) will prevent an attacking page from retrieving the results of authenticated `GET` requests.
+<docs-callout helpful title="Почему не защищаются GET-запросы?">
+Защита от CSRF необходима только для запросов, которые могут изменить состояние на бэкенде. По своей природе CSRF-атаки пересекают границы доменов, и веб-[политика одинакового источника (same-origin policy)](https://developer.mozilla.org/docs/Web/Security/Same-origin_policy) предотвратит получение атакующей страницей результатов аутентифицированных GET-запросов.
 </docs-callout>
 
-To take advantage of this, your server needs to set a token in a JavaScript readable session cookie called `XSRF-TOKEN` on either the page load or the first GET request. On subsequent requests the server can verify that the cookie matches the `X-XSRF-TOKEN` HTTP header, and therefore be sure that only code running on your domain could have sent the request. The token must be unique for each user and must be verifiable by the server; this prevents the client from making up its own tokens. Set the token to a digest of your site's authentication cookie with a salt for added security.
+Чтобы воспользоваться этим преимуществом, ваш сервер должен установить токен в сессионную cookie, доступную для
+JavaScript, с именем `XSRF-TOKEN` при загрузке страницы или при первом GET-запросе. При последующих запросах сервер
+может проверить, совпадает ли cookie с HTTP-заголовком `X-XSRF-TOKEN`, и, следовательно, быть уверенным, что запрос мог
+отправить только код, запущенный на вашем домене. Токен должен быть уникальным для каждого пользователя и поддаваться
+проверке сервером; это не позволяет клиенту создавать свои собственные токены. Для дополнительной безопасности
+установите токен как дайджест аутентификационной cookie вашего сайта с "солью".
 
-To prevent collisions in environments where multiple Angular apps share the same domain or subdomain, give each application a unique cookie name.
+Чтобы предотвратить коллизии в средах, где несколько приложений Angular используют один и тот же домен или поддомен,
+задайте каждому приложению уникальное имя cookie.
 
-<docs-callout important title="HttpClient supports only the client half of the XSRF protection scheme">
-  Your backend service must be configured to set the cookie for your page, and to verify that the header is present on all eligible requests. Failing to do so renders Angular's default protection ineffective.
+<docs-callout important title="HttpClient поддерживает только клиентскую часть схемы защиты XSRF">
+  Ваш бэкенд-сервис должен быть настроен на установку cookie для вашей страницы и проверку наличия заголовка во всех соответствующих запросах. Невыполнение этого требования делает защиту Angular по умолчанию неэффективной.
 </docs-callout>
 
-### Configure custom cookie/header names
+### Настройка пользовательских имен cookie/заголовков
 
-If your backend service uses different names for the XSRF token cookie or header, use `withXsrfConfiguration` to override the defaults.
+Если ваш бэкенд-сервис использует другие имена для cookie или заголовка токена XSRF, используйте `withXsrfConfiguration`
+для переопределения значений по умолчанию.
 
-Add it to the `provideHttpClient` call as follows:
+Добавьте его в вызов `provideHttpClient` следующим образом:
 
 ```ts
 export const appConfig: ApplicationConfig = {
@@ -51,9 +74,10 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-### Disabling XSRF protection
+### Отключение защиты XSRF
 
-If the built-in XSRF protection mechanism doesn't work for your application, you can disable it using the `withNoXsrfProtection` feature:
+Если встроенный механизм защиты XSRF не подходит для вашего приложения, вы можете отключить его, используя функцию
+`withNoXsrfProtection`:
 
 ```ts
 export const appConfig: ApplicationConfig = {

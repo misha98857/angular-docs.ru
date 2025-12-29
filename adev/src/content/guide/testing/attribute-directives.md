@@ -1,52 +1,63 @@
-# Testing Attribute Directives
+# Тестирование атрибутивных директив
 
-An _attribute directive_ modifies the behavior of an element, component or another directive.
-Its name reflects the way the directive is applied: as an attribute on a host element.
+_Атрибутивная директива_ изменяет поведение элемента, компонента или другой директивы.
+Ее название отражает способ применения: как атрибут хост-элемента.
 
-## Testing the `HighlightDirective`
+## Тестирование `HighlightDirective`
 
-The sample application's `HighlightDirective` sets the background color of an element based on either a data bound color or a default color \(lightgray\).
-It also sets a custom property of the element \(`customProperty`\) to `true` for no reason other than to show that it can.
+`HighlightDirective` из примера приложения устанавливает цвет фона элемента на основе привязанного цвета или цвета по
+умолчанию (светло-серый).
+Она также устанавливает пользовательское свойство элемента (`customProperty`) в `true` просто для того, чтобы показать,
+что это возможно.
 
 <docs-code header="highlight.directive.ts" path="adev/src/content/examples/testing/src/app/shared/highlight.directive.ts"/>
 
-It's used throughout the application, perhaps most simply in the `AboutComponent`:
+Она используется во всем приложении, возможно, проще всего в `AboutComponent`:
 
 <docs-code header="about.component.ts" path="adev/src/content/examples/testing/src/app/about/about.component.ts"/>
 
-Testing the specific use of the `HighlightDirective` within the `AboutComponent` requires only the techniques explored in the ["Nested component tests"](guide/testing/components-scenarios#nested-component-tests) section of [Component testing scenarios](guide/testing/components-scenarios).
+Тестирование конкретного использования `HighlightDirective` внутри `AboutComponent` требует только техник, рассмотренных
+в разделе ["Тестирование вложенных компонентов"](guide/testing/components-scenarios#nested-component-tests)
+руководства [Сценарии тестирования компонентов](guide/testing/components-scenarios).
 
 <docs-code header="about.component.spec.ts" path="adev/src/content/examples/testing/src/app/about/about.component.spec.ts" region="tests"/>
 
-However, testing a single use case is unlikely to explore the full range of a directive's capabilities.
-Finding and testing all components that use the directive is tedious, brittle, and almost as unlikely to afford full coverage.
+Однако тестирование одного варианта использования вряд ли раскроет весь спектр возможностей директивы.
+Поиск и тестирование всех компонентов, использующих директиву, утомительны, ненадежны и вряд ли обеспечат полное
+покрытие.
 
-_Class-only tests_ might be helpful, but attribute directives like this one tend to manipulate the DOM.
-Isolated unit tests don't touch the DOM and, therefore, do not inspire confidence in the directive's efficacy.
+_Тесты только класса_ (class-only tests) могут быть полезны, но атрибутивные директивы, подобные этой, как правило,
+манипулируют DOM.
+Изолированные модульные тесты не затрагивают DOM и, следовательно, не внушают уверенности в эффективности директивы.
 
-A better solution is to create an artificial test component that demonstrates all ways to apply the directive.
+Лучшее решение — создать искусственный тестовый компонент, демонстрирующий все способы применения директивы.
 
 <docs-code header="highlight.directive.spec.ts (TestComponent)" path="adev/src/content/examples/testing/src/app/shared/highlight.directive.spec.ts" region="test-component"/>
 
 <img alt="HighlightDirective spec in action" src="assets/images/guide/testing/highlight-directive-spec.png">
 
-HELPFUL: The `<input>` case binds the `HighlightDirective` to the name of a color value in the input box.
-The initial value is the word "cyan" which should be the background color of the input box.
+ПОЛЕЗНО: В случае с `<input>`, `HighlightDirective` привязывается к названию цвета в поле ввода.
+Начальное значение — слово "cyan" (голубой), которое должно стать цветом фона поля ввода.
 
-Here are some tests of this component:
+Вот несколько тестов этого компонента:
 
 <docs-code header="highlight.directive.spec.ts (selected tests)" path="adev/src/content/examples/testing/src/app/shared/highlight.directive.spec.ts" region="selected-tests"/>
 
-A few techniques are noteworthy:
+Стоит отметить несколько техник:
 
-- The `By.directive` predicate is a great way to get the elements that have this directive _when their element types are unknown_
-- The [`:not` pseudo-class](https://developer.mozilla.org/docs/Web/CSS/:not) in `By.css('h2:not([highlight])')` helps find `<h2>` elements that _do not_ have the directive.
-  `By.css('*:not([highlight])')` finds _any_ element that does not have the directive.
+- Предикат `By.directive` — отличный способ получить элементы, имеющие эту директиву, _когда типы их элементов
+  неизвестны_.
+- [Псевдокласс `:not`](https://developer.mozilla.org/docs/Web/CSS/:not) в `By.css('h2:not([highlight])')` помогает найти
+  элементы `<h2>`, у которых _нет_ директивы.
+  `By.css('*:not([highlight])')` находит _любой_ элемент, у которого нет директивы.
 
-- `DebugElement.styles` affords access to element styles even in the absence of a real browser, thanks to the `DebugElement` abstraction.
-  But feel free to exploit the `nativeElement` when that seems easier or more clear than the abstraction.
+- `DebugElement.styles` предоставляет доступ к стилям элементов даже при отсутствии реального браузера, благодаря
+  абстракции `DebugElement`.
+  Но не стесняйтесь использовать `nativeElement`, когда это кажется проще или понятнее, чем абстракция.
 
-- Angular adds a directive to the injector of the element to which it is applied.
-  The test for the default color uses the injector of the second `<h2>` to get its `HighlightDirective` instance and its `defaultColor`.
+- Angular добавляет директиву в инжектор элемента, к которому она применяется.
+  Тест для цвета по умолчанию использует инжектор второго `<h2>` для получения экземпляра его `HighlightDirective` и
+  значения `defaultColor`.
 
-- `DebugElement.properties` affords access to the artificial custom property that is set by the directive
+- `DebugElement.properties` предоставляет доступ к искусственному пользовательскому свойству, которое устанавливается
+  директивой.

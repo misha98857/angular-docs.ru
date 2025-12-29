@@ -1,14 +1,14 @@
-# Example Angular Internationalization application
+# Пример приложения с интернационализацией в Angular
 
-<!-- ## Explore the translated example application -->
+<!-- ## Изучите переведенный пример приложения -->
 
-<!-- Explore the sample application with French translations used in the [Angular Internationalization][GuideI18nOverview] guide: -->
-<!-- TODO: link to GitHub -->
-<!-- <docs-code live path="adev/src/content/examples/i18n" title="live example"/> -->
+<!-- Изучите пример приложения с французским переводом, используемый в руководстве по [Интернационализации Angular][GuideI18nOverview]: -->
+<!-- TODO: ссылка на GitHub -->
+<!-- <docs-code live path="adev/src/content/examples/i18n" title="живой пример"/> -->
 
-## `fr-CA` and `en-US` example
+## Пример для `fr-CA` и `en-US`
 
-The following tabs display the example application and the associated translation files.
+На следующих вкладках показаны пример приложения и связанные файлы перевода.
 
 <docs-code-multifile>
     <docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html"/>

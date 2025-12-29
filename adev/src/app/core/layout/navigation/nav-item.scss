@@ -3,10 +3,10 @@
 .adev-nav-item {
   color: var(--quaternary-contrast);
   position: relative;
-  width: 6.875rem;
+  width: 7rem;
 
   @include mq.for-phone-only {
-    width: 5.05rem;
+    width: 7rem;
   }
 
   @include mq.for-tablet {

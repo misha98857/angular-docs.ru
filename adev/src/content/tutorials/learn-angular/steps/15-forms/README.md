@@ -1,20 +1,22 @@
-# Forms Overview
+# Обзор форм
 
-Forms are a big part of many apps because they enable your app to accept user input. Let's learn about how forms are handled in Angular.
+Формы являются важной частью многих приложений, поскольку они позволяют принимать пользовательский ввод. Давайте узнаем,
+как работать с формами в Angular.
 
-In Angular, there are two types of forms: template-driven and reactive. You'll learn about both over the next few activities.
+В Angular существует два типа форм: управляемые шаблонами (template-driven) и реактивные (reactive). Вы узнаете об обоих
+типах в следующих нескольких уроках.
 
-NOTE: Learn more about [forms in Angular in the in-depth guide](/guide/forms).
+Примечание: Подробнее о [формах в Angular читайте в подробном руководстве](/guide/forms).
 
-In this activity, you'll learn how to set up a form using a template-driven approach.
+В этом уроке вы узнаете, как создать форму, используя подход template-driven (управляемый шаблоном).
 
 <hr>
 
 <docs-workflow>
 
-<docs-step title="Create an input field">
+<docs-step title="Создание поля ввода">
 
-In `user.ts`, update the template by adding a text input with the `id` set to `framework`, type set to `text`.
+В файле `user.ts` обновите шаблон, добавив текстовое поле ввода с `id`, установленным в `framework`, и типом `text`.
 
 ```angular-html
 <label for="framework">
@@ -25,11 +27,12 @@ In `user.ts`, update the template by adding a text input with the `id` set to `f
 
 </docs-step>
 
-<docs-step title="Import `FormsModule`">
+<docs-step title="Импорт FormsModule">
 
-For this form to use Angular features that enable data binding to forms, you'll need to import the `FormsModule`.
+Чтобы эта форма могла использовать функции Angular, обеспечивающие привязку данных к формам, необходимо импортировать
+`FormsModule`.
 
-Import the `FormsModule` from `@angular/forms` and add it to the `imports` array of the `User`.
+Импортируйте `FormsModule` из `@angular/forms` и добавьте его в массив `imports` компонента `User`.
 
 <docs-code language="ts" highlight="[2, 7]">
 import {Component} from '@angular/core';
@@ -44,11 +47,12 @@ export class User {}
 
 </docs-step>
 
-<docs-step title="Add binding to the value of the input">
+<docs-step title="Добавление привязки к значению поля ввода">
 
-The `FormsModule` has a directive called `ngModel` that binds the value of the input to a property in your class.
+В `FormsModule` есть директива `ngModel`, которая привязывает значение поля ввода к свойству вашего класса.
 
-Update the input to use the `ngModel` directive, specifically with the following syntax `[(ngModel)]="favoriteFramework"` to bind to the `favoriteFramework` property.
+Обновите поле ввода, чтобы использовать директиву `ngModel`, используя синтаксис `[(ngModel)]="favoriteFramework"` для
+привязки к свойству `favoriteFramework`.
 
 <docs-code language="html" highlight="[3]">
 <label for="framework">
@@ -57,14 +61,17 @@ Update the input to use the `ngModel` directive, specifically with the following
 </label>
 </docs-code>
 
-After you've made changes, try entering a value in the input field. Notice how it updates on the screen (yes, very cool).
+После внесения изменений попробуйте ввести значение в поле ввода. Обратите внимание, как оно обновляется на экране (да,
+очень круто).
 
-NOTE: The syntax `[()]` is known as "banana in a box" but it represents two-way binding: property binding and event binding. Learn more in the [Angular docs about two-way data binding](guide/templates/two-way-binding).
+ПРИМЕЧАНИЕ: Синтаксис `[()]` известен как «банан в коробке» (banana in a box), но он представляет собой двустороннюю
+привязку: привязку свойств и привязку событий. Подробнее читайте
+в [документации Angular о двусторонней привязке данных](guide/templates/two-way-binding).
 
 </docs-step>
 
 </docs-workflow>
 
-You've now taken an important first step towards building forms with Angular.
+Вы сделали важный первый шаг к созданию форм с помощью Angular.
 
-Nice work. Let's keep the momentum going!
+Отличная работа. Продолжаем в том же духе!
