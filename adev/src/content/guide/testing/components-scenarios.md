@@ -702,7 +702,7 @@ _Маршрутизируемый компонент_ — это пункт на
 
 <docs-code header="hero-detail.component.spec.ts (selected tests)" path="adev/src/content/examples/testing/src/app/hero/hero-detail.component.spec.ts" region="selected-tests"/>
 
-## Переопределение провайдеров компонентов
+## Переопределение провайдеров компонентов {#override-component-providers}
 
 `HeroDetailComponent` предоставляет свой собственный `HeroDetailService`.
 
@@ -773,7 +773,7 @@ providers?: any[];
 
 </docs-code>
 
-### Предоставление _шпиона-заглушки_ (`HeroDetailServiceSpy`)
+### Предоставление _шпиона-заглушки_ (`HeroDetailServiceSpy`) {#provide-a-spy-stub-herodetailservicespy}
 
 Этот пример полностью заменяет массив `providers` компонента новым массивом, содержащим `HeroDetailServiceSpy`.
 
