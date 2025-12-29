@@ -1,19 +1,19 @@
-# Defining dependency providers
+# Определение провайдеров зависимостей
 
-Angular provides two ways to make services available for injection:
+Angular предоставляет два способа сделать сервисы доступными для внедрения:
 
-1. **Automatic provision** - Using `providedIn` in the `@Injectable` decorator or by providing a factory in the `InjectionToken` configuration
-2. **Manual provision** - Using the `providers` array in components, directives, routes, or application config
+1.  **Автоматическое предоставление** — использование `providedIn` в декораторе `@Injectable` или предоставление фабрики в конфигурации `InjectionToken`.
+2.  **Ручное предоставление** — использование массива `providers` в компонентах, директивах, маршрутах или конфигурации приложения.
 
-In the [previous guide](/guide/di/creating-and-using-services), you learned how to create services using `providedIn: 'root'`, which handles most common use cases. This guide explores additional patterns for both automatic and manual provider configuration.
+В [предыдущем руководстве](/guide/di/creating-and-using-services) вы узнали, как создавать сервисы с использованием `providedIn: 'root'`, что покрывает большинство распространенных случаев использования. В этом руководстве рассматриваются дополнительные паттерны как для автоматической, так и для ручной настройки провайдеров.
 
-## Automatic provision for non-class dependencies
+## Автоматическое предоставление для зависимостей, не являющихся классами
 
-While the `@Injectable` decorator with `providedIn: 'root'` works great for services (classes), you might need to provide other types of values globally - like configuration objects, functions, or primitive values. Angular provides `InjectionToken` for this purpose.
+Хотя декоратор `@Injectable` с `providedIn: 'root'` отлично работает для сервисов (классов), вам может понадобиться предоставить другие типы значений глобально — например, объекты конфигурации, функции или примитивные значения. Для этой цели Angular предоставляет `InjectionToken`.
 
-### What is an InjectionToken?
+### Что такое InjectionToken?
 
-An `InjectionToken` is an object that Angular's dependency injection system uses to uniquely identify values for injection. Think of it as a special key that lets you store and retrieve any type of value in Angular's DI system:
+`InjectionToken` — это объект, который система внедрения зависимостей Angular использует для уникальной идентификации значений для внедрения. Думайте о нем как о специальном ключе, который позволяет сохранять и извлекать любой тип значения в системе DI Angular:
 
 ```ts
 import { InjectionToken } from '@angular/core';
@@ -32,11 +32,11 @@ export interface Config {
 export const CONFIG_TOKEN = new InjectionToken<Config>('app.config');
 ```
 
-NOTE: The string parameter (e.g., `'api.url'`) is a description purely for debugging — Angular identifies tokens by their object reference, not this string.
+ПРИМЕЧАНИЕ: Строковый параметр (например, `'api.url'`) — это описание исключительно для отладки. Angular идентифицирует токены по ссылке на объект, а не по этой строке.
 
-### InjectionToken with `providedIn: 'root'`
+### InjectionToken с `providedIn: 'root'`
 
-An `InjectionToken` that has a `factory` results in `providedIn: 'root'` by default (but can be overidden via the `providedIn` prop).
+`InjectionToken`, имеющий `factory`, по умолчанию получает `providedIn: 'root'` (но это можно переопределить через свойство `providedIn`).
 
 ```ts
 // 📁 /app/config.token.ts
@@ -71,9 +71,9 @@ export class HeaderComponent {
 }
 ```
 
-### When to use InjectionToken with factory functions
+### Когда использовать InjectionToken с фабричными функциями
 
-InjectionToken with factory functions is ideal when you can't use a class but need to provide dependencies globally:
+`InjectionToken` с фабричными функциями идеально подходит, когда вы не можете использовать класс, но вам нужно предоставить зависимости глобально:
 
 ```ts
 // 📁 /app/logger.token.ts
@@ -129,23 +129,23 @@ export const FEATURE_FLAGS = new InjectionToken<Map<string, boolean>>('feature.f
 });
 ```
 
-This approach offers several advantages:
+Этот подход имеет ряд преимуществ:
 
-- **No manual provider configuration needed** - Works just like `providedIn: 'root'` for services
-- **Tree-shakeable** - Only included if actually used
-- **Type-safe** - Full TypeScript support for non-class values
-- **Can inject other dependencies** - Factory functions can use `inject()` to access other services
+-   **Не требуется ручная настройка провайдера** — работает так же, как `providedIn: 'root'` для сервисов.
+-   **Tree-shakeable** — включается в сборку только при фактическом использовании.
+-   **Типобезопасность** — полная поддержка TypeScript для значений, не являющихся классами.
+-   **Возможность внедрять другие зависимости** — фабричные функции могут использовать `inject()` для доступа к другим сервисам.
 
-## Understanding manual provider configuration
+## Понимание ручной настройки провайдеров
 
-When you need more control than `providedIn: 'root'` offers, you can manually configure providers. Manual configuration through the `providers` array is useful when:
+Когда вам нужно больше контроля, чем предлагает `providedIn: 'root'`, вы можете настроить провайдеры вручную. Ручная настройка через массив `providers` полезна, когда:
 
-1. **The service doesn't have `providedIn`** - Services without automatic provision must be manually provided
-2. **You want a new instance** - To create a separate instance at the component/directive level instead of using the shared one
-3. **You need runtime configuration** - When service behavior depends on runtime values
-4. **You're providing non-class values** - Configuration objects, functions, or primitive values
+1.  **У сервиса нет `providedIn`** — сервисы без автоматического предоставления должны быть предоставлены вручную.
+2.  **Вы хотите создать новый экземпляр** — чтобы создать отдельный экземпляр на уровне компонента/директивы вместо использования общего.
+3.  **Нужна конфигурация во время выполнения** — когда поведение сервиса зависит от значений времени выполнения.
+4.  **Вы предоставляете значения, не являющиеся классами** — объекты конфигурации, функции или примитивные значения.
 
-### Example: Service without `providedIn`
+### Пример: Сервис без `providedIn`
 
 ```ts
 import { Injectable, Component, inject } from '@angular/core';
@@ -172,9 +172,9 @@ export class ExampleComponent {
 }
 ```
 
-### Example: Creating component-specific instances
+### Пример: Создание экземпляров для конкретного компонента
 
-Services with `providedIn: 'root'` can be overridden at the component level. This ties the instance of the service to the life of a component. As a result, when the component gets destroyed, the provided service is also destroyed as well.
+Сервисы с `providedIn: 'root'` могут быть переопределены на уровне компонента. Это связывает экземпляр сервиса с жизненным циклом компонента. В результате, когда компонент уничтожается, предоставленный сервис также уничтожается.
 
 ```ts
 import { Injectable, Component, inject } from '@angular/core';
@@ -196,17 +196,17 @@ export class IsolatedComponent {
 }
 ```
 
-## Injector hierarchy in Angular
+## Иерархия инжекторов в Angular
 
-Angular's dependency injection system is hierarchical. When a component requests a dependency, Angular starts with that component's injector and walks up the tree until it finds a provider for that dependency. Each component in your application tree can have its own injector, and these injectors form a hierarchy that mirrors your component tree.
+Система внедрения зависимостей Angular является иерархической. Когда компонент запрашивает зависимость, Angular начинает с инжектора этого компонента и поднимается вверх по дереву, пока не найдет провайдер для этой зависимости. Каждый компонент в дереве вашего приложения может иметь свой собственный инжектор, и эти инжекторы образуют иерархию, отражающую дерево компонентов.
 
-This hierarchy enables:
+Эта иерархия обеспечивает:
 
-- **Scoped instances**: Different parts of your app can have different instances of the same service
-- **Override behavior**: Child components can override providers from parent components
-- **Memory efficiency**: Services are only instantiated where needed
+-   **Экземпляры с ограниченной областью видимости**: Разные части вашего приложения могут иметь разные экземпляры одного и того же сервиса.
+-   **Поведение переопределения**: Дочерние компоненты могут переопределять провайдеры родительских компонентов.
+-   **Эффективность использования памяти**: Сервисы создаются только там, где они необходимы.
 
-In Angular, any element with a component or directive can provide values to all of its descendants.
+В Angular любой элемент с компонентом или директивой может предоставлять значения всем своим потомкам.
 
 ```mermaid
 graph TD
@@ -220,19 +220,19 @@ graph TD
     end
 ```
 
-In the example above:
+В примере выше:
 
-1. `SocialApp` can provide values for `UserProfile` and `FriendList`
-2. `FriendList` can provide values for injection to `FriendEntry`, but cannot provide values for injection in `UserProfile` because it's not part of the tree
+1.  `SocialApp` может предоставлять значения для `UserProfile` и `FriendList`.
+2.  `FriendList` может предоставлять значения для внедрения в `FriendEntry`, но не может предоставлять значения для `UserProfile`, так как тот не является частью этого дерева.
 
-## Declaring a provider
+## Объявление провайдера
 
-Think of Angular's dependency injection system as a hash map or dictionary. Each provider configuration object defines a key-value pair:
+Представьте систему внедрения зависимостей Angular как хеш-карту или словарь. Каждый объект конфигурации провайдера определяет пару ключ-значение:
 
-- **Key (Provider identifier)**: The unique identifier you use to request a dependency
-- **Value**: What Angular should return when that token is requested
+-   **Ключ (Идентификатор провайдера)**: Уникальный идентификатор, который вы используете для запроса зависимости.
+-   **Значение**: То, что Angular должен вернуть при запросе этого токена.
 
-When manually providing dependencies, you typically see this shorthand syntax:
+При ручном предоставлении зависимостей вы обычно видите такой сокращенный синтаксис:
 
 ```angular-ts
 import { Component } from '@angular/core';
@@ -245,7 +245,7 @@ import { LocalService } from './local-service';
 export class ExampleComponent { }
 ```
 
-This is actually a shorthand for a more detailed provider configuration:
+На самом деле это сокращение для более детальной конфигурации провайдера:
 
 ```ts
 {
@@ -259,27 +259,27 @@ This is actually a shorthand for a more detailed provider configuration:
 }
 ```
 
-### Provider configuration object
+### Объект конфигурации провайдера
 
-Every provider configuration object has two primary parts:
+Каждый объект конфигурации провайдера состоит из двух основных частей:
 
-1. **Provider identifier**: The unique key that Angular uses to get the dependency (set via the `provide` property)
-2. **Value**: The actual dependency that you want Angular to fetch, configured with different keys based on the desired type:
-   - `useClass` - Provides a JavaScript class
-   - `useValue` - Provides a static value
-   - `useFactory` - Provides a factory function that returns the value
-   - `useExisting` - Provides an alias to an existing provider
+1.  **Идентификатор провайдера**: Уникальный ключ, который Angular использует для получения зависимости (устанавливается через свойство `provide`).
+2.  **Значение**: Фактическая зависимость, которую вы хотите, чтобы Angular извлек, настроенная с помощью различных ключей в зависимости от желаемого типа:
+    -   `useClass` — Предоставляет класс JavaScript.
+    -   `useValue` — Предоставляет статическое значение.
+    -   `useFactory` — Предоставляет фабричную функцию, которая возвращает значение.
+    -   `useExisting` — Предоставляет псевдоним для существующего провайдера.
 
-### Provider identifiers
+### Идентификаторы провайдеров
 
-Provider identifiers allow Angular's dependency injection (DI) system to retrieve a dependency through a unique ID. You can generate provider identifiers in two ways:
+Идентификаторы провайдеров позволяют системе внедрения зависимостей (DI) Angular получать зависимость по уникальному ID. Вы можете генерировать идентификаторы провайдеров двумя способами:
 
-1. [Class names](#class-names)
-2. [Injection tokens](#injection-tokens)
+1.  [Имена классов](#class-names)
+2.  [Токены внедрения (Injection tokens)](#injection-tokens)
 
-#### Class names
+#### Имена классов {#class-names}
 
-Class name use the imported class directly as the identifier:
+Имя класса использует импортированный класс непосредственно в качестве идентификатора:
 
 ```angular-ts
 import { Component } from '@angular/core';
@@ -294,11 +294,11 @@ import { LocalService } from './local-service';
 export class ExampleComponent { /* ... */ }
 ```
 
-The class serves as both the identifier and the implementation, which is why Angular provides the shorthand `providers: [LocalService]`.
+Класс служит одновременно и идентификатором, и реализацией, поэтому Angular предоставляет сокращение `providers: [LocalService]`.
 
-#### Injection tokens
+#### Токены внедрения (Injection tokens) {#injection-tokens}
 
-Angular provides a built-in [`InjectionToken`](api/core/InjectionToken) class that creates a unique object reference for injectable values or when you want to provide multiple implementations of the same interface.
+Angular предоставляет встроенный класс [`InjectionToken`](api/core/InjectionToken), который создает уникальную ссылку на объект для внедряемых значений или когда вы хотите предоставить несколько реализаций одного интерфейса.
 
 ```ts
 // 📁 /app/tokens.ts
@@ -308,9 +308,9 @@ import { DataService } from './data-service.interface';
 export const DATA_SERVICE_TOKEN = new InjectionToken<DataService>('DataService');
 ```
 
-NOTE: The string `'DataService'` is a description used purely for debugging purposes. Angular identifies the token by its object reference, not this string.
+ПРИМЕЧАНИЕ: Строка `'DataService'` — это описание, используемое исключительно для отладки. Angular идентифицирует токены по ссылке на объект, а не по этой строке.
 
-Use the token in your provider configuration:
+Используйте токен в конфигурации провайдера:
 
 ```angular-ts
 import { Component, inject } from '@angular/core';
@@ -328,9 +328,9 @@ export class ExampleComponent {
 }
 ```
 
-#### Can TypeScript interfaces be identifiers for injection?
+#### Могут ли интерфейсы TypeScript быть идентификаторами для внедрения?
 
-TypeScript interfaces cannot be used for injection because they don't exist at runtime:
+Интерфейсы TypeScript нельзя использовать для внедрения, так как они не существуют во время выполнения:
 
 ```ts
 // ❌ This won't work!
@@ -361,13 +361,13 @@ export class ExampleComponent {
 }
 ```
 
-The InjectionToken provides a runtime value that Angular's DI system can use, while still maintaining type safety through TypeScript's generic type parameter.
+`InjectionToken` предоставляет значение времени выполнения, которое может использовать система DI Angular, сохраняя при этом типобезопасность благодаря параметру универсального типа (generic) TypeScript.
 
-### Provider value types
+### Типы значений провайдера
 
 #### useClass
 
-`useClass` provides a JavaScript class as a dependency. This is the default when using the shorthand syntax:
+`useClass` предоставляет класс JavaScript в качестве зависимости. Это значение по умолчанию при использовании сокращенного синтаксиса:
 
 ```ts
 // Shorthand
@@ -392,9 +392,9 @@ providers: [
 ]
 ```
 
-#### Practical example: Logger substitution
+#### Практический пример: Замена логгера
 
-You can substitute implementations to extend functionality:
+Вы можете подменять реализации для расширения функциональности:
 
 ```ts
 import { Injectable, Component, inject } from '@angular/core';
@@ -441,7 +441,7 @@ export class ExampleComponent {
 
 #### useValue
 
-`useValue` provides any JavaScript data type as a static value:
+`useValue` предоставляет любой тип данных JavaScript как статическое значение:
 
 ```ts
 providers: [
@@ -451,11 +451,11 @@ providers: [
 ]
 ```
 
-IMPORTANT: TypeScript types and interfaces cannot serve as dependency values. They exist only at compile-time.
+ВАЖНО: Типы и интерфейсы TypeScript не могут служить значениями зависимостей. Они существуют только во время компиляции.
 
-#### Practical example: Application configuration
+#### Практический пример: Конфигурация приложения
 
-A common use case for `useValue` is providing application configuration:
+Распространенный случай использования `useValue` — предоставление конфигурации приложения:
 
 ```ts
 // Define configuration interface
@@ -501,7 +501,7 @@ export class HeaderComponent {
 
 #### useFactory
 
-`useFactory` provides a function that generates a new value for injection:
+`useFactory` предоставляет функцию, которая генерирует новое значение для внедрения:
 
 ```ts
 export const loggerFactory = (config: AppConfig) => {
@@ -517,7 +517,7 @@ providers: [
 ]
 ```
 
-You can mark factory dependencies as optional:
+Вы можете пометить зависимости фабрики как необязательные:
 
 ```ts
 import { Optional } from '@angular/core';
@@ -533,9 +533,9 @@ providers: [
 ]
 ```
 
-#### Practical example: Configuration-based API client
+#### Практический пример: API-клиент на основе конфигурации
 
-Here's a complete example showing how to use a factory to create a service with runtime configuration:
+Вот полный пример, показывающий, как использовать фабрику для создания сервиса с конфигурацией во время выполнения:
 
 ```ts
 // Service that needs runtime configuration
@@ -590,7 +590,7 @@ export class DashboardComponent {
 
 #### useExisting
 
-`useExisting` creates an alias for a provider that was already defined. Both tokens return the same instance:
+`useExisting` создает псевдоним для провайдера, который уже был определен. Оба токена возвращают один и тот же экземпляр:
 
 ```ts
 providers: [
@@ -599,11 +599,11 @@ providers: [
 ]
 ```
 
-IMPORTANT: Don't confuse `useExisting` with `useClass`. `useClass` creates separate instances, while `useExisting` ensures you get the same singleton instance.
+ВАЖНО: Не путайте `useExisting` с `useClass`. `useClass` создает отдельные экземпляры, тогда как `useExisting` гарантирует получение того же самого синглтон-экземпляра.
 
-### Multiple providers
+### Множественные провайдеры
 
-Use the `multi: true` flag when multiple providers contribute values to the same token:
+Используйте флаг `multi: true`, когда несколько провайдеров предоставляют значения для одного и того же токена:
 
 ```ts
 export const INTERCEPTOR_TOKEN = new InjectionToken<Interceptor[]>('interceptors');
@@ -615,24 +615,24 @@ providers: [
 ]
 ```
 
-When you inject `INTERCEPTOR_TOKEN`, you'll receive an array containing instances of all three interceptors.
+Когда вы внедряете `INTERCEPTOR_TOKEN`, вы получаете массив, содержащий экземпляры всех трех перехватчиков.
 
-## Where can you specify providers?
+## Где можно указывать провайдеры?
 
-Angular offers several levels where you can register providers, each with different implications for scope, lifecycle, and performance:
+Angular предлагает несколько уровней, где можно зарегистрировать провайдеры, каждый из которых имеет свои последствия для области видимости, жизненного цикла и производительности:
 
-- [**Application bootstrap**](#application-bootstrap) - Global singletons available everywhere
-- [**On an element (component or directive)**](#component-or-directive-providers) - Isolated instances for specific component trees
-- [**Route**](#route-providers) - Feature-specific services for lazy-loaded modules
+-   [**Загрузка приложения (Bootstrap)**](#application-bootstrap) — Глобальные синглтоны, доступные везде.
+-   [**На элементе (компонент или директива)**](#component-or-directive-providers) — Изолированные экземпляры для конкретных деревьев компонентов.
+-   [**Маршрут**](#route-providers) — Сервисы, специфичные для функций, для лениво загружаемых модулей.
 
-### Application bootstrap
+### Загрузка приложения (Bootstrap) {#application-bootstrap}
 
-Use application-level providers in `bootstrapApplication` when:
+Используйте провайдеры уровня приложения в `bootstrapApplication`, когда:
 
-- **The service is used across multiple feature areas** - Services like HTTP clients, logging, or authentication that many parts of your app need
-- **You want a true singleton** - One instance shared by the entire application
-- **The service has no component-specific configuration** - General-purpose utilities that work the same everywhere
-- **You're providing global configuration** - API endpoints, feature flags, or environment settings
+-   **Сервис используется в нескольких функциональных областях** — сервисы, такие как HTTP-клиенты, логирование или аутентификация, которые нужны многим частям вашего приложения.
+-   **Вам нужен настоящий синглтон** — один экземпляр, общий для всего приложения.
+-   **У сервиса нет конфигурации, специфичной для компонента** — утилиты общего назначения, которые работают одинаково везде.
+-   **Вы предоставляете глобальную конфигурацию** — конечные точки API, флаги функций или настройки среды.
 
 ```ts
 // main.ts
@@ -646,34 +646,34 @@ bootstrapApplication(AppComponent, {
 });
 ```
 
-**Benefits:**
+**Преимущества:**
 
-- Single instance reduces memory usage
-- Available everywhere without additional setup
-- Easier to manage global state
+-   Один экземпляр снижает использование памяти.
+-   Доступен везде без дополнительной настройки.
+-   Проще управлять глобальным состоянием.
 
-**Drawbacks:**
+**Недостатки:**
 
-- Always included in your JavaScript bundle, even if the value is never injected
-- Cannot be easily customized per feature
-- Harder to test individual components in isolation
+-   Всегда включается в JavaScript-бандл, даже если значение никогда не внедряется.
+-   Нельзя легко настроить для каждой функции.
+-   Сложнее тестировать отдельные компоненты в изоляции.
 
-#### Why provide during bootstrap instead of using `providedIn: 'root'`?
+#### Зачем предоставлять во время загрузки вместо использования `providedIn: 'root'`?
 
-You might want a provider during bootstrap when:
+Вам может понадобиться провайдер во время загрузки, когда:
 
-- The provider has side-effects (e.g., installing the client-side router)
-- The provider requires configuration (e.g., routes)
-- You're using Angular's `provideSomething` pattern (e.g., `provideRouter`, `provideHttpClient`)
+-   Провайдер имеет побочные эффекты (например, установка клиентского роутера).
+-   Провайдер требует конфигурации (например, маршруты).
+-   Вы используете паттерн Angular `provideSomething` (например, `provideRouter`, `provideHttpClient`).
 
-### Component or directive providers
+### Провайдеры компонентов или директив {#component-or-directive-providers}
 
-Use component or directive providers when:
+Используйте провайдеры компонентов или директив, когда:
 
-- **The service has component-specific state** - Form validators, component-specific caches, or UI state managers
-- **You need isolated instances** - Each component needs its own copy of the service
-- **The service is only used by one component tree** - Specialized services that don't need global access
-- **You're creating reusable components** - Components that should work independently with their own services
+-   **Сервис имеет состояние, специфичное для компонента** — валидаторы форм, кеши конкретных компонентов или менеджеры состояния UI.
+-   **Вам нужны изолированные экземпляры** — каждому компоненту нужна своя копия сервиса.
+-   **Сервис используется только одним деревом компонентов** — специализированные сервисы, которым не нужен глобальный доступ.
+-   **Вы создаете переиспользуемые компоненты** — компоненты, которые должны работать независимо со своими собственными сервисами.
 
 ```angular-ts
 // Specialized form component with its own validation service
@@ -696,28 +696,28 @@ export class AdvancedFormComponent { }
 export class ModalComponent { }
 ```
 
-**Benefits:**
+**Преимущества:**
 
-- Better encapsulation and isolation
-- Easier to test components individually
-- Multiple instances can coexist with different configurations
+-   Лучшая инкапсуляция и изоляция.
+-   Проще тестировать компоненты по отдельности.
+-   Несколько экземпляров могут сосуществовать с разными конфигурациями.
 
-**Drawbacks:**
+**Недостатки:**
 
-- New instance created for each component (higher memory usage)
-- No shared state between components
-- Must be provided wherever needed
-- Always included in the same JavaScript bundle as the component or directive, even if the value is never injected
+-   Создается новый экземпляр для каждого компонента (более высокое потребление памяти).
+-   Нет общего состояния между компонентами.
+-   Должен быть предоставлен везде, где необходим.
+-   Всегда включается в тот же JavaScript-бандл, что и компонент или директива, даже если значение никогда не внедряется.
 
-NOTE: If multiple directives on the same element provide the same token, one will win, but which one is undefined.
+ПРИМЕЧАНИЕ: Если несколько директив на одном элементе предоставляют один и тот же токен, победит одна из них, но какая именно — не определено.
 
-### Route providers
+### Провайдеры маршрутов {#route-providers}
 
-Use route-level providers for:
+Используйте провайдеры уровня маршрута для:
 
-- **Feature-specific services** - Services only needed for particular routes or feature modules
-- **Lazy-loaded module dependencies** - Services that should only load with specific features
-- **Route-specific configuration** - Settings that vary by application area
+-   **Сервисов, специфичных для функций** — сервисы, необходимые только для конкретных маршрутов или функциональных модулей.
+-   **Зависимостей лениво загружаемых модулей** — сервисы, которые должны загружаться только с определенными функциями.
+-   **Конфигурации, специфичной для маршрута** — настройки, которые варьируются в зависимости от области приложения.
 
 ```ts
 // routes.ts
@@ -741,13 +741,13 @@ export const routes: Routes = [
 ];
 ```
 
-## Library author patterns
+## Паттерны для авторов библиотек
 
-When creating Angular libraries, you often need to provide flexible configuration options for consumers while maintaining clean APIs. Angular's own libraries demonstrate powerful patterns for achieving this.
+При создании библиотек Angular часто требуется предоставить потребителям гибкие возможности конфигурации, сохраняя при этом чистый API. Собственные библиотеки Angular демонстрируют мощные паттерны для достижения этой цели.
 
-### The `provide` pattern
+### Паттерн `provide`
 
-Instead of requiring users to manually configure complex providers, library authors can export functions that return provider configurations:
+Вместо того чтобы требовать от пользователей вручную настраивать сложные провайдеры, авторы библиотек могут экспортировать функции, возвращающие конфигурации провайдеров:
 
 ```ts
 // 📁 /libs/analytics/src/providers.ts
@@ -792,9 +792,9 @@ bootstrapApplication(AppComponent, {
 });
 ```
 
-### Advanced provider patterns with options
+### Продвинутые паттерны провайдеров с опциями
 
-For more complex scenarios, you can combine multiple configuration approaches:
+Для более сложных сценариев можно комбинировать несколько подходов к конфигурации:
 
 ```ts
 // 📁 /libs/http-client/src/provider.ts
@@ -910,14 +910,14 @@ bootstrapApplication(AppComponent, {
 });
 ```
 
-### Why use provider functions instead of direct configuration?
+### Зачем использовать функции-провайдеры вместо прямой конфигурации?
 
-Provider functions offer several advantages for library authors:
+Функции-провайдеры предлагают ряд преимуществ для авторов библиотек:
 
-1. **Encapsulation** - Internal tokens and implementation details remain private
-2. **Type safety** - TypeScript ensures correct configuration at compile time
-3. **Flexibility** - Easily compose features with `with*` pattern
-4. **Future-proofing** - Internal implementation can change without breaking consumers
-5. **Consistency** - Aligns with Angular's own patterns (`provideRouter`, `provideHttpClient`, etc.)
+1.  **Инкапсуляция** — внутренние токены и детали реализации остаются приватными.
+2.  **Типобезопасность** — TypeScript обеспечивает правильную конфигурацию во время компиляции.
+3.  **Гибкость** — легкая компоновка функций с помощью паттерна `with*`.
+4.  **Устойчивость к изменениям** — внутренняя реализация может меняться, не ломая код потребителей.
+5.  **Единообразие** — соответствует собственным паттернам Angular (`provideRouter`, `provideHttpClient` и т.д.).
 
-This pattern is extensively used in Angular's own libraries and is considered a best practice for library authors who need to provide configurable services.
+Этот паттерн широко используется в собственных библиотеках Angular и считается лучшей практикой для авторов библиотек, которым необходимо предоставлять настраиваемые сервисы.
