@@ -1,33 +1,33 @@
-# Component testing scenarios
+# Сценарии тестирования компонентов
 
-This guide explores common component testing use cases.
+В этом руководстве рассматриваются распространенные сценарии использования тестирования компонентов.
 
-## Component binding
+## Привязка компонента
 
-In the example application, the `BannerComponent` presents static title text in the HTML template.
+В примере приложения `BannerComponent` отображает статический текст заголовка в HTML-шаблоне.
 
-After a few changes, the `BannerComponent` presents a dynamic title by binding to the component's `title` property like this.
+После нескольких изменений `BannerComponent` отображает динамический заголовок, привязываясь к свойству компонента `title` следующим образом.
 
 <docs-code header="banner.component.ts" path="adev/src/content/examples/testing/src/app/banner/banner.component.ts" region="component"/>
 
-As minimal as this is, you decide to add a test to confirm that component actually displays the right content where you think it should.
+Несмотря на простоту, вы решаете добавить тест, чтобы подтвердить, что компонент действительно отображает правильный контент там, где это ожидается.
 
-### Query for the `<h1>`
+### Запрос элемента `<h1>`
 
-You'll write a sequence of tests that inspect the value of the `<h1>` element that wraps the _title_ property interpolation binding.
+Вы напишете последовательность тестов, которые проверяют значение элемента `<h1>`, содержащего интерполяционную привязку свойства _title_.
 
-You update the `beforeEach` to find that element with a standard HTML `querySelector` and assign it to the `h1` variable.
+Вы обновляете `beforeEach`, чтобы найти этот элемент с помощью стандартного HTML `querySelector` и присвоить его переменной `h1`.
 
 <docs-code header="banner.component.spec.ts (setup)" path="adev/src/content/examples/testing/src/app/banner/banner.component.spec.ts" region="setup"/>
 
-### `createComponent()` does not bind data
+### `createComponent()` не выполняет привязку данных
 
-For your first test you'd like to see that the screen displays the default `title`.
-Your instinct is to write a test that immediately inspects the `<h1>` like this:
+Для первого теста вы хотите убедиться, что на экране отображается `title` по умолчанию.
+Интуиция подсказывает написать тест, который сразу проверяет `<h1>`, например так:
 
 <docs-code path="adev/src/content/examples/testing/src/app/banner/banner.component.spec.ts" region="expect-h1-default-v1"/>
 
-_That test fails_ with the message:
+_Этот тест не проходит_ с сообщением:
 
 <docs-code language="javascript">
 
@@ -35,86 +35,83 @@ expected '' to contain 'Test Tour of Heroes'.
 
 </docs-code>
 
-Binding happens when Angular performs **change detection**.
+Привязка происходит, когда Angular выполняет **обнаружение изменений** (change detection).
 
-In production, change detection kicks in automatically when Angular creates a component or the user enters a keystroke, for example.
+В продакшене обнаружение изменений запускается автоматически, например, когда Angular создает компонент или пользователь нажимает клавишу.
 
-The `TestBed.createComponent` does not trigger change detection by default; a fact confirmed in the revised test:
+`TestBed.createComponent` не запускает обнаружение изменений по умолчанию; этот факт подтверждается в исправленном тесте:
 
 <docs-code path="adev/src/content/examples/testing/src/app/banner/banner.component.spec.ts" region="test-w-o-detect-changes"/>
 
 ### `detectChanges()`
 
-You can tell the `TestBed` to perform data binding by calling `fixture.detectChanges()`.
-Only then does the `<h1>` have the expected title.
+Вы можете указать `TestBed` выполнить привязку данных, вызвав `fixture.detectChanges()`.
+Только после этого `<h1>` будет содержать ожидаемый заголовок.
 
 <docs-code path="adev/src/content/examples/testing/src/app/banner/banner.component.spec.ts" region="expect-h1-default"/>
 
-Delayed change detection is intentional and useful.
-It gives the tester an opportunity to inspect and change the state of the component _before Angular initiates data binding and calls [lifecycle hooks](guide/components/lifecycle)_.
+Отложенное обнаружение изменений сделано намеренно и является полезным.
+Это дает тестировщику возможность проверить и изменить состояние компонента _до того, как Angular инициирует привязку данных и вызовет [хуки жизненного цикла](guide/components/lifecycle)_.
 
-Here's another test that changes the component's `title` property _before_ calling `fixture.detectChanges()`.
+Вот еще один тест, который изменяет свойство `title` компонента _перед_ вызовом `fixture.detectChanges()`.
 
 <docs-code path="adev/src/content/examples/testing/src/app/banner/banner.component.spec.ts" region="after-change"/>
 
-### Automatic change detection
+### Автоматическое обнаружение изменений
 
-The `BannerComponent` tests frequently call `detectChanges`.
-Many testers prefer that the Angular test environment run change detection automatically like it does in production.
+Тесты `BannerComponent` часто вызывают `detectChanges`.
+Многие тестировщики предпочитают, чтобы среда тестирования Angular запускала обнаружение изменений автоматически, как это происходит в продакшене.
 
-That's possible by configuring the `TestBed` with the `ComponentFixtureAutoDetect` provider.
-First import it from the testing utility library:
+Это возможно путем настройки `TestBed` с провайдером `ComponentFixtureAutoDetect`.
+Сначала импортируйте его из библиотеки утилит тестирования:
 
 <docs-code header="banner.component.detect-changes.spec.ts (import)" path="adev/src/content/examples/testing/src/app/banner/banner.component.detect-changes.spec.ts" region="import-ComponentFixtureAutoDetect"/>
 
-Then add it to the `providers` array of the testing module configuration:
+Затем добавьте его в массив `providers` конфигурации модуля тестирования:
 
 <docs-code header="banner.component.detect-changes.spec.ts (AutoDetect)" path="adev/src/content/examples/testing/src/app/banner/banner.component.detect-changes.spec.ts" region="auto-detect"/>
 
-HELPFUL: You can also use the `fixture.autoDetectChanges()` function instead if you only want to enable automatic change detection
-after making updates to the state of the fixture's component. In addition, automatic change detection is on by default
-when using `provideZonelessChangeDetection` and turning it off is not recommended.
+ПОЛЕЗНО: Вы также можете использовать функцию `fixture.autoDetectChanges()`, если хотите включить автоматическое обнаружение изменений только после обновления состояния компонента фикстуры. Кроме того, автоматическое обнаружение изменений включено по умолчанию при использовании `provideZonelessChangeDetection`, и отключать его не рекомендуется.
 
-Here are three tests that illustrate how automatic change detection works.
+Вот три теста, иллюстрирующие работу автоматического обнаружения изменений.
 
 <docs-code header="banner.component.detect-changes.spec.ts (AutoDetect Tests)" path="adev/src/content/examples/testing/src/app/banner/banner.component.detect-changes.spec.ts" region="auto-detect-tests"/>
 
-The first test shows the benefit of automatic change detection.
+Первый тест показывает преимущество автоматического обнаружения изменений.
 
-The second and third test reveal an important limitation.
-The Angular testing environment does not run change detection synchronously when updates happen inside the test case that changed the component's `title`.
-The test must call `await fixture.whenStable` to wait for another round of change detection.
+Второй и третий тесты выявляют важное ограничение.
+Среда тестирования Angular не запускает обнаружение изменений синхронно, когда обновления происходят внутри тест-кейса, изменившего `title` компонента.
+Тест должен вызвать `await fixture.whenStable`, чтобы дождаться следующего цикла обнаружения изменений.
 
-HELPFUL: Angular does not know about direct updates to values that are not signals. The easiest way to ensure that
-change detection will be scheduled is to use signals for values read in the template.
+ПОЛЕЗНО: Angular не знает о прямых обновлениях значений, которые не являются сигналами. Самый простой способ гарантировать планирование обнаружения изменений — использовать сигналы для значений, считываемых в шаблоне.
 
-### Change an input value with `dispatchEvent()`
+### Изменение значения input с помощью `dispatchEvent()`
 
-To simulate user input, find the input element and set its `value` property.
+Чтобы имитировать ввод пользователя, найдите элемент input и установите его свойство `value`.
 
-But there is an essential, intermediate step.
+Но есть важный промежуточный шаг.
 
-Angular doesn't know that you set the input element's `value` property.
-It won't read that property until you raise the element's `input` event by calling `dispatchEvent()`.
+Angular не знает, что вы установили свойство `value` элемента input.
+Он не прочитает это свойство, пока вы не вызовете событие `input` элемента с помощью `dispatchEvent()`.
 
-The following example demonstrates the proper sequence.
+Следующий пример демонстрирует правильную последовательность действий.
 
 <docs-code header="hero-detail.component.spec.ts (pipe test)" path="adev/src/content/examples/testing/src/app/hero/hero-detail.component.spec.ts" region="title-case-pipe"/>
 
-## Component with external files
+## Компонент с внешними файлами
 
-The preceding `BannerComponent` is defined with an _inline template_ and _inline css_, specified in the `@Component.template` and `@Component.styles` properties respectively.
+Предыдущий `BannerComponent` определен со _встроенным (inline) шаблоном_ и _встроенным CSS_, указанными в свойствах `@Component.template` и `@Component.styles` соответственно.
 
-Many components specify _external templates_ and _external css_ with the `@Component.templateUrl` and `@Component.styleUrls` properties respectively, as the following variant of `BannerComponent` does.
+Многие компоненты указывают _внешние шаблоны_ и _внешний CSS_ с помощью свойств `@Component.templateUrl` и `@Component.styleUrls` соответственно, как это делает следующий вариант `BannerComponent`.
 
 <docs-code header="banner-external.component.ts (metadata)" path="adev/src/content/examples/testing/src/app/banner/banner-external.component.ts" region="metadata"/>
 
-This syntax tells the Angular compiler to read the external files during component compilation.
+Этот синтаксис указывает компилятору Angular читать внешние файлы во время компиляции компонента.
 
-That's not a problem when you run the CLI `ng test` command because it _compiles the application before running the tests_.
+Это не проблема, когда вы запускаете команду CLI `ng test`, потому что она _компилирует приложение перед запуском тестов_.
 
-However, if you run the tests in a **non-CLI environment**, tests of this component might fail.
-For example, if you run the `BannerComponent` tests in a web coding environment such as [plunker](https://plnkr.co), you'll see a message like this one:
+Однако, если вы запускаете тесты в **среде без CLI**, тесты этого компонента могут не пройти.
+Например, если вы запустите тесты `BannerComponent` в среде веб-кодинга, такой как [plunker](https://plnkr.co), вы увидите сообщение, подобное этому:
 
 <docs-code hideCopy language="shell">
 
@@ -124,125 +121,124 @@ Please call "TestBed.compileComponents" before your test.
 
 </docs-code>
 
-You get this test failure message when the runtime environment compiles the source code _during the tests themselves_.
+Вы получаете это сообщение об ошибке теста, когда среда выполнения компилирует исходный код _во время самих тестов_.
 
-To correct the problem, call `compileComponents()`.
+Чтобы исправить проблему, вызовите `compileComponents()`.
 
-## Component with a dependency
+## Компонент с зависимостью
 
-Components often have service dependencies.
+Компоненты часто имеют зависимости от сервисов.
 
-The `WelcomeComponent` displays a welcome message to the logged-in user.
-It knows who the user is based on a property of the injected `UserService`:
+`WelcomeComponent` отображает приветственное сообщение для вошедшего в систему пользователя.
+Он узнает, кто является пользователем, основываясь на свойстве внедренного `UserService`:
 
 <docs-code header="welcome.component.ts" path="adev/src/content/examples/testing/src/app/welcome/welcome.component.ts"/>
 
-The `WelcomeComponent` has decision logic that interacts with the service, logic that makes this component worth testing.
+`WelcomeComponent` имеет логику принятия решений, которая взаимодействует с сервисом, что делает этот компонент достойным тестирования.
 
-### Provide service test doubles
+### Предоставление тестовых двойников сервиса
 
-A _component-under-test_ doesn't have to be provided with real services.
+_Тестируемому компоненту_ не обязательно предоставлять реальные сервисы.
 
-Injecting the real `UserService` could be difficult.
-The real service might ask the user for login credentials and attempt to reach an authentication server.
-These behaviors can be hard to intercept. Be aware that using test doubles makes the test behave differently from production so use them sparingly.
+Внедрение реального `UserService` может быть затруднительным.
+Реальный сервис может запрашивать у пользователя учетные данные для входа и пытаться связаться с сервером аутентификации.
+Такое поведение может быть трудно перехватить. Имейте в виду, что использование тестовых двойников заставляет тест вести себя иначе, чем в продакшене, поэтому используйте их умеренно.
 
-### Get injected services
+### Получение внедренных сервисов
 
-The tests need access to the `UserService` injected into the `WelcomeComponent`.
+Тестам нужен доступ к `UserService`, внедренному в `WelcomeComponent`.
 
-Angular has a hierarchical injection system.
-There can be injectors at multiple levels, from the root injector created by the `TestBed` down through the component tree.
+Angular имеет иерархическую систему внедрения.
+Инжекторы могут находиться на нескольких уровнях: от корневого инжектора, созданного `TestBed`, до дерева компонентов.
 
-The safest way to get the injected service, the way that **_always works_**,
-is to **get it from the injector of the _component-under-test_**.
-The component injector is a property of the fixture's `DebugElement`.
+Самый безопасный способ получить внедренный сервис, который **_работает всегда_**, — это **получить его из инжектора _тестируемого компонента_**.
+Инжектор компонента является свойством `DebugElement` фикстуры.
 
 <docs-code header="WelcomeComponent's injector" path="adev/src/content/examples/testing/src/app/welcome/welcome.component.spec.ts" region="injected-service"/>
 
-HELPFUL: This is _usually_ not necessary. Services are often provided in the root or the TestBed overrides and can be retrieved more easily with `TestBed.inject()` (see below).
+ПОЛЕЗНО: Это _обычно_ не требуется. Сервисы часто предоставляются в корне или переопределениях TestBed и могут быть получены проще с помощью `TestBed.inject()` (см. ниже).
 
 ### `TestBed.inject()`
 
-This is easier to remember and less verbose than retrieving a service using the fixture's `DebugElement`.
+Это легче запомнить и менее многословно, чем получение сервиса с помощью `DebugElement` фикстуры.
 
-In this test suite, the _only_ provider of `UserService` is the root testing module, so it is safe to call `TestBed.inject()` as follows:
+В этом наборе тестов _единственным_ провайдером `UserService` является корневой модуль тестирования, поэтому безопасно вызывать `TestBed.inject()` следующим образом:
 
 <docs-code header="TestBed injector" path="adev/src/content/examples/testing/src/app/welcome/welcome.component.spec.ts" region="inject-from-testbed" />
 
-HELPFUL: For a use case in which `TestBed.inject()` does not work, see the [_Override component providers_](#override-component-providers) section that explains when and why you must get the service from the component's injector instead.
+ПОЛЕЗНО: Для случая использования, когда `TestBed.inject()` не работает, см. раздел [_Переопределение провайдеров компонентов_](#override-component-providers), который объясняет, когда и почему вы должны получать сервис из инжектора компонента.
 
-### Final setup and tests
+### Финальная настройка и тесты
 
-Here's the complete `beforeEach()`, using `TestBed.inject()`:
+Вот полный `beforeEach()`, использующий `TestBed.inject()`:
 
 <docs-code header="welcome.component.spec.ts" path="adev/src/content/examples/testing/src/app/welcome/welcome.component.spec.ts" region="setup"/>
 
-And here are some tests:
+А вот несколько тестов:
 
 <docs-code header="welcome.component.spec.ts" path="adev/src/content/examples/testing/src/app/welcome/welcome.component.spec.ts" region="tests"/>
 
-The first is a sanity test; it confirms that the `UserService` is called and working.
+Первый — это проверка работоспособности; он подтверждает, что `UserService` вызывается и работает.
 
-HELPFUL: The withContext function \(for example, `'expected name'`\) is an optional failure label.
-If the expectation fails, Jasmine appends this label to the expectation failure message.
-In a spec with multiple expectations, it can help clarify what went wrong and which expectation failed.
+ПОЛЕЗНО: Функция withContext (например, `'expected name'`) — это необязательная метка сбоя.
+Если ожидание не выполняется, Jasmine добавляет эту метку к сообщению о сбое ожидания.
+В спецификации с несколькими ожиданиями это может помочь прояснить, что пошло не так и какое именно ожидание не выполнилось.
 
-The remaining tests confirm the logic of the component when the service returns different values.
-The second test validates the effect of changing the user name.
-The third test checks that the component displays the proper message when there is no logged-in user.
+Остальные тесты подтверждают логику компонента, когда сервис возвращает разные значения.
+Второй тест проверяет эффект изменения имени пользователя.
+Третий тест проверяет, что компонент отображает правильное сообщение, когда пользователь не вошел в систему.
 
-## Component with async service
+## Компонент с асинхронным сервисом
 
-In this sample, the `AboutComponent` template hosts a `TwainComponent`.
-The `TwainComponent` displays Mark Twain quotes.
+В этом примере шаблон `AboutComponent` содержит `TwainComponent`.
+`TwainComponent` отображает цитаты Марка Твена.
 
 <docs-code header="twain.component.ts (template)" path="adev/src/content/examples/testing/src/app/twain/twain.component.ts" region="template" />
 
-HELPFUL: The value of the component's `quote` property passes through an `AsyncPipe`.
-That means the property returns either a `Promise` or an `Observable`.
+ПОЛЕЗНО: Значение свойства `quote` компонента проходит через `AsyncPipe`.
+Это означает, что свойство возвращает либо `Promise`, либо `Observable`.
 
-In this example, the `TwainComponent.getQuote()` method tells you that the `quote` property returns an `Observable`.
+В этом примере метод `TwainComponent.getQuote()` говорит вам, что свойство `quote` возвращает `Observable`.
 
 <docs-code header="twain.component.ts (getQuote)" path="adev/src/content/examples/testing/src/app/twain/twain.component.ts" region="get-quote"/>
 
-The `TwainComponent` gets quotes from an injected `TwainService`.
-The component starts the returned `Observable` with a placeholder value \(`'...'`\), before the service can return its first quote.
+`TwainComponent` получает цитаты из внедренного `TwainService`.
+Компонент начинает возвращаемый `Observable` со значения-заполнителя (`'...'`), прежде чем сервис сможет вернуть свою первую цитату.
 
-The `catchError` intercepts service errors, prepares an error message, and returns the placeholder value on the success channel.
+`catchError` перехватывает ошибки сервиса, подготавливает сообщение об ошибке и возвращает значение-заполнитель в канал успеха.
 
-These are all features you'll want to test.
+Все эти функции вы захотите протестировать.
 
-### Testing with a spy
+### Тестирование со шпионом (spy)
 
-When testing a component, only the service's public API should matter.
-In general, tests themselves should not make calls to remote servers.
-They should emulate such calls.
-The setup in this `app/twain/twain.component.spec.ts` shows one way to do that:
+При тестировании компонента важен только публичный API сервиса.
+В общем случае сами тесты не должны делать вызовы к удаленным серверам.
+Они должны эмулировать такие вызовы.
+Настройка в этом `app/twain/twain.component.spec.ts` показывает один из способов сделать это:
 
 <docs-code header="twain.component.spec.ts (setup)" path="adev/src/content/examples/testing/src/app/twain/twain.component.spec.ts" region="setup"/>
 
-Focus on the spy.
+Обратите внимание на шпиона (spy).
 
 <docs-code path="adev/src/content/examples/testing/src/app/twain/twain.component.spec.ts" region="spy"/>
 
-The spy is designed such that any call to `getQuote` receives an observable with a test quote.
-Unlike the real `getQuote()` method, this spy bypasses the server and returns a synchronous observable whose value is available immediately.
+Шпион спроектирован так, что любой вызов `getQuote` получает Observable с тестовой цитатой.
+В отличие от реального метода `getQuote()`, этот шпион обходит сервер и возвращает синхронный Observable, значение которого доступно немедленно.
 
-You can write many useful tests with this spy, even though its `Observable` is synchronous.
+Вы можете написать много полезных тестов с этим шпионом, даже если его `Observable` является синхронным.
 
-HELPFUL: It is best to limit the usage of spies to only what is necessary for the test. Creating mocks or spies for more than what's necessary can be brittle. As the component and injectable evolves, the unrelated tests can fail because they no longer mock enough behaviors that would otherwise not affect the test.
+ПОЛЕЗНО: Лучше ограничить использование шпионов только тем, что необходимо для теста. Создание моков или шпионов для большего, чем необходимо, может сделать тесты хрупкими. По мере развития компонента и инъекций, несвязанные тесты могут падать, потому что они больше не имитируют достаточное количество поведений, которые в противном случае не повлияли бы на тест.
 
-### Async test with `fakeAsync()`
+### Асинхронный тест с `fakeAsync()`
 
-To use `fakeAsync()` functionality, you must import `zone.js/testing` in your test setup file.
-If you created your project with the Angular CLI, `zone-testing` is already imported in `src/test.ts`.
+Чтобы использовать функциональность `fakeAsync()`, вы должны импортировать `zone.js/testing` в вашем файле настройки тестов.
+Если вы создали свой проект с помощью Angular CLI, `zone-testing` уже импортирован в `src/test.ts`.
 
-The following test confirms the expected behavior when the service returns an `ErrorObservable`.
+Следующий тест подтверждает ожидаемое поведение, когда сервис возвращает `ErrorObservable`.
 
 <docs-code path="adev/src/content/examples/testing/src/app/twain/twain.component.spec.ts" region="error-test"/>
 
-HELPFUL: The `it()` function receives an argument of the following form.
+ПОЛЕЗНО: Функция `it()` принимает аргумент следующего вида.
 
 <docs-code language="javascript">
 
@@ -250,59 +246,57 @@ fakeAsync(() => { /_test body_/ })
 
 </docs-code>
 
-The `fakeAsync()` function enables a linear coding style by running the test body in a special `fakeAsync test zone`.
-The test body appears to be synchronous.
-There is no nested syntax \(like a `Promise.then()`\) to disrupt the flow of control.
+Функция `fakeAsync()` позволяет использовать линейный стиль кодирования, запуская тело теста в специальной `тестовой зоне fakeAsync`.
+Тело теста выглядит синхронным.
+Нет вложенного синтаксиса (как `Promise.then()`), нарушающего поток управления.
 
-HELPFUL: Limitation: The `fakeAsync()` function won't work if the test body makes an `XMLHttpRequest` \(XHR\) call.
-XHR calls within a test are rare, but if you need to call XHR, use `waitForAsync()`.
+ПОЛЕЗНО: Ограничение: Функция `fakeAsync()` не будет работать, если тело теста делает вызов `XMLHttpRequest` (XHR).
+Вызовы XHR внутри теста редки, но если вам нужно вызвать XHR, используйте `waitForAsync()`.
 
-IMPORTANT: Be aware that asynchronous tasks that happen inside the `fakeAsync` zone need to be manually executed with `flush` or `tick`. If you attempt to
-wait for them to complete (i.e. using `fixture.whenStable`) without using the
-`fakeAsync` test helpers to advance time, your test will likely fail. See below for more information.
+ВАЖНО: Имейте в виду, что асинхронные задачи, происходящие внутри зоны `fakeAsync`, нужно выполнять вручную с помощью `flush` или `tick`. Если вы попытаетесь дождаться их завершения (т.е. используя `fixture.whenStable`) без использования помощников тестирования `fakeAsync` для продвижения времени, ваш тест, скорее всего, упадет. См. ниже для получения дополнительной информации.
 
-### The `tick()` function
+### Функция `tick()`
 
-You do have to call [tick()](api/core/testing/tick) to advance the virtual clock.
+Вам нужно вызвать [tick()](api/core/testing/tick), чтобы продвинуть виртуальные часы.
 
-Calling [tick()](api/core/testing/tick) simulates the passage of time until all pending asynchronous activities finish.
-In this case, it waits for the observable's `setTimeout()`.
+Вызов [tick()](api/core/testing/tick) имитирует течение времени до завершения всех ожидающих асинхронных действий.
+В данном случае он ждет `setTimeout()` Observable-потока.
 
-The [tick()](api/core/testing/tick) function accepts `millis` and `tickOptions` as parameters. The `millis` parameter specifies how much the virtual clock advances and defaults to `0` if not provided.
-For example, if you have a `setTimeout(fn, 100)` in a `fakeAsync()` test, you need to use `tick(100)` to trigger the fn callback.
-The optional `tickOptions` parameter has a property named `processNewMacroTasksSynchronously`. The `processNewMacroTasksSynchronously` property represents whether to invoke new generated macro tasks when ticking and defaults to `true`.
+Функция [tick()](api/core/testing/tick) принимает параметры `millis` и `tickOptions`. Параметр `millis` указывает, насколько продвигаются виртуальные часы, и по умолчанию равен `0`, если не указан.
+Например, если у вас есть `setTimeout(fn, 100)` в тесте `fakeAsync()`, вам нужно использовать `tick(100)`, чтобы вызвать колбэк fn.
+Необязательный параметр `tickOptions` имеет свойство с именем `processNewMacroTasksSynchronously`. Свойство `processNewMacroTasksSynchronously` указывает, следует ли вызывать новые сгенерированные макрозадачи при тике, и по умолчанию равно `true`.
 
 <docs-code path="adev/src/content/examples/testing/src/app/demo/async-helper.spec.ts" region="fake-async-test-tick"/>
 
-The [tick()](api/core/testing/tick) function is one of the Angular testing utilities that you import with `TestBed`.
-It's a companion to `fakeAsync()` and you can only call it within a `fakeAsync()` body.
+Функция [tick()](api/core/testing/tick) — это одна из утилит тестирования Angular, которую вы импортируете с помощью `TestBed`.
+Это компаньон для `fakeAsync()`, и вы можете вызывать ее только внутри тела `fakeAsync()`.
 
 ### tickOptions
 
-In this example, you have a new macro task, the nested `setTimeout` function. By default, when the `tick` is setTimeout, `outside` and `nested` will both be triggered.
+В этом примере у вас есть новая макрозадача — вложенная функция `setTimeout`. По умолчанию, когда `tick` равен setTimeout, будут вызваны и `outside`, и `nested`.
 
 <docs-code path="adev/src/content/examples/testing/src/app/demo/async-helper.spec.ts" region="fake-async-test-tick-new-macro-task-sync"/>
 
-In some case, you don't want to trigger the new macro task when ticking. You can use `tick(millis, {processNewMacroTasksSynchronously: false})` to not invoke a new macro task.
+В некоторых случаях вы не хотите вызывать новую макрозадачу при тике. Вы можете использовать `tick(millis, {processNewMacroTasksSynchronously: false})`, чтобы не вызывать новую макрозадачу.
 
 <docs-code path="adev/src/content/examples/testing/src/app/demo/async-helper.spec.ts" region="fake-async-test-tick-new-macro-task-async"/>
 
-### Comparing dates inside fakeAsync()
+### Сравнение дат внутри fakeAsync()
 
-`fakeAsync()` simulates passage of time, which lets you calculate the difference between dates inside `fakeAsync()`.
+`fakeAsync()` имитирует течение времени, что позволяет вычислять разницу между датами внутри `fakeAsync()`.
 
 <docs-code path="adev/src/content/examples/testing/src/app/demo/async-helper.spec.ts" region="fake-async-test-date"/>
 
-### jasmine.clock with fakeAsync()
+### jasmine.clock с fakeAsync()
 
-Jasmine also provides a `clock` feature to mock dates.
-Angular automatically runs tests that are run after `jasmine.clock().install()` is called inside a `fakeAsync()` method until `jasmine.clock().uninstall()` is called.
-`fakeAsync()` is not needed and throws an error if nested.
+Jasmine также предоставляет функцию `clock` для имитации дат.
+Angular автоматически запускает тесты, которые выполняются после вызова `jasmine.clock().install()` внутри метода `fakeAsync()`, пока не будет вызван `jasmine.clock().uninstall()`.
+`fakeAsync()` не нужен и вызывает ошибку, если он вложен.
 
-By default, this feature is disabled.
-To enable it, set a global flag before importing `zone-testing`.
+По умолчанию эта функция отключена.
+Чтобы включить ее, установите глобальный флаг перед импортом `zone-testing`.
 
-If you use the Angular CLI, configure this flag in `src/test.ts`.
+Если вы используете Angular CLI, настройте этот флаг в `src/test.ts`.
 
 ```ts
 [window as any]('__zone_symbol__fakeAsyncPatchLock') = true;
@@ -311,15 +305,15 @@ import 'zone.js/testing';
 
 <docs-code path="adev/src/content/examples/testing/src/app/demo/async-helper.spec.ts" region="fake-async-test-clock"/>
 
-### Using the RxJS scheduler inside fakeAsync()
+### Использование планировщика RxJS внутри fakeAsync()
 
-You can also use RxJS scheduler in `fakeAsync()` just like using `setTimeout()` or `setInterval()`, but you need to import `zone.js/plugins/zone-patch-rxjs-fake-async` to patch RxJS scheduler.
+Вы также можете использовать планировщик RxJS в `fakeAsync()` так же, как `setTimeout()` или `setInterval()`, но вам нужно импортировать `zone.js/plugins/zone-patch-rxjs-fake-async`, чтобы пропатчить планировщик RxJS.
 
 <docs-code path="adev/src/content/examples/testing/src/app/demo/async-helper.spec.ts" region="fake-async-test-rxjs"/>
 
-### Support more macroTasks
+### Поддержка большего количества макрозадач (macroTasks)
 
-By default, `fakeAsync()` supports the following macro tasks.
+По умолчанию `fakeAsync()` поддерживает следующие макрозадачи:
 
 - `setTimeout`
 - `setInterval`
@@ -327,432 +321,432 @@ By default, `fakeAsync()` supports the following macro tasks.
 - `webkitRequestAnimationFrame`
 - `mozRequestAnimationFrame`
 
-If you run other macro tasks such as `HTMLCanvasElement.toBlob()`, an _"Unknown macroTask scheduled in fake async test"_ error is thrown.
+Если вы запустите другие макрозадачи, такие как `HTMLCanvasElement.toBlob()`, будет выброшена ошибка _"Unknown macroTask scheduled in fake async test"_.
 
 <docs-code-multifile>
     <docs-code header="canvas.component.spec.ts (failing)" path="adev/src/content/examples/testing/src/app/shared/canvas.component.spec.ts" region="without-toBlob-macrotask"/>
     <docs-code header="canvas.component.ts" path="adev/src/content/examples/testing/src/app/shared/canvas.component.ts" region="main"/>
 </docs-code-multifile>
 
-If you want to support such a case, you need to define the macro task you want to support in `beforeEach()`.
-For example:
+Если вы хотите поддерживать такой случай, вам нужно определить макрозадачу, которую вы хотите поддерживать, в `beforeEach()`.
+Например:
 
 <docs-code header="canvas.component.spec.ts (excerpt)" path="adev/src/content/examples/testing/src/app/shared/canvas.component.spec.ts" region="enable-toBlob-macrotask"/>
 
-HELPFUL: In order to make the `<canvas>` element Zone.js-aware in your app, you need to import the `zone-patch-canvas` patch \(either in `polyfills.ts` or in the specific file that uses `<canvas>`\):
+ПОЛЕЗНО: Чтобы сделать элемент `<canvas>` совместимым с Zone.js в вашем приложении, вам нужно импортировать патч `zone-patch-canvas` (либо в `polyfills.ts`, либо в конкретном файле, который использует `<canvas>`):
 
 <docs-code header="src/polyfills.ts or src/app/shared/canvas.component.ts" path="adev/src/content/examples/testing/src/app/shared/canvas.component.ts" region="import-canvas-patch"/>
 
-### Async observables
+### Асинхронные Observable
 
-You might be satisfied with the test coverage of these tests.
+Вы можете быть удовлетворены покрытием тестами.
 
-However, you might be troubled by the fact that the real service doesn't quite behave this way.
-The real service sends requests to a remote server.
-A server takes time to respond and the response certainly won't be available immediately as in the previous two tests.
+Однако вас может беспокоить тот факт, что реальный сервис ведет себя не совсем так.
+Реальный сервис отправляет запросы на удаленный сервер.
+Серверу требуется время для ответа, и ответ, безусловно, не будет доступен немедленно, как в предыдущих двух тестах.
 
-Your tests will reflect the real world more faithfully if you return an _asynchronous_ observable from the `getQuote()` spy like this.
+Ваши тесты будут более точно отражать реальный мир, если вы вернете _асинхронный_ Observable из шпиона `getQuote()` следующим образом.
 
 <docs-code path="adev/src/content/examples/testing/src/app/twain/twain.component.spec.ts" region="async-setup"/>
 
-### Async observable helpers
+### Помощники асинхронных Observable
 
-The async observable was produced by an `asyncData` helper.
-The `asyncData` helper is a utility function that you'll have to write yourself, or copy this one from the sample code.
+Асинхронный Observable был создан с помощью помощника `asyncData`.
+Помощник `asyncData` — это служебная функция, которую вам придется написать самостоятельно или скопировать из примера кода.
 
 <docs-code header="testing/async-observable-helpers.ts" path="adev/src/content/examples/testing/src/testing/async-observable-helpers.ts" region="async-data"/>
 
-This helper's observable emits the `data` value in the next turn of the JavaScript engine.
+Observable этого помощника выдает значение `data` на следующем витке движка JavaScript.
 
-The [RxJS `defer()` operator](http://reactivex.io/documentation/operators/defer.html) returns an observable.
-It takes a factory function that returns either a promise or an observable.
-When something subscribes to _defer_'s observable, it adds the subscriber to a new observable created with that factory.
+[Оператор RxJS `defer()`](http://reactivex.io/documentation/operators/defer.html) возвращает Observable.
+Он принимает фабричную функцию, которая возвращает либо промис, либо Observable.
+Когда кто-то подписывается на Observable _defer_, он добавляет подписчика к новому Observable, созданному с помощью этой фабрики.
 
-The `defer()` operator transforms the `Promise.resolve()` into a new observable that, like `HttpClient`, emits once and completes.
-Subscribers are unsubscribed after they receive the data value.
+Оператор `defer()` преобразует `Promise.resolve()` в новый Observable, который, подобно `HttpClient`, выдает значение один раз и завершается.
+Подписчики отписываются после получения значения данных.
 
-There's a similar helper for producing an async error.
+Существует аналогичный помощник для создания асинхронной ошибки.
 
 <docs-code path="adev/src/content/examples/testing/src/testing/async-observable-helpers.ts" region="async-error"/>
 
-### More async tests
+### Больше асинхронных тестов
 
-Now that the `getQuote()` spy is returning async observables, most of your tests will have to be async as well.
+Теперь, когда шпион `getQuote()` возвращает асинхронные Observable, большинство ваших тестов также должны быть асинхронными.
 
-Here's a `fakeAsync()` test that demonstrates the data flow you'd expect in the real world.
+Вот тест `fakeAsync()`, который демонстрирует поток данных, ожидаемый в реальном мире.
 
 <docs-code path="adev/src/content/examples/testing/src/app/twain/twain.component.spec.ts" region="fake-async-test"/>
 
-Notice that the quote element displays the placeholder value \(`'...'`\) after `ngOnInit()`.
-The first quote hasn't arrived yet.
+Обратите внимание, что элемент цитаты отображает значение-заполнитель (`'...'`) после `ngOnInit()`.
+Первая цитата еще не пришла.
 
-To flush the first quote from the observable, you call [tick()](api/core/testing/tick).
-Then call `detectChanges()` to tell Angular to update the screen.
+Чтобы сбросить (flush) первую цитату из Observable, вы вызываете [tick()](api/core/testing/tick).
+Затем вызовите `detectChanges()`, чтобы указать Angular обновить экран.
 
-Then you can assert that the quote element displays the expected text.
+Затем вы можете утверждать, что элемент цитаты отображает ожидаемый текст.
 
-### Async test without `fakeAsync()`
+### Асинхронный тест без `fakeAsync()`
 
-Here's the previous `fakeAsync()` test, re-written with the `async`.
+Вот предыдущий тест `fakeAsync()`, переписанный с использованием `async` (waitForAsync).
 
 <docs-code path="adev/src/content/examples/testing/src/app/twain/twain.component.spec.ts" region="async-test"/>
 
 ### `whenStable`
 
-The test must wait for the `getQuote()` observable to emit the next quote.
-Instead of calling [tick()](api/core/testing/tick), it calls `fixture.whenStable()`.
+Тест должен ждать, пока Observable `getQuote()` выдаст следующую цитату.
+Вместо вызова [tick()](api/core/testing/tick), он вызывает `fixture.whenStable()`.
 
-The `fixture.whenStable()` returns a promise that resolves when the JavaScript engine's task queue becomes empty.
-In this example, the task queue becomes empty when the observable emits the first quote.
+`fixture.whenStable()` возвращает промис, который разрешается, когда очередь задач движка JavaScript становится пустой.
+В этом примере очередь задач становится пустой, когда Observable выдает первую цитату.
 
-## Component with inputs and outputs
+## Компонент с Input и Output
 
-A component with inputs and outputs typically appears inside the view template of a host component.
-The host uses a property binding to set the input property and an event binding to listen to events raised by the output property.
+Компонент с входными (input) и выходными (output) свойствами обычно появляется внутри шаблона представления хост-компонента (родительского компонента).
+Хост использует привязку свойств для установки входного свойства и привязку событий для прослушивания событий, вызываемых выходным свойством.
 
-The testing goal is to verify that such bindings work as expected.
-The tests should set input values and listen for output events.
+Цель тестирования — проверить, что такие привязки работают так, как ожидается.
+Тесты должны устанавливать входные значения и слушать выходные события.
 
-The `DashboardHeroComponent` is a tiny example of a component in this role.
-It displays an individual hero provided by the `DashboardComponent`.
-Clicking that hero tells the `DashboardComponent` that the user has selected the hero.
+`DashboardHeroComponent` — это крошечный пример компонента в этой роли.
+Он отображает отдельного героя, предоставленного `DashboardComponent`.
+Клик по этому герою сообщает `DashboardComponent`, что пользователь выбрал героя.
 
-The `DashboardHeroComponent` is embedded in the `DashboardComponent` template like this:
+`DashboardHeroComponent` встроен в шаблон `DashboardComponent` следующим образом:
 
 <docs-code header="dashboard.component.html (excerpt)" path="adev/src/content/examples/testing/src/app/dashboard/dashboard.component.html" region="dashboard-hero"/>
 
-The `DashboardHeroComponent` appears in an `@for` block, which sets each component's `hero` input property to the looping value and listens for the component's `selected` event.
+`DashboardHeroComponent` появляется в блоке `@for`, который устанавливает входное свойство `hero` каждого компонента в значение цикла и слушает событие `selected` компонента.
 
-Here's the component's full definition:
+Вот полное определение компонента:
 
 <docs-code header="dashboard-hero.component.ts (component)" path="adev/src/content/examples/testing/src/app/dashboard/dashboard-hero.component.ts" region="component"/>
 
-While testing a component this simple has little intrinsic value, it's worth knowing how.
-Use one of these approaches:
+Хотя тестирование такого простого компонента имеет небольшую внутреннюю ценность, стоит знать, как это делается.
+Используйте один из следующих подходов:
 
-- Test it as used by `DashboardComponent`
-- Test it as a standalone component
-- Test it as used by a substitute for `DashboardComponent`
+- Тестировать его так, как он используется в `DashboardComponent`
+- Тестировать его как автономный компонент
+- Тестировать его так, как он используется заместителем `DashboardComponent`
 
-The immediate goal is to test the `DashboardHeroComponent`, not the `DashboardComponent`, so, try the second and third options.
+Непосредственная цель — протестировать `DashboardHeroComponent`, а не `DashboardComponent`, поэтому попробуйте второй и третий варианты.
 
-### Test `DashboardHeroComponent` standalone
+### Тестирование `DashboardHeroComponent` автономно
 
-Here's the meat of the spec file setup.
+Вот основная часть настройки файла спецификации.
 
 <docs-code header="dashboard-hero.component.spec.ts (setup)" path="adev/src/content/examples/testing/src/app/dashboard/dashboard-hero.component.spec.ts" region="setup"/>
 
-Notice how the setup code assigns a test hero \(`expectedHero`\) to the component's `hero` property, emulating the way the `DashboardComponent` would set it using the property binding in its repeater.
+Обратите внимание, как код настройки присваивает тестового героя (`expectedHero`) свойству `hero` компонента, эмулируя способ, которым `DashboardComponent` устанавливал бы его, используя привязку свойств в своем повторителе.
 
-The following test verifies that the hero name is propagated to the template using a binding.
+Следующий тест проверяет, что имя героя передается в шаблон с помощью привязки.
 
 <docs-code path="adev/src/content/examples/testing/src/app/dashboard/dashboard-hero.component.spec.ts" region="name-test"/>
 
-Because the template passes the hero name through the Angular `UpperCasePipe`, the test must match the element value with the upper-cased name.
+Поскольку шаблон пропускает имя героя через Angular `UpperCasePipe`, тест должен сравнивать значение элемента с именем в верхнем регистре.
 
-### Clicking
+### Клик
 
-Clicking the hero should raise a `selected` event that the host component \(`DashboardComponent` presumably\) can hear:
+Клик по герою должен вызвать событие `selected`, которое может услышать хост-компонент (предположительно `DashboardComponent`):
 
 <docs-code path="adev/src/content/examples/testing/src/app/dashboard/dashboard-hero.component.spec.ts" region="click-test"/>
 
-The component's `selected` property returns an `EventEmitter`, which looks like an RxJS synchronous `Observable` to consumers.
-The test subscribes to it _explicitly_ just as the host component does _implicitly_.
+Свойство `selected` компонента возвращает `EventEmitter`, который выглядит для потребителей как синхронный RxJS `Observable`.
+Тест подписывается на него _явно_, так же как хост-компонент делает это _неявно_.
 
-If the component behaves as expected, clicking the hero's element should tell the component's `selected` property to emit the `hero` object.
+Если компонент ведет себя так, как ожидается, клик по элементу героя должен заставить свойство `selected` компонента выдать объект `hero`.
 
-The test detects that event through its subscription to `selected`.
+Тест обнаруживает это событие через свою подписку на `selected`.
 
 ### `triggerEventHandler`
 
-The `heroDe` in the previous test is a `DebugElement` that represents the hero `<div>`.
+`heroDe` в предыдущем тесте — это `DebugElement`, который представляет `<div>` героя.
 
-It has Angular properties and methods that abstract interaction with the native element.
-This test calls the `DebugElement.triggerEventHandler` with the "click" event name.
-The "click" event binding responds by calling `DashboardHeroComponent.click()`.
+Он имеет свойства и методы Angular, которые абстрагируют взаимодействие с нативным элементом.
+Этот тест вызывает `DebugElement.triggerEventHandler` с именем события "click".
+Привязка события "click" реагирует вызовом `DashboardHeroComponent.click()`.
 
-The Angular `DebugElement.triggerEventHandler` can raise _any data-bound event_ by its _event name_.
-The second parameter is the event object passed to the handler.
+Angular `DebugElement.triggerEventHandler` может вызвать _любое событие, привязанное к данным_, по его _имени события_.
+Второй параметр — это объект события, передаваемый обработчику.
 
-The test triggered a "click" event.
+Тест вызвал событие "click".
 
 <docs-code path="adev/src/content/examples/testing/src/app/dashboard/dashboard-hero.component.spec.ts" region="trigger-event-handler"/>
 
-In this case, the test correctly assumes that the runtime event handler, the component's `click()` method, doesn't care about the event object.
+В данном случае тест правильно предполагает, что обработчик события времени выполнения, метод `click()` компонента, не заботится об объекте события.
 
-HELPFUL: Other handlers are less forgiving.
-For example, the `RouterLink` directive expects an object with a `button` property that identifies which mouse button, if any, was pressed during the click.
-The `RouterLink` directive throws an error if the event object is missing.
+ПОЛЕЗНО: Другие обработчики менее снисходительны.
+Например, директива `RouterLink` ожидает объект со свойством `button`, которое идентифицирует, какая кнопка мыши, если таковая имеется, была нажата во время клика.
+Директива `RouterLink` выдает ошибку, если объект события отсутствует.
 
-### Click the element
+### Клик по элементу
 
-The following test alternative calls the native element's own `click()` method, which is perfectly fine for _this component_.
+Следующая альтернатива теста вызывает собственный метод `click()` нативного элемента, что вполне нормально для _этого компонента_.
 
 <docs-code path="adev/src/content/examples/testing/src/app/dashboard/dashboard-hero.component.spec.ts" region="click-test-2"/>
 
-### `click()` helper
+### Помощник `click()`
 
-Clicking a button, an anchor, or an arbitrary HTML element is a common test task.
+Клик по кнопке, якорю или произвольному HTML-элементу — распространенная задача тестирования.
 
-Make that consistent and straightforward by encapsulating the _click-triggering_ process in a helper such as the following `click()` function:
+Сделайте это последовательным и простым, инкапсулируя процесс _вызова клика_ в помощнике, таком как следующая функция `click()`:
 
 <docs-code header="testing/index.ts (click helper)" path="adev/src/content/examples/testing/src/testing/index.ts" region="click-event"/>
 
-The first parameter is the _element-to-click_.
-If you want, pass a custom event object as the second parameter.
-The default is a partial [left-button mouse event object](https://developer.mozilla.org/docs/Web/API/MouseEvent/button) accepted by many handlers including the `RouterLink` directive.
+Первый параметр — это _элемент для клика_.
+Если хотите, передайте пользовательский объект события в качестве второго параметра.
+По умолчанию это частичный [объект события мыши левой кнопки](https://developer.mozilla.org/docs/Web/API/MouseEvent/button), принимаемый многими обработчиками, включая директиву `RouterLink`.
 
-IMPORTANT: The `click()` helper function is **not** one of the Angular testing utilities.
-It's a function defined in _this guide's sample code_.
-All of the sample tests use it.
-If you like it, add it to your own collection of helpers.
+ВАЖНО: Помощник `click()` **не** является одной из утилит тестирования Angular.
+Это функция, определенная в _примере кода этого руководства_.
+Все примеры тестов используют ее.
+Если она вам нравится, добавьте ее в свою коллекцию помощников.
 
-Here's the previous test, rewritten using the click helper.
+Вот предыдущий тест, переписанный с использованием помощника клика.
 
 <docs-code header="dashboard-hero.component.spec.ts (test with click helper)" path="adev/src/content/examples/testing/src/app/dashboard/dashboard-hero.component.spec.ts" region="click-test-3"/>
 
-## Component inside a test host
+## Компонент внутри тестового хоста
 
-The previous tests played the role of the host `DashboardComponent` themselves.
-But does the `DashboardHeroComponent` work correctly when properly data-bound to a host component?
+Предыдущие тесты сами играли роль хоста `DashboardComponent`.
+Но работает ли `DashboardHeroComponent` правильно, когда он должным образом привязан к данным хост-компонента?
 
 <docs-code header="dashboard-hero.component.spec.ts (test host)" path="adev/src/content/examples/testing/src/app/dashboard/dashboard-hero.component.spec.ts" region="test-host"/>
 
-The test host sets the component's `hero` input property with its test hero.
-It binds the component's `selected` event with its `onSelected` handler, which records the emitted hero in its `selectedHero` property.
+Тестовый хост устанавливает входное свойство `hero` компонента с помощью своего тестового героя.
+Он связывает событие `selected` компонента со своим обработчиком `onSelected`, который записывает выданного героя в свое свойство `selectedHero`.
 
-Later, the tests will be able to check `selectedHero` to verify that the `DashboardHeroComponent.selected` event emitted the expected hero.
+Позже тесты смогут проверить `selectedHero`, чтобы убедиться, что событие `DashboardHeroComponent.selected` выдало ожидаемого героя.
 
-The setup for the `test-host` tests is similar to the setup for the stand-alone tests:
+Настройка для тестов `test-host` аналогична настройке для автономных тестов:
 
 <docs-code header="dashboard-hero.component.spec.ts (test host setup)" path="adev/src/content/examples/testing/src/app/dashboard/dashboard-hero.component.spec.ts" region="test-host-setup"/>
 
-This testing module configuration shows two important differences:
+Эта конфигурация модуля тестирования показывает два важных отличия:
 
-- It _creates_ the `TestHostComponent` instead of the `DashboardHeroComponent`
-- The `TestHostComponent` sets the `DashboardHeroComponent.hero` with a binding
+- Она _создает_ `TestHostComponent` вместо `DashboardHeroComponent`
+- `TestHostComponent` устанавливает `DashboardHeroComponent.hero` с помощью привязки
 
-The `createComponent` returns a `fixture` that holds an instance of `TestHostComponent` instead of an instance of `DashboardHeroComponent`.
+`createComponent` возвращает `fixture`, которая содержит экземпляр `TestHostComponent` вместо экземпляра `DashboardHeroComponent`.
 
-Creating the `TestHostComponent` has the side effect of creating a `DashboardHeroComponent` because the latter appears within the template of the former.
-The query for the hero element \(`heroEl`\) still finds it in the test DOM, albeit at greater depth in the element tree than before.
+Создание `TestHostComponent` имеет побочный эффект создания `DashboardHeroComponent`, потому что последний появляется внутри шаблона первого.
+Запрос элемента героя (`heroEl`) по-прежнему находит его в тестовом DOM, хотя и на большей глубине в дереве элементов, чем раньше.
 
-The tests themselves are almost identical to the stand-alone version:
+Сами тесты почти идентичны автономной версии:
 
 <docs-code header="dashboard-hero.component.spec.ts (test-host)" path="adev/src/content/examples/testing/src/app/dashboard/dashboard-hero.component.spec.ts" region="test-host-tests"/>
 
-Only the selected event test differs.
-It confirms that the selected `DashboardHeroComponent` hero really does find its way up through the event binding to the host component.
+Отличается только тест события selected.
+Он подтверждает, что выбранный герой `DashboardHeroComponent` действительно попадает через привязку событий в хост-компонент.
 
-## Routing component
+## Компонент маршрутизации
 
-A _routing component_ is a component that tells the `Router` to navigate to another component.
-The `DashboardComponent` is a _routing component_ because the user can navigate to the `HeroDetailComponent` by clicking on one of the _hero buttons_ on the dashboard.
+_Компонент маршрутизации_ — это компонент, который указывает `Router` перейти к другому компоненту.
+`DashboardComponent` является _компонентом маршрутизации_, потому что пользователь может перейти к `HeroDetailComponent`, нажав на одну из _кнопок героев_ на дашборде.
 
-Angular provides test helpers to reduce boilerplate and more effectively test code which depends on `HttpClient`. The `provideRouter` function can be used directly in the test module as well.
+Angular предоставляет помощники тестирования для уменьшения шаблонного кода и более эффективного тестирования кода, который зависит от `HttpClient`. Функция `provideRouter` также может использоваться непосредственно в модуле тестирования.
 
 <docs-code header="dashboard.component.spec.ts" path="adev/src/content/examples/testing/src/app/dashboard/dashboard.component.spec.ts" region="router-harness"/>
 
-The following test clicks the displayed hero and confirms that we navigate to the expected URL.
+Следующий тест кликает по отображаемому герою и подтверждает, что мы переходим по ожидаемому URL.
 
 <docs-code header="dashboard.component.spec.ts (navigate test)" path="adev/src/content/examples/testing/src/app/dashboard/dashboard.component.spec.ts" region="navigate-test"/>
 
-## Routed components
+## Маршрутизируемые компоненты
 
-A _routed component_ is the destination of a `Router` navigation.
-It can be trickier to test, especially when the route to the component _includes parameters_.
-The `HeroDetailComponent` is a _routed component_ that is the destination of such a route.
+_Маршрутизируемый компонент_ — это пункт назначения навигации `Router`.
+Его может быть сложнее тестировать, особенно когда маршрут к компоненту _включает параметры_.
+`HeroDetailComponent` — это _маршрутизируемый компонент_, который является пунктом назначения такого маршрута.
 
-When a user clicks a _Dashboard_ hero, the `DashboardComponent` tells the `Router` to navigate to `heroes/:id`.
-The `:id` is a route parameter whose value is the `id` of the hero to edit.
+Когда пользователь нажимает на героя _Dashboard_, `DashboardComponent` указывает `Router` перейти к `heroes/:id`.
+`:id` — это параметр маршрута, значением которого является `id` героя для редактирования.
 
-The `Router` matches that URL to a route to the `HeroDetailComponent`.
-It creates an `ActivatedRoute` object with the routing information and injects it into a new instance of the `HeroDetailComponent`.
+`Router` сопоставляет этот URL с маршрутом к `HeroDetailComponent`.
+Он создает объект `ActivatedRoute` с информацией о маршрутизации и внедряет его в новый экземпляр `HeroDetailComponent`.
 
-Here are the services injected into `HeroDetailComponent`:
+Вот сервисы, внедренные в `HeroDetailComponent`:
 
 <docs-code header="hero-detail.component.ts (inject)" path="adev/src/content/examples/testing/src/app/hero/hero-detail.component.ts" region="inject"/>
 
-The `HeroDetail` component needs the `id` parameter so it can fetch the corresponding hero using the `HeroDetailService`.
-The component has to get the `id` from the `ActivatedRoute.paramMap` property which is an `Observable`.
+Компоненту `HeroDetail` нужен параметр `id`, чтобы он мог получить соответствующего героя с помощью `HeroDetailService`.
+Компонент должен получить `id` из свойства `ActivatedRoute.paramMap`, которое является `Observable`.
 
-It can't just reference the `id` property of the `ActivatedRoute.paramMap`.
-The component has to _subscribe_ to the `ActivatedRoute.paramMap` observable and be prepared for the `id` to change during its lifetime.
+Он не может просто сослаться на свойство `id` из `ActivatedRoute.paramMap`.
+Компонент должен _подписаться_ на Observable `ActivatedRoute.paramMap` и быть готовым к тому, что `id` изменится в течение его жизни.
 
 <docs-code header="hero-detail.component.ts (constructor)" path="adev/src/content/examples/testing/src/app/hero/hero-detail.component.ts" region="ctor"/>
 
-Tests can explore how the `HeroDetailComponent` responds to different `id` parameter values by navigating to different routes.
+Тесты могут исследовать, как `HeroDetailComponent` реагирует на различные значения параметра `id`, переходя по разным маршрутам.
 
-## Nested component tests
+## Тесты вложенных компонентов
 
-Component templates often have nested components, whose templates might contain more components.
+Шаблоны компонентов часто имеют вложенные компоненты, шаблоны которых могут содержать еще больше компонентов.
 
-The component tree can be very deep and sometimes the nested components play no role in testing the component at the top of the tree.
+Дерево компонентов может быть очень глубоким, и иногда вложенные компоненты не играют никакой роли в тестировании компонента на вершине дерева.
 
-The `AppComponent`, for example, displays a navigation bar with anchors and their `RouterLink` directives.
+`AppComponent`, например, отображает навигационную панель с якорями и их директивами `RouterLink`.
 
 <docs-code header="app.component.html" path="adev/src/content/examples/testing/src/app/app.component.html"/>
 
-To validate the links but not the navigation, you don't need the `Router` to navigate and you don't need the `<router-outlet>` to mark where the `Router` inserts _routed components_.
+Чтобы проверить ссылки, но не навигацию, вам не нужен `Router` для навигации, и вам не нужен `<router-outlet>`, чтобы отметить, где `Router` вставляет _маршрутизируемые компоненты_.
 
-The `BannerComponent` and `WelcomeComponent` \(indicated by `<app-banner>` and `<app-welcome>`\) are also irrelevant.
+`BannerComponent` и `WelcomeComponent` (обозначенные `<app-banner>` и `<app-welcome>`) также не имеют значения.
 
-Yet any test that creates the `AppComponent` in the DOM also creates instances of these three components and, if you let that happen, you'll have to configure the `TestBed` to create them.
+Тем не менее, любой тест, который создает `AppComponent` в DOM, также создает экземпляры этих трех компонентов, и, если вы позволите этому случиться, вам придется настроить `TestBed` для их создания.
 
-If you neglect to declare them, the Angular compiler won't recognize the `<app-banner>`, `<app-welcome>`, and `<router-outlet>` tags in the `AppComponent` template and will throw an error.
+Если вы забудете объявить их, компилятор Angular не распознает теги `<app-banner>`, `<app-welcome>` и `<router-outlet>` в шаблоне `AppComponent` и выдаст ошибку.
 
-If you declare the real components, you'll also have to declare _their_ nested components and provide for _all_ services injected in _any_ component in the tree.
+Если вы объявите реальные компоненты, вам также придется объявить _их_ вложенные компоненты и предоставить _все_ сервисы, внедренные в _любой_ компонент в дереве.
 
-This section describes two techniques for minimizing the setup.
-Use them, alone or in combination, to stay focused on testing the primary component.
+В этом разделе описываются два метода минимизации настройки.
+Используйте их по отдельности или в комбинации, чтобы сосредоточиться на тестировании основного компонента.
 
-### Stubbing unneeded components
+### Создание заглушек для ненужных компонентов
 
-In the first technique, you create and declare stub versions of the components and directive that play little or no role in the tests.
+В первом методе вы создаете и объявляете версии-заглушки компонентов и директив, которые играют незначительную роль или вообще не играют роли в тестах.
 
 <docs-code header="app.component.spec.ts (stub declaration)" path="adev/src/content/examples/testing/src/app/app.component.spec.ts" region="component-stubs"/>
 
-The stub selectors match the selectors for the corresponding real components.
-But their templates and classes are empty.
+Селекторы заглушек соответствуют селекторам соответствующих реальных компонентов.
+Но их шаблоны и классы пусты.
 
-Then declare them by overriding the `imports` of your component using `TestBed.overrideComponent`.
+Затем объявите их, переопределив `imports` вашего компонента с помощью `TestBed.overrideComponent`.
 
 <docs-code header="app.component.spec.ts (TestBed stubs)" path="adev/src/content/examples/testing/src/app/app.component.spec.ts" region="testbed-stubs"/>
 
-HELPFUL: The `set` key in this example replaces all the exisiting imports on your component, make sure to imports all dependencies, not only the stubs. Alternatively you can use the `remove`/`add` keys to selectively remove and add imports.
+ПОЛЕЗНО: Ключ `set` в этом примере заменяет все существующие импорты вашего компонента, убедитесь, что импортируете все зависимости, а не только заглушки. В качестве альтернативы вы можете использовать ключи `remove`/`add` для выборочного удаления и добавления импортов.
 
 ### `NO_ERRORS_SCHEMA`
 
-In the second approach, add `NO_ERRORS_SCHEMA` to the metadata overrides of your component.
+Во втором подходе добавьте `NO_ERRORS_SCHEMA` в переопределения метаданных вашего компонента.
 
 <docs-code header="app.component.spec.ts (NO_ERRORS_SCHEMA)" path="adev/src/content/examples/testing/src/app/app.component.spec.ts" region="no-errors-schema"/>
 
-The `NO_ERRORS_SCHEMA` tells the Angular compiler to ignore unrecognized elements and attributes.
+`NO_ERRORS_SCHEMA` указывает компилятору Angular игнорировать нераспознанные элементы и атрибуты.
 
-The compiler recognizes the `<app-root>` element and the `routerLink` attribute because you declared a corresponding `AppComponent` and `RouterLink` in the `TestBed` configuration.
+Компилятор распознает элемент `<app-root>` и атрибут `routerLink`, потому что вы объявили соответствующие `AppComponent` и `RouterLink` в конфигурации `TestBed`.
 
-But the compiler won't throw an error when it encounters `<app-banner>`, `<app-welcome>`, or `<router-outlet>`.
-It simply renders them as empty tags and the browser ignores them.
+Но компилятор не выдаст ошибку, когда встретит `<app-banner>`, `<app-welcome>` или `<router-outlet>`.
+Он просто отрендерит их как пустые теги, и браузер проигнорирует их.
 
-You no longer need the stub components.
+Вам больше не нужны компоненты-заглушки.
 
-### Use both techniques together
+### Используйте оба метода вместе
 
-These are techniques for _Shallow Component Testing_, so-named because they reduce the visual surface of the component to just those elements in the component's template that matter for tests.
+Это методы _поверхностного тестирования компонентов_ (Shallow Component Testing), названные так потому, что они уменьшают визуальную поверхность компонента только до тех элементов в шаблоне компонента, которые важны для тестов.
 
-The `NO_ERRORS_SCHEMA` approach is the easier of the two but don't overuse it.
+Подход `NO_ERRORS_SCHEMA` проще из двух, но не злоупотребляйте им.
 
-The `NO_ERRORS_SCHEMA` also prevents the compiler from telling you about the missing components and attributes that you omitted inadvertently or misspelled.
-You could waste hours chasing phantom bugs that the compiler would have caught in an instant.
+`NO_ERRORS_SCHEMA` также не позволяет компилятору сообщать вам об отсутствующих компонентах и атрибутах, которые вы пропустили непреднамеренно или написали с ошибкой.
+Вы можете потратить часы на погоню за фантомными багами, которые компилятор поймал бы мгновенно.
 
-The _stub component_ approach has another advantage.
-While the stubs in _this_ example were empty, you could give them stripped-down templates and classes if your tests need to interact with them in some way.
+Подход с _компонентами-заглушками_ имеет еще одно преимущество.
+Хотя заглушки в _этом_ примере были пустыми, вы могли бы дать им урезанные шаблоны и классы, если вашим тестам нужно как-то взаимодействовать с ними.
 
-In practice you will combine the two techniques in the same setup, as seen in this example.
+На практике вы будете комбинировать эти два метода в одной настройке, как показано в этом примере.
 
 <docs-code header="app.component.spec.ts (mixed setup)" path="adev/src/content/examples/testing/src/app/app.component.spec.ts" region="mixed-setup"/>
 
-The Angular compiler creates the `BannerStubComponent` for the `<app-banner>` element and applies the `RouterLink` to the anchors with the `routerLink` attribute, but it ignores the `<app-welcome>` and `<router-outlet>` tags.
+Компилятор Angular создает `BannerStubComponent` для элемента `<app-banner>` и применяет `RouterLink` к якорям с атрибутом `routerLink`, но игнорирует теги `<app-welcome>` и `<router-outlet>`.
 
-### `By.directive` and injected directives
+### `By.directive` и внедренные директивы
 
-A little more setup triggers the initial data binding and gets references to the navigation links:
+Еще немного настройки запускает начальную привязку данных и получает ссылки на навигационные ссылки:
 
 <docs-code header="app.component.spec.ts (test setup)" path="adev/src/content/examples/testing/src/app/app.component.spec.ts" region="test-setup"/>
 
-Three points of special interest:
+Три момента, представляющих особый интерес:
 
-- Locate the anchor elements with an attached directive using `By.directive`
-- The query returns `DebugElement` wrappers around the matching elements
-- Each `DebugElement` exposes a dependency injector with the specific instance of the directive attached to that element
+- Поиск элементов якорей с прикрепленной директивой с помощью `By.directive`
+- Запрос возвращает обертки `DebugElement` вокруг соответствующих элементов
+- Каждый `DebugElement` предоставляет инжектор зависимостей с конкретным экземпляром директивы, прикрепленной к этому элементу
 
-The `AppComponent` links to validate are as follows:
+Ссылки `AppComponent` для проверки выглядят следующим образом:
 
 <docs-code header="app.component.html (navigation links)" path="adev/src/content/examples/testing/src/app/app.component.html" region="links"/>
 
-Here are some tests that confirm those links are wired to the `routerLink` directives as expected:
+Вот несколько тестов, которые подтверждают, что эти ссылки связаны с директивами `routerLink` так, как ожидается:
 
 <docs-code header="app.component.spec.ts (selected tests)" path="adev/src/content/examples/testing/src/app/app.component.spec.ts" region="tests"/>
 
-## Use a `page` object
+## Использование объекта `page`
 
-The `HeroDetailComponent` is a simple view with a title, two hero fields, and two buttons.
+`HeroDetailComponent` — это простое представление с заголовком, двумя полями героя и двумя кнопками.
 
-But there's plenty of template complexity even in this simple form.
+Но даже в этой простой форме в шаблоне достаточно сложности.
 
 <docs-code
   path="adev/src/content/examples/testing/src/app/hero/hero-detail.component.html" header="hero-detail.component.html"/>
 
-Tests that exercise the component need …
+Тесты, которые проверяют компонент, должны…
 
-- To wait until a hero arrives before elements appear in the DOM
-- A reference to the title text
-- A reference to the name input box to inspect and set it
-- References to the two buttons so they can click them
+- Ждать, пока герой прибудет, прежде чем элементы появятся в DOM
+- Иметь ссылку на текст заголовка
+- Иметь ссылку на поле ввода имени для его проверки и установки
+- Иметь ссылки на две кнопки, чтобы можно было нажать на них
 
-Even a small form such as this one can produce a mess of tortured conditional setup and CSS element selection.
+Даже такая небольшая форма, как эта, может создать беспорядок из запутанной условной настройки и выбора элементов CSS.
 
-Tame the complexity with a `Page` class that handles access to component properties and encapsulates the logic that sets them.
+Укротите сложность с помощью класса `Page`, который обрабатывает доступ к свойствам компонента и инкапсулирует логику, которая их устанавливает.
 
-Here is such a `Page` class for the `hero-detail.component.spec.ts`
+Вот такой класс `Page` для `hero-detail.component.spec.ts`
 
 <docs-code header="hero-detail.component.spec.ts (Page)" path="adev/src/content/examples/testing/src/app/hero/hero-detail.component.spec.ts" region="page"/>
 
-Now the important hooks for component manipulation and inspection are neatly organized and accessible from an instance of `Page`.
+Теперь важные хуки для манипулирования компонентом и проверки аккуратно организованы и доступны из экземпляра `Page`.
 
-A `createComponent` method creates a `page` object and fills in the blanks once the `hero` arrives.
+Метод `createComponent` создает объект `page` и заполняет пробелы, как только `hero` прибывает.
 
 <docs-code header="hero-detail.component.spec.ts (createComponent)" path="adev/src/content/examples/testing/src/app/hero/hero-detail.component.spec.ts" region="create-component"/>
 
-Here are a few more `HeroDetailComponent` tests to reinforce the point.
+Вот еще несколько тестов `HeroDetailComponent` для закрепления мысли.
 
 <docs-code header="hero-detail.component.spec.ts (selected tests)" path="adev/src/content/examples/testing/src/app/hero/hero-detail.component.spec.ts" region="selected-tests"/>
 
-## Override component providers
+## Переопределение провайдеров компонентов
 
-The `HeroDetailComponent` provides its own `HeroDetailService`.
+`HeroDetailComponent` предоставляет свой собственный `HeroDetailService`.
 
 <docs-code header="hero-detail.component.ts (prototype)" path="adev/src/content/examples/testing/src/app/hero/hero-detail.component.ts" region="prototype"/>
 
-It's not possible to stub the component's `HeroDetailService` in the `providers` of the `TestBed.configureTestingModule`.
-Those are providers for the _testing module_, not the component.
-They prepare the dependency injector at the _fixture level_.
+Невозможно создать заглушку для `HeroDetailService` компонента в `providers` конфигурации `TestBed.configureTestingModule`.
+Это провайдеры для _модуля тестирования_, а не для компонента.
+Они подготавливают инжектор зависимостей на уровне _фикстуры_.
 
-Angular creates the component with its _own_ injector, which is a _child_ of the fixture injector.
-It registers the component's providers \(the `HeroDetailService` in this case\) with the child injector.
+Angular создает компонент со своим _собственным_ инжектором, который является _дочерним_ по отношению к инжектору фикстуры.
+Он регистрирует провайдеры компонента (в данном случае `HeroDetailService`) в дочернем инжекторе.
 
-A test cannot get to child injector services from the fixture injector.
-And `TestBed.configureTestingModule` can't configure them either.
+Тест не может добраться до сервисов дочернего инжектора из инжектора фикстуры.
+И `TestBed.configureTestingModule` также не может их настроить.
 
-Angular has created new instances of the real `HeroDetailService` all along!
+Angular все это время создавал новые экземпляры реального `HeroDetailService`!
 
-HELPFUL: These tests could fail or timeout if the `HeroDetailService` made its own XHR calls to a remote server.
-There might not be a remote server to call.
+ПОЛЕЗНО: Эти тесты могли бы упасть или завершиться по таймауту, если бы `HeroDetailService` делал свои собственные вызовы XHR к удаленному серверу.
+Удаленного сервера для вызова может не быть.
 
-Fortunately, the `HeroDetailService` delegates responsibility for remote data access to an injected `HeroService`.
+К счастью, `HeroDetailService` делегирует ответственность за удаленный доступ к данным внедренному `HeroService`.
 
 <docs-code header="hero-detail.service.ts (prototype)" path="adev/src/content/examples/testing/src/app/hero/hero-detail.service.ts" region="prototype"/>
 
-The previous test configuration replaces the real `HeroService` with a `TestHeroService` that intercepts server requests and fakes their responses.
+Предыдущая конфигурация теста заменяет реальный `HeroService` на `TestHeroService`, который перехватывает запросы к серверу и подделывает их ответы.
 
-What if you aren't so lucky.
-What if faking the `HeroService` is hard?
-What if `HeroDetailService` makes its own server requests?
+Что, если вам не так повезло.
+Что, если подделать `HeroService` сложно?
+Что, если `HeroDetailService` делает свои собственные запросы к серверу?
 
-The `TestBed.overrideComponent` method can replace the component's `providers` with easy-to-manage _test doubles_ as seen in the following setup variation:
+Метод `TestBed.overrideComponent` может заменить массив `providers` компонента на легко управляемые _тестовые двойники_, как показано в следующем варианте настройки:
 
 <docs-code header="hero-detail.component.spec.ts (Override setup)" path="adev/src/content/examples/testing/src/app/hero/hero-detail.component.spec.ts" region="setup-override"/>
 
-Notice that `TestBed.configureTestingModule` no longer provides a fake `HeroService` because it's [not needed](#provide-a-spy-stub-herodetailservicespy).
+Обратите внимание, что `TestBed.configureTestingModule` больше не предоставляет фейковый `HeroService`, потому что он [не нужен](#provide-a-spy-stub-herodetailservicespy).
 
-### The `overrideComponent` method
+### Метод `overrideComponent`
 
-Focus on the `overrideComponent` method.
+Сосредоточьтесь на методе `overrideComponent`.
 
 <docs-code header="hero-detail.component.spec.ts (overrideComponent)" path="adev/src/content/examples/testing/src/app/hero/hero-detail.component.spec.ts" region="override-component-method"/>
 
-It takes two arguments: the component type to override \(`HeroDetailComponent`\) and an override metadata object.
-The [override metadata object](guide/testing/utility-apis#metadata-override-object) is a generic defined as follows:
+Он принимает два аргумента: тип компонента для переопределения (`HeroDetailComponent`) и объект переопределения метаданных.
+[Объект переопределения метаданных](guide/testing/utility-apis#metadata-override-object) — это дженерик, определенный следующим образом:
 
 <docs-code language="javascript">
 
@@ -764,10 +758,10 @@ set?: Partial<T>;
 
 </docs-code>
 
-A metadata override object can either add-and-remove elements in metadata properties or completely reset those properties.
-This example resets the component's `providers` metadata.
+Объект переопределения метаданных может либо добавлять и удалять элементы в свойствах метаданных, либо полностью сбрасывать эти свойства.
+Этот пример сбрасывает метаданные `providers` компонента.
 
-The type parameter, `T`, is the kind of metadata you'd pass to the `@Component` decorator:
+Параметр типа, `T`, — это вид метаданных, которые вы передаете декоратору `@Component`:
 
 <docs-code language="javascript">
 
@@ -779,27 +773,27 @@ providers?: any[];
 
 </docs-code>
 
-### Provide a _spy stub_ (`HeroDetailServiceSpy`)
+### Предоставление _шпиона-заглушки_ (`HeroDetailServiceSpy`)
 
-This example completely replaces the component's `providers` array with a new array containing a `HeroDetailServiceSpy`.
+Этот пример полностью заменяет массив `providers` компонента новым массивом, содержащим `HeroDetailServiceSpy`.
 
-The `HeroDetailServiceSpy` is a stubbed version of the real `HeroDetailService` that fakes all necessary features of that service.
-It neither injects nor delegates to the lower level `HeroService` so there's no need to provide a test double for that.
+`HeroDetailServiceSpy` — это версия-заглушка реального `HeroDetailService`, которая подделывает все необходимые функции этого сервиса.
+Она не внедряет и не делегирует `HeroService` более низкого уровня, поэтому нет необходимости предоставлять тестовый двойник для него.
 
-The related `HeroDetailComponent` tests will assert that methods of the `HeroDetailService` were called by spying on the service methods.
-Accordingly, the stub implements its methods as spies:
+Связанные тесты `HeroDetailComponent` будут утверждать, что методы `HeroDetailService` были вызваны, шпионя за методами сервиса.
+Соответственно, заглушка реализует свои методы как шпионы:
 
 <docs-code header="hero-detail.component.spec.ts (HeroDetailServiceSpy)" path="adev/src/content/examples/testing/src/app/hero/hero-detail.component.spec.ts" region="hds-spy"/>
 
-### The override tests
+### Тесты с переопределением
 
-Now the tests can control the component's hero directly by manipulating the spy-stub's `testHero` and confirm that service methods were called.
+Теперь тесты могут управлять героем компонента напрямую, манипулируя `testHero` шпиона-заглушки, и подтверждать, что методы сервиса были вызваны.
 
 <docs-code header="hero-detail.component.spec.ts (override tests)" path="adev/src/content/examples/testing/src/app/hero/hero-detail.component.spec.ts" region="override-tests"/>
 
-### More overrides
+### Больше переопределений
 
-The `TestBed.overrideComponent` method can be called multiple times for the same or different components.
-The `TestBed` offers similar `overrideDirective`, `overrideModule`, and `overridePipe` methods for digging into and replacing parts of these other classes.
+Метод `TestBed.overrideComponent` может быть вызван несколько раз для одних и тех же или разных компонентов.
+`TestBed` предлагает аналогичные методы `overrideDirective`, `overrideModule` и `overridePipe` для проникновения в эти другие классы и замены их частей.
 
-Explore the options and combinations on your own.
+Изучите варианты и комбинации самостоятельно.
