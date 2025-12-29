@@ -1,23 +1,38 @@
 # Image metadata and config.
 # Ideally, the Node.js version should match what we use on CI.
-FROM cimg/node:18.13.0@sha256:45d0ee279f522c4562a464df71108104cc9b2187205333ffd0707d4f05589731
-
+FROM cimg/node:20.19.0@sha256:5fa71892a331cd4e6a51c14eec3ff00dceb18f3eebd6496f1dadb768d914ff46
 
 LABEL name="Angular dev environment" \
-      description="This image can be used to create a dev environment for building Angular." \
-      vendor="angular" \
-      version="1.0"
+  description="This image can be used to create a dev environment for building Angular." \
+  vendor="angular" \
+  version="1.0"
 
 EXPOSE 4000 4200 4433 5000 8080 9876
-
 
 # Switch to `root`.
 USER root
 
+# Install Chrome dependencies (required for Bazel markdown processing with Mermaid)
+RUN apt-get update && apt-get install -y \
+    libnspr4 \
+    libnss3 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdrm2 \
+    libxkbcommon0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    libgbm1 \
+    libasound2 \
+    libpango-1.0-0 \
+    libcairo2 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Configure `Node.js`/`npm`.
-RUN npm config --global set user root
-
+# Install pnpm (required for dependency management)
+RUN corepack use pnpm@10.26.2
 
 # Go! (And keep going.)
 CMD ["tail", "--follow", "/dev/null"]
