@@ -1,229 +1,227 @@
-# Contributing to Angular
+# Участие в разработке Angular Docs RU
 
-We would love for you to contribute to Angular and help make it even better than it is today!
-As a contributor, here are the guidelines we would like you to follow:
+Мы будем рады, если вы внесете свой вклад в развитие документации Angular на русском языке и поможете сделать её еще лучше!
+Как участнику, мы предлагаем вам следовать следующим рекомендациям:
 
-- [Code of Conduct](#coc)
-- [Question or Problem?](#question)
-- [Issues and Bugs](#issue)
-- [Feature Requests](#feature)
-- [Submission Guidelines](#submit)
-- [Coding Rules](#rules)
-- [Commit Message Guidelines](#commit)
-- [Signing the CLA](#cla)
+- [Кодекс поведения](#coc)
+- [Вопросы и проблемы](#question)
+- [Ошибки и баги](#issue)
+- [Запрос новых функций](#feature)
+- [Руководство по отправке изменений](#submit)
+- [Правила кодирования](#rules)
+- [Правила сообщений коммитов](#commit)
+- [Подписание CLA](#cla)
 
-## <a name="coc"></a> Code of Conduct
+## <a name="coc"></a> Кодекс поведения
 
-Help us keep Angular open and inclusive.
-Please read and follow our [Code of Conduct][coc].
+Помогите нам сохранить сообщество Angular открытым и инклюзивным.
+Пожалуйста, прочитайте и соблюдайте наш [Кодекс поведения][coc].
 
-## <a name="question"></a> Got a Question or Problem?
+## <a name="question"></a> Есть вопрос или проблема?
 
-Do not open issues for general support questions as we want to keep GitHub issues for bug reports and feature requests.
-Instead, we recommend using [Stack Overflow](https://stackoverflow.com/questions/tagged/angular) to ask support-related questions. When creating a new question on Stack Overflow, make sure to add the `angular` tag.
+Не создавайте issues для общих вопросов поддержки, так как мы хотим использовать GitHub issues для отчетов об ошибках и запросов новых функций.
+Вместо этого мы рекомендуем использовать [Stack Overflow](https://stackoverflow.com/questions/tagged/angular) для вопросов, связанных с поддержкой. Создавая новый вопрос на Stack Overflow, не забудьте добавить тег `angular`.
 
-Stack Overflow is a much better place to ask questions since:
+Stack Overflow — гораздо лучшее место для вопросов, потому что:
 
-- there are thousands of people willing to help on Stack Overflow
-- questions and answers stay available for public viewing so your question/answer might help someone else
-- Stack Overflow's voting system assures that the best answers are prominently visible.
+- на Stack Overflow тысячи людей, готовых помочь;
+- вопросы и ответы остаются доступными для публичного просмотра, поэтому ваш вопрос/ответ может помочь кому-то еще;
+- система голосования Stack Overflow гарантирует, что лучшие ответы будут видны в первую очередь.
 
-To save your and our time, we will systematically close all issues that are requests for general support and redirect people to Stack Overflow.
+Чтобы сэкономить ваше и наше время, мы будем систематически закрывать все issues, являющиеся запросами на общую поддержку, и перенаправлять людей на Stack Overflow.
 
-If you would like to chat about the question in real-time, you can reach out via [the Angular community Discord server][discord].
+Если вы хотите обсудить вопрос в реальном времени, вы можете обратиться в [Discord-сервер сообщества Angular][discord].
 
-## <a name="issue"></a> Found a Bug?
+## <a name="issue"></a> Нашли ошибку?
 
-If you find a bug in the source code, you can help us by [submitting an issue](#submit-issue) to our [GitHub Repository][github].
-Even better, you can [submit a Pull Request](#submit-pr) with a fix.
+Если вы нашли ошибку в исходном коде или документации, вы можете помочь нам, [отправив issue](#submit-issue) в наш [репозиторий на GitHub][github].
+Еще лучше, если вы [отправите Pull Request](#submit-pr) с исправлением.
 
-## <a name="feature"></a> Missing a Feature?
+## <a name="feature"></a> Не хватает функции?
 
-You can _request_ a new feature by [submitting an issue](#submit-issue) to our GitHub Repository.
-If you would like to _implement_ a new feature, please consider the size of the change in order to determine the right steps to proceed:
+Вы можете _запросить_ новую функцию, [отправив issue](#submit-issue) в наш репозиторий на GitHub.
+Если вы хотите _реализовать_ новую функцию, пожалуйста, оцените объем изменений, чтобы определить правильные шаги для продолжения:
 
-- For a **Major Feature**, first open an issue and outline your proposal so that it can be discussed.
-  This process allows us to better coordinate our efforts, prevent duplication of work, and help you to craft the change so that it is successfully accepted into the project.
+- Для **Крупной функции** (Major Feature) сначала откройте issue и опишите свое предложение, чтобы его можно было обсудить.
+  Этот процесс позволяет нам лучше координировать наши усилия, предотвращать дублирование работы и помогать вам создавать изменения так, чтобы они были успешно приняты в проект.
 
-  **Note**: Adding a new topic to the documentation, or significantly re-writing a topic, counts as a major feature.
+  **Примечание**: Добавление новой темы в документацию или значительная переработка темы считается крупной функцией.
 
-- **Small Features** can be crafted and directly [submitted as a Pull Request](#submit-pr).
+- **Небольшие функции** (Small Features) могут быть созданы и сразу [отправлены как Pull Request](#submit-pr).
 
-## <a name="submit"></a> Submission Guidelines
+## <a name="submit"></a> Руководство по отправке изменений
 
-### <a name="submit-issue"></a> Submitting an Issue
+### <a name="submit-issue"></a> Отправка Issue
 
-Before you submit an issue, please search the issue tracker. An issue for your problem might already exist and the discussion might inform you of workarounds readily available.
+Перед тем как создать issue, пожалуйста, выполните поиск в трекере задач. Возможно, issue для вашей проблемы уже существует, и обсуждение может подсказать вам готовые решения.
 
-We want to fix all the issues as soon as possible, but before fixing a bug, we need to reproduce and confirm it.
-In order to reproduce bugs, we require that you provide a minimal reproduction.
-Having a minimal reproducible scenario gives us a wealth of important information without going back and forth to you with additional questions.
+Мы хотим исправлять все проблемы как можно скорее, но перед исправлением ошибки нам нужно воспроизвести и подтвердить её.
+Для воспроизведения ошибок мы требуем предоставить минимальную репродукцию.
+Наличие минимального воспроизводимого сценария дает нам массу важной информации без необходимости задавать вам дополнительные вопросы.
 
-A minimal reproduction allows us to quickly confirm a bug (or point out a coding problem) as well as confirm that we are fixing the right problem.
+Минимальная репродукция позволяет нам быстро подтвердить ошибку (или указать на проблему в коде), а также подтвердить, что мы исправляем именно ту проблему.
 
-We require a minimal reproduction to save maintainers' time and ultimately be able to fix more bugs.
-Often, developers find coding problems themselves while preparing a minimal reproduction.
-We understand that sometimes it might be hard to extract essential bits of code from a larger codebase, but we really need to isolate the problem before we can fix it.
+Мы требуем минимальную репродукцию, чтобы сэкономить время мейнтейнеров и в конечном итоге исправлять больше ошибок.
+Часто разработчики сами находят проблемы в коде, пока готовят минимальную репродукцию.
+Мы понимаем, что иногда бывает сложно извлечь существенные части кода из большой кодовой базы, но нам действительно нужно изолировать проблему, прежде чем мы сможем её исправить.
 
-Unfortunately, we are not able to investigate / fix bugs without a minimal reproduction, so if we don't hear back from you, we are going to close an issue that doesn't have enough info to be reproduced.
+К сожалению, мы не можем исследовать / исправлять ошибки без минимальной репродукции, поэтому, если мы не получим от вас ответа, мы закроем issue, в котором недостаточно информации для воспроизведения.
 
-You can file new issues by selecting from our [new issue templates](https://github.com/angular/angular/issues/new/choose) and filling out the issue template.
+Вы можете создавать новые issues, выбрав один из наших [шаблонов новых задач](https://github.com/misha98857/angular-docs.ru/issues/new/choose) и заполнив его.
 
-### <a name="submit-pr"></a> Submitting a Pull Request (PR)
+### <a name="submit-pr"></a> Отправка Pull Request (PR)
 
-Before you submit your Pull Request (PR) consider the following guidelines:
+Перед отправкой Pull Request (PR) ознакомьтесь со следующими рекомендациями:
 
-1. Search [GitHub](https://github.com/angular/angular/pulls) for an open or closed PR that relates to your submission.
-   You don't want to duplicate existing efforts.
+1. Выполните поиск в [GitHub](https://github.com/misha98857/angular-docs.ru/pulls) на предмет открытых или закрытых PR, относящихся к вашему предложению.
+   Вы же не хотите дублировать существующие усилия.
 
-2. Be sure that an issue describes the problem you're fixing, or documents the design for the feature you'd like to add.
-   Discussing the design upfront helps to ensure that we're ready to accept your work.
+2. Убедитесь, что issue описывает проблему, которую вы исправляете, или документирует дизайн функции, которую вы хотите добавить.
+   Обсуждение дизайна заранее помогает убедиться, что мы готовы принять вашу работу.
 
-3. Please sign our [Contributor License Agreement (CLA)](#cla) before sending PRs.
-   We cannot accept code without a signed CLA.
-   Make sure you author all contributed Git commits with email address associated with your CLA signature.
+3. Пожалуйста, подпишите наше [Соглашение участника (CLA)](#cla) перед отправкой PR (если применимо).
+   Мы не можем принять код без подписанного CLA (для официального репозитория Angular).
+   Убедитесь, что вы создаете все коммиты с адресом электронной почты, связанным с вашей подписью CLA.
 
-4. [Fork](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) the [angular/angular](https://github.com/angular/angular/fork) repo.
+4. [Сделайте форк](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) репозитория [misha98857/angular-docs.ru](https://github.com/misha98857/angular-docs.ru/fork).
 
-5. In your forked repository, make your changes in a new git branch:
+5. В вашем форке внесите изменения в новой git-ветке:
 
    ```shell
    git checkout -b my-fix-branch main
    ```
 
-6. Create your patch, **including appropriate test cases**.
+6. Создайте патч, **включая соответствующие тесты** (если применимо).
 
-7. Follow our [Coding Rules](#rules).
+7. Следуйте нашим [Правилам кодирования](#rules).
 
-8. Run the full Angular test suite, as described in the [developer documentation][dev-doc], and ensure that all tests pass.
+8. Запустите полный набор тестов Angular (или сборку документации), как описано в [документации разработчика][dev-doc], и убедитесь, что все проходит успешно.
 
-9. Commit your changes using a descriptive commit message that follows our [commit message conventions][commit-message-guidelines].
-   Adherence to these conventions is necessary because release notes are automatically generated from these messages.
+9. Закоммитьте ваши изменения, используя описательное сообщение коммита, которое следует нашим [соглашениям о сообщениях коммитов][commit-message-guidelines].
+   Соблюдение этих соглашений необходимо, так как примечания к выпуску (release notes) генерируются автоматически из этих сообщений.
 
    ```shell
    git commit --all
    ```
 
-   Note: the optional commit `--all` command line option will automatically "add" and "rm" edited files.
+   Примечание: опциональный параметр `--all` автоматически добавит ("add") и удалит ("rm") отредактированные файлы.
 
-10. Push your branch to GitHub:
+10. Отправьте вашу ветку на GitHub:
 
     ```shell
     git push origin my-fix-branch
     ```
 
-11. In GitHub, send a pull request to `angular:main`.
+11. На GitHub отправьте pull request в `misha98857:main`.
 
-### Reviewing a Pull Request
+### Проверка Pull Request
 
-The Angular team reserves the right not to accept pull requests from community members who haven't been good citizens of the community. Such behavior includes not following the [Angular code of conduct](https://github.com/angular/code-of-conduct) and applies within or outside of Angular managed channels.
+Команда проекта оставляет за собой право не принимать pull requests от участников, которые не были добросовестными членами сообщества. Такое поведение включает несоблюдение [Кодекса поведения Angular](https://github.com/angular/code-of-conduct) и применяется как внутри, так и за пределами каналов, управляемых Angular.
 
-#### Addressing review feedback
+#### Обработка отзывов (review feedback)
 
-If we ask for changes via code reviews then:
+Если мы просим внести изменения в ходе код-ревью, то:
 
-1. Make the required updates to the code.
+1. Внесите необходимые изменения в код.
 
-2. Re-run the Angular test suites to ensure tests are still passing.
+2. Перезапустите тесты/сборку, чтобы убедиться, что все по-прежнему работает.
 
-3. Create a fixup commit and push to your GitHub repository (this will update your Pull Request):
+3. Создайте fixup-коммит и отправьте его в ваш репозиторий на GitHub (это обновит ваш Pull Request):
 
    ```shell
    git commit --all --fixup HEAD
    git push
    ```
 
-   For more info on working with fixup commits see [here](./contributing-docs/using-fixup-commits.md).
+   Для получения дополнительной информации о работе с fixup-коммитами см. [здесь](./contributing-docs/using-fixup-commits.md).
 
-That's it! Thank you for your contribution!
+Вот и все! Спасибо за ваш вклад!
 
-##### Updating the commit message
+##### Обновление сообщения коммита
 
-A reviewer might often suggest changes to a commit message (for example, to add more context for a change or adhere to our [commit message guidelines][commit-message-guidelines]).
-In order to update the commit message of the last commit on your branch:
+Рецензент (reviewer) часто может предложить изменения в сообщении коммита (например, чтобы добавить больше контекста или соблюсти наши [правила сообщений коммитов][commit-message-guidelines]).
+Чтобы обновить сообщение последнего коммита в вашей ветке:
 
-1. Check out your branch:
+1. Переключитесь на вашу ветку:
 
    ```shell
    git checkout my-fix-branch
    ```
 
-2. Amend the last commit and modify the commit message:
+2. Измените последний коммит и отредактируйте сообщение:
 
    ```shell
    git commit --amend
    ```
 
-3. Push to your GitHub repository:
+3. Отправьте изменения в ваш репозиторий на GitHub (force push):
 
    ```shell
    git push --force-with-lease
    ```
 
-> NOTE:<br />
-> If you need to update the commit message of an earlier commit, you can use `git rebase` in interactive mode.
-> See the [git docs](https://git-scm.com/docs/git-rebase#_interactive_mode) for more details.
+> ПРИМЕЧАНИЕ:<br />
+> Если вам нужно обновить сообщение более раннего коммита, вы можете использовать `git rebase` в интерактивном режиме.
+> См. [документацию git](https://git-scm.com/docs/git-rebase#_interactive_mode) для подробностей.
 
-#### After your pull request is merged
+#### После того, как ваш pull request был принят (merged)
 
-After your pull request is merged, you can safely delete your branch and pull the changes from the main (upstream) repository:
+После того, как ваш PR был принят, вы можете безопасно удалить свою ветку и подтянуть изменения из основного (upstream) репозитория:
 
-- Delete the remote branch on GitHub either through the GitHub web UI or your local shell as follows:
+- Удалите удаленную ветку на GitHub через веб-интерфейс GitHub или локальную консоль следующим образом:
 
   ```shell
   git push origin --delete my-fix-branch
   ```
 
-- Check out the main branch:
+- Переключитесь на ветку main:
 
   ```shell
   git checkout main -f
   ```
 
-- Delete the local branch:
+- Удалите локальную ветку:
 
   ```shell
   git branch -D my-fix-branch
   ```
 
-- Update your local `main` with the latest upstream version:
+- Обновите вашу локальную ветку `main` до последней версии upstream:
 
   ```shell
   git pull --ff upstream main
   ```
 
-## <a name="rules"></a> Coding Rules
+## <a name="rules"></a> Правила кодирования
 
-To ensure consistency throughout the source code, keep these rules in mind as you are working:
+Чтобы обеспечить единообразие во всем исходном коде, придерживайтесь этих правил при работе:
 
-- All features or bug fixes **must be tested** by one or more specs (unit-tests).
-- All public API methods **must be documented**.
-- We follow [Google's TypeScript Style Guide][ts-style-guide], but wrap all code at **100 characters**.
+- Все функции или исправления ошибок **должны быть протестированы** одной или несколькими спецификациями (unit-тестами), если это применимо к коду.
+- Все публичные методы API **должны быть задокументированы**.
+- Мы следуем [Google's TypeScript Style Guide][ts-style-guide], но ограничиваем длину строки **100 символами**.
 
-  An automated formatter is available, see [building-and-testing-angular.md](./contributing-docs/building-and-testing-angular.md#formatting-your-source-code).
+  Доступен автоматический форматировщик, см. [building-and-testing-angular.md](./contributing-docs/building-and-testing-angular.md#formatting-your-source-code).
 
-## <a name="commit"></a> Commit Message Guidelines
+## <a name="commit"></a> Правила сообщений коммитов
 
-We have very precise rules over how our Git commit messages must be formatted:
+У нас есть очень четкие правила того, как должны быть отформатированы сообщения коммитов Git:
 
 ```
 <type>(<scope>): <short summary>
 ```
 
-See [Commit Message Guidelines][commit-message-guidelines] for details.
+См. [Commit Message Guidelines][commit-message-guidelines] для подробностей.
 
-## <a name="cla"></a> Signing the CLA
+## <a name="cla"></a> Подписание CLA
 
-Please sign our Contributor License Agreement (CLA) before sending pull requests. For any code
-changes to be accepted, the CLA must be signed. It's a quick process, we promise!
+Пожалуйста, подпишите наше Соглашение участника (CLA) перед отправкой pull requests. Для принятия любых изменений кода (в основном репозитории Angular) CLA должен быть подписан. Это быстрый процесс, мы обещаем!
 
-- For individuals, we have a [simple click-through form][individual-cla].
-- For corporations, we'll need you to
-  [print, sign and one of scan+email, fax or mail the form][corporate-cla].
+- Для физических лиц у нас есть [простая форма][individual-cla].
+- Для корпораций нам потребуется, чтобы вы [распечатали, подписали и отсканировали+отправили по email, факсу или почте эту форму][corporate-cla].
 
-If you have more than one GitHub accounts, or multiple email addresses associated with a single GitHub account, you must sign the CLA using the primary email address of the GitHub account used to author Git commits and send pull requests.
+Если у вас несколько аккаунтов GitHub или несколько адресов электронной почты, связанных с одним аккаунтом GitHub, вы должны подписать CLA, используя основной адрес электронной почты аккаунта GitHub, который используется для создания коммитов Git и отправки pull requests.
 
-The following documents can help you sort out issues with GitHub accounts and multiple email addresses:
+Следующие документы могут помочь вам разобраться с проблемами аккаунтов GitHub и нескольких адресов электронной почты:
 
 - https://help.github.com/articles/setting-your-commit-email-address-in-git/
 - https://stackoverflow.com/questions/37245303/what-does-usera-committed-with-userb-13-days-ago-on-github-mean
@@ -234,7 +232,7 @@ The following documents can help you sort out issues with GitHub accounts and mu
 [corporate-cla]: https://cla.developers.google.com/about/google-corporate
 [dev-doc]: ./contributing-docs/building-and-testing-angular.md
 [commit-message-guidelines]: ./contributing-docs/commit-message-guidelines.md
-[github]: https://github.com/angular/angular
+[github]: https://github.com/misha98857/angular-docs.ru
 [discord]: https://discord.gg/angular
 [individual-cla]: https://cla.developers.google.com/about/google-individual
 [ts-style-guide]: https://google.github.io/styleguide/tsguide.html
