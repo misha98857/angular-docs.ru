@@ -98,7 +98,7 @@ section {
   text-align: center;
   h2 {
     padding: 0 1rem;
-    font-size: clamp(1rem, 9vw, 38pt);
+    font-size: clamp(1.15rem, 4.8vw, 1.85rem);
   }
 }
 
@@ -206,13 +206,24 @@ section {
     justify-content: space-between;
 
     h2 {
-      font-size: clamp(3rem, 6vw, 5rem);
+      font-size: clamp(2rem, 5vw, 3.25rem);
       margin-bottom: 0;
+      line-height: 1.15;
+
+      @include mq.for-phone-only {
+        font-size: clamp(1.35rem, 6.5vw, 1.85rem);
+      }
     }
 
     h3 {
-      font-size: clamp(0.5rem, 4vw, 1rem);
+      font-size: clamp(0.85rem, 3.2vw, 1rem);
       color: var(--quaternary-contrast);
+      line-height: 1.4;
+
+      @include mq.for-phone-only {
+        font-size: 0.85rem;
+        padding: 0 0.5rem;
+      }
     }
   }
 
@@ -318,11 +329,19 @@ section {
     padding: 0.5rem;
     cursor: pointer;
     color: var(--tertiary-contrast);
-    font-size: 14px;
+    font-size: 13px;
+    line-height: 1.25;
+    text-align: center;
     border-radius: 0.5rem;
     transition: all 0.2s ease-in-out;
     position: relative;
     z-index: 1;
+
+    @include mq.for-phone-only {
+      font-size: 10px;
+      padding: 0.35rem 0.15rem;
+      letter-spacing: -0.01em;
+    }
 
     &:hover {
       color: var(--primary-contrast);
@@ -395,11 +414,15 @@ section {
   gap: 1.5rem;
 
   .header {
-    font-size: 1.75rem;
+    font-size: clamp(1.05rem, 3.5vw, 1.25rem);
+
+    @include mq.for-phone-only {
+      font-size: 1.05rem;
+    }
   }
 
   .description {
-    font-size: 1.1rem;
+    font-size: clamp(0.9rem, 2.8vw, 1rem);
     line-height: 1.6;
     color: var(--secondary-contrast);
 

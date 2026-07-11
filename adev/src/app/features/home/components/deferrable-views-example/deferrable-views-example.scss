@@ -31,12 +31,12 @@
   gap: 1.5rem;
 
   .header {
-    font-size: 1.5rem;
+    font-size: clamp(1.05rem, 3.5vw, 1.25rem);
     font-weight: 500;
   }
 
   .description {
-    font-size: 1.1rem;
+    font-size: clamp(0.9rem, 2.8vw, 1rem);
     line-height: 1.6;
     color: var(--secondary-contrast);
   }
