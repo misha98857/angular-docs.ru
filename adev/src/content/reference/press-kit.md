@@ -15,9 +15,9 @@
     Наши папки с руководством по бренду содержат файлы дизайна, рекомендации и примеры от сообщества по адаптации бренда.
     Подробнее об адаптации логотипа читайте в разделе ниже.
   </docs-card>
-  <docs-card title="Angular mascot" href="https://drive.google.com/drive/folders/1uX4H3exWWpwPqh52Bxig3GLS736gBEAf?usp=drive_link" link="Download from Google Drive">
-    ![Angular mascot cheerful](assets/images/press-kit/angular_mascot_cheerful.png "Angular mascot cheerful")
-    Angie is the official mascot of the Angular framework. The mascot folders contain different file formats and poses of our friendly companion for use in your community assets and presentations.
+  <docs-card title="Маскот Angular" href="https://drive.google.com/drive/folders/1uX4H3exWWpwPqh52Bxig3GLS736gBEAf?usp=drive_link" link="Скачать с Google Диска">
+    ![Весёлый маскот Angular](assets/images/press-kit/angular_mascot_cheerful.png "Весёлый маскот Angular")
+    Angie — официальный маскот фреймворка Angular. Папки с маскотом содержат разные форматы файлов и позы нашего дружелюбного компаньона для использования в материалах сообщества и презентациях.
   </docs-card>
 </docs-card-container>
 

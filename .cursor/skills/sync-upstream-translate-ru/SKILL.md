@@ -94,3 +94,16 @@ Conventional commits, Russian-friendly messages, e.g.:
 - `feat: translate home page, footer, and restore Russian nav labels`
 
 Branch: `feat/sync-upstream-YYYY-MM-DD` (or Jira key if provided).
+
+## Pull requests — CRITICAL
+
+**NEVER** open a PR against `angular/angular` (upstream).
+**ONLY** create PRs against `https://github.com/misha98857/angular-docs.ru` (`origin`).
+
+```bash
+git push -u origin HEAD
+gh pr create --repo misha98857/angular-docs.ru --base main --head "$(git branch --show-current)"
+```
+
+See `.cursor/rules/no-upstream-prs.mdc`.
+

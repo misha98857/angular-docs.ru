@@ -1724,17 +1724,17 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
         contentPath: 'reference/migrations/route-lazy-loading',
       },
       {
-        label: 'Signal inputs',
+        label: 'Сигнальные входные свойства',
         path: 'reference/migrations/signal-inputs',
         contentPath: 'reference/migrations/signal-inputs',
       },
       {
-        label: 'Outputs',
+        label: 'Выходные свойства',
         path: 'reference/migrations/outputs',
         contentPath: 'reference/migrations/outputs',
       },
       {
-        label: 'Signal queries',
+        label: 'Сигнальные запросы',
         path: 'reference/migrations/signal-queries',
         contentPath: 'reference/migrations/signal-queries',
       },

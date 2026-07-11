@@ -21,7 +21,7 @@
 - **Auxiliary**: Указывает, является ли маршрут вспомогательным (например, в именованном outlet).
 - **Lazy**: Указывает, загружается ли маршрут лениво.
 
-Примечание: свойства вроде Path Match, Data, Resolvers, Guards, Providers, Title и RunGuardsAndResolvers появляются на боковой панели только если они настроены на выбранном маршруте.
+NOTE: свойства вроде Path Match, Data, Resolvers, Guards, Providers, Title и RunGuardsAndResolvers появляются на боковой панели только если они настроены на выбранном маршруте.
 
 ### Навигация к конкретному маршруту {#navigate-to-a-specific-route}
 

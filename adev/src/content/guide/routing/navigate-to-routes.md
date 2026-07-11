@@ -159,7 +159,7 @@ export class UserDetailComponent {
 }
 ```
 
-When navigating multiple levels up, all `..` segments must be in the **first element** of the commands array. The router only parses `..` from the first command string — subsequent array elements are treated as literal path segments.
+При навигации на несколько уровней вверх все сегменты `..` должны находиться в **первом элементе** массива команд. Роутер разбирает `..` только из первой строки команды — последующие элементы массива обрабатываются как литеральные сегменты пути.
 
 ```angular-ts {prefer}
 // From: /team/123/users/456
@@ -167,7 +167,7 @@ When navigating multiple levels up, all `..` segments must be in the **first ele
 this.router.navigate(['../../settings'], {relativeTo: this.route});
 ```
 
-When using `relativeTo`, never prefix the first command with `/`. A leading `/` makes the navigation absolute and ignores `relativeTo` entirely.
+При использовании `relativeTo` никогда не добавляйте `/` в начало первой команды. Ведущий `/` делает навигацию абсолютной и полностью игнорирует `relativeTo`.
 
 ```angular-ts {prefer}
 // From: /team/123/users/456

@@ -143,7 +143,7 @@ export const routes: Route[] = [
       {
         path: PAGE_PREFIX.PLAYGROUND,
         loadComponent: () => import('../features/playground/playground.component'),
-        data: {...commonTutorialRouteData, label: 'Playground'},
+        data: {...commonTutorialRouteData, label: 'Песочница'},
       },
       ...SUB_NAVIGATION_ROUTES,
       ...API_REFERENCE_ROUTES,

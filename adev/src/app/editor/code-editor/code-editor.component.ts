@@ -261,7 +261,7 @@ export class CodeEditor {
       const newFile = 'src/' + renameFileInputValue;
 
       if (this.files().find(({filename}) => filename.includes(newFile))) {
-        alert('File name already exists');
+        alert('Имя файла уже существует');
         return;
       }
 
@@ -284,7 +284,7 @@ export class CodeEditor {
       const newFile = 'src/' + newFileInputValue;
 
       if (this.files().find(({filename}) => filename.includes(newFile))) {
-        alert('File already exists');
+        alert('Файл уже существует');
         return;
       }
 
@@ -299,11 +299,11 @@ export class CodeEditor {
       return false;
     }
     if (fileName.split('/').pop()?.indexOf('.') === 0) {
-      alert('File must contain a name.');
+      alert('Имя файла обязательно.');
       return false;
     }
     if (fileName.includes('..')) {
-      alert('File name can not contain ".."');
+      alert('Имя файла не может содержать ".."');
       return false;
     }
     return true;

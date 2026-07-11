@@ -1,0 +1,48 @@
+---
+description: >-
+  NEVER open PRs/MRs against upstream angular/angular. Only create pull requests
+  against the fork misha98857/angular-docs.ru. Use when pushing, creating PRs,
+  MRs, pull requests, or syncing with upstream.
+alwaysApply: true
+---
+
+# PRs только в форк angular-docs.ru
+
+Этот репозиторий — **форк** `angular/angular` для русской документации.
+Открывать Pull Request / Merge Request в **upstream Angular запрещено**.
+
+## Разрешённый target
+
+| Remote | URL | Push / PR |
+|--------|-----|-----------|
+| `origin` | `https://github.com/misha98857/angular-docs.ru.git` | ✅ единственный target для PR |
+| `upstream` | `https://github.com/angular/angular.git` | ❌ только `fetch` / merge локально |
+
+## Обязательные проверки перед `gh pr create` / API create
+
+1. `git remote -v` — PR base repo = **`misha98857/angular-docs.ru`**, не `angular/angular`.
+2. Base branch = `main` (или указанная ветка **форка**).
+3. Head = наша feature-ветка на **`origin`**.
+4. Если команда/API по умолчанию целится в `angular/angular` — **стоп**, явно указать форк:
+
+```bash
+# ✅ правильно
+git push -u origin HEAD
+gh pr create --repo misha98857/angular-docs.ru --base main --head feat/your-branch
+
+# ❌ ЗАПРЕЩЕНО
+gh pr create --repo angular/angular ...
+gh pr create  # если upstream = default repo
+```
+
+## Запрещено
+
+- `gh pr create` без `--repo misha98857/angular-docs.ru`, если есть риск уйти в upstream
+- PR в `angular/angular`, `angular/*`, любой org Angular
+- Push feature-веток в `upstream` (только `git fetch upstream`)
+
+## Если PR уже ушёл в upstream по ошибке
+
+1. Немедленно закрыть PR в `angular/angular` с коротким извинением (wrong target / fork mistake).
+2. Создать правильный PR в `https://github.com/misha98857/angular-docs.ru`.
+3. Сообщить пользователю оба URL.

@@ -147,20 +147,20 @@ const activeUserEditCopy = linkedSignal({
 });
 ```
 
-## Customizing the set operation
+## Настройка операции set {#customizing-the-set-operation}
 
-Sometimes you may want the `set` and `update` operations of a `linkedSignal` to write back to the source of truth instead of updating the `linkedSignal`'s value directly. You can customize this behavior by passing a `set` function in the options.
+Иногда операции `set` и `update` у `linkedSignal` нужно направлять обратно в источник истины, а не обновлять значение самого `linkedSignal` напрямую. Такое поведение можно настроить, передав функцию `set` в опциях.
 
-The custom `set` function receives two arguments:
+Пользовательская функция `set` получает два аргумента:
 
-1. The new value being set.
-2. A `rawSet` function, which you can invoke to update the `linkedSignal`'s internal state directly (matching the default behavior).
+1. Новое устанавливаемое значение.
+2. Функцию `rawSet`, которую можно вызвать, чтобы обновить внутреннее состояние `linkedSignal` напрямую (как при поведении по умолчанию).
 
-NOTE: Using `rawSet` allows you to update the `linkedSignal`'s value directly. This can be useful to prevent the computation from running, for example if it is an expensive derivation and you already know the result.
+NOTE: С помощью `rawSet` можно обновить значение `linkedSignal` напрямую. Это полезно, если нужно избежать повторного запуска вычисления — например, когда оно дорогое, а результат уже известен.
 
-### Writing back to a source signal
+### Запись обратно в исходный сигнал {#writing-back-to-a-source-signal}
 
-Consider a component that displays and allows editing temperature in Fahrenheit, but uses a Celsius signal as its source of truth:
+Рассмотрим компонент, который отображает и позволяет редактировать температуру в градусах Фаренгейта, но в качестве источника истины использует сигнал в градусах Цельсия:
 
 ```typescript
 const tempC = signal(0);
@@ -176,9 +176,9 @@ console.log(tempC()); // 100
 console.log(tempF()); // 212
 ```
 
-### Updating a property inside a parent object
+### Обновление свойства внутри родительского объекта {#updating-a-property-inside-a-parent-object}
 
-Another common scenario is updating a specific property inside a parent object. The parent is held in a signal, and you link to a nested property:
+Ещё один распространённый сценарий — обновление конкретного свойства внутри родительского объекта. Родитель хранится в сигнале, а вы связываетесь со вложенным свойством:
 
 ```typescript
 interface Order {
