@@ -6,19 +6,30 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
-import {Step, RECOMMENDATIONS} from './recommendations';
 import {Clipboard} from '@angular/cdk/clipboard';
-import {CdkMenuModule} from '@angular/cdk/menu';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatInputModule} from '@angular/material/input';
-import {MatCardModule} from '@angular/material/card';
-import {MatGridListModule} from '@angular/material/grid-list';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {CdkMenu, CdkMenuItem, CdkMenuTrigger} from '@angular/cdk/menu';
+import {Component, inject, signal} from '@angular/core';
 import {IconComponent} from '@angular/docs';
+import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
 import {marked} from 'marked';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {ApplicationComplexity, RECOMMENDATIONS, Step} from './recommendations';
+
+/**
+ * Configure marked with a custom link renderer so external links in the
+ * update guide open in a new tab, matching the convention applied elsewhere
+ * in adev via the `ExternalLink` directive.
+ */
+marked.use({
+  renderer: {
+    link({href, title, text}) {
+      const titleAttr = title ? ` title="${title}"` : '';
+      return `<a href="${href}"${titleAttr} target="_blank" rel="noopener noreferrer">${text}</a>`;
+    },
+  },
+});
 
 interface Option {
   id: keyof Step;
@@ -33,15 +44,14 @@ const isWindows = typeof window !== 'undefined' && window.navigator.userAgent.in
   templateUrl: './update.component.html',
   styleUrl: './update.component.scss',
   imports: [
-    MatCheckboxModule,
-    MatInputModule,
-    MatCardModule,
-    MatGridListModule,
-    MatButtonToggleModule,
-    CdkMenuModule,
+    MatCheckbox,
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    CdkMenuTrigger,
+    CdkMenu,
+    CdkMenuItem,
     IconComponent,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '(click)': 'copyCode($event)',
   },
@@ -59,7 +69,7 @@ export default class UpdateComponent {
   };
 
   protected readonly optionList: Option[] = [
-    {id: 'ngUpgrade', name: 'ngUpgrade', description: 'to combine AngularJS & Angular'},
+    {id: 'ngUpgrade', name: 'ngUpgrade', description: 'для объединения AngularJS и Angular'},
     {id: 'material', name: 'Angular Material', description: ''},
     {id: 'windows', name: 'Windows', description: ''},
   ];
@@ -71,6 +81,7 @@ export default class UpdateComponent {
   protected afterRecommendations: Step[] = [];
 
   protected readonly versions = [
+    {name: '22.0', number: 2200},
     {name: '21.0', number: 2100},
     {name: '20.0', number: 2000},
     {name: '19.0', number: 1900},
@@ -109,9 +120,9 @@ export default class UpdateComponent {
     {name: '2.1', number: 201},
     {name: '2.0', number: 200},
   ];
-  protected from = this.versions.find((version) => version.name === '20.0')!;
-  protected to = this.versions.find((version) => version.name === '21.0')!;
-  protected futureVersion = 2100;
+  protected from = this.versions.find((version) => version.name === '21.0')!;
+  protected to = this.versions.find((version) => version.name === '22.0')!;
+  protected futureVersion = 2300;
 
   protected readonly steps: Step[] = RECOMMENDATIONS;
 
@@ -139,7 +150,7 @@ export default class UpdateComponent {
 
     if (tagName === 'CODE') {
       this.clipboard.copy(textContent!);
-      this.snackBar.open('Copied to clipboard', '', {duration: 2000});
+      this.snackBar.open('Скопировано в буфер обмена', '', {duration: 2000});
     }
   }
 
@@ -150,17 +161,17 @@ export default class UpdateComponent {
 
     // Refuse to generate recommendations for downgrades
     if (this.to.number < this.from.number) {
-      alert('We do not support downgrading versions of Angular.');
+      alert('Мы не поддерживаем понижение версий Angular.');
       return;
     }
 
-    const labelTitle = 'Guide to update your Angular application';
-    const labelBasic = 'basic applications';
-    const labelMedium = 'medium applications';
-    const labelAdvanced = 'advanced applications';
+    const labelTitle = 'Руководство по обновлению приложения Angular';
+    const labelBasic = 'базовых приложений';
+    const labelMedium = 'средних приложений';
+    const labelAdvanced = 'продвинутых приложений';
 
     this.title.set(`${labelTitle} v${this.from.name} -> v${this.to.name}
-    for
+    для
     ${this.level < 2 ? labelBasic : this.level < 3 ? labelMedium : labelAdvanced}`);
 
     // Find applicable steps and organize them into before, during, and after upgrade
@@ -252,7 +263,7 @@ export default class UpdateComponent {
 
     // Provide npm/yarn instructions for versions before 6
     if (this.to.number < 600) {
-      const actionMessage = `Update all of your dependencies to the latest Angular and the right version of TypeScript.`;
+      const actionMessage = `Обновите все зависимости до актуальной версии Angular и подходящей версии TypeScript.`;
 
       if (isWindows) {
         const packages =
@@ -263,18 +274,18 @@ export default class UpdateComponent {
           additionalDeps;
 
         upgradeStep = {
-          step: 'General Update',
+          step: 'Общее обновление',
           action: `${actionMessage}
-          If you are using Windows, you can use:
+          Если вы используете Windows, выполните:
 
 \`${this.packageManager} ${packages}\``,
         } as Step;
       } else {
         const packages = `@angular/{${angularPackages.join(',')}}@${angularVersion} ${additionalDeps}`;
         upgradeStep = {
-          step: 'General update',
+          step: 'Общее обновление',
           action: `${actionMessage}
-          If you are using Linux/Mac, you can use:
+          Если вы используете Linux/Mac, выполните:
 
 \`${this.packageManager} ${packages}\``,
         } as Step;
@@ -292,6 +303,16 @@ export default class UpdateComponent {
 
       this.duringRecommendations.push(upgradeStep);
     }
+  }
+
+  protected getComplexityLevelName(level: ApplicationComplexity): string {
+    const names: Record<ApplicationComplexity, string> = {
+      [ApplicationComplexity.Basic]: 'Базовый',
+      [ApplicationComplexity.Medium]: 'Средний',
+      [ApplicationComplexity.Advanced]: 'Продвинутый',
+    };
+
+    return names[level] ?? 'Неизвестно';
   }
 
   private replaceVariables(action: string): string {

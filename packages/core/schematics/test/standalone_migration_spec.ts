@@ -10,8 +10,8 @@ import {getSystemPath, normalize, virtualFs} from '@angular-devkit/core';
 import {TempScopedNodeJsSyncHost} from '@angular-devkit/core/node/testing';
 import {HostTree} from '@angular-devkit/schematics';
 import {SchematicTestRunner, UnitTestTree} from '@angular-devkit/schematics/testing/index.js';
-import {resolve} from 'node:path';
 import {rmSync} from 'node:fs';
+import {resolve} from 'node:path';
 
 describe('standalone migration', () => {
   let runner: SchematicTestRunner;
@@ -884,76 +884,6 @@ describe('standalone migration', () => {
     expect(tree.readContent('./do-not-migrate/button.ts')).toContain('standalone: false');
     expect(stripWhitespace(tree.readContent('./do-not-migrate/button.module.ts'))).toContain(
       stripWhitespace(`@NgModule({declarations: [MyButton], exports: [MyButton]})`),
-    );
-  });
-
-  it('should add imports to dependencies within the same module', async () => {
-    writeFile(
-      'module.ts',
-      `
-        import {NgModule} from '@angular/core';
-        import {MyComp} from './comp';
-        import {MyButton} from './button';
-        import {MyTooltip} from './tooltip';
-
-        @NgModule({declarations: [MyComp, MyButton, MyTooltip], exports: [MyComp]})
-        export class Mod {}
-      `,
-    );
-
-    writeFile(
-      'comp.ts',
-      `
-        import {Component} from '@angular/core';
-
-        @Component({selector: 'my-comp', template: '<my-button tooltip="Click me">Hello</my-button>', standalone: false})
-        export class MyComp {}
-      `,
-    );
-
-    writeFile(
-      'button.ts',
-      `
-        import {Component} from '@angular/core';
-
-        @Component({selector: 'my-button', template: '<ng-content></ng-content>', standalone: false})
-        export class MyButton {}
-      `,
-    );
-
-    writeFile(
-      'tooltip.ts',
-      `
-        import {Directive} from '@angular/core';
-
-        @Directive({selector: '[tooltip]', standalone: false})
-        export class MyTooltip {}
-      `,
-    );
-
-    await runMigration('convert-to-standalone');
-
-    const myCompContent = tree.readContent('comp.ts');
-
-    expect(myCompContent).toContain(`import { MyButton } from './button';`);
-    expect(myCompContent).toContain(`import { MyTooltip } from './tooltip';`);
-    expect(stripWhitespace(myCompContent)).toContain(
-      stripWhitespace(`
-        @Component({
-          selector: 'my-comp',
-          template: '<my-button tooltip="Click me">Hello</my-button>',
-          imports: [MyButton, MyTooltip]
-        })
-      `),
-    );
-    expect(stripWhitespace(tree.readContent('module.ts'))).toContain(
-      stripWhitespace(`@NgModule({imports: [MyComp, MyButton, MyTooltip], exports: [MyComp]})`),
-    );
-    expect(stripWhitespace(tree.readContent('button.ts'))).toContain(
-      stripWhitespace(`@Component({selector: 'my-button', template: '<ng-content></ng-content>'})`),
-    );
-    expect(stripWhitespace(tree.readContent('tooltip.ts'))).toContain(
-      stripWhitespace(`@Directive({selector: '[tooltip]'})`),
     );
   });
 
@@ -3820,6 +3750,113 @@ describe('standalone migration', () => {
           imports: [OtherComponent]
         })
       `),
+    );
+  });
+
+  it('should not remove a module that is exported by a retained module (transitive dependency)', async () => {
+    writeFile(
+      'icon.component.ts',
+      `
+      import {Component} from '@angular/core';
+
+      @Component({
+        selector: 'app-icon',
+        template: '<p>icon</p>'
+      })
+      export class IconComponent {}
+    `,
+    );
+
+    writeFile(
+      'icons.module.ts',
+      `
+      import {NgModule} from '@angular/core';
+      import {IconComponent} from './icon.component';
+
+      @NgModule({
+        imports: [IconComponent],
+        exports: [IconComponent],
+      })
+      export class IconsModule {}
+    `,
+    );
+
+    writeFile(
+      'forms.module.ts',
+      `
+      import {NgModule, ModuleWithProviders} from '@angular/core';
+
+      export interface FormsConfig {
+        callSetDisabledState: string;
+      }
+
+      @NgModule()
+      export class FormsModule {
+        static withConfig(config: FormsConfig): ModuleWithProviders<FormsModule> {
+          return {
+            ngModule: FormsModule,
+            providers: [{provide: 'FORMS_CONFIG', useValue: config}]
+          };
+        }
+      }
+    `,
+    );
+    const sharedModule = `
+      import {NgModule} from '@angular/core';
+      import {IconsModule} from './icons.module';
+      import {FormsModule} from './forms.module';
+
+      @NgModule({
+        imports: [
+          // This import with config prevents SharedModule from being removed
+          FormsModule.withConfig({ callSetDisabledState: 'whenDisabledForLegacyCode' }),
+          IconsModule,
+        ],
+        exports: [IconsModule],
+      })
+      export class SharedModule {}
+    `;
+
+    writeFile('shared.module.ts', sharedModule);
+
+    writeFile(
+      'some.component.ts',
+      `
+      import {Component} from '@angular/core';
+      import {SharedModule} from './shared.module';
+
+      @Component({
+        selector: 'app-some',
+        template: 'inside some component: <app-icon />',
+        imports: [SharedModule]
+      })
+      export class SomeComponent {}
+    `,
+    );
+
+    await runMigration('prune-ng-modules');
+
+    // IconsModule should NOT be removed because it's exported by SharedModule
+    // which is retained due to the FormsModule.withConfig
+    expect(tree.exists('icons.module.ts')).toBe(true);
+
+    const someContent = tree.readContent('some.component.ts');
+    const sharedModuleContent = tree.readContent('shared.module.ts');
+
+    expect(sharedModuleContent).toBe(sharedModule);
+
+    expect(stripWhitespace(someContent)).toBe(
+      stripWhitespace(`
+      import {Component} from '@angular/core';
+      import {SharedModule} from './shared.module';
+
+      @Component({
+        selector: 'app-some',
+        template: 'inside some component: <app-icon />',
+        imports: [SharedModule]
+      })
+      export class SomeComponent {}
+    `),
     );
   });
 

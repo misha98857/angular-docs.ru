@@ -1,9 +1,9 @@
 # Наследование
 
-TIP: Это руководство предполагает, что вы уже ознакомились с [Руководством по основам](essentials). Если вы новичок в
-Angular, начните с него.
+TIP: Это руководство предполагает, что вы уже прочитали [Essentials Guide](essentials). Если вы новичок в Angular, начните с него.
 
-Компоненты Angular представляют собой классы TypeScript и используют стандартные механизмы наследования JavaScript.
+Компоненты Angular — это классы TypeScript и участвуют в стандартной семантике наследования
+JavaScript.
 
 Компонент может расширять любой базовый класс:
 
@@ -12,24 +12,22 @@ export class ListboxBase {
   value: string;
 }
 
-@Component({ ... })
+@Component(/* ... */)
 export class CustomListbox extends ListboxBase {
-  // CustomListbox наследует свойство `value`.
+  // CustomListbox inherits the `value` property.
 }
 ```
 
-## Наследование от других компонентов и директив
+## Расширение других компонентов и директив {#extending-other-components-and-directives}
 
-Когда компонент расширяет другой компонент или директиву, он наследует часть метаданных, определенных в декораторе
-базового класса, а также декорированные члены этого класса. Сюда входят привязки к хосту (host bindings), Input и Output
-свойства, а также методы жизненного цикла.
+Когда компонент расширяет другой компонент или директиву, он наследует часть метаданных, определённых в
+декораторе базового класса, и декорированные члены базового класса. Это включает
+host bindings, inputs, outputs, методы жизненного цикла.
 
 ```angular-ts
 @Component({
   selector: 'base-listbox',
-  template: `
-    ...
-  `,
+  template: ` ... `,
   host: {
     '(keydown)': 'handleKey($event)',
   },
@@ -43,9 +41,7 @@ export class ListboxBase {
 
 @Component({
   selector: 'custom-listbox',
-  template: `
-    ...
-  `,
+  template: ` ... `,
   host: {
     '(click)': 'focusActiveOption()',
   },
@@ -58,25 +54,38 @@ export class CustomListbox extends ListboxBase {
 }
 ```
 
-В приведенном выше примере `CustomListbox` наследует всю информацию, связанную с `ListboxBase`, переопределяя селектор и
-шаблон собственными значениями. `CustomListbox` имеет два Input-свойства (`value` и `disabled`) и два слушателя
-событий (`keydown` и `click`).
+В примере выше `CustomListbox` наследует всю информацию, связанную с `ListboxBase`,
+переопределяя selector и template своими значениями. У `CustomListbox` два input (`value`
+и `disabled`) и два слушателя событий (`keydown` и `click`).
 
-Дочерние классы в итоге получают _объединение_ всех Input и Output свойств, а также привязок к хосту своих предков и
-своих собственных.
+Дочерние классы получают _объединение_ всех inputs, outputs и host bindings предков
+и своих собственных.
 
-### Передача внедряемых зависимостей
+### Проброс внедрённых зависимостей {#forwarding-injected-dependencies}
 
-Если базовый класс внедряет зависимости через параметры конструктора, дочерний класс должен явно передать эти
-зависимости в `super`.
+Когда базовый класс использует `inject()` как инициализатор свойства, дочерний класс наследует свойство автоматически. Проброс через `super` не нужен.
 
 ```ts
-@Component({ ... })
+@Component(/* ... */)
 export class ListboxBase {
-  constructor(private element: ElementRef) { }
+  protected element = inject(ElementRef);
 }
 
-@Component({ ... })
+@Component(/* ... */)
+export class CustomListbox extends ListboxBase {
+  // `element` is inherited from `ListboxBase`.
+}
+```
+
+Если базовый класс внедряет зависимости как параметры конструктора, дочерний класс должен явно передать эти зависимости в `super`.
+
+```ts
+@Component(/* ... */)
+export class ListboxBase {
+  constructor(private element: ElementRef) {}
+}
+
+@Component(/* ... */)
 export class CustomListbox extends ListboxBase {
   constructor(element: ElementRef) {
     super(element);
@@ -84,14 +93,14 @@ export class CustomListbox extends ListboxBase {
 }
 ```
 
-### Переопределение методов жизненного цикла
+### Переопределение методов жизненного цикла {#overriding-lifecycle-methods}
 
-Если базовый класс определяет метод жизненного цикла, например `ngOnInit`, то дочерний класс, который также реализует
-`ngOnInit`, _переопределяет_ реализацию базового класса. Если вы хотите сохранить выполнение метода жизненного цикла
-базового класса, явно вызовите этот метод через `super`:
+Если базовый класс определяет метод жизненного цикла, например `ngOnInit`, дочерний класс, который также
+реализует `ngOnInit`, _переопределяет_ реализацию базового класса. Если нужно сохранить метод
+жизненного цикла базового класса, явно вызовите метод через `super`:
 
 ```ts
-@Component({ ... })
+@Component(/* ... */)
 export class ListboxBase {
   protected isInitialized = false;
   ngOnInit() {
@@ -99,7 +108,7 @@ export class ListboxBase {
   }
 }
 
-@Component({ ... })
+@Component(/* ... */)
 export class CustomListbox extends ListboxBase {
   override ngOnInit() {
     super.ngOnInit();

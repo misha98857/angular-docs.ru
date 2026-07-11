@@ -11,9 +11,9 @@ import {injectRootLimpMode, setInjectImplementation} from '../di/inject_switch';
 import {Injector} from '../di/injector';
 import {BackwardsCompatibleInjector, convertToBitFlags} from '../di/injector_compatibility';
 import {InjectorMarkers} from '../di/injector_marker';
-import {InternalInjectFlags, InjectOptions} from '../di/interface/injector';
+import {InjectOptions, InternalInjectFlags} from '../di/interface/injector';
 import {ProviderToken} from '../di/provider_token';
-import {Type} from '../interface/type';
+import {AbstractType, Type} from '../interface/type';
 import {assertDefined, assertEqual, assertIndexInRange} from '../util/assert';
 import {noSideEffects} from '../util/closure';
 
@@ -745,8 +745,9 @@ export function getNodeInjectable(
     const factory: NodeInjectorFactory = value;
     ngDevMode && injectionPath.push(factory.name ?? 'unknown');
     if (factory.resolving) {
-      const token = stringifyForError(tData[index]);
+      let token = '';
       if (ngDevMode) {
+        token = stringifyForError(tData[index]);
         throw cyclicDependencyErrorWithDetails(token, injectionPath);
       } else {
         throw cyclicDependencyError(token);
@@ -914,7 +915,9 @@ export function createNodeInjector(): Injector {
 /**
  * @codeGenApi
  */
-export function ɵɵgetInheritedFactory<T>(type: Type<any>): (type: Type<T>) => T {
+export function ɵɵgetInheritedFactory<T>(
+  type: Type<any> | AbstractType<any>,
+): (type: Type<T>) => T {
   return noSideEffects(() => {
     const ownConstructor = type.prototype.constructor;
     const ownFactory = ownConstructor[NG_FACTORY_DEF] || getFactoryOf(ownConstructor);
@@ -1015,7 +1018,11 @@ function lookupTokenUsingEmbeddedInjector<T>(
         const embeddedViewInjectorValue = (embeddedViewInjector as BackwardsCompatibleInjector).get(
           token,
           NOT_FOUND as T | {},
-          flags,
+          // The `SkipSelf` flag is intended for the current injection context (the child component).
+          // When we delegate to the embedded view injector, we are effectively traversing to a
+          // parent/fallback scope, so the "Self" has already been skipped. We must strip the
+          // flag to ensure the embedded view injector can resolve tokens from itself.
+          flags & ~InternalInjectFlags.SkipSelf,
         );
         if (embeddedViewInjectorValue !== NOT_FOUND) {
           return embeddedViewInjectorValue;

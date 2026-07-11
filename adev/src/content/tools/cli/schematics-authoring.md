@@ -14,7 +14,7 @@ Schematic описывает конвейер преобразований, ко
 Когда Schematic запускается, преобразования записываются в память и применяются к реальной файловой системе только после
 подтверждения их валидности.
 
-## Концепции Schematics
+## Концепции Schematics {#schematics-concepts}
 
 Публичный API для Schematics определяет классы, представляющие основные концепции.
 
@@ -38,19 +38,19 @@ Schematic описывает конвейер преобразований, ко
 дерева сливаются с базовым деревом.
 Изменение может быть принято, проигнорировано или вызвать исключение.
 
-### Определение правил и действий
+### Определение правил и действий {#defining-rules-and-actions}
 
 Когда вы создаете новый пустой Schematic с помощью [Schematics CLI](#schematics-cli), сгенерированная входная функция
 является _фабрикой правил_ (rule factory).
 Объект `RuleFactory` определяет функцию высшего порядка, которая создает `Rule`.
 
 ```ts {header: "index.ts"}
-import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
+import {Rule, SchematicContext, Tree} from '@angular-devkit/schematics';
 
 // You don't have to export the function as default.
 // You can also have more than one rule factory per file.
-export function helloWorld(\_options: any): Rule {
-   return (tree: Tree,\_context: SchematicContext) => {
+export function helloWorld(_options: any): Rule {
+  return (tree: Tree, _context: SchematicContext) => {
     return tree;
   };
 }
@@ -76,7 +76,7 @@ strings,
 } from '@angular-devkit/core';
 ```
 
-### Определение входных опций с помощью схемы и интерфейсов
+### Определение входных опций с помощью схемы и интерфейсов {#defining-input-options-with-a-schema-and-interfaces}
 
 Правила могут собирать значения опций от вызывающей стороны и внедрять их в шаблоны.
 Опции, доступные вашим правилам, с их допустимыми значениями и значениями по умолчанию, определяются в файле JSON-схемы
@@ -104,7 +104,7 @@ Schematic-а, `<schematic>/schema.json`.
 См. примеры файлов схем для команд Angular CLI в [
 `@schematics/angular`](https://github.com/angular/angular-cli/blob/main/packages/schematics/angular/application/schema.json).
 
-### Подсказки (Prompts) в Schematics
+### Подсказки (Prompts) в Schematics {#schematic-prompts}
 
 _Подсказки_ (prompts) Schematics вводят взаимодействие с пользователем при выполнении.
 Настройте опции Schematic-а, чтобы отображать пользователю настраиваемый вопрос.
@@ -317,7 +317,7 @@ CLI.
 используя Schematics CLI.
 См. [Schematics для библиотек](tools/cli/schematics-for-libraries).
 
-### Создание коллекции Schematics
+### Создание коллекции Schematics {#creating-a-schematics-collection}
 
 Следующая команда создает новый Schematic с именем `hello-world` в новой папке проекта с тем же именем.
 
@@ -348,7 +348,7 @@ code .
 функциональность вашего Schematic-а.
 Имя каждого Schematic-а должно быть уникальным в пределах коллекции.
 
-### Запуск Schematic-а
+### Запуск Schematic-а {#running-a-schematic}
 
 Используйте команду `schematics` для запуска именованного Schematic-а.
 Укажите путь к папке проекта, имя Schematic-а и любые обязательные опции в следующем формате.
@@ -369,7 +369,7 @@ schematics .:hello-world
 
 ```
 
-### Добавление Schematic-а в коллекцию
+### Добавление Schematic-а в коллекцию {#adding-a-schematic-to-a-collection}
 
 Чтобы добавить Schematic в существующую коллекцию, используйте ту же команду, что и для создания нового проекта
 Schematics, но запустите её внутри папки проекта.
@@ -386,7 +386,7 @@ schematics blank --name=goodbye-world
 Она также добавляет имя, описание и фабричную функцию для нового Schematic-а в схему коллекции в файле
 `collection.json`.
 
-## Содержимое коллекции
+## Содержимое коллекции {#collection-contents}
 
 Верхний уровень корневой папки проекта коллекции содержит конфигурационные файлы, папку `node_modules` и папку `src/`.
 Папка `src/` содержит подпапки для именованных Schematics в коллекции и схему `collection.json`, которая описывает
@@ -420,7 +420,7 @@ schematics blank --name=goodbye-world
 - Необязательный массив `aliases` задает одну или несколько строк, которые можно использовать для вызова Schematic-а.
   Например, Schematic для команды Angular CLI "generate" имеет псевдоним "g", что позволяет использовать команду `ng g`.
 
-### Именованные Schematics
+### Именованные Schematics {#named-schematics}
 
 Когда вы используете Schematics CLI для создания пустого проекта Schematics, новый пустой Schematic является первым
 членом коллекции и имеет то же имя, что и коллекция.

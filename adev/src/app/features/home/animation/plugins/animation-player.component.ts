@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {ChangeDetectionStrategy, Component, computed, signal} from '@angular/core';
+import {Component, computed, signal} from '@angular/core';
 import {Animation} from '../animation';
 
 // In milliseconds. Used for going forward or back through the animation.
@@ -19,15 +19,14 @@ export type ComponentAlignment = 'left' | 'center' | 'right';
  */
 @Component({
   selector: 'adev-animation-player',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (animation(); as anim) {
       <div class="deck" [class]="[alignment()]">
-        <div class="progress-bar" (click)="seek($event)" title="Seek">
+        <div class="progress-bar" (click)="seek($event)" title="Перемотать">
           <div class="progress" [style.width]="progressPerc()"></div>
         </div>
         <div class="controls">
-          <button (click)="anim.back(TIMESTEP)" title="Go back">⏪</button>
+          <button (click)="anim.back(TIMESTEP)" title="Назад">⏪</button>
           <button
             (click)="playPause()"
             [attr.title]="!anim.isPlaying() ? 'Play' : 'Pause'"
@@ -35,8 +34,8 @@ export type ComponentAlignment = 'left' | 'center' | 'right';
           >
             {{ !anim.isPlaying() ? '▶️' : '⏸️' }}
           </button>
-          <button (click)="anim.stop()" title="Stop">⏹️</button>
-          <button (click)="anim.forward(TIMESTEP)" title="Go forward">⏩</button>
+          <button (click)="anim.stop()" title="Стоп">⏹️</button>
+          <button (click)="anim.forward(TIMESTEP)" title="Вперёд">⏩</button>
         </div>
       </div>
     }

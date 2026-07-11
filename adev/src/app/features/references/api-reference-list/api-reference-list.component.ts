@@ -7,7 +7,6 @@
  */
 
 import {
-  ChangeDetectionStrategy,
   Component,
   ElementRef,
   computed,
@@ -55,7 +54,6 @@ export const DEFAULT_STATUS = STATUSES.stable | STATUSES.developerPreview | STAT
   ],
   templateUrl: './api-reference-list.component.html',
   styleUrls: ['./api-reference-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class ApiReferenceList {
   // services
@@ -80,10 +78,10 @@ export default class ApiReferenceList {
   protected readonly statuses = STATUSES;
 
   protected readonly statusLabels = {
-    [STATUSES.stable]: 'Stable',
-    [STATUSES.developerPreview]: 'Developer Preview',
-    [STATUSES.experimental]: 'Experimental',
-    [STATUSES.deprecated]: 'Deprecated',
+    [STATUSES.stable]: 'Стабильный',
+    [STATUSES.developerPreview]: 'Превью для разработчиков',
+    [STATUSES.experimental]: 'Экспериментальный',
+    [STATUSES.deprecated]: 'Устаревший',
   };
 
   readonly filteredGroups = computed((): ApiItemsGroup[] => {

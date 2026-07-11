@@ -21,7 +21,7 @@ ng generate @angular/core:ngclass-to-class
 <div [class]="{admin: isAdmin, dense: density === 'high'}">
 ```
 
-## Параметры конфигурации
+## Параметры конфигурации {#configuration-options}
 
 Миграция поддерживает несколько опций для точной настройки процесса под ваши конкретные нужды.
 

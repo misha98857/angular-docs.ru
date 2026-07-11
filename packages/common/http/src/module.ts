@@ -14,6 +14,7 @@ import {
   withInterceptorsFromDi,
   withJsonpSupport,
   withNoXsrfProtection,
+  withXhr,
   withXsrfConfiguration,
 } from './provider';
 import {
@@ -90,6 +91,9 @@ export class HttpClientXsrfModule {
  * You can add interceptors to the chain behind `HttpClient` by binding them to the
  * multiprovider for built-in DI token `HTTP_INTERCEPTORS`.
  *
+ * When importing the `HttpClientModule`, the `HttpBackend` is set to using the `HttpXhrBackend`.
+ * If you want to use the `FetchBackend`, use `provideHttpClient` instead.
+ *
  * @publicApi
  * @deprecated use `provideHttpClient(withInterceptorsFromDi())` as providers instead
  */
@@ -98,7 +102,7 @@ export class HttpClientXsrfModule {
    * Configures the dependency injector where it is imported
    * with supporting services for HTTP communications.
    */
-  providers: [provideHttpClient(withInterceptorsFromDi())],
+  providers: [provideHttpClient(withInterceptorsFromDi(), withXhr())],
 })
 export class HttpClientModule {}
 
@@ -109,7 +113,7 @@ export class HttpClientModule {}
  * with method JSONP, where they are rejected.
  *
  * @publicApi
- * @deprecated `withJsonpSupport()` as providers instead
+ * @deprecated 22.1 JSONP is deprecated as it can cause XSS vulnerabilities. Intent to remove in future versions of Angular.
  */
 @NgModule({
   providers: [withJsonpSupport().ɵproviders],

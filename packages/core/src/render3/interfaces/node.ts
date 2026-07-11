@@ -5,10 +5,11 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-import {Type} from '../../interface/type';
+import {AbstractType, Type} from '../../interface/type';
 import {KeyValueArray} from '../../util/array_utils';
 import {TStylingRange} from '../interfaces/styling';
 import {AttributeMarker} from './attribute_marker';
+import {ForeignComponent} from '../../interface/foreign_component';
 
 import {TIcu} from './i18n';
 import {CssSelector} from './projection';
@@ -77,6 +78,11 @@ export const enum TNodeType {
    * The TNode contains information about a `@let` declaration.
    */
   LetDeclaration = 0b10000000,
+
+  /**
+   * The TNode contains a control directive's update function.
+   */
+  ControlDirective = 0b100000000,
 
   // Combined Types These should never be used for `TNode.type` only as a useful way to check
   // if `TNode.type` is one of several choices.
@@ -190,29 +196,7 @@ export const enum TNodeFlags {
    *
    * This is used to bind to a `ControlValueAccessor` from `@angular/forms`.
    */
-  isInteropControl = 1 << 12,
-
-  /**
-   * Bit #14 - This bit is set if the node is a native control.
-   *
-   * This is used to determine whether we can bind common control properties to the host element of
-   * a custom control when it doesn't define a corresponding input.
-   */
-  isNativeControl = 1 << 13,
-
-  /**
-   * Bit #15 - This bit is set if the node is a native control with a numeric type.
-   *
-   * This is used to determine whether the control supports the `min` and `max` properties.
-   */
-  isNativeNumericControl = 1 << 14,
-
-  /**
-   * Bit #16 - This bit is set if the node is a native text control.
-   *
-   * This is used to determine whether control supports the `minLength` and `maxLength` properties.
-   */
-  isNativeTextControl = 1 << 15,
+  isPassThroughControl = 1 << 12,
 }
 
 /**
@@ -243,8 +227,9 @@ export type TAttributes = (string | AttributeMarker | CssSelector)[];
  * - Attribute arrays.
  * - Local definition arrays.
  * - Translated messages (i18n).
+ * - Foreign components.
  */
-export type TConstants = (TAttributes | string)[];
+export type TConstants = (TAttributes | string | ForeignComponent<any, any>)[];
 
 /**
  * Factory function that returns an array of consts. Consts can be represented as a function in
@@ -377,7 +362,7 @@ export interface TNode {
    * Index at which the signal forms field directive is stored.
    * Value is set to -1 if there are no field directives.
    */
-  fieldIndex: number;
+  controlDirectiveIndex: number;
 
   /**
    * Index at which the custom control directive is stored.
@@ -432,6 +417,11 @@ export interface TNode {
    *   `TNodeType.ICUContainer`: `TIcu`
    */
   value: any;
+
+  /**
+   * The namespace associated with this node.
+   */
+  namespace: string | null;
 
   /**
    * Attributes associated with an element. We need to store attributes to support various
@@ -947,7 +937,7 @@ export type HostDirectiveOutputs = Record<string, (number | string)[]>;
  * ```
  */
 export type DirectiveIndexMap = Map<
-  Type<unknown>,
+  Type<unknown> | AbstractType<unknown>,
   number | [directiveIndex: number, hostDirectivesStart: number, hostDirectivesEnd: number]
 >;
 

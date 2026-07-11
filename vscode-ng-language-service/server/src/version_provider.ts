@@ -1,9 +1,9 @@
-/**
+/*!
  * @license
- * Copyright Google Inc. All Rights Reserved.
+ * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
 
 import * as fs from 'fs';
@@ -53,6 +53,8 @@ function resolveWithMinVersion(
 /**
  * Resolve `typescript/lib/tsserverlibrary` from the given locations.
  * @param probeLocations
+ * TODO: Remove probeLocations entirely and require the client to pass the exact TypeScript path
+ * to load (either the bundled version or the user-configured tsdk version as an absolute path).
  */
 export function resolveTsServer(probeLocations: string[], tsdk: string | null): NodeModule {
   if (tsdk !== null) {

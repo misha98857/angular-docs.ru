@@ -2,7 +2,7 @@
 <p>{{ 'Sample text processed by a pipe' | sample }}</p>
 <section class="todoapp">
   <header class="header">
-    <h1 id="demo-app-title">{{title}}</h1>
+    <h1 id="demo-app-title">{{ title }}</h1>
     <input
       (keydown.enter)="addTodo(input)"
       #input
@@ -39,5 +39,11 @@
     <button class="clear-completed" (click)="clearCompleted()">Clear completed</button>
   </footer>
 </section>
+
+<svg width="180" height="80" viewBox="0 0 180 80" aria-label="SVG component highlighter demo">
+  <foreignObject appSvgDemo x="10" y="10" width="160" height="60">
+    <div xmlns="http://www.w3.org/1999/xhtml">SVG component highlighter demo</div>
+  </foreignObject>
+</svg>
 
 <recursive-component />

@@ -1,149 +1,129 @@
-# Drag and drop
+# Перетаскивание (drag and drop)
 
-## Обзор
+## Обзор {#overview}
 
-Эта страница описывает директивы drag and drop (перетаскивания), которые позволяют быстро создавать интерфейсы с
-функцией перетаскивания, поддерживающие:
+На этой странице описаны директивы drag and drop, которые позволяют быстро создавать интерфейсы перетаскивания со следующими возможностями:
 
 - Свободное перетаскивание
-- Создание списка сортируемых перетаскиваемых элементов
-- Перемещение перетаскиваемых элементов между списками
+- Создание списка переупорядочиваемых перетаскиваемых элементов
+- Перенос перетаскиваемых элементов между списками
 - Анимации перетаскивания
-- Блокировку перетаскиваемых элементов по оси или внутри элемента
-- Добавление кастомных элементов захвата (ручек)
+- Блокировка перетаскиваемых элементов по оси или внутри элемента
+- Добавление пользовательских ручек перетаскивания
 - Добавление превью при перетаскивании
-- Добавление кастомного плейсхолдера (заполнителя)
+- Добавление пользовательского placeholder при перетаскивании
 
-Полный справочник по API можно найти на [странице API drag and drop в Angular CDK](api#angular_cdk_drag-drop).
+Полный справочник API см. на [странице справочника API drag and drop Angular CDK](api#angular_cdk_drag-drop).
 
-## Перед началом работы
+## Перед началом {#before-you-start}
 
-### Установка CDK
+### Установка CDK {#cdk-installation}
 
-[Component Dev Kit (CDK)](https://material.angular.dev/cdk/categories) — это набор поведенческих примитивов для создания
-компонентов. Чтобы использовать директивы drag and drop, сначала установите `@angular/cdk` из npm. Вы можете сделать это
-через терминал с помощью Angular CLI:
+[Component Dev Kit (CDK)](https://material.angular.dev/cdk/categories) — набор примитивов поведения для создания компонентов. Чтобы использовать директивы drag and drop, сначала установите `@angular/cdk` из npm. Это можно сделать из терминала с помощью Angular CLI:
 
 ```shell
 ng add @angular/cdk
 ```
 
-### Импорт drag and drop
+### Импорт drag and drop {#importing-drag-and-drop}
 
-Чтобы использовать drag and drop, импортируйте необходимые директивы в ваш компонент.
+Чтобы использовать drag and drop, импортируйте необходимое из директив в компонент.
 
 ```ts
 import {Component} from '@angular/core';
 import {CdkDrag} from '@angular/cdk/drag-drop';
 
 @Component({
-  selector: 'my-custom-component',
-  templateUrl: 'my-custom-component.html',
+  selector: 'drag-drop-example',
+  templateUrl: 'drag-drop-example.html',
   imports: [CdkDrag],
 })
 export class DragDropExample {}
 ```
 
-## Создание перетаскиваемых элементов
+## Создание перетаскиваемых элементов {#create-draggable-elements}
 
-Вы можете сделать любой элемент перетаскиваемым, добавив директиву `cdkDrag`. По умолчанию все перетаскиваемые элементы
-поддерживают свободное перемещение.
+Любой элемент можно сделать перетаскиваемым, добавив директиву `cdkDrag`. По умолчанию все перетаскиваемые элементы поддерживают свободное перетаскивание.
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/overview/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/overview/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/overview/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/overview/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/overview/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/overview/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/overview/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/overview/app/app.css"/>
 </docs-code-multifile>
 
-## Создание списка сортируемых перетаскиваемых элементов
+## Создание списка переупорядочиваемых перетаскиваемых элементов {#create-a-list-of-reorderable-draggable-elements}
 
-Добавьте директиву `cdkDropList` к родительскому элементу, чтобы сгруппировать перетаскиваемые элементы в сортируемую
-коллекцию. Это определяет область, куда можно сбрасывать перетаскиваемые элементы. Элементы внутри группы `cdkDropList`
-автоматически перестраиваются при перемещении элемента.
+Добавьте директиву `cdkDropList` к родительскому элементу, чтобы сгруппировать перетаскиваемые элементы в переупорядочиваемую коллекцию. Это определяет, куда можно сбрасывать перетаскиваемые элементы. Перетаскиваемые элементы в группе drop list автоматически перестраиваются при перемещении элемента.
 
-Директивы drag and drop не обновляют вашу модель данных. Чтобы обновить модель данных, подпишитесь на событие
-`cdkDropListDropped` (которое срабатывает, когда пользователь заканчивает перетаскивание) и обновите данные вручную.
+Директивы drag and drop не обновляют модель данных. Чтобы обновить модель данных, подпишитесь на событие `cdkDropListDropped` (после того как пользователь завершит перетаскивание) и обновите модель данных вручную.
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/sorting/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/sorting/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/sorting/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/sorting/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/sorting/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/sorting/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/sorting/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/sorting/app/app.css"/>
 </docs-code-multifile>
 
-Вы можете использовать токен внедрения `CDK_DROP_LIST` для получения ссылок на экземпляры `cdkDropList`. Для получения
-дополнительной информации см. [руководство по внедрению зависимостей](/guide/di)
-и [API токена внедрения drop list](api/cdk/drag-drop/CDK_DROP_LIST).
+Можно использовать injection token `CDK_DROP_LIST`, который позволяет ссылаться на экземпляры `cdkDropList`. Подробнее см. [руководство по внедрению зависимостей](/guide/di) и [API injection token drop list](api/cdk/drag-drop/CDK_DROP_LIST).
 
-## Перемещение перетаскиваемых элементов между списками
+## Перенос перетаскиваемых элементов между списками {#transfer-draggable-elements-between-lists}
 
-Директива `cdkDropList` поддерживает перемещение перетаскиваемых элементов между связанными списками. Существует два
-способа связать один или несколько экземпляров `cdkDropList` вместе:
+Директива `cdkDropList` поддерживает перенос перетаскиваемых элементов между связанными drop list. Есть два способа связать один или несколько экземпляров `cdkDropList`:
 
-- Установить свойство `cdkDropListConnectedTo`, указывающее на другой список.
+- Установить свойство `cdkDropListConnectedTo` на другой drop list.
 - Обернуть элементы в элемент с атрибутом `cdkDropListGroup`.
 
-Свойство `cdkDropListConnectedTo` работает как с прямой ссылкой на другой `cdkDropList`, так и со ссылкой на id другого
-контейнера.
+Директива `cdkDropListConnectedTo` работает как с прямой ссылкой на другой `cdkDropList`, так и со ссылкой на id другого drop-контейнера.
 
 ```html
-<!-- Это валидно -->
+<!-- This is valid -->
 <div cdkDropList #listOne="cdkDropList" [cdkDropListConnectedTo]="[listTwo]"></div>
 <div cdkDropList #listTwo="cdkDropList" [cdkDropListConnectedTo]="[listOne]"></div>
 
-<!-- Это тоже валидно -->
+<!-- This is valid as well -->
 <div cdkDropList id="list-one" [cdkDropListConnectedTo]="['list-two']"></div>
 <div cdkDropList id="list-two" [cdkDropListConnectedTo]="['list-one']"></div>
 ```
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/connected-sorting/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/connected-sorting/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/connected-sorting/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/connected-sorting/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/connected-sorting/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/connected-sorting/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/connected-sorting/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/connected-sorting/app/app.css"/>
 </docs-code-multifile>
 
-Используйте директиву `cdkDropListGroup`, если у вас неизвестное количество связанных списков, чтобы настроить
-соединение автоматически. Любой новый `cdkDropList`, добавленный в группу, автоматически связывается со всеми остальными
-списками.
+Используйте директиву `cdkDropListGroup`, если у вас неизвестное количество связанных drop list — она автоматически настраивает соединение. Любой новый `cdkDropList`, добавленный в группу, автоматически связывается со всеми остальными списками.
 
-```html
+```angular-html
 <div cdkDropListGroup>
-  <!-- Все списки здесь будут связаны. -->
+  <!-- All lists in here will be connected. -->
   @for (list of lists; track list) {
     <div cdkDropList></div>
   }
 </div>
 ```
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/connected-sorting-group/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/connected-sorting-group/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/connected-sorting-group/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/connected-sorting-group/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/connected-sorting-group/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/connected-sorting-group/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/connected-sorting-group/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/connected-sorting-group/app/app.css"/>
 </docs-code-multifile>
 
-Вы можете использовать токен внедрения `CDK_DROP_LIST_GROUP` для получения ссылок на экземпляры `cdkDropListGroup`. Для
-получения дополнительной информации см. [руководство по внедрению зависимостей](/guide/di)
-и [API токена внедрения группы списков](api/cdk/drag-drop/CDK_DROP_LIST_GROUP).
+Можно использовать injection token `CDK_DROP_LIST_GROUP`, который позволяет ссылаться на экземпляры `cdkDropListGroup`. Подробнее см. [руководство по внедрению зависимостей](/guide/di) и [API injection token drop list group](api/cdk/drag-drop/CDK_DROP_LIST_GROUP).
 
-### Выборочное перетаскивание
+### Выборочное перетаскивание {#selective-dragging}
 
-По умолчанию пользователь может перемещать элементы `cdkDrag` из одного контейнера в другой связанный контейнер. Для
-более точного контроля над тем, какие элементы могут быть сброшены в контейнер, используйте `cdkDropListEnterPredicate`.
-Angular вызывает предикат всякий раз, когда перетаскиваемый элемент входит в новый контейнер. В зависимости от того,
-возвращает предикат true или false, элемент может быть разрешен или запрещен для помещения в новый контейнер.
+По умолчанию пользователь может перемещать элементы `cdkDrag` из одного контейнера в другой связанный контейнер. Для более точного контроля над тем, какие элементы можно сбрасывать в контейнер, используйте `cdkDropListEnterPredicate`. Angular вызывает предикат всякий раз, когда перетаскиваемый элемент входит в новый контейнер. В зависимости от того, возвращает предикат true или false, элемент может быть разрешён или запрещён в новый контейнер.
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/enter-predicate/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/enter-predicate/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/enter-predicate/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/enter-predicate/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/enter-predicate/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/enter-predicate/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/enter-predicate/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/enter-predicate/app/app.css"/>
 </docs-code-multifile>
 
-## Прикрепление данных
+## Привязка данных {#attach-data}
 
-Вы можете связать произвольные данные как с `cdkDrag`, так и с `cdkDropList`, установив `cdkDragData` или
-`cdkDropListData` соответственно. Вы можете привязаться к событиям, вызываемым обеими директивами, которые будут
-включать эти данные, что позволит легко определить источник взаимодействия drag или drop.
+Можно связать произвольные данные как с `cdkDrag`, так и с `cdkDropList`, установив соответственно `cdkDragData` или `cdkDropListData`. Можно подписаться на события, генерируемые обеими директивами, которые будут включать эти данные, что позволяет легко определить источник взаимодействия drag или drop.
 
-```html
+```angular-html
 @for (list of lists; track list) {
   <div cdkDropList [cdkDropListData]="list" (cdkDropListDropped)="drop($event)">
     @for (item of list; track item) {
@@ -153,311 +133,233 @@ Angular вызывает предикат всякий раз, когда пер
 }
 ```
 
-## Настройка перетаскивания
+## Настройка перетаскивания {#dragging-customizations}
 
-### Настройка элемента захвата (ручки)
+### Настройка ручки перетаскивания {#customize-drag-handle}
 
-По умолчанию пользователь может перетаскивать весь элемент `cdkDrag` целиком. Чтобы ограничить пользователя возможностью
-перетаскивания только за определенный элемент захвата, добавьте директиву `cdkDragHandle` к элементу внутри `cdkDrag`.
-Вы можете добавить столько элементов `cdkDragHandle`, сколько необходимо.
+По умолчанию пользователь может перетаскивать весь элемент `cdkDrag`. Чтобы ограничить перетаскивание только через элемент-ручку, добавьте директиву `cdkDragHandle` к элементу внутри `cdkDrag`. Можно иметь сколько угодно элементов `cdkDragHandle`.
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/custom-handle/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/custom-handle/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/custom-handle/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/custom-handle/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/custom-handle/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/custom-handle/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/custom-handle/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/custom-handle/app/app.css"/>
 </docs-code-multifile>
 
-Вы можете использовать токен внедрения `CDK_DRAG_HANDLE` для получения ссылок на экземпляры `cdkDragHandle`. Для
-получения дополнительной информации см. [руководство по внедрению зависимостей](/guide/di)
-и [API токена внедрения элемента захвата](api/cdk/drag-drop/CDK_DRAG_HANDLE).
+Можно использовать injection token `CDK_DRAG_HANDLE`, который позволяет ссылаться на экземпляры `cdkDragHandle`. Подробнее см. [руководство по внедрению зависимостей](/guide/di) и [API injection token drag handle](api/cdk/drag-drop/CDK_DRAG_HANDLE).
 
-### Настройка превью при перетаскивании
+### Настройка превью перетаскивания {#customize-drag-preview}
 
-Элемент превью становится видимым, когда элемент `cdkDrag` перетаскивается. По умолчанию превью — это клон оригинального
-элемента, расположенный рядом с курсором пользователя.
+Элемент превью становится видимым, когда элемент `cdkDrag` перетаскивается. По умолчанию превью — это клон оригинального элемента, расположенный рядом с курсором пользователя.
 
-Чтобы настроить превью, предоставьте пользовательский шаблон через `*cdkDragPreview`. Кастомное превью не будет
-соответствовать размеру оригинального перетаскиваемого элемента, так как не делается никаких предположений о содержимом
-элемента. Чтобы размер превью соответствовал размеру элемента, передайте `true` во входное свойство `matchSize`.
+Чтобы настроить превью, предоставьте пользовательский шаблон через `*cdkDragPreview`. Пользовательское превью не будет соответствовать размеру оригинального перетаскиваемого элемента, поскольку не делаются предположения о содержимом элемента. Чтобы превью соответствовало размеру элемента, передайте true во вход `matchSize`.
 
-Клонированный элемент удаляет свой атрибут id, чтобы избежать наличия нескольких элементов с одинаковым id на странице.
-Это приведет к тому, что любой CSS, нацеленный на этот id, не будет применен.
+У клонированного элемента удаляется атрибут id, чтобы избежать нескольких элементов с одинаковым id на странице. Из-за этого CSS, нацеленный на этот id, не будет применён.
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/custom-preview/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/custom-preview/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/custom-preview/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/custom-preview/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/custom-preview/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/custom-preview/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/custom-preview/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/custom-preview/app/app.css"/>
 </docs-code-multifile>
 
-Вы можете использовать токен внедрения `CDK_DRAG_PREVIEW` для получения ссылок на экземпляры `cdkDragPreview`. Для
-получения дополнительной информации см. [руководство по внедрению зависимостей](/guide/di)
-и [API токена внедрения превью](api/cdk/drag-drop/CDK_DRAG_PREVIEW).
+Можно использовать injection token `CDK_DRAG_PREVIEW`, который позволяет ссылаться на экземпляры `cdkDragPreview`. Подробнее см. [руководство по внедрению зависимостей](/guide/di) и [API injection token drag preview](api/cdk/drag-drop/CDK_DRAG_PREVIEW).
 
-### Настройка точки вставки при перетаскивании
+### Настройка точки вставки при перетаскивании {#customize-drag-insertion-point}
 
-По умолчанию Angular вставляет превью `cdkDrag` в `<body>` страницы, чтобы избежать проблем с позиционированием и
-переполнением (overflow). В некоторых случаях это может быть нежелательно, так как к превью не будут применены
-унаследованные стили.
+По умолчанию Angular вставляет превью `cdkDrag` в `<body>` страницы, чтобы избежать проблем с позиционированием и overflow. В некоторых случаях это может быть нежелательно, поскольку превью не получит унаследованные стили.
 
-Вы можете изменить место, куда Angular вставляет превью, используя входное свойство `cdkDragPreviewContainer` на
-`cdkDrag`. Возможные значения:
+Можно изменить место вставки превью с помощью входа `cdkDragPreviewContainer` на `cdkDrag`. Возможные значения:
 
-| Значение                       | Описание                                                                              | Преимущества                                                                                                                  | Недостатки                                                                                                                                                                                 |
-| :----------------------------- | :------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `global`                       | Значение по умолчанию. Angular вставляет превью в `<body>` или ближайший shadow root. | На превью не будут влиять `z-index` или `overflow: hidden`. Это также не повлияет на селекторы `:nth-child` и flex-раскладки. | Не сохраняет унаследованные стили.                                                                                                                                                         |
-| `parent`                       | Angular вставляет превью внутрь родителя перетаскиваемого элемента.                   | Превью наследует те же стили, что и перетаскиваемый элемент.                                                                  | Превью может быть обрезано из-за `overflow: hidden` или перекрыто другими элементами из-за `z-index`. Кроме того, это может повлиять на селекторы `:nth-child` и некоторые flex-раскладки. |
-| `ElementRef` или `HTMLElement` | Angular вставляет превью в указанный элемент.                                         | Превью наследует стили от указанного элемента-контейнера.                                                                     | Превью может быть обрезано из-за `overflow: hidden` или перекрыто другими элементами из-за `z-index`. Кроме того, это может повлиять на селекторы `:nth-child` и некоторые flex-раскладки. |
+| Значение                      | Описание                                                                                             | Преимущества                                                                                                                              | Недостатки                                                                                                                                                                                  |
+| :---------------------------- | :--------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `global`                      | Значение по умолчанию. Angular вставляет превью в `<body>` или ближайший shadow root.                | Превью не зависит от `z-index` и `overflow: hidden`. Также не влияет на селекторы `:nth-child` и flex-раскладки.                          | Не сохраняет унаследованные стили.                                                                                                                                                          |
+| `parent`                      | Angular вставляет превью внутрь родителя перетаскиваемого элемента.                                  | Превью наследует те же стили, что и перетаскиваемый элемент.                                                                              | Превью может быть обрезано из‑за `overflow: hidden` или оказаться под другими элементами из‑за `z-index`. Также может влиять на селекторы `:nth-child` и некоторые flex-раскладки.           |
+| `ElementRef` или `HTMLElement` | Angular вставляет превью в указанный элемент.                                                       | Превью наследует стили от указанного контейнера.                                                                                          | Превью может быть обрезано из‑за `overflow: hidden` или оказаться под другими элементами из‑за `z-index`. Также может влиять на селекторы `:nth-child` и некоторые flex-раскладки.           |
 
-В качестве альтернативы вы можете изменить токен внедрения `CDK_DRAG_CONFIG`, чтобы обновить `previewContainer` в
-конфигурации, если значение равно `global` или `parent`. Для получения дополнительной информации
-см. [руководство по внедрению зависимостей](/guide/di), [API токена внедрения конфигурации drag](api/cdk/drag-drop/CDK_DRAG_CONFIG)
-и [API конфигурации drag drop](api/cdk/drag-drop/DragDropConfig).
+Альтернативно можно изменить injection token `CDK_DRAG_CONFIG`, чтобы обновить `previewContainer` в конфигурации, если значение — `global` или `parent`. Подробнее см. [руководство по внедрению зависимостей](/guide/di), [API injection token drag config](api/cdk/drag-drop/CDK_DRAG_CONFIG) и [API drag drop config](api/cdk/drag-drop/DragDropConfig).
 
-### Настройка плейсхолдера (заполнителя)
+### Настройка placeholder перетаскивания {#customize-drag-placeholder}
 
-Пока элемент `cdkDrag` перетаскивается, директива создает элемент-плейсхолдер, который показывает, где элемент будет
-размещен при сбросе. По умолчанию плейсхолдер — это клон перетаскиваемого элемента. Вы можете заменить плейсхолдер на
-кастомный, используя директиву `*cdkDragPlaceholder`:
+Пока элемент `cdkDrag` перетаскивается, директива создаёт элемент placeholder, показывающий, куда элемент будет помещён при сбросе. По умолчанию placeholder — это клон перетаскиваемого элемента. Можно заменить placeholder пользовательским с помощью директивы `*cdkDragPlaceholder`:
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/custom-placeholder/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/custom-placeholder/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/custom-placeholder/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/custom-placeholder/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/custom-placeholder/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/custom-placeholder/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/custom-placeholder/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/custom-placeholder/app/app.css"/>
 </docs-code-multifile>
 
-Вы можете использовать токен внедрения `CDK_DRAG_PLACEHOLDER` для получения ссылок на экземпляры `cdkDragPlaceholder`.
-Для получения дополнительной информации см. [руководство по внедрению зависимостей](/guide/di)
-и [API токена внедрения плейсхолдера](api/cdk/drag-drop/CDK_DRAG_PLACEHOLDER).
+Можно использовать injection token `CDK_DRAG_PLACEHOLDER`, который позволяет ссылаться на экземпляры `cdkDragPlaceholder`. Подробнее см. [руководство по внедрению зависимостей](/guide/di) и [API injection token drag placeholder](api/cdk/drag-drop/CDK_DRAG_PLACEHOLDER).
 
-### Настройка корневого элемента перетаскивания
+### Настройка корневого элемента перетаскивания {#customize-drag-root-element}
 
-Установите атрибут `cdkDragRootElement`, если есть элемент, который вы хотите сделать перетаскиваемым, но у вас нет к
-нему прямого доступа.
+Установите атрибут `cdkDragRootElement`, если есть элемент, который нужно сделать перетаскиваемым, но у вас нет прямого доступа к нему.
 
-Атрибут принимает селектор и ищет вверх по DOM, пока не найдет элемент, соответствующий селектору. Если элемент найден,
-он становится перетаскиваемым. Это полезно, например, для того, чтобы сделать диалоговое окно перетаскиваемым.
+Атрибут принимает селектор и просматривает DOM, пока не найдёт элемент, соответствующий селектору. Если элемент найден, он становится перетаскиваемым. Это полезно, например, для перетаскивания диалогового окна.
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/root-element/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/root-element/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/root-element/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/root-element/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/root-element/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/root-element/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/root-element/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/root-element/app/app.css"/>
 </docs-code-multifile>
 
-В качестве альтернативы вы можете изменить токен внедрения `CDK_DRAG_CONFIG`, чтобы обновить `rootElementSelector` в
-конфигурации. Для получения дополнительной информации
-см. [руководство по внедрению зависимостей](/guide/di), [API токена внедрения конфигурации drag](api/cdk/drag-drop/CDK_DRAG_CONFIG)
-и [API конфигурации drag drop](api/cdk/drag-drop/DragDropConfig).
+Альтернативно можно изменить injection token `CDK_DRAG_CONFIG`, чтобы обновить `rootElementSelector` в конфигурации. Подробнее см. [руководство по внедрению зависимостей](/guide/di), [API injection token drag config](api/cdk/drag-drop/CDK_DRAG_CONFIG) и [API drag drop config](api/cdk/drag-drop/DragDropConfig).
 
-### Установка DOM-позиции перетаскиваемого элемента
+### Установка DOM-позиции перетаскиваемого элемента {#set-dom-position-of-a-draggable-element}
 
-По умолчанию элементы `cdkDrag`, не находящиеся в `cdkDropList`, перемещаются со своей нормальной DOM-позиции только
-тогда, когда пользователь вручную перемещает элемент. Используйте входное свойство `cdkDragFreeDragPosition`, чтобы явно
-задать позицию элемента. Частый случай использования — восстановление позиции перетаскиваемого элемента после того, как
-пользователь ушел со страницы и вернулся.
+По умолчанию элементы `cdkDrag`, не находящиеся в `cdkDropList`, перемещаются из обычной DOM-позиции только когда пользователь вручную перемещает элемент. Используйте вход `cdkDragFreeDragPosition`, чтобы явно задать позицию элемента. Типичный случай — восстановление позиции перетаскиваемого элемента после того, как пользователь ушёл со страницы и вернулся.
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/free-drag-position/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/free-drag-position/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/free-drag-position/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/free-drag-position/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/free-drag-position/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/free-drag-position/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/free-drag-position/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/free-drag-position/app/app.css"/>
 </docs-code-multifile>
 
-### Ограничение перемещения внутри элемента
+### Ограничение перемещения внутри элемента {#restrict-movement-within-an-element}
 
-Чтобы запретить пользователю перетаскивать элемент `cdkDrag` за пределы другого элемента, передайте CSS-селектор в
-атрибут `cdkDragBoundary`. Этот атрибут принимает селектор и ищет вверх по DOM, пока не найдет соответствующий элемент.
-Если совпадение найдено, элемент становится границей, за пределы которой перетаскиваемый элемент не может выйти.
-`cdkDragBoundary` также можно использовать, когда `cdkDrag` находится внутри `cdkDropList`.
+Чтобы запретить пользователю перетаскивать элемент `cdkDrag` за пределы другого элемента, передайте CSS-селектор в атрибут `cdkDragBoundary`. Атрибут принимает селектор и просматривает DOM, пока не найдёт соответствующий элемент. Если совпадение найдено, элемент становится границей, за которую перетаскиваемый элемент не может выйти. `cdkDragBoundary` также можно использовать, когда `cdkDrag` размещён внутри `cdkDropList`.
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/boundary/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/boundary/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/boundary/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/boundary/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/boundary/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/boundary/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/boundary/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/boundary/app/app.css"/>
 </docs-code-multifile>
 
-В качестве альтернативы вы можете изменить токен внедрения `CDK_DRAG_CONFIG`, чтобы обновить `boundaryElement` в
-конфигурации. Для получения дополнительной информации
-см. [руководство по внедрению зависимостей](/guide/di), [API токена внедрения конфигурации drag](api/cdk/drag-drop/CDK_DRAG_CONFIG)
-и [API конфигурации drag drop](api/cdk/drag-drop/DragDropConfig).
+Альтернативно можно изменить injection token `CDK_DRAG_CONFIG`, чтобы обновить boundaryElement в конфигурации. Подробнее см. [руководство по внедрению зависимостей](/guide/di), [API injection token drag config](api/cdk/drag-drop/CDK_DRAG_CONFIG) и [API drag drop config](api/cdk/drag-drop/DragDropConfig).
 
-### Ограничение перемещения по оси
+### Ограничение перемещения по оси {#restrict-movement-along-an-axis}
 
-По умолчанию `cdkDrag` разрешает свободное перемещение во всех направлениях. Чтобы ограничить перетаскивание
-определенной осью, установите `cdkDragLockAxis` в значение "x" или "y" на `cdkDrag`. Чтобы ограничить перетаскивание для
-нескольких элементов внутри `cdkDropList`, установите `cdkDropListLockAxis` на `cdkDropList`.
+По умолчанию `cdkDrag` позволяет свободное перемещение во всех направлениях. Чтобы ограничить перетаскивание по определённой оси, установите `cdkDragLockAxis` в «x» или «y» на `cdkDrag`. Чтобы ограничить перетаскивание для нескольких перетаскиваемых элементов внутри `cdkDropList`, установите `cdkDropListLockAxis` на `cdkDropList`.
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/axis-lock/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/axis-lock/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/axis-lock/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/axis-lock/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/axis-lock/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/axis-lock/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/axis-lock/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/axis-lock/app/app.css"/>
 </docs-code-multifile>
 
-В качестве альтернативы вы можете изменить токен внедрения `CDK_DRAG_CONFIG`, чтобы обновить `lockAxis` в конфигурации.
-Для получения дополнительной информации
-см. [руководство по внедрению зависимостей](/guide/di), [API токена внедрения конфигурации drag](api/cdk/drag-drop/CDK_DRAG_CONFIG)
-и [API конфигурации drag drop](api/cdk/drag-drop/DragDropConfig).
+Альтернативно можно изменить injection token `CDK_DRAG_CONFIG`, чтобы обновить `lockAxis` в конфигурации. Подробнее см. [руководство по внедрению зависимостей](/guide/di), [API injection token drag config](api/cdk/drag-drop/CDK_DRAG_CONFIG) и [API drag drop config](api/cdk/drag-drop/DragDropConfig).
 
-### Задержка перетаскивания
+### Задержка перетаскивания {#delay-dragging}
 
-По умолчанию, когда пользователь нажимает указателем на `cdkDrag`, начинается последовательность перетаскивания. Это
-поведение может быть нежелательным в таких случаях, как полноэкранные перетаскиваемые элементы на сенсорных устройствах,
-где пользователь может случайно вызвать событие перетаскивания при прокрутке страницы.
+По умолчанию, когда пользователь нажимает указателем на `cdkDrag`, начинается последовательность перетаскивания. Такое поведение может быть нежелательным, например, для полноэкранных перетаскиваемых элементов на сенсорных устройствах, где пользователь может случайно запустить событие перетаскивания при прокрутке страницы.
 
-Вы можете задержать начало перетаскивания, используя входное свойство `cdkDragStartDelay`. Оно заставляет ждать
-указанное количество миллисекунд удержания указателя, прежде чем начать перетаскивание элемента.
+Можно задержать последовательность перетаскивания с помощью входа `cdkDragStartDelay`. Вход ожидает, пока пользователь удерживает указатель заданное количество миллисекунд, прежде чем начать перетаскивание элемента.
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/delay-drag/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/delay-drag/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/delay-drag/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/delay-drag/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/delay-drag/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/delay-drag/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/delay-drag/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/delay-drag/app/app.css"/>
 </docs-code-multifile>
 
-В качестве альтернативы вы можете изменить токен внедрения `CDK_DRAG_CONFIG`, чтобы обновить `dragStartDelay` в
-конфигурации. Для получения дополнительной информации
-см. [руководство по внедрению зависимостей](/guide/di), [API токена внедрения конфигурации drag](api/cdk/drag-drop/CDK_DRAG_CONFIG)
-и [API конфигурации drag drop](api/cdk/drag-drop/DragDropConfig).
+Альтернативно можно изменить injection token `CDK_DRAG_CONFIG`, чтобы обновить dragStartDelay в конфигурации. Подробнее см. [руководство по внедрению зависимостей](/guide/di), [API injection token drag config](api/cdk/drag-drop/CDK_DRAG_CONFIG) и [API drag drop config](api/cdk/drag-drop/DragDropConfig).
 
-### Отключение перетаскивания
+### Отключение перетаскивания {#disable-dragging}
 
-Если вы хотите отключить перетаскивание для конкретного элемента, установите входное свойство `cdkDragDisabled` на
-элементе `cdkDrag` в `true` или `false`. Вы можете отключить весь список, используя входное свойство
-`cdkDropListDisabled` на `cdkDropList`. Также можно отключить конкретный элемент захвата через `cdkDragHandleDisabled`
-на `cdkDragHandle`.
+Чтобы отключить перетаскивание для конкретного элемента, установите вход `cdkDragDisabled` на элементе `cdkDrag` в true или false. Можно отключить весь список с помощью входа `cdkDropListDisabled` на `cdkDropList`. Также можно отключить конкретную ручку через `cdkDragHandleDisabled` на `cdkDragHandle`.
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/disable-drag/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/disable-drag/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/disable-drag/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/disable-drag/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/disable-drag/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/disable-drag/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/disable-drag/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/disable-drag/app/app.css"/>
 </docs-code-multifile>
 
-В качестве альтернативы вы можете изменить токен внедрения `CDK_DRAG_CONFIG`, чтобы обновить `draggingDisabled` в
-конфигурации. Для получения дополнительной информации
-см. [руководство по внедрению зависимостей](/guide/di), [API токена внедрения конфигурации drag](api/cdk/drag-drop/CDK_DRAG_CONFIG)
-и [API конфигурации drag drop](api/cdk/drag-drop/DragDropConfig).
+Альтернативно можно изменить injection token `CDK_DRAG_CONFIG`, чтобы обновить `draggingDisabled` в конфигурации. Подробнее см. [руководство по внедрению зависимостей](/guide/di), [API injection token drag config](api/cdk/drag-drop/CDK_DRAG_CONFIG) и [API drag drop config](api/cdk/drag-drop/DragDropConfig).
 
-## Настройка сортировки
+## Настройка сортировки {#sorting-customizations}
 
-### Ориентация списка
+### Ориентация списка {#list-orientation}
 
-По умолчанию директива `cdkDropList` предполагает, что списки вертикальные. Это можно изменить, установив свойство
-`cdkDropListOrientation` в значение `horizontal`.
+По умолчанию директива `cdkDropList` предполагает вертикальные списки. Это можно изменить, установив свойство `cdkDropListOrientation` в horizontal.
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/horizontal-sorting/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/horizontal-sorting/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/horizontal-sorting/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/horizontal-sorting/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/horizontal-sorting/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/horizontal-sorting/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/horizontal-sorting/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/horizontal-sorting/app/app.css"/>
 </docs-code-multifile>
 
-В качестве альтернативы вы можете изменить токен внедрения `CDK_DRAG_CONFIG`, чтобы обновить `listOrientation` в
-конфигурации. Для получения дополнительной информации
-см. [руководство по внедрению зависимостей](/guide/di), [API токена внедрения конфигурации drag](api/cdk/drag-drop/CDK_DRAG_CONFIG)
-и [API конфигурации drag drop](api/cdk/drag-drop/DragDropConfig).
+Альтернативно можно изменить injection token `CDK_DRAG_CONFIG`, чтобы обновить `listOrientation` в конфигурации. Подробнее см. [руководство по внедрению зависимостей](/guide/di), [API injection token drag config](api/cdk/drag-drop/CDK_DRAG_CONFIG) и [API drag drop config](api/cdk/drag-drop/DragDropConfig).
 
-### Перенос элементов списка
+### Перенос строк в списке {#list-wrapping}
 
-По умолчанию `cdkDropList` сортирует перетаскиваемые элементы, перемещая их с помощью CSS-трансформации. Это позволяет
-анимировать сортировку, что улучшает пользовательский опыт. Однако недостатком является то, что список работает только в
-одном направлении: вертикально или горизонтально.
+По умолчанию `cdkDropList` сортирует перетаскиваемые элементы, перемещая их с помощью CSS transform. Это позволяет анимировать сортировку, что улучшает пользовательский опыт. Однако drop list работает только в одном направлении: вертикально или горизонтально.
 
-Если у вас есть сортируемый список, который должен переноситься на новые строки, вы можете установить атрибут
-`cdkDropListOrientation` в значение `mixed`. Это заставляет список использовать другую стратегию сортировки элементов,
-которая включает их перемещение в DOM. Однако список больше не сможет анимировать действие сортировки.
+Если у вас сортируемый список, который должен переноситься на новые строки, установите атрибут `cdkDropListOrientation` в `mixed`. Это заставляет список использовать другую стратегию сортировки элементов — перемещение в DOM. Однако список больше не может анимировать действие сортировки.
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/mixed-sorting/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/mixed-sorting/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/mixed-sorting/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/mixed-sorting/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/mixed-sorting/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/mixed-sorting/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/mixed-sorting/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/mixed-sorting/app/app.css"/>
 </docs-code-multifile>
 
-### Выборочная сортировка
+### Выборочная сортировка {#selective-sorting}
 
-По умолчанию элементы `cdkDrag` сортируются в любую позицию внутри `cdkDropList`. Чтобы изменить это поведение,
-установите атрибут `cdkDropListSortPredicate`, который принимает функцию. Функция-предикат вызывается всякий раз, когда
-перетаскиваемый элемент собирается переместиться на новый индекс в списке. Если предикат возвращает true, элемент будет
-перемещен на новый индекс, в противном случае он сохранит свою текущую позицию.
+По умолчанию элементы `cdkDrag` сортируются в любую позицию внутри `cdkDropList`. Чтобы изменить это поведение, установите атрибут `cdkDropListSortPredicate`, который принимает функцию. Функция-предикат вызывается, когда перетаскиваемый элемент собирается переместиться на новый индекс в drop list. Если предикат возвращает true, элемент перемещается на новый индекс, иначе остаётся на текущей позиции.
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/sort-predicate/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/sort-predicate/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/sort-predicate/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/sort-predicate/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/sort-predicate/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/sort-predicate/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/sort-predicate/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/sort-predicate/app/app.css"/>
 </docs-code-multifile>
 
-### Отключение сортировки
+### Отключение сортировки {#disable-sorting}
 
-Бывают случаи, когда перетаскиваемые элементы можно перетаскивать из одного `cdkDropList` в другой, но пользователь не
-должен иметь возможности сортировать их внутри исходного списка. Для таких случаев добавьте атрибут
-`cdkDropListSortingDisabled`, чтобы предотвратить сортировку перетаскиваемых элементов в `cdkDropList`. Это сохраняет
-начальную позицию перетаскиваемого элемента в исходном списке, если он не будет перетащен на новую валидную позицию.
+Бывают случаи, когда перетаскиваемые элементы можно перетащить из одного `cdkDropList` в другой, но пользователь не должен иметь возможность сортировать их внутри исходного списка. Для таких случаев добавьте атрибут `cdkDropListSortingDisabled`, чтобы запретить сортировку перетаскиваемых элементов в `cdkDropList`. Это сохраняет начальную позицию перетаскиваемого элемента в исходном списке, если он не перетащен на новую допустимую позицию.
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/disable-sorting/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/disable-sorting/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/disable-sorting/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/disable-sorting/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/disable-sorting/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/disable-sorting/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/disable-sorting/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/disable-sorting/app/app.css"/>
 </docs-code-multifile>
 
-В качестве альтернативы вы можете изменить токен внедрения `CDK_DRAG_CONFIG`, чтобы обновить `sortingDisabled` в
-конфигурации. Для получения дополнительной информации
-см. [руководство по внедрению зависимостей](/guide/di), [API токена внедрения конфигурации drag](api/cdk/drag-drop/CDK_DRAG_CONFIG)
-и [API конфигурации drag drop](api/cdk/drag-drop/DragDropConfig).
+Альтернативно можно изменить injection token `CDK_DRAG_CONFIG`, чтобы обновить sortingDisabled в конфигурации. Подробнее см. [руководство по внедрению зависимостей](/guide/di), [API injection token drag config](api/cdk/drag-drop/CDK_DRAG_CONFIG) и [API drag drop config](api/cdk/drag-drop/DragDropConfig).
 
-### Копирование элементов между списками
+### Копирование элементов между списками {#copying-items-between-lists}
 
-По умолчанию, когда элемент перетаскивается из одного списка в другой, он перемещается из исходного списка. Однако вы
-можете настроить директивы так, чтобы элемент копировался, оставляя оригинал в исходном списке.
+По умолчанию, когда элемент перетаскивается из одного списка в другой, он удаляется из исходного списка. Однако можно настроить директивы на копирование элемента, оставляя оригинал в исходном списке.
 
-Чтобы включить копирование, вы можете установить входное свойство `cdkDropListHasAnchor`. Это указывает `cdkDropList`
-создать элемент-"якорь", который остается в исходном контейнере и не перемещается вместе с элементом. Если пользователь
-перемещает элемент обратно в исходный контейнер, якорь удаляется автоматически. Элемент-якорь можно стилизовать,
-обратившись к CSS-классу `.cdk-drag-anchor`.
+Чтобы включить копирование, установите вход `cdkDropListHasAnchor`. Это указывает `cdkDropList` создать «якорный» элемент, который остаётся в исходном контейнере и не перемещается вместе с элементом. Если пользователь вернёт элемент в исходный контейнер, якорь удаляется автоматически. Якорный элемент можно стилизовать, нацелившись на CSS-класс `.cdk-drag-anchor`.
 
-Сочетание `cdkDropListHasAnchor` с `cdkDropListSortingDisabled` позволяет создать список, из которого пользователь может
-копировать элементы, не имея возможности переупорядочивать исходный список (например, список товаров и корзина покупок).
+Сочетание `cdkDropListHasAnchor` с `cdkDropListSortingDisabled` позволяет создать список, из которого пользователь может копировать элементы, не имея возможности переупорядочить исходный список (например, список товаров и корзина покупок).
 
-<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/copy-list/app/app.component.ts">
-  <docs-code header="app.component.html" path="adev/src/content/examples/drag-drop/src/copy-list/app/app.component.html"/>
-  <docs-code header="app.component.ts" path="adev/src/content/examples/drag-drop/src/copy-list/app/app.component.ts"/>
-  <docs-code header="app.component.css" path="adev/src/content/examples/drag-drop/src/copy-list/app/app.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/copy-list/app/app.ts">
+  <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/copy-list/app/app.html"/>
+  <docs-code header="app.ts" path="adev/src/content/examples/drag-drop/src/copy-list/app/app.ts"/>
+  <docs-code header="app.css" path="adev/src/content/examples/drag-drop/src/copy-list/app/app.css"/>
 </docs-code-multifile>
 
-## Настройка анимаций
+## Настройка анимаций {#customize-animations}
 
-Drag and drop поддерживает анимации для:
+Перетаскивание поддерживает анимации для:
 
 - Сортировки перетаскиваемого элемента внутри списка
-- Перемещения перетаскиваемого элемента из позиции, где пользователь его сбросил, в конечную позицию внутри списка
+- Перемещения перетаскиваемого элемента из позиции, куда пользователь его сбросил, в финальную позицию внутри списка
 
-Чтобы настроить анимации, определите CSS-переход (transition), нацеленный на свойство transform. Для анимаций можно
-использовать следующие классы:
+Чтобы настроить анимации, определите CSS-переход, нацеленный на свойство transform. Для анимаций можно использовать следующие классы:
 
-| Имя CSS-класса      | Результат добавления перехода                                                                                                                                                                        |
-| :------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| .cdk-drag           | Анимирует перетаскиваемые элементы во время их сортировки.                                                                                                                                           |
-| .cdk-drag-animating | Анимирует перетаскиваемый элемент из позиции сброса в конечную позицию внутри `cdkDropList`.<br><br>Этот CSS-класс применяется к элементу `cdkDrag` только после завершения действия перетаскивания. |
+| Имя CSS-класса      | Результат добавления перехода                                                                                                                                                                                              |
+| :------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| .cdk-drag           | Анимирует перетаскиваемые элементы во время сортировки.                                                                                                                                                                    |
+| .cdk-drag-animating | Анимирует перетаскиваемый элемент от позиции сброса до финальной позиции внутри `cdkDropList`.<br><br>Этот CSS-класс применяется к элементу `cdkDrag` только после завершения действия перетаскивания.                    |
 
-## Стилизация
+## Стилизация {#styling}
 
-Директивы `cdkDrag` и `cdkDropList` применяют только основные стили, необходимые для функциональности. Приложения могут
-настраивать свои стили, используя указанные CSS-классы.
+Директивы `cdkDrag` и `cdkDropList` применяют только необходимые стили для функциональности. Приложения могут настраивать стили, нацеливаясь на указанные CSS-классы.
 
-| Имя CSS-класса           | Описание                                                                                                                                                                                                                                                                                            |
-| :----------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| .cdk-drop-list           | Селектор для контейнеров `cdkDropList`.                                                                                                                                                                                                                                                             |
-| .cdk-drag                | Селектор для элементов `cdkDrag`.                                                                                                                                                                                                                                                                   |
-| .cdk-drag-disabled       | Селектор для отключенных элементов `cdkDrag`.                                                                                                                                                                                                                                                       |
-| .cdk-drag-handle         | Селектор для хост-элемента `cdkDragHandle`.                                                                                                                                                                                                                                                         |
-| .cdk-drag-preview        | Селектор для элемента превью перетаскивания. Это элемент, который появляется рядом с курсором, когда пользователь перетаскивает элемент в сортируемом списке.<br><br>Элемент выглядит точно так же, как перетаскиваемый элемент, если не настроен пользовательский шаблон через `*cdkDragPreview`.  |
-| .cdk-drag-placeholder    | Селектор для элемента-плейсхолдера перетаскивания. Это элемент, который показывается в месте, куда будет перетащен элемент после завершения действия перетаскивания.<br><br>Этот элемент выглядит точно так же, как сортируемый элемент, если не настроен с помощью директивы `cdkDragPlaceholder`. |
-| .cdk-drop-list-dragging  | Селектор для контейнера `cdkDropList`, в котором в данный момент перетаскивается элемент.                                                                                                                                                                                                           |
-| .cdk-drop-list-disabled  | Селектор для отключенных контейнеров `cdkDropList`.                                                                                                                                                                                                                                                 |
-| .cdk-drop-list-receiving | Селектор для контейнера `cdkDropList`, который может принять перетаскиваемый элемент из связанного списка, который в данный момент перетаскивается.                                                                                                                                                 |
-| .cdk-drag-anchor         | Селектор для элемента-якоря, который создается, когда включен `cdkDropListHasAnchor`. Этот элемент указывает позицию, с которой начал движение перетаскиваемый элемент.                                                                                                                             |
+| Имя CSS-класса           | Описание                                                                                                                                                                                                                                                                                                                                 |
+| :----------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| .cdk-drop-list           | Селектор контейнеров `cdkDropList`.                                                                                                                                                                                                                                                                                                      |
+| .cdk-drag                | Селектор элементов `cdkDrag`.                                                                                                                                                                                                                                                                                                            |
+| .cdk-drag-disabled       | Селектор отключённых элементов `cdkDrag`.                                                                                                                                                                                                                                                                                                |
+| .cdk-drag-handle         | Селектор host-элемента `cdkDragHandle`.                                                                                                                                                                                                                                                                                                  |
+| .cdk-drag-preview        | Селектор элемента превью перетаскивания. Это элемент, который появляется рядом с курсором, пока пользователь перетаскивает элемент в сортируемом списке.<br><br>Элемент выглядит так же, как перетаскиваемый, если не настроен пользовательский шаблон через `*cdkDragPreview`.                                                         |
+| .cdk-drag-placeholder    | Селектор элемента placeholder. Это элемент, который отображается в месте, куда будет помещён перетаскиваемый элемент после завершения перетаскивания.<br><br>Элемент выглядит так же, как сортируемый, если не настроен через директиву `cdkDragPlaceholder`.                                                                            |
+| .cdk-drop-list-dragging  | Селектор контейнера `cdkDropList`, в котором сейчас перетаскивается элемент.                                                                                                                                                                                                                                                             |
+| .cdk-drop-list-disabled  | Селектор отключённых контейнеров `cdkDropList`.                                                                                                                                                                                                                                                                                          |
+| .cdk-drop-list-receiving | Селектор контейнера `cdkDropList`, который может принять перетаскиваемый элемент из связанного списка сброса, пока тот перетаскивается.                                                                                                                                                                                                  |
+| .cdk-drag-anchor         | Селектор якорного элемента, создаваемого при включённом `cdkDropListHasAnchor`. Этот элемент указывает позицию, с которой началось перетаскивание.                                                                                                                                                                                       |
 
-## Перетаскивание в прокручиваемом контейнере
+## Перетаскивание в прокручиваемом контейнере {#dragging-in-a-scrollable-container}
 
-Если ваши перетаскиваемые элементы находятся внутри прокручиваемого контейнера (например, `div` с `overflow: auto`),
-автоматическая прокрутка не будет работать, если у контейнера нет директивы `cdkScrollable`. Без нее CDK не сможет
-обнаруживать или контролировать поведение прокрутки контейнера во время операций перетаскивания.
+Если перетаскиваемые элементы находятся внутри прокручиваемого контейнера (например, `div` с `overflow: auto`), автоматическая прокрутка не будет работать, пока прокручиваемый контейнер не имеет директивы `cdkScrollable`. Без неё CDK не может обнаружить или управлять поведением прокрутки контейнера во время операций перетаскивания.
 
-## Интеграция с другими компонентами
+## Интеграция с другими компонентами {#integrations-with-other-components}
 
-Функциональность drag-and-drop из CDK может быть интегрирована с различными компонентами. Распространенные случаи
-использования включают сортируемые компоненты `MatTable` и сортируемые компоненты `MatTabGroup`.
+Функциональность drag-and-drop CDK может интегрироваться с различными компонентами. Типичные случаи — сортируемые компоненты `MatTable` и сортируемые компоненты `MatTabGroup`.

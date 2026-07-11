@@ -11,14 +11,8 @@ import * as o from '../output/output_ast';
 const CORE = '@angular/core';
 
 export class Identifiers {
-  /* Methods */
-  static NEW_METHOD = 'factory';
-  static TRANSFORM_METHOD = 'transform';
-  static PATCH_DEPS = 'patchedDeps';
-
   static core: o.ExternalReference = {name: null, moduleName: CORE};
 
-  /* Instructions */
   static namespaceHTML: o.ExternalReference = {name: 'ɵɵnamespaceHTML', moduleName: CORE};
 
   static namespaceMathML: o.ExternalReference = {name: 'ɵɵnamespaceMathML', moduleName: CORE};
@@ -30,6 +24,10 @@ export class Identifiers {
   static elementStart: o.ExternalReference = {name: 'ɵɵelementStart', moduleName: CORE};
 
   static elementEnd: o.ExternalReference = {name: 'ɵɵelementEnd', moduleName: CORE};
+
+  static foreignComponent: o.ExternalReference = {name: 'ɵɵforeignComponent', moduleName: CORE};
+  static foreignContent: o.ExternalReference = {name: 'ɵɵforeignContent', moduleName: CORE};
+  static foreignContentFn: o.ExternalReference = {name: 'ɵɵforeignContentFn', moduleName: CORE};
 
   static domElement: o.ExternalReference = {name: 'ɵɵdomElement', moduleName: CORE};
   static domElementStart: o.ExternalReference = {name: 'ɵɵdomElementStart', moduleName: CORE};
@@ -193,6 +191,10 @@ export class Identifiers {
     name: 'ɵɵdeferEnableTimerScheduling',
     moduleName: CORE,
   };
+  static enableIncrementalHydrationRuntime: o.ExternalReference = {
+    name: 'ɵɵenableIncrementalHydrationRuntime',
+    moduleName: CORE,
+  };
 
   static conditionalCreate: o.ExternalReference = {name: 'ɵɵconditionalCreate', moduleName: CORE};
   static conditionalBranchCreate: o.ExternalReference = {
@@ -313,6 +315,9 @@ export class Identifiers {
     moduleName: CORE,
   };
 
+  static defineService: o.ExternalReference = {name: 'ɵɵdefineService', moduleName: CORE};
+  static declareService: o.ExternalReference = {name: 'ɵɵngDeclareService', moduleName: CORE};
+
   static resolveWindow: o.ExternalReference = {name: 'ɵɵresolveWindow', moduleName: CORE};
   static resolveDocument: o.ExternalReference = {name: 'ɵɵresolveDocument', moduleName: CORE};
   static resolveBody: o.ExternalReference = {name: 'ɵɵresolveBody', moduleName: CORE};
@@ -421,12 +426,19 @@ export class Identifiers {
   static storeLet: o.ExternalReference = {name: 'ɵɵstoreLet', moduleName: CORE};
   static readContextLet: o.ExternalReference = {name: 'ɵɵreadContextLet', moduleName: CORE};
 
+  static arrowFunction: o.ExternalReference = {name: 'ɵɵarrowFunction', moduleName: CORE};
+
   static attachSourceLocations: o.ExternalReference = {
     name: 'ɵɵattachSourceLocations',
     moduleName: CORE,
   };
 
   static NgOnChangesFeature: o.ExternalReference = {name: 'ɵɵNgOnChangesFeature', moduleName: CORE};
+
+  static ControlFeature: o.ExternalReference = {
+    name: 'ɵɵControlFeature',
+    moduleName: CORE,
+  };
 
   static InheritDefinitionFeature: o.ExternalReference = {
     name: 'ɵɵInheritDefinitionFeature',

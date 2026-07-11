@@ -2,11 +2,11 @@
 
 Ниже приведены ошибки метаданных, с которыми вы можете столкнуться, с объяснениями и предлагаемыми исправлениями.
 
-## Форма выражения не поддерживается (Expression form not supported)
+## Форма выражения не поддерживается (Expression form not supported) {#expression-form-not-supported}
 
-ПОЛЕЗНО: Компилятор встретил выражение, которое он не понял при оценке метаданных Angular.
+HELPFUL: Компилятор встретил выражение, которое он не понял при оценке метаданных Angular.
 
-Возможности языка, выходящие за рамки [ограниченного синтаксиса выражений](tools/cli/aot-compiler#expression-syntax)
+Возможности языка, выходящие за рамки [ограниченного синтаксиса выражений](tools/cli/aot-compiler#expression-syntax-limitations)
 компилятора, могут вызвать эту ошибку, как показано в следующем примере:
 
 ```ts
@@ -23,13 +23,13 @@ const prop = typeof Fooish; // typeof недопустим в метаданны
 Вы можете использовать `typeof` и скобочную нотацию в обычном коде приложения.
 Вы просто не можете использовать эти возможности внутри выражений, определяющих метаданные Angular.
 
-Избегайте этой ошибки, придерживаясь [ограниченного синтаксиса выражений](tools/cli/aot-compiler#expression-syntax)
+Избегайте этой ошибки, придерживаясь [ограниченного синтаксиса выражений](tools/cli/aot-compiler#expression-syntax-limitations)
 компилятора при написании метаданных Angular, и с осторожностью относитесь к новым или необычным возможностям
 TypeScript.
 
-## Ссылка на локальный (неэкспортируемый) символ (Reference to a local (non-exported) symbol)
+## Ссылка на локальный (неэкспортируемый) символ (Reference to a local (non-exported) symbol) {#reference-to-a-local-non-exported-symbol}
 
-ПОЛЕЗНО: Ссылка на локальный \(неэкспортируемый\) символ 'symbol name'. Рассмотрите возможность экспорта символа.
+HELPFUL: Ссылка на локальный \(неэкспортируемый\) символ 'symbol name'. Рассмотрите возможность экспорта символа.
 
 Компилятор обнаружил ссылку на локально определенный символ, который либо не был экспортирован, либо не был
 инициализирован.
@@ -65,9 +65,7 @@ let foo = 42; // инициализирована
 Компилятор [свернет](tools/cli/aot-compiler#code-folding) выражение в провайдер, как если бы вы написали это:
 
 ```ts
-providers: [
-  { provide: Foo, useValue: 42 }
-]
+providers: [{provide: Foo, useValue: 42}];
 ```
 
 В качестве альтернативы, вы можете исправить это, экспортировав `foo` с расчетом на то, что `foo` будет присвоено
@@ -100,7 +98,7 @@ export let someTemplate: string; // экспортирована, но не ин
 
 @Component({
   selector: 'my-component',
-  template: someTemplate
+  template: someTemplate,
 })
 export class MyComponent {}
 ```
@@ -112,7 +110,7 @@ export class MyComponent {}
 
 ## Только инициализированные переменные и константы (Only initialized variables and constants) {#only-initialized-variables-and-constants}
 
-ПОЛЕЗНО: _Можно ссылаться только на инициализированные переменные и константы, так как значение этой переменной
+HELPFUL: _Можно ссылаться только на инициализированные переменные и константы, так как значение этой переменной
 необходимо компилятору шаблонов._
 
 Компилятор обнаружил ссылку на экспортируемую переменную или статическое поле, которое не было инициализировано.
@@ -127,7 +125,7 @@ export let someTemplate: string;
 
 @Component({
   selector: 'my-component',
-  template: someTemplate
+  template: someTemplate,
 })
 export class MyComponent {}
 ```
@@ -136,11 +134,11 @@ export class MyComponent {}
 
 ```ts
 // ERROR - там тоже не инициализирована
-import { someTemplate } from './config';
+import {someTemplate} from './config';
 
 @Component({
   selector: 'my-component',
-  template: someTemplate
+  template: someTemplate,
 })
 export class MyComponent {}
 ```
@@ -157,14 +155,14 @@ export let someTemplate = '<h1>Greetings from Angular</h1>';
 
 @Component({
   selector: 'my-component',
-  template: someTemplate
+  template: someTemplate,
 })
 export class MyComponent {}
 ```
 
-## Ссылка на неэкспортируемый класс (Reference to a non-exported class)
+## Ссылка на неэкспортируемый класс (Reference to a non-exported class) {#reference-to-a-non-exported-class}
 
-ПОЛЕЗНО: _Ссылка на неэкспортируемый класс `<class name>`._
+HELPFUL: _Ссылка на неэкспортируемый класс `<class name>`._
 _Рассмотрите возможность экспорта класса._
 
 Метаданные ссылаются на класс, который не был экспортирован.
@@ -184,7 +182,7 @@ abstract class MyStrategy { }
 ```
 
 Angular генерирует фабрику класса в отдельном модуле, и эта
-фабрика [может обращаться только к экспортируемым классам](tools/cli/aot-compiler#exported-symbols).
+фабрика [может обращаться только к экспортируемым классам](tools/cli/aot-compiler#public-or-protected-symbols).
 Чтобы исправить эту ошибку, экспортируйте указанный класс.
 
 ```ts
@@ -198,9 +196,9 @@ export abstract class MyStrategy { }
   …
 ```
 
-## Ссылка на неэкспортируемую функцию (Reference to a non-exported function)
+## Ссылка на неэкспортируемую функцию (Reference to a non-exported function) {#reference-to-a-non-exported-function}
 
-ПОЛЕЗНО: _Метаданные ссылаются на функцию, которая не была экспортирована._
+HELPFUL: _Метаданные ссылаются на функцию, которая не была экспортирована._
 
 Например, вы могли установить свойство `useFactory` провайдера на локально определенную функцию, которую забыли
 экспортировать.
@@ -217,7 +215,7 @@ function myStrategy() { … }
 ```
 
 Angular генерирует фабрику класса в отдельном модуле, и эта
-фабрика [может обращаться только к экспортируемым функциям](tools/cli/aot-compiler#exported-symbols).
+фабрика [может обращаться только к экспортируемым функциям](tools/cli/aot-compiler#public-or-protected-symbols).
 Чтобы исправить эту ошибку, экспортируйте функцию.
 
 ```ts
@@ -231,13 +229,13 @@ export function myStrategy() { … }
   …
 ```
 
-## Вызовы функций не поддерживаются (Function calls are not supported)
+## Вызовы функций не поддерживаются (Function calls are not supported) {#function-calls-are-not-supported}
 
-ПОЛЕЗНО: _Вызовы функций не поддерживаются. Рассмотрите возможность замены функции или лямбда-выражения ссылкой на
+HELPFUL: _Вызовы функций не поддерживаются. Рассмотрите возможность замены функции или лямбда-выражения ссылкой на
 экспортируемую функцию._
 
 Компилятор в настоящее время не
-поддерживает [функциональные выражения или лямбда-функции](tools/cli/aot-compiler#function-expression).
+поддерживает [функциональные выражения или лямбда-функции](tools/cli/aot-compiler#functions-and-static-method-calls).
 Например, вы не можете установить `useFactory` провайдера на анонимную функцию или стрелочную функцию следующим образом.
 
 ```ts
@@ -283,9 +281,9 @@ export function someValueFactory() {
   …
 ```
 
-## Деструктурированная переменная или константа не поддерживается (Destructured variable or constant not supported)
+## Деструктурированная переменная или константа не поддерживается (Destructured variable or constant not supported) {#destructured-variable-or-constant-not-supported}
 
-ПОЛЕЗНО: _Ссылка на экспортируемую деструктурированную переменную или константу не поддерживается компилятором шаблонов.
+HELPFUL: _Ссылка на экспортируемую деструктурированную переменную или константу не поддерживается компилятором шаблонов.
 Рассмотрите возможность упрощения, чтобы избежать деструктуризации._
 
 Компилятор не поддерживает ссылки на переменные, присвоенные с
@@ -320,9 +318,9 @@ import { configuration } from './configuration';
   …
 ```
 
-## Не удалось разрешить тип (Could not resolve type)
+## Не удалось разрешить тип (Could not resolve type) {#could-not-resolve-type}
 
-ПОЛЕЗНО: _Компилятор встретил тип и не может определить, какой модуль экспортирует этот тип._
+HELPFUL: _Компилятор встретил тип и не может определить, какой модуль экспортирует этот тип._
 
 Это может произойти, если вы ссылаетесь на ambient-тип (тип из окружения).
 Например, тип `Window` — это ambient-тип, объявленный в глобальном файле `.d.ts`.
@@ -388,27 +386,27 @@ export class MyComponent {
 }
 ```
 
-## Ожидалось имя (Name expected)
+## Ожидалось имя (Name expected) {#name-expected}
 
-ПОЛЕЗНО: _Компилятор ожидал имя в выражении, которое он оценивал._
+HELPFUL: _Компилятор ожидал имя в выражении, которое он оценивал._
 
 Это может произойти, если вы используете число в качестве имени свойства, как в следующем примере.
 
 ```ts
 // ERROR
-provider: [{ provide: Foo, useValue: { 0: 'test' } }]
+provider: [{provide: Foo, useValue: {0: 'test'}}];
 ```
 
 Измените имя свойства на нечисловое.
 
 ```ts
 // CORRECTED
-provider: [{ provide: Foo, useValue: { '0': 'test' } }]
+provider: [{provide: Foo, useValue: {'0': 'test'}}];
 ```
 
-## Неподдерживаемое имя члена перечисления (Unsupported enum member name)
+## Неподдерживаемое имя члена перечисления (Unsupported enum member name) {#unsupported-enum-member-name}
 
-ПОЛЕЗНО: _Angular не смог определить
+HELPFUL: _Angular не смог определить
 значение [члена перечисления](https://www.typescriptlang.org/docs/handbook/enums.html), на который вы ссылались в
 метаданных._
 
@@ -434,9 +432,9 @@ enum Colors {
 
 Избегайте ссылок на перечисления (enum) со сложными инициализаторами или вычисляемыми свойствами.
 
-## Тегированные шаблонные строки не поддерживаются (Tagged template expressions are not supported)
+## Тегированные шаблонные строки не поддерживаются (Tagged template expressions are not supported) {#tagged-template-expressions-are-not-supported}
 
-ПОЛЕЗНО: _Тегированные шаблонные строки не поддерживаются в метаданных._
+HELPFUL: _Тегированные шаблонные строки не поддерживаются в метаданных._
 
 Компилятор встретил JavaScript
 ES2015 [тегированную шаблонную строку](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Template_literals#Tagged_template_literals),
@@ -458,9 +456,9 @@ _функция-тег_, встроенная в JavaScript ES2015.
 
 AOT-компилятор не поддерживает тегированные шаблонные строки; избегайте их в выражениях метаданных.
 
-## Ожидалась ссылка на символ (Symbol reference expected)
+## Ожидалась ссылка на символ (Symbol reference expected) {#symbol-reference-expected}
 
-ПОЛЕЗНО: _Компилятор ожидал ссылку на символ в месте, указанном в сообщении об ошибке._
+HELPFUL: _Компилятор ожидал ссылку на символ в месте, указанном в сообщении об ошибке._
 
 Эта ошибка может возникнуть, если вы используете выражение в предложении `extends` класса.
 

@@ -3,7 +3,7 @@
 При разработке веб-приложений часто возникает необходимость повторить определенный код несколько раз — например, имея
 массив имен, вы можете захотеть отобразить каждое имя в теге `<p>`.
 
-Примечание: Подробнее
+NOTE: Подробнее
 об [управлении потоком читайте в руководстве по основам](/essentials/templates#control-flow-with-if-and-for).
 
 В этом упражнении вы узнаете, как использовать `@for` для повторения элементов в шаблоне.
@@ -24,7 +24,7 @@
   `,
 })
 export class App {
-  operatingSystems = [{id: 'win', name: 'Windows'}, {id: 'osx', name: 'MacOS'}, {id: 'linux', name: 'Linux'}];
+  operatingSystems = [{id: 'win', name: 'Windows'}, {id: 'osx', name: 'macOS'}, {id: 'linux', name: 'Linux'}];
 }
 ```
 
@@ -37,7 +37,7 @@ export class App {
 
 <docs-workflow>
 
-<docs-step title="Добавьте свойство `users`">
+<docs-step title="Add the `users` property">
 В классе `App` добавьте свойство `users`, содержащее пользователей и их имена.
 
 ```ts
@@ -46,7 +46,7 @@ export class App {
 
 </docs-step>
 
-<docs-step title="Обновите шаблон">
+<docs-step title="Update the template">
 Обновите шаблон, чтобы отобразить имя каждого пользователя в элементе `p`, используя синтаксис шаблона `@for`.
 
 ```angular-html
@@ -55,7 +55,7 @@ export class App {
 }
 ```
 
-ПРИМЕЧАНИЕ: использование `track` обязательно; вы можете использовать `id` или любой другой уникальный идентификатор.
+NOTE: использование `track` обязательно; вы можете использовать `id` или любой другой уникальный идентификатор.
 
 </docs-step>
 

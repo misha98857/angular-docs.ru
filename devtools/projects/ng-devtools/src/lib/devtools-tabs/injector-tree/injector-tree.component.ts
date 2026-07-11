@@ -8,7 +8,6 @@
 
 import {
   afterRenderEffect,
-  ChangeDetectionStrategy,
   Component,
   computed,
   inject,
@@ -30,6 +29,8 @@ import {TreeD3Node, TreeVisualizerConfig} from '../../shared/tree-visualizer/tre
 import {TreeVisualizerComponent} from '../../shared/tree-visualizer/tree-visualizer.component';
 import {InjectorProvidersComponent} from './injector-providers/injector-providers.component';
 import {
+  areInjectorTreeNodesEqual,
+  areInjectorTreesEqual,
   d3InjectorTreeLinkModifier,
   d3InjectorTreeNodeModifier,
   filterOutAngularInjectors,
@@ -40,6 +41,8 @@ import {
   InjectorTreeD3Node,
   InjectorTreeNode,
   InjectorTreeVisualizer,
+  isElementTreeInjector,
+  isEnvironmentTreeInjector,
   splitInjectorPathsIntoElementAndEnvironmentPaths,
   transformInjectorResolutionPathsIntoTree,
 } from './injector-tree-fns';
@@ -59,6 +62,9 @@ const HIERARCHY_HOR_SIZE = 50;
 const INIT_SNAP_ZOOM_SCALE = 0.7;
 const SNAP_ZOOM_SCALE = 0.8;
 
+const HIGHLIGHTED_NODE_CLASS = 'it-highlighted';
+const SELECTED_NODE_CLASS = 'it-selected';
+
 @Component({
   selector: 'ng-injector-tree',
   imports: [
@@ -74,7 +80,6 @@ const SNAP_ZOOM_SCALE = 0.8;
   host: {
     '[hidden]': 'hidden()',
   },
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InjectorTreeComponent {
   private readonly elementTree = viewChild<InjectorTreeVisualizer>('elementTree');
@@ -92,6 +97,8 @@ export class InjectorTreeComponent {
   protected readonly componentExplorerView = input.required<ComponentExplorerView | null>();
   protected readonly hidden = input(false);
 
+  protected readonly treeNodesEqualityFn = areInjectorTreeNodesEqual;
+
   protected readonly diDebugAPIsAvailable = computed<boolean>(() => {
     const view = this.componentExplorerView();
     return !!(view && view.forest.length && view.forest[0].resolutionPath);
@@ -103,8 +110,12 @@ export class InjectorTreeComponent {
   private hideInjectorsWithNoProviders = false;
   private hideFrameworkInjectors = false;
 
-  protected readonly elementInjectorTree = signal<InjectorTreeNode | null>(null);
-  protected readonly environmentInjectorTree = signal<InjectorTreeNode | null>(null);
+  protected readonly elementInjectorTree = signal<InjectorTreeNode | null>(null, {
+    equal: areInjectorTreesEqual,
+  });
+  protected readonly environmentInjectorTree = signal<InjectorTreeNode | null>(null, {
+    equal: areInjectorTreesEqual,
+  });
 
   protected readonly responsiveSplitConfig: ResponsiveSplitConfig = {
     defaultDirection: 'vertical',
@@ -155,7 +166,12 @@ export class InjectorTreeComponent {
 
   onTreeRender(tree: InjectorTreeVisualizer, {initial}: {initial: boolean}) {
     if (initial) {
-      this.snapToRoot(tree);
+      // Slightly defer the node snapping since the production app
+      // needs a bit more time for registering the tree container size.
+      // INFO: Container size is not bound/related to tree rendering.
+      setTimeout(() => {
+        this.snapToRoot(tree);
+      }, 100);
     }
   }
 
@@ -199,7 +215,7 @@ export class InjectorTreeComponent {
   private refreshVisualizer(): void {
     this.updateInjectorTreeVisualization(this.rawDirectiveForest);
 
-    if (this.selectedNode()?.data.injector.type === 'environment') {
+    if (isEnvironmentTreeInjector(this.selectedNode()?.data.injector)) {
       this.snapToRoot(this.environmentTree());
     }
 
@@ -269,11 +285,11 @@ export class InjectorTreeComponent {
 
     // wait for CD to run before snapping to root so that svg container can change size.
     setTimeout(() => {
-      const {type} = node.data.injector;
+      const {injector} = node.data;
 
-      if (type === 'element') {
+      if (isElementTreeInjector(injector)) {
         this.elementTree()?.snapToNode(node.data, SNAP_ZOOM_SCALE);
-      } else if (type === 'environment') {
+      } else if (isEnvironmentTreeInjector(injector)) {
         this.environmentTree()?.snapToNode(node.data, SNAP_ZOOM_SCALE);
       }
     });
@@ -288,9 +304,9 @@ export class InjectorTreeComponent {
     const injector = selectedNode.data.injector;
     let newNode: TreeD3Node<InjectorTreeNode> | null = null;
 
-    if (injector.type === 'element') {
+    if (isElementTreeInjector(injector)) {
       newNode = this.elementTree()?.getNodeById(injector.id) ?? null;
-    } else if (injector.type === 'environment') {
+    } else if (isEnvironmentTreeInjector(injector)) {
       newNode = this.environmentTree()?.getNodeById(injector.id) ?? null;
     }
 
@@ -338,7 +354,7 @@ export class InjectorTreeComponent {
       return;
     }
 
-    if (this.selectedNode()!.data.injector.type === 'element') {
+    if (isElementTreeInjector(this.selectedNode()!.data.injector)) {
       const idsToRoot = getInjectorIdsToRootFromNode(this.selectedNode()!);
       idsToRoot.forEach((id) => this.highlightNodeById(elementTree, id));
       const edgeIds = generateEdgeIdsFromNodeIds(idsToRoot);
@@ -365,9 +381,9 @@ export class InjectorTreeComponent {
       return;
     }
     if (this.selectedNode()!.data.injector.id === id) {
-      node.classList.add('selected');
+      node.classList.add(SELECTED_NODE_CLASS);
     }
-    node.classList.add('highlighted');
+    node.classList.add(HIGHLIGHTED_NODE_CLASS);
   }
 
   private highlightEdgeById(tree: InjectorTreeVisualizer, id: string): void {
@@ -376,21 +392,21 @@ export class InjectorTreeComponent {
       return;
     }
 
-    edge.classList.add('highlighted');
+    edge.classList.add(HIGHLIGHTED_NODE_CLASS);
   }
 
   private unhighlightAllEdges(tree: InjectorTreeVisualizer): void {
     const edges = tree.svg.querySelectorAll('.link');
     for (const edge of edges) {
-      edge.classList.remove('highlighted');
+      edge.classList.remove(HIGHLIGHTED_NODE_CLASS);
     }
   }
 
   private unhighlightAllNodes(tree: InjectorTreeVisualizer): void {
     const nodes = tree.svg.querySelectorAll('.node');
     for (const node of nodes) {
-      node.classList.remove('selected');
-      node.classList.remove('highlighted');
+      node.classList.remove(SELECTED_NODE_CLASS);
+      node.classList.remove(HIGHLIGHTED_NODE_CLASS);
     }
   }
 

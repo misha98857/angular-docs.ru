@@ -1,16 +1,14 @@
-<docs-decorative-header title="Аккордеон">
+<docs-decorative-header title="Accordion">
 </docs-decorative-header>
 
 <docs-pill-row>
-  <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/accordion/" title="ARIA-паттерн Аккордеон"/>
-  <docs-pill href="/api?query=accordion#angular_aria_accordion" title="Справочник API Аккордеона"/>
+  <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/accordion/" title="Accordion ARIA pattern"/>
+  <docs-pill href="/api?query=accordion#angular_aria_accordion" title="Accordion API Reference"/>
 </docs-pill-row>
 
-## Обзор
+## Обзор {#overview}
 
-Аккордеон организует связанный контент в разворачиваемые и сворачиваемые секции, уменьшая прокрутку страницы и помогая
-пользователям сосредоточиться на важной информации. Каждая секция имеет кнопку-триггер и панель контента. Нажатие на
-триггер переключает видимость связанной с ним панели.
+Accordion организует связанный контент в раскрываемые и сворачиваемые секции, уменьшая прокрутку страницы и помогая пользователям сосредоточиться на релевантной информации. У каждой секции есть кнопка-trigger и панель контента. Клик по trigger переключает видимость связанной панели.
 
 <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/accordion/src/single-expansion/basic/app/app.ts">
   <docs-code header="TS" path="adev/src/content/examples/aria/accordion/src/single-expansion/basic/app/app.ts"/>
@@ -18,42 +16,39 @@
   <docs-code header="CSS" path="adev/src/content/examples/aria/accordion/src/single-expansion/basic/app/app.css"/>
 </docs-code-multifile>
 
-## Использование
+## Использование {#usage}
 
-Аккордеоны хорошо подходят для организации контента в логические группы, где пользователям обычно нужно просматривать
-одну секцию за раз.
+Accordions хорошо подходят для организации контента в логические группы, где пользователям обычно нужно просматривать одну секцию за раз.
 
-**Используйте аккордеоны, когда:**
+**Используйте accordions, когда:**
 
-- Отображаете FAQ с множеством вопросов и ответов
+- Показываете FAQ с несколькими вопросами и ответами
 - Организуете длинные формы в управляемые секции
-- Уменьшаете прокрутку на страницах с большим количеством контента
-- Реализуете постепенное раскрытие связанной информации
+- Уменьшаете прокрутку на страницах с большим объёмом контента
+- Постепенно раскрываете связанную информацию
 
-**Избегайте использования аккордеонов, когда:**
+**Избегайте accordions, когда:**
 
-- Создаете навигационные меню (используйте компонент [Menu](guide/aria/menu))
-- Создаете интерфейсы с вкладками (используйте компонент [Tabs](guide/aria/tabs))
-- Показываете одну сворачиваемую секцию (используйте паттерн раскрытия)
-- Пользователям нужно видеть несколько секций одновременно (рассмотрите другой макет)
+- Строите навигационные меню (вместо этого используйте компонент [Menu](guide/aria/menu))
+- Создаёте интерфейсы с вкладками (вместо этого используйте компонент [Tabs](guide/aria/tabs))
+- Показываете одну сворачиваемую секцию (вместо этого используйте паттерн disclosure)
+- Пользователям нужно видеть несколько секций одновременно (рассмотрите другой layout)
 
-## Особенности
+## Возможности {#features}
 
-- **Режимы раскрытия** — Управление тем, может ли быть открыта одна или несколько панелей одновременно.
-- **Клавиатурная навигация** — Перемещение между триггерами с помощью клавиш со стрелками, Home и End.
-- **Ленивый рендеринг** — Контент создается только при первом раскрытии панели, что улучшает производительность
-  начальной загрузки.
-- **Отключенные состояния** — Отключение всей группы или отдельных триггеров.
-- **Управление фокусом** — Управление тем, могут ли отключенные элементы получать фокус клавиатуры.
-- **Программное управление** — Раскрытие, сворачивание или переключение панелей из кода вашего компонента.
-- **Поддержка RTL** — Автоматическая поддержка языков с письмом справа налево.
+- **Режимы раскрытия** — контроль, может ли быть открыта одна или несколько панелей одновременно
+- **Клавиатурная навигация** — перемещение между triggers стрелками, Home и End
+- **Ленивый рендеринг** — контент создаётся только при первом раскрытии панели, улучшая производительность начальной загрузки
+- **Состояния disabled** — отключение всей группы или отдельных triggers
+- **Управление фокусом** — контроль, могут ли disabled-элементы получать клавиатурный фокус
+- **Программное управление** — раскрытие, сворачивание или переключение панелей из кода компонента
+- **Поддержка RTL** — автоматическая поддержка языков справа налево
 
-## Примеры
+## Примеры {#examples}
 
-### Режим одиночного раскрытия
+### Режим одиночного раскрытия {#single-expansion-mode}
 
-Установите `[multiExpandable]="false"`, чтобы разрешить открытие только одной панели за раз. Открытие новой панели
-автоматически закрывает любую ранее открытую панель.
+Задайте `[multiExpandable]="false"`, чтобы одновременно могла быть открыта только одна панель. Открытие новой панели автоматически закрывает любую ранее открытую.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -79,13 +74,11 @@
   </docs-tab>
 </docs-tab-group>
 
-Этот режим хорошо подходит для FAQ или ситуаций, когда вы хотите, чтобы пользователи сосредоточились на одном ответе за
-раз.
+Этот режим хорошо подходит для FAQ или ситуаций, когда нужно, чтобы пользователи сосредоточились на одном ответе за раз.
 
-### Режим множественного раскрытия
+### Режим множественного раскрытия {#multiple-expansion-mode}
 
-Установите `[multiExpandable]="true"`, чтобы разрешить одновременное открытие нескольких панелей. Пользователи могут
-разворачивать столько панелей, сколько необходимо, не закрывая другие.
+Задайте `[multiExpandable]="true"`, чтобы несколько панелей могли быть открыты одновременно. Пользователи могут раскрывать столько панелей, сколько нужно, не закрывая другие.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -111,15 +104,13 @@
   </docs-tab>
 </docs-tab-group>
 
-Этот режим полезен для разделов форм или когда пользователям нужно сравнить контент в нескольких панелях.
+Этот режим полезен для секций форм или когда пользователям нужно сравнивать контент в нескольких панелях.
 
-ПРИМЕЧАНИЕ: Input-свойство `multiExpandable` по умолчанию имеет значение `true`. Установите его в `false` явно, если вам
-требуется поведение одиночного раскрытия.
+NOTE: Input `multiExpandable` по умолчанию равен `true`. Задайте `false` явно, если нужно поведение одиночного раскрытия.
 
-### Отключенные элементы аккордеона
+### Отключённые элементы accordion {#disabled-accordion-items}
 
-Отключайте конкретные триггеры с помощью Input-свойства `disabled`. Управляйте поведением отключенных элементов во время
-навигации с клавиатуры с помощью Input-свойства `softDisabled` в группе аккордеона.
+Отключайте конкретные triggers через input `disabled`. Поведение disabled-элементов при клавиатурной навигации контролируйте через input `softDisabled` на группе accordion.
 
 <docs-tab-group>
   <docs-tab label="Basic">
@@ -145,25 +136,20 @@
   </docs-tab>
 </docs-tab-group>
 
-Когда `[softDisabled]="true"` (по умолчанию), отключенные элементы могут получать фокус, но не могут быть активированы.
-Когда `[softDisabled]="false"`, отключенные элементы полностью пропускаются при навигации с клавиатуры.
+Когда `[softDisabled]="true"` (значение по умолчанию), disabled-элементы могут получать фокус, но не могут быть активированы. Когда `[softDisabled]="false"`, disabled-элементы полностью пропускаются при клавиатурной навигации.
 
-### Ленивый рендеринг контента
+### Ленивый рендеринг контента {#lazy-content-rendering}
 
-Используйте директиву `ngAccordionContent` на `ng-template`, чтобы отложить рендеринг контента до первого раскрытия
-панели. Это улучшает производительность для аккордеонов с "тяжелым" контентом, таким как изображения, графики или
-сложные компоненты.
+Используйте директиву `ngAccordionContent` на `ng-template`, чтобы отложить рендеринг контента до первого раскрытия панели. Это улучшает производительность для accordion с тяжёлым контентом — изображениями, графиками или сложными компонентами.
 
 ```angular-html
 <div ngAccordionGroup>
   <div>
-    <button ngAccordionTrigger panelId="item-1">
-      Trigger Text
-    </button>
-    <div ngAccordionPanel panelId="item-1">
+    <button ngAccordionTrigger [panel]="panel1">Trigger Text</button>
+    <div ngAccordionPanel #panel1="ngAccordionPanel">
       <ng-template ngAccordionContent>
         <!-- This content only renders when the panel first opens -->
-        <img src="large-image.jpg" alt="Description">
+        <img src="large-image.jpg" alt="Description" />
         <app-expensive-component />
       </ng-template>
     </div>
@@ -171,94 +157,62 @@
 </div>
 ```
 
-По умолчанию контент остается в DOM после сворачивания панели. Установите `[preserveContent]="false"`, чтобы удалять
-контент из DOM при закрытии панели.
+По умолчанию контент остаётся в DOM после сворачивания панели. Задайте `[preserveContent]="false"`, чтобы удалять контент из DOM при закрытии панели.
 
-## API
+## Тестирование {#testing}
 
-### AccordionGroup
+Angular Aria предоставляет component harnesses для тестирования компонентов accordion.
+Пример использования harnesses в тесте компонента:
 
-Директива-контейнер, которая управляет навигацией с клавиатуры и поведением раскрытия для группы элементов аккордеона.
+```typescript
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {HarnessLoader} from '@angular/cdk/testing';
+import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
+import {AccordionGroupHarness} from '@angular/aria/accordion/testing';
+import {MyAccordionComponent} from './my-accordion'; // Your component
 
-#### Input-свойства
+describe('MyAccordionComponent', () => {
+  let fixture: ComponentFixture<MyAccordionComponent>;
+  let loader: HarnessLoader;
 
-| Свойство          | Тип       | По умолчанию | Описание                                                                        |
-| ----------------- | --------- | ------------ | ------------------------------------------------------------------------------- |
-| `disabled`        | `boolean` | `false`      | Отключает все триггеры в группе                                                 |
-| `multiExpandable` | `boolean` | `true`       | Могут ли несколько панелей быть развернуты одновременно                         |
-| `softDisabled`    | `boolean` | `true`       | Если `true`, отключенные элементы фокусируемы. Если `false`, они пропускаются   |
-| `wrap`            | `boolean` | `false`      | Переходит ли навигация с клавиатуры от последнего элемента к первому и наоборот |
+  beforeEach(async () => {
+    TestBed.configureTestingModule({
+      imports: [MyAccordionComponent],
+    });
 
-#### Методы
+    fixture = TestBed.createComponent(MyAccordionComponent);
+    await fixture.whenStable();
+    loader = TestbedHarnessEnvironment.loader(fixture);
+  });
 
-| Метод         | Параметры | Описание                                                                   |
-| ------------- | --------- | -------------------------------------------------------------------------- |
-| `expandAll`   | нет       | Разворачивает все панели (работает только если `multiExpandable` — `true`) |
-| `collapseAll` | нет       | Сворачивает все панели                                                     |
+  it('should allow expanding panels', async () => {
+    // Load the accordion group harness
+    const group = await loader.getHarness(AccordionGroupHarness);
 
-### AccordionTrigger
+    // Get all individual accordions (items) in the group
+    const accordions = await group.getAccordions();
+    expect(accordions.length).toBe(3);
 
-Директива, применяемая к элементу кнопки, которая переключает видимость панели.
+    // Verify initial state (first expanded, others collapsed)
+    expect(await accordions[0].isExpanded()).toBe(true);
+    expect(await accordions[1].isExpanded()).toBe(false);
 
-#### Input-свойства
+    // Expand the second panel
+    await accordions[1].expand();
 
-| Свойство   | Тип       | По умолчанию | Описание                                                       |
-| ---------- | --------- | ------------ | -------------------------------------------------------------- |
-| `id`       | `string`  | авто         | Уникальный идентификатор для триггера                          |
-| `panelId`  | `string`  | —            | **Обязательно.** Должен совпадать с `panelId` связанной панели |
-| `disabled` | `boolean` | `false`      | Отключает этот триггер                                         |
-| `expanded` | `boolean` | `false`      | Развернута ли панель (поддерживает двустороннюю привязку)      |
-
-#### Сигналы
-
-| Свойство | Тип               | Описание                               |
-| -------- | ----------------- | -------------------------------------- |
-| `active` | `Signal<boolean>` | Имеет ли триггер фокус в данный момент |
-
-#### Методы
-
-| Метод      | Параметры | Описание                               |
-| ---------- | --------- | -------------------------------------- |
-| `expand`   | нет       | Разворачивает связанную панель         |
-| `collapse` | нет       | Сворачивает связанную панель           |
-| `toggle`   | нет       | Переключает состояние раскрытия панели |
-
-### AccordionPanel
-
-Директива, применяемая к элементу, содержащему сворачиваемый контент.
-
-#### Input-свойства
-
-| Свойство          | Тип       | По умолчанию | Описание                                                          |
-| ----------------- | --------- | ------------ | ----------------------------------------------------------------- |
-| `id`              | `string`  | авто         | Уникальный идентификатор для панели                               |
-| `panelId`         | `string`  | —            | **Обязательно.** Должен совпадать с `panelId` связанного триггера |
-| `preserveContent` | `boolean` | `true`       | Сохранять ли контент в DOM после сворачивания панели              |
-
-#### Сигналы
-
-| Свойство  | Тип               | Описание                             |
-| --------- | ----------------- | ------------------------------------ |
-| `visible` | `Signal<boolean>` | Развернута ли панель в данный момент |
-
-#### Методы
-
-| Метод      | Параметры | Описание                        |
-| ---------- | --------- | ------------------------------- |
-| `expand`   | нет       | Разворачивает эту панель        |
-| `collapse` | нет       | Сворачивает эту панель          |
-| `toggle`   | нет       | Переключает состояние раскрытия |
-
-### AccordionContent
-
-Структурная директива, применяемая к `ng-template` внутри панели аккордеона для включения ленивого рендеринга.
-
-У этой директивы нет Input/Output свойств или методов. Примените её к элементу `ng-template`:
-
-```angular-html
-<div ngAccordionPanel panelId="item-1">
-  <ng-template ngAccordionContent>
-    <!-- Content here is lazily rendered -->
-  </ng-template>
-</div>
+    // Verify updated state
+    expect(await accordions[1].isExpanded()).toBe(true);
+    // If multiExpandable is false, the first one should now be collapsed
+    expect(await accordions[0].isExpanded()).toBe(false);
+  });
+});
 ```
+
+## API reference {#api-reference}
+
+Подробную API-документацию смотрите в следующих API reference:
+
+- [`AccordionGroup`](/api/aria/accordion/AccordionGroup)
+- [`AccordionTrigger`](/api/aria/accordion/AccordionTrigger)
+- [`AccordionPanel`](/api/aria/accordion/AccordionPanel)
+- [`AccordionContent`](/api/aria/accordion/AccordionContent)

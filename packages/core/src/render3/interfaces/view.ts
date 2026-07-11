@@ -7,6 +7,7 @@
  */
 
 import {AnimationLViewData} from '../../animation/interfaces';
+import type {TracingService, TracingSnapshot} from '../../application/tracing';
 import type {ChangeDetectionScheduler} from '../../change_detection/scheduling/zoneless_scheduling';
 import {TDeferBlockDetails} from '../../defer/interfaces';
 import type {Injector} from '../../di/injector';
@@ -387,6 +388,9 @@ export interface LViewEnvironment {
   /** Scheduler for change detection to notify when application state changes. */
   changeDetectionScheduler: ChangeDetectionScheduler | null;
 
+  /** Service used for tracing different parts of the application. */
+  tracingService: TracingService<TracingSnapshot> | null;
+
   /**
    * Whether `ng-reflect-*` attributes should be produced in dev mode
    * (always disabled in prod mode).
@@ -595,6 +599,11 @@ export const enum TViewType {
    * can have zero or more `Embedded` `TView`s.
    */
   Embedded = 2,
+
+  /**
+   * Foreign `TView` associated with a range of nodes between `head` and `tail` comment nodes.
+   */
+  Foreign = 3,
 }
 
 /**

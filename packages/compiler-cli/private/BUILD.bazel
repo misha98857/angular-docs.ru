@@ -12,6 +12,13 @@ copy_to_bin(
     ],
 )
 
+copy_to_bin(
+    name = "hybrid_analysis",
+    srcs = [
+        "hybrid_analysis.ts",
+    ],
+)
+
 ts_project(
     name = "private",
     srcs = glob(["*.ts"]),
@@ -23,6 +30,7 @@ ts_project(
         "//packages/compiler-cli/src/ngtsc/file_system",
         "//packages/compiler-cli/src/ngtsc/file_system/testing",
         "//packages/compiler-cli/src/ngtsc/imports",
+        "//packages/compiler-cli/src/ngtsc/indexer",
         "//packages/compiler-cli/src/ngtsc/logging",
         "//packages/compiler-cli/src/ngtsc/metadata",
         "//packages/compiler-cli/src/ngtsc/partial_evaluator",
@@ -33,6 +41,7 @@ ts_project(
         "//packages/compiler-cli/src/ngtsc/transform",
         "//packages/compiler-cli/src/ngtsc/transform/jit",
         "//packages/compiler-cli/src/ngtsc/translator",
+        "//packages/compiler-cli/src/ngtsc/typecheck",
         "//packages/compiler-cli/src/ngtsc/typecheck/api",
         "//packages/compiler-cli/src/ngtsc/util",
     ],

@@ -17,6 +17,7 @@ import {
   ɵɵproperty,
   ɵɵstyleMap,
   ɵɵstyleProp,
+  ɵɵforeignComponent,
 } from '../../src/render3/index';
 import {AttributeMarker} from '../../src/render3/interfaces/attribute_marker';
 import {
@@ -37,7 +38,7 @@ import {
   ɵɵsanitizeUrl,
 } from '../../src/sanitization/sanitization';
 import {Sanitizer} from '../../src/sanitization/sanitizer';
-import {SecurityContext} from '../../src/sanitization/security';
+import {SecurityContext} from '../../src/sanitization/dom_security_schema';
 
 import {ViewFixture} from './view_fixture';
 
@@ -410,7 +411,7 @@ describe('instructions', () => {
       expect(s.lastSanitizedValue).toBeFalsy();
     });
 
-    it('should bypass ivy-level script sanitization if a custom sanitizer is used', () => {
+    it('should bypass ivy-level script sanitization if a custom sanitizer is used (trurst script)', () => {
       const s = new LocalMockSanitizer((value) => '');
       const t = new ViewFixture({create: createScript, decls: 1, vars: 1, sanitizer: s});
       const inputValue = bypassSanitizationTrustScript('alert("bar")');
@@ -449,7 +450,7 @@ describe('instructions', () => {
       expect(s.lastSanitizedValue).toBeFalsy();
     });
 
-    it('should bypass ivy-level script sanitization if a custom sanitizer is used', () => {
+    it('should bypass ivy-level script sanitization if a custom sanitizer is used (trust html)', () => {
       const s = new LocalMockSanitizer((value) => '');
       const t = new ViewFixture({create: createDiv, decls: 1, vars: 1, sanitizer: s});
       const inputValue = bypassSanitizationTrustHtml('<div onclick="alert(123)"></div>');

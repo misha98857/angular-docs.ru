@@ -4,7 +4,7 @@
 помощью [Angular CLI](tools/cli). Затем на примере демонстрируется работа Service Worker, включая загрузку и базовое
 кеширование.
 
-## Добавление Service Worker в проект
+## Добавление Service Worker в проект {#adding-a-service-worker-to-your-project}
 
 Чтобы настроить Angular Service Worker в вашем проекте, выполните следующую команду CLI:
 
@@ -38,7 +38,7 @@ ng build
 
 Проект CLI теперь настроен для использования Angular Service Worker.
 
-## Service Worker в действии: обзор
+## Service Worker в действии: обзор {#service-worker-in-action-a-tour}
 
 Этот раздел демонстрирует работу Service Worker на примере приложения. Чтобы включить поддержку Service Worker во время
 локальной разработки, используйте производственную конфигурацию с помощью следующей команды:
@@ -60,19 +60,19 @@ npx http-server -p 8080 -c-1 dist/<project-name>/browser
 
 Это запустит ваше приложение с поддержкой Service Worker по адресу http://localhost:8080.
 
-### Первоначальная загрузка
+### Первоначальная загрузка {#initial-load}
 
 Запустив сервер на порту `8080`, перейдите в браузере по адресу `http://localhost:8080`.
 Ваше приложение должно загрузиться как обычно.
 
-СОВЕТ: При тестировании Angular Service Workers рекомендуется использовать режим инкогнито или приватное окно в
+TIP: При тестировании Angular Service Workers рекомендуется использовать режим инкогнито или приватное окно в
 браузере, чтобы гарантировать, что Service Worker не считывает предыдущее остаточное состояние, что может вызвать
 неожиданное поведение.
 
-ПОЛЕЗНО: Если вы не используете HTTPS, Service Worker будет зарегистрирован только при доступе к приложению через
+HELPFUL: Если вы не используете HTTPS, Service Worker будет зарегистрирован только при доступе к приложению через
 `localhost`.
 
-### Моделирование проблем с сетью
+### Моделирование проблем с сетью {#simulating-a-network-issue}
 
 Чтобы смоделировать проблему с сетью, отключите сетевое взаимодействие для вашего приложения.
 
@@ -96,11 +96,11 @@ npx http-server -p 8080 -c-1 dist/<project-name>/browser
 
 <img alt="Запросы помечены как от ServiceWorker" src="assets/images/guide/service-worker/sw-active.png">
 
-ПОЛЕЗНО: В столбце "Size" состояние запросов указано как `(ServiceWorker)`.
+HELPFUL: В столбце "Size" состояние запросов указано как `(ServiceWorker)`.
 Это означает, что ресурсы загружаются не из сети.
 Вместо этого они загружаются из кеша Service Worker.
 
-### Что кешируется?
+### Что кешируется? {#whats-being-cached}
 
 Обратите внимание, что все файлы, необходимые браузеру для рендеринга этого приложения, закешированы.
 Шаблонная конфигурация `ngsw-config.json` настроена на кеширование конкретных ресурсов, используемых CLI:
@@ -113,13 +113,13 @@ npx http-server -p 8080 -c-1 dist/<project-name>/browser
   `resourcesOutputPath`.
   См. документацию по `ng build` для получения дополнительной информации об этих опциях.
 
-ВАЖНО: Сгенерированный `ngsw-config.json` включает ограниченный список расширений для кешируемых шрифтов и изображений.
+IMPORTANT: Сгенерированный `ngsw-config.json` включает ограниченный список расширений для кешируемых шрифтов и изображений.
 В некоторых случаях вам может потребоваться изменить glob-шаблон в соответствии с вашими потребностями.
 
-ВАЖНО: Если пути `resourcesOutputPath` или `assets` были изменены после генерации файла конфигурации, необходимо
+IMPORTANT: Если пути `resourcesOutputPath` или `assets` были изменены после генерации файла конфигурации, необходимо
 изменить пути вручную в `ngsw-config.json`.
 
-### Внесение изменений в приложение
+### Внесение изменений в приложение {#making-changes-to-your-application}
 
 Теперь, когда вы увидели, как Service Worker кеширует приложение, следующий шаг — понять, как работают обновления.
 Внесите изменение в приложение и наблюдайте, как Service Worker устанавливает обновление:
@@ -140,7 +140,7 @@ npx http-server -p 8080 -c-1 dist/<project-name>/browser
     npx http-server -p 8080 -c-1 dist/<project-name>/browser
 ```
 
-### Обновление приложения в браузере
+### Обновление приложения в браузере {#updating-your-application-in-the-browser}
 
 Теперь посмотрите, как браузер и Service Worker обрабатывают обновленное приложение.
 
@@ -171,12 +171,12 @@ npx http-server -p 8080 -c-1 dist/<project-name>/browser
    Service Worker установил обновленную версию вашего приложения _в фоновом режиме_, и при следующей загрузке или
    перезагрузке страницы Service Worker переключится на последнюю версию.
 
-## Конфигурация Service Worker
+## Конфигурация Service Worker {#service-worker-configuration}
 
 Angular Service Workers поддерживают обширные возможности конфигурации через интерфейс `SwRegistrationOptions`,
 обеспечивая детальный контроль над поведением регистрации, кешированием и выполнением скриптов.
 
-### Включение и отключение Service Workers
+### Включение и отключение Service Workers {#enabling-and-disabling-service-workers}
 
 Опция `enabled` управляет тем, будет ли зарегистрирован Service Worker и будут ли связанные сервисы пытаться
 взаимодействовать с ним.
@@ -196,7 +196,7 @@ export const appConfig: ApplicationConfig = {
 
 ```
 
-### Управление кешем с помощью updateViaCache
+### Управление кешем с помощью updateViaCache {#cache-control-with-updateviacache}
 
 Опция `updateViaCache` управляет тем, как браузер обращается к HTTP-кешу во время обновлений Service Worker. Это
 обеспечивает детальный контроль над тем, когда браузер извлекает обновленные скрипты Service Worker и импортируемые
@@ -222,7 +222,7 @@ export const appConfig: ApplicationConfig = {
 - **`'all'`** — HTTP-кеш используется как для скрипта Service Worker, так и для его импортируемых скриптов
 - **`'none'`** — HTTP-кеш не используется ни для скрипта Service Worker, ни для его импортируемых скриптов
 
-### Поддержка ES-модулей с опцией type
+### Поддержка ES-модулей с опцией type {#es-module-support-with-type-option}
 
 Опция `type` позволяет указать тип скрипта при регистрации Service Worker, обеспечивая поддержку функций ES-модулей в
 ваших скриптах Service Worker.
@@ -247,7 +247,7 @@ export const appConfig: ApplicationConfig = {
 - **`'module'`** — Регистрирует скрипт как ES-модуль. Позволяет использовать синтаксис `import`/`export` и функции
   модулей
 
-### Управление областью регистрации (scope)
+### Управление областью регистрации (scope) {#registration-scope-control}
 
 Опция `scope` определяет область регистрации Service Worker, указывая диапазон URL-адресов, которыми он может управлять.
 
@@ -268,7 +268,7 @@ export const appConfig: ApplicationConfig = {
 - По умолчанию областью видимости является каталог, содержащий скрипт Service Worker
 - Используется при вызове `ServiceWorkerContainer.register()`
 
-### Конфигурация стратегии регистрации
+### Конфигурация стратегии регистрации {#registration-strategy-configuration}
 
 Опция `registrationStrategy` определяет, когда Service Worker будет зарегистрирован в браузере, обеспечивая контроль над
 временем регистрации.
@@ -333,7 +333,7 @@ export const customConfig: ApplicationConfig = {
 
 ```
 
-## Дополнительно об Angular Service Workers
+## Дополнительно об Angular Service Workers {#more-on-angular-service-workers}
 
 Вас также может заинтересовать следующее:
 

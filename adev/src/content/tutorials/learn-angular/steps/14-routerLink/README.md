@@ -5,8 +5,8 @@
 может иметь последствия для производительности, так как пользователям приходится заново загружать ресурсы и повторно
 выполнять вычисления.
 
-Примечание: Узнайте больше
-о [добавлении маршрутов в ваше приложение в подробном руководстве](/guide/routing/common-router-tasks#add-your-routes-to-your-application).
+NOTE: Узнайте больше
+о [добавлении маршрутов в ваше приложение в подробном руководстве](/guide/routing/define-routes#adding-the-router-to-your-application).
 
 В этом задании вы узнаете, как задействовать директиву `RouterLink`, чтобы максимально эффективно использовать Angular
 Router.
@@ -15,7 +15,7 @@ Router.
 
 <docs-workflow>
 
-<docs-step title="Импорт директивы `RouterLink`">
+<docs-step title="Import `RouterLink` directive">
 
 В файле `app.ts` добавьте импорт директивы `RouterLink` к существующему импорту из `@angular/router` и добавьте её в
 массив `imports` декоратора вашего компонента.
@@ -32,7 +32,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 
 </docs-step>
 
-<docs-step title="Добавление `routerLink` в шаблон">
+<docs-step title="Add a `routerLink` to template">
 
 Чтобы использовать директиву `RouterLink`, замените атрибуты `href` на `routerLink`. Обновите шаблон, внеся это
 изменение.

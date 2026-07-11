@@ -25,7 +25,7 @@ export const ANIMATIONS_DISABLED = new InjectionToken<boolean>(
  *
  * @publicApi 20.2
  */
-export type AnimationCallbackEvent = {target: Element; animationComplete: Function};
+export type AnimationCallbackEvent = {target: Element; animationComplete: VoidFunction};
 
 /**
  * A [DI token](api/core/InjectionToken) that configures the maximum animation timeout
@@ -50,6 +50,8 @@ const MAX_ANIMATION_TIMEOUT_DEFAULT = 4000;
  * function callbacks.
  *
  * @publicApi 20.2
+ *
+ * @see [Animating your applications with animate.enter and animate.leave](guide/animations)
  */
 export type AnimationFunction = (event: AnimationCallbackEvent) => void;
 
@@ -92,4 +94,4 @@ export interface AnimationLViewData {
 /**
  * Function that returns the class or class list binded to the animate instruction
  */
-export type AnimationClassBindingFn = () => string | string[];
+export type AnimationClassBindingFn = () => string | string[] | undefined | null;

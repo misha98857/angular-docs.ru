@@ -6,11 +6,13 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 import {ɵɵdefineComponent, ɵɵdefineDirective, ɵɵdefineNgModule, ɵɵdefinePipe} from './definition';
+import {ɵɵControlFeature} from './features/control_feature';
 import {ɵɵHostDirectivesFeature} from './features/host_directives_feature';
 import {ɵɵInheritDefinitionFeature} from './features/inherit_definition_feature';
 import {ɵɵNgOnChangesFeature} from './features/ng_onchanges_feature';
 import {ɵɵProvidersFeature} from './features/providers_feature';
 import {ɵɵExternalStylesFeature} from './features/external_styles_feature';
+import {ControlDirectiveHost} from './interfaces/control';
 import {
   ComponentDef,
   ComponentTemplate,
@@ -46,7 +48,7 @@ import {
 } from './util/discovery_utils';
 
 export {NgModuleType} from '../metadata/ng_module_def';
-export {ComponentFactory, ComponentFactoryResolver, ComponentRef} from './component_ref';
+export {ComponentFactory, ComponentRef} from './component_ref';
 export {ɵɵgetInheritedFactory} from './di';
 export {getLocaleId, setLocaleId} from './i18n/i18n_locale_id';
 export {
@@ -81,6 +83,9 @@ export {
   ɵɵelementContainerStart,
   ɵɵelementEnd,
   ɵɵelementStart,
+  ɵɵforeignComponent,
+  ɵɵforeignContent,
+  ɵɵforeignContentFn,
   ɵɵgetCurrentView,
   ɵɵdomProperty,
   ɵɵinjectAttribute,
@@ -95,7 +100,6 @@ export {
   ɵɵproperty,
   ɵɵcontrol,
   ɵɵcontrolCreate,
-  ɵcontrolUpdate,
   ɵɵcontentQuery,
   ɵɵcontentQuerySignal,
   ɵɵloadQuery,
@@ -165,12 +169,14 @@ export {
   ɵɵanimateEnterListener,
   ɵɵanimateLeave,
   ɵɵanimateLeaveListener,
+  ɵɵarrowFunction,
 } from './instructions/all';
 export {
   ɵɵdeferEnableTimerScheduling,
   DEFER_BLOCK_DEPENDENCY_INTERCEPTOR as ɵDEFER_BLOCK_DEPENDENCY_INTERCEPTOR,
   DEFER_BLOCK_CONFIG as ɵDEFER_BLOCK_CONFIG,
 } from '../defer/rendering';
+export {ɵɵenableIncrementalHydrationRuntime} from '../hydration/incremental_runtime';
 export {DeferBlockDependencyInterceptor as ɵDeferBlockDependencyInterceptor} from '../defer/interfaces';
 export {
   ɵɵi18n,
@@ -221,6 +227,7 @@ export {
   AcxDirectiveDebugMetadata,
   AcxComponentDebugMetadata,
   WizComponentDebugMetadata,
+  ControlDirectiveHost,
   DirectiveDebugMetadata,
   DirectiveDef,
   DirectiveType,
@@ -237,6 +244,7 @@ export {
   ɵɵdefinePipe,
   ɵɵDirectiveDeclaration,
   ɵɵFactoryDeclaration,
+  ɵɵControlFeature,
   ɵɵHostDirectivesFeature,
   ɵɵInheritDefinitionFeature,
   ɵɵInjectorDeclaration,

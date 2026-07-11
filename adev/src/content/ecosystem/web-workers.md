@@ -8,7 +8,7 @@
 
 HELPFUL: Angular CLI не поддерживает запуск самого себя внутри Web Worker.
 
-## Добавление Web Worker
+## Добавление Web Worker {#adding-a-web-worker}
 
 Чтобы добавить Web Worker в существующий проект, используйте команду Angular CLI `ng generate`.
 

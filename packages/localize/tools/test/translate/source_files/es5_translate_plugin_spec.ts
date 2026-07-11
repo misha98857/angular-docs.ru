@@ -11,16 +11,16 @@ import {
   PathSegment,
   relativeFrom,
 } from '@angular/compiler-cli/src/ngtsc/file_system';
+import {transformSync} from '@babel/core';
 import {ɵcomputeMsgId, ɵparseTranslation} from '../../../../index';
 import {ɵParsedTranslation} from '../../../../private';
-import {transformSync} from '@babel/core';
 
 import {Diagnostics} from '../../../src/diagnostics';
 import {TranslatePluginOptions} from '../../../src/source_file_utils';
 import {makeEs5TranslatePlugin} from '../../../src/translate/source_files/es5_translate_plugin';
 import {runInNativeFileSystem} from '../../helpers';
 
-runInNativeFileSystem(() => {
+runInNativeFileSystem('source_files', () => {
   let fs: FileSystem;
   let testPath: PathSegment;
 
@@ -378,7 +378,7 @@ runInNativeFileSystem(() => {
     const cwd = fs.resolve('/');
     const filename = fs.resolve(cwd, testPath);
     return transformSync(input, {
-      plugins: [makeEs5TranslatePlugin(diagnostics, translations, pluginOptions)],
+      plugins: [() => makeEs5TranslatePlugin(diagnostics, translations, pluginOptions)],
       filename,
       cwd,
     })!.code!;

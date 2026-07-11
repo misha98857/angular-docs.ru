@@ -1,13 +1,12 @@
-<docs-decorative-header title="Автозаполнение">
+<docs-decorative-header title="Autocomplete">
 </docs-decorative-header>
 
-## Обзор
+## Обзор {#overview}
 
-Доступное поле ввода, которое фильтрует и предлагает варианты по мере ввода, помогая пользователям находить и выбирать
-значения из списка.
+Доступное поле ввода, которое фильтрует и предлагает опции по мере ввода, помогая находить и выбирать значения из списка.
 
 <docs-tab-group>
-  <docs-tab label="Базовый">
+  <docs-tab label="Basic">
     <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/autocomplete/src/basic/app/app.ts">
       <docs-code header="app.ts" path="adev/src/content/examples/aria/autocomplete/src/basic/app/app.ts"/>
       <docs-code header="app.html" path="adev/src/content/examples/aria/autocomplete/src/basic/app/app.html"/>
@@ -23,7 +22,7 @@
     </docs-code-multifile>
   </docs-tab>
 
-  <docs-tab label="Ретро">
+  <docs-tab label="Retro">
     <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/autocomplete/src/basic/retro/app/app.ts">
       <docs-code header="app.ts" path="adev/src/content/examples/aria/autocomplete/src/basic/retro/app/app.ts"/>
       <docs-code header="app.html" path="adev/src/content/examples/aria/autocomplete/src/basic/retro/app/app.html"/>
@@ -32,47 +31,40 @@
   </docs-tab>
 </docs-tab-group>
 
-## Использование
+## Использование {#usage}
 
-Автозаполнение лучше всего работает, когда пользователям нужно выбрать из большого набора опций, где ввод текста
-быстрее, чем прокрутка. Рассмотрите возможность использования автозаполнения, когда:
+Autocomplete лучше всего подходит, когда пользователям нужно выбрать из большого набора опций, где ввод быстрее прокрутки. Рассмотрите autocomplete, когда:
 
-- **Список опций длинный** (более 20 элементов) — Ввод текста сужает выбор быстрее, чем прокрутка выпадающего списка.
-- **Пользователи знают, что ищут** — Они могут ввести часть ожидаемого значения (например, название штата, продукт или
-  имя пользователя).
-- **Опции следуют предсказуемым шаблонам** — Пользователи могут угадать частичные совпадения (например, коды стран,
-  домены электронной почты или категории).
-- **Скорость имеет значение** — Формы выигрывают от быстрого выбора без длительной навигации.
+- **Список опций длинный** (больше 20 элементов) — ввод сужает выбор быстрее, чем прокрутка dropdown
+- **Пользователи знают, что ищут** — могут ввести часть ожидаемого значения (имя штата, продукт, username)
+- **Опции следуют предсказуемым паттернам** — пользователи могут угадать частичные совпадения (коды стран, email-домены, категории)
+- **Важна скорость** — формы выигрывают от быстрого выбора без обширной навигации
 
-Избегайте автозаполнения, когда:
+Избегайте autocomplete, когда:
 
-- В списке менее 10 опций — Обычный выпадающий список или группа переключателей (radio group) обеспечивают лучшую
-  видимость.
-- Пользователям нужно просматривать опции — Если важно ознакомление, покажите все опции сразу.
-- Опции незнакомы — Пользователи не могут ввести то, о существовании чего в списке они не знают.
+- В списке меньше 10 опций — обычный dropdown или radio group даёт лучшую видимость
+- Пользователям нужно просматривать опции — если важен discovery, покажите все опции сразу
+- Опции незнакомы — пользователи не могут ввести то, о чём не знают, что оно есть в списке
 
-## Возможности
+## Возможности {#features}
 
-Автозаполнение в Angular предоставляет полностью доступную реализацию combobox с:
+Autocomplete Angular предоставляет полностью доступную реализацию combobox с:
 
-- **Навигация с клавиатуры** — Перемещение по опциям с помощью стрелок, выбор через Enter, закрытие через Escape.
-- **Поддержка скринридеров** — Встроенные ARIA-атрибуты для вспомогательных технологий.
-- **Три режима фильтрации** — Выбор между автовыбором, ручным выбором или режимом подсветки.
-- **Реактивность на основе Сигналов** — Управление реактивным состоянием с использованием сигналов Angular.
-- **Интеграция с Popover API** — Использует нативный HTML Popover API для оптимального позиционирования.
-- **Поддержка двунаправленного текста** — Автоматически обрабатывает языки с письмом справа налево (RTL).
+- **Клавиатурной навигацией** — перемещение по опциям стрелками, выбор Enter, закрытие Escape
+- **Поддержкой screen reader** — встроенные ARIA-атрибуты для вспомогательных технологий
+- **Динамическим highlight-поведением** — встроенная поддержка inline-предложений выбора
+- **Signal-based реактивностью** — реактивное управление состоянием через сигналы Angular
+- **Интеграцией Popover API** — использует нативный HTML Popover API для оптимального позиционирования
+- **Поддержкой двунаправленного текста** — автоматическая обработка языков справа налево (RTL)
 
-## Примеры
+## Примеры {#examples}
 
-### Режим автовыбора
+### Режим auto-select {#auto-select-mode}
 
-Пользователи, вводящие частичный текст, ожидают немедленного подтверждения того, что их ввод совпадает с доступной
-опцией. Режим автовыбора обновляет значение ввода, чтобы оно соответствовало первой отфильтрованной опции по мере ввода,
-уменьшая количество нажатий клавиш и обеспечивая мгновенную обратную связь о том, что поиск идет в правильном
-направлении.
+Пользователи, вводящие частичный текст, ожидают немедленного подтверждения, что их ввод совпадает с доступной опцией. Режим auto-select обновляет значение input, чтобы оно совпадало с первой отфильтрованной опцией по мере ввода, сокращая число нажатий клавиш и давая мгновенную обратную связь, что поиск идёт в верном направлении.
 
 <docs-tab-group>
-  <docs-tab label="Базовый">
+  <docs-tab label="Basic">
     <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/autocomplete/src/basic/app/app.ts">
       <docs-code header="app.ts" path="adev/src/content/examples/aria/autocomplete/src/basic/app/app.ts"/>
       <docs-code header="app.html" path="adev/src/content/examples/aria/autocomplete/src/basic/app/app.html"/>
@@ -88,7 +80,7 @@
     </docs-code-multifile>
   </docs-tab>
 
-  <docs-tab label="Ретро">
+  <docs-tab label="Retro">
     <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/autocomplete/src/basic/retro/app/app.ts">
       <docs-code header="app.ts" path="adev/src/content/examples/aria/autocomplete/src/basic/retro/app/app.ts"/>
       <docs-code header="app.html" path="adev/src/content/examples/aria/autocomplete/src/basic/retro/app/app.html"/>
@@ -97,14 +89,12 @@
   </docs-tab>
 </docs-tab-group>
 
-### Режим ручного выбора
+### Режим ручного выбора {#manual-selection-mode}
 
-Режим ручного выбора оставляет введенный текст без изменений, пока пользователи перемещаются по списку предложений,
-предотвращая путаницу от автоматических обновлений. Ввод изменяется только тогда, когда пользователи явно подтверждают
-свой выбор нажатием Enter или кликом.
+Режим ручного выбора сохраняет введённый текст без изменений, пока пользователи перемещаются по списку предложений, предотвращая путаницу от автоматических обновлений. Input меняется только когда пользователи явно подтверждают выбор Enter или кликом.
 
 <docs-tab-group>
-  <docs-tab label="Базовый">
+  <docs-tab label="Basic">
     <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/autocomplete/src/manual/app/app.ts">
       <docs-code header="app.ts" path="adev/src/content/examples/aria/autocomplete/src/manual/app/app.ts"/>
       <docs-code header="app.html" path="adev/src/content/examples/aria/autocomplete/src/manual/app/app.html"/>
@@ -120,7 +110,7 @@
     </docs-code-multifile>
   </docs-tab>
 
-  <docs-tab label="Ретро">
+  <docs-tab label="Retro">
     <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/autocomplete/src/manual/retro/app/app.ts">
       <docs-code header="app.ts" path="adev/src/content/examples/aria/autocomplete/src/manual/retro/app/app.ts"/>
       <docs-code header="app.html" path="adev/src/content/examples/aria/autocomplete/src/manual/retro/app/app.html"/>
@@ -129,13 +119,12 @@
   </docs-tab>
 </docs-tab-group>
 
-### Режим подсветки
+### Режим highlight {#highlight-mode}
 
-Режим подсветки позволяет пользователю перемещаться по опциям с помощью клавиш со стрелками, не изменяя значение ввода
-во время просмотра, пока он явно не выберет новую опцию нажатием Enter или кликом.
+Режим highlight позволяет пользователю перемещаться по опциям стрелками без изменения значения input при просмотре, пока явно не выберут новую опцию Enter или кликом.
 
 <docs-tab-group>
-  <docs-tab label="Базовый">
+  <docs-tab label="Basic">
     <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/autocomplete/src/highlight/app/app.ts">
       <docs-code header="app.ts" path="adev/src/content/examples/aria/autocomplete/src/highlight/app/app.ts"/>
       <docs-code header="app.html" path="adev/src/content/examples/aria/autocomplete/src/highlight/app/app.html"/>
@@ -151,7 +140,7 @@
     </docs-code-multifile>
   </docs-tab>
 
-  <docs-tab label="Ретро">
+  <docs-tab label="Retro">
     <docs-code-multifile preview hideCode path="adev/src/content/examples/aria/autocomplete/src/highlight/retro/app/app.ts">
       <docs-code header="app.ts" path="adev/src/content/examples/aria/autocomplete/src/highlight/retro/app/app.ts"/>
       <docs-code header="app.html" path="adev/src/content/examples/aria/autocomplete/src/highlight/retro/app/app.html"/>
@@ -160,44 +149,79 @@
   </docs-tab>
 </docs-tab-group>
 
-## API
+### Интеграция с Signal Forms {#signal-forms-integration}
 
-### Директива Combobox
+Angular Aria бесшовно интегрируется с signal-based API [Signal Forms](guide/forms/signals/overview). Сложные inputs можно инкапсулировать в переиспользуемые кастомные control-компоненты, реализующие `FormValueControl`.
 
-Директива `ngCombobox` предоставляет контейнер для функциональности автозаполнения.
+Следующий пример демонстрирует компонент выбора страны, реализующий `FormValueControl<string>`, привязанный к родительской форме через `[formField]` и защищённый правилами валидации схемы.
 
-#### Входные параметры (Inputs)
+<docs-code-multifile preview hideCode path="adev/src/content/examples/aria/autocomplete/src/signal-forms/app/app.ts">
+  <docs-code header="app.ts" path="adev/src/content/examples/aria/autocomplete/src/signal-forms/app/app.ts"/>
+  <docs-code header="app.html" path="adev/src/content/examples/aria/autocomplete/src/signal-forms/app/app.html"/>
+  <docs-code header="country-selector.ts" path="adev/src/content/examples/aria/autocomplete/src/signal-forms/app/country-selector.ts"/>
+  <docs-code header="country-selector.html" path="adev/src/content/examples/aria/autocomplete/src/signal-forms/app/country-selector.html"/>
+  <docs-code header="country-selector.css" path="adev/src/content/examples/aria/autocomplete/src/signal-forms/app/country-selector.css"/>
+  <docs-code header="app.css" path="adev/src/content/examples/aria/autocomplete/src/signal-forms/app/app.css"/>
+</docs-code-multifile>
 
-| Свойство     | Тип                                            | По умолчанию | Описание                                                   |
-| ------------ | ---------------------------------------------- | ------------ | ---------------------------------------------------------- |
-| `filterMode` | `'auto-select'` \| `'manual'` \| `'highlight'` | `'manual'`   | Управляет поведением выбора                                |
-| `disabled`   | `boolean`                                      | `false`      | Отключает combobox                                         |
-| `firstMatch` | `string`                                       | -            | Значение первого совпадающего элемента во всплывающем окне |
+## Тестирование {#testing}
 
-#### Выходные параметры (Outputs)
+Паттерн autocomplete можно тестировать комбинацией `ComboboxHarness` и `ListboxHarness` из `@angular/aria/combobox/testing` и `@angular/aria/listbox/testing`.
+Пример использования harnesses для тестирования компонента autocomplete:
 
-| Свойство   | Тип               | Описание                                                         |
-| ---------- | ----------------- | ---------------------------------------------------------------- |
-| `expanded` | `Signal<boolean>` | Сигнал, указывающий, открыто ли в данный момент всплывающее окно |
+```typescript
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {HarnessLoader} from '@angular/cdk/testing';
+import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
+import {ComboboxHarness} from '@angular/aria/combobox/testing';
+import {ListboxHarness} from '@angular/aria/listbox/testing';
+import {MyAutocompleteComponent} from './my-autocomplete'; // Your component
 
-### Директива ComboboxInput
+describe('MyAutocompleteComponent', () => {
+  let fixture: ComponentFixture<MyAutocompleteComponent>;
+  let loader: HarnessLoader;
 
-Директива `ngComboboxInput` связывает элемент ввода с combobox.
+  beforeEach(async () => {
+    TestBed.configureTestingModule({
+      imports: [MyAutocompleteComponent],
+    });
 
-#### Модель
+    fixture = TestBed.createComponent(MyAutocompleteComponent);
+    await fixture.whenStable();
+    loader = TestbedHarnessEnvironment.loader(fixture);
+  });
 
-| Свойство | Тип      | Описание                                                                    |
-| -------- | -------- | --------------------------------------------------------------------------- |
-| `value`  | `string` | Строковое значение ввода с двусторонней привязкой, использующее `[(value)]` |
+  it('should filter options based on input', async () => {
+    const combobox = await loader.getHarness(ComboboxHarness);
 
-### Директива ComboboxPopupContainer
+    // Type in the input to trigger filtering
+    await combobox.setValue('ap');
+    expect(await combobox.isOpen()).toBe(true);
 
-Директива `ngComboboxPopupContainer` оборачивает содержимое всплывающего окна и управляет его отображением.
+    // Get the listbox harness from the popup
+    const listbox = await combobox.getPopupWidget(ListboxHarness);
+    const options = await listbox.getOptions();
 
-Должна использоваться с `<ng-template>` внутри элемента popover.
+    // Verify options are filtered (e.g., 'Apple', 'Apricot')
+    expect(options.length).toBe(2);
+    expect(await options[0].getText()).toBe('Apple');
 
-### Связанные компоненты
+    // Select the first option
+    await options[0].click();
 
-Автозаполнение использует директивы [Listbox](/api/aria/listbox/Listbox) и [Option](/api/aria/listbox/Option) для
-рендеринга списка предложений. См. [документацию Listbox](/guide/aria/listbox) для дополнительных возможностей
-настройки.
+    // Verify the input value is updated and popup is closed
+    expect(await combobox.isOpen()).toBe(false);
+    expect(await combobox.getValue()).toBe('Apple');
+  });
+});
+```
+
+## API reference {#api-reference}
+
+Подробную API-документацию смотрите в следующих API reference:
+
+- [`Combobox`](/api/aria/combobox/Combobox)
+- [`ComboboxPopup`](/api/aria/combobox/ComboboxPopup)
+- [`ComboboxWidget`](/api/aria/combobox/ComboboxWidget)
+- [`Listbox`](/api/aria/listbox/Listbox)
+- [`Option`](/api/aria/listbox/Option)

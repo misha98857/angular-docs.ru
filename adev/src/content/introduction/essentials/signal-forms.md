@@ -1,18 +1,14 @@
-<docs-decorative-header title="Формы с сигналами" imgSrc="adev/src/assets/images/signals.svg"> </docs-decorative-header>
+<docs-decorative-header title="Формы на сигналах" imgSrc="adev/src/assets/images/signals.svg"> </docs-decorative-header>
 
-ВАЖНО: Формы с сигналами являются [экспериментальными](/reference/releases#experimental). API может измениться в будущих
-релизах. Избегайте использования экспериментальных API в продакшн-приложениях без понимания рисков.
+Signal Forms управляют состоянием форм с помощью сигналов Angular, обеспечивая автоматическую синхронизацию между моделью данных и UI.
 
-Формы с сигналами (Signal Forms) управляют состоянием формы, используя сигналы Angular, чтобы обеспечить автоматическую
-синхронизацию между вашей моделью данных и UI с помощью Angular Signals.
+Это руководство проводит по основным концепциям создания форм с Signal Forms. Как это работает:
 
-Это руководство проведет вас через основные концепции создания форм с Signal Forms. Вот как это работает:
+## Создание первой формы {#creating-your-first-form}
 
-## Создание вашей первой формы
+### 1. Создайте модель формы с `signal()` {#1-create-a-form-model-with-signal}
 
-### 1. Создайте модель формы с `signal()`
-
-Каждая форма начинается с создания сигнала, который хранит модель данных вашей формы:
+Каждая форма начинается с создания сигнала, хранящего модель данных формы:
 
 ```ts
 interface LoginData {
@@ -26,47 +22,46 @@ const loginModel = signal<LoginData>({
 });
 ```
 
-### 2. Передайте модель формы в `form()` для создания `FieldTree`
+### 2. Передайте модель формы в `form()`, чтобы создать `FieldTree` {#2-pass-the-form-model-to-form-to-create-a-fieldtree}
 
-Затем вы передаете модель вашей формы в функцию `form()` для создания **дерева полей (field tree)** - структуры
-объектов, которая отражает форму вашей модели, позволяя вам получать доступ к полям через точечную нотацию:
+Затем передайте модель формы в функцию `form()`, чтобы создать **дерево полей** — объектную структуру, зеркалирующую форму модели и позволяющую обращаться к полям через точечную нотацию.
+
+И корневой объект формы, и его вложенные свойства — узлы `FieldTree`:
 
 ```ts
 const loginForm = form(loginModel);
 
-// Access fields directly by property name
-loginForm.email
-loginForm.password
+loginForm; // is a FieldTree
+loginForm.email; // is also a FieldTree
 ```
 
-### 3. Свяжите HTML инпуты с директивой `[field]`
+### 3. Привяжите HTML-поля директивой `[formField]` {#3-bind-html-inputs-with-formfield-directive}
 
-Далее, вы связываете ваши HTML инпуты с формой, используя директиву `[field]`, которая создает двустороннюю привязку
-между ними:
+Далее привяжите HTML-поля к форме директивой `[formField]`, которая создаёт двустороннюю привязку:
 
 ```html
-<input type="email" [field]="loginForm.email" />
-<input type="password" [field]="loginForm.password" />
+<input type="email" [formField]="loginForm.email" />
+<input type="password" [formField]="loginForm.password" />
 ```
 
-В результате действия пользователя (например, ввод в поле) автоматически обновляют форму.
+В результате изменения пользователя (например, ввод в поле) автоматически обновляют форму.
 
-ПРИМЕЧАНИЕ: Директива `[field]` также синхронизирует состояние поля для таких атрибутов, как `required`, `disabled` и
-`readonly`, когда это уместно.
+NOTE: Директива `[formField]` также синхронизирует состояние поля для атрибутов вроде `required`, `disabled` и `readonly`, когда это уместно.
 
-### 4. Чтение значений полей с `value()`
+### 4. Читайте состояние через сигналы `FieldTree` {#4-read-state-with-fieldtree-signals}
 
-Вы можете получить доступ к состоянию поля, вызвав поле как функцию. Это возвращает объект `FieldState`, содержащий
-реактивные сигналы для значения поля, статуса валидации и состояния взаимодействия:
+К состоянию любой части дерева можно обратиться, вызвав узел `FieldTree` как функцию. Это возвращает объект состояния с реактивными сигналами значения, статуса валидации и состояния взаимодействия:
 
 ```ts
-loginForm.email() // Returns FieldState with value(), valid(), touched(), etc.
+loginForm(); // Returns state for the whole form
+loginForm.email(); // Returns state for the email field
 ```
 
-Чтобы прочитать текущее значение поля, обратитесь к сигналу `value()`:
+Чтобы прочитать текущее значение, обратитесь к сигналу `value()`:
 
 ```html
-<!-- Render form value that updates automatically as user types -->
+<!-- Render values that update automatically as user types -->
+<p>Form value: {{ loginForm().value() | json }}</p>
 <p>Email: {{ loginForm.email().value() }}</p>
 ```
 
@@ -75,24 +70,23 @@ loginForm.email() // Returns FieldState with value(), valid(), touched(), etc.
 const currentEmail = loginForm.email().value();
 ```
 
-### 5. Обновление значений полей с `set()`
+### 5. Обновляйте значения через `set()` {#5-update-values-with-set}
 
-Вы можете программно обновить значение поля, используя метод `value.set()`. Это обновляет как поле, так и сигнал базовой
-модели:
+Значения можно обновлять программно методом `value.set()` на любом узле. Это обновляет и `FieldTree`, и нижележащий сигнал модели:
 
 ```ts
 // Update the value programmatically
 loginForm.email().value.set('alice@wonderland.com');
 ```
 
-В результате и значение поля, и сигнал модели обновляются автоматически:
+В результате автоматически обновляются и значение поля, и сигнал модели:
 
 ```ts
 // The model signal is also updated
 console.log(loginModel().email); // 'alice@wonderland.com'
 ```
 
-Вот полный пример:
+### Полный пример {#complete-example}
 
 <docs-code-multifile preview path="adev/src/content/examples/signal-forms/src/login-simple/app/app.ts">
   <docs-code header="app.ts" path="adev/src/content/examples/signal-forms/src/login-simple/app/app.ts"/>
@@ -100,114 +94,112 @@ console.log(loginModel().email); // 'alice@wonderland.com'
   <docs-code header="app.css" path="adev/src/content/examples/signal-forms/src/login-simple/app/app.css"/>
 </docs-code-multifile>
 
-## Базовое использование
+## Базовое использование {#basic-usage}
 
-Директива `[field]` работает со всеми стандартными типами HTML инпутов. Вот наиболее распространенные паттерны:
+Директива `[formField]` работает со всеми стандартными типами HTML-полей. Вот самые распространённые паттерны:
 
-### Текстовые поля ввода
+### Текстовые поля {#text-inputs}
 
-Текстовые поля ввода работают с различными атрибутами `type` и текстовыми областями (textareas):
+Текстовые поля работают с разными атрибутами `type` и textarea:
 
 ```html
 <!-- Text and email -->
-<input type="text" [field]="form.name" />
-<input type="email" [field]="form.email" />
+<input type="text" [formField]="form.name" />
+<input type="email" [formField]="form.email" />
 ```
 
-#### Числа
+#### Числа {#numbers}
 
-Числовые поля ввода автоматически преобразуют значения между строками и числами:
+Числовые поля автоматически преобразуют строки в числа и обратно:
 
 ```html
 <!-- Number - automatically converts to number type -->
-<input type="number" [field]="form.age" />
+<input type="number" [formField]="form.age" />
 ```
 
-#### Дата и время
+#### Дата и время {#date-and-time}
 
-Поля ввода даты хранят значения в виде строк `YYYY-MM-DD`, а поля ввода времени используют формат `HH:mm`:
+Поля даты хранят значения как строки `YYYY-MM-DD`, поля времени — в формате `HH:mm`:
 
 ```html
 <!-- Date and time - stores as ISO format strings -->
-<input type="date" [field]="form.eventDate" />
-<input type="time" [field]="form.eventTime" />
+<input type="date" [formField]="form.eventDate" />
+<input type="time" [formField]="form.eventTime" />
 ```
 
-Если вам нужно преобразовать строки даты в объекты Date, вы можете сделать это, передав значение поля в `Date()`:
+Если нужно преобразовать строки дат в объекты Date, передайте значение поля в `Date()`:
 
 ```ts
 const dateObject = new Date(form.eventDate().value());
 ```
 
-#### Многострочный текст
+#### Многострочный текст {#multiline-text}
 
-Текстовые области (textareas) работают так же, как и текстовые поля ввода:
+Textarea работают так же, как текстовые поля:
 
 ```html
 <!-- Textarea -->
-<textarea [field]="form.message" rows="4"></textarea>
+<textarea [formField]="form.message" rows="4"></textarea>
 ```
 
-### Чекбоксы
+### Чекбоксы {#checkboxes}
 
 Чекбоксы привязываются к булевым значениям:
 
 ```html
 <!-- Single checkbox -->
 <label>
-  <input type="checkbox" [field]="form.agreeToTerms" />
+  <input type="checkbox" [formField]="form.agreeToTerms" />
   I agree to the terms
 </label>
 ```
 
-#### Множественные чекбоксы
+#### Несколько чекбоксов {#multiple-checkboxes}
 
-Для нескольких опций создайте отдельное булево поле `field` для каждой:
+Для нескольких опций создайте отдельный булев `formField` для каждой:
 
 ```html
 <label>
-  <input type="checkbox" [field]="form.emailNotifications" />
+  <input type="checkbox" [formField]="form.emailNotifications" />
   Email notifications
 </label>
 <label>
-  <input type="checkbox" [field]="form.smsNotifications" />
+  <input type="checkbox" [formField]="form.smsNotifications" />
   SMS notifications
 </label>
 ```
 
-### Радиокнопки
+### Радиокнопки {#radio-buttons}
 
-Радиокнопки работают аналогично чекбоксам. Пока радиокнопки используют одно и то же значение `[field]`, Signal Forms
-будет автоматически привязывать один и тот же атрибут `name` ко всем ним:
+Радиокнопки работают похоже на чекбоксы. Пока радиокнопки используют одно и то же значение `[formField]`, Signal Forms автоматически привяжет одинаковый атрибут `name` ко всем:
 
 ```html
 <label>
-  <input type="radio" value="free" [field]="form.plan" />
+  <input type="radio" value="free" [formField]="form.plan" />
   Free
 </label>
 <label>
-  <input type="radio" value="premium" [field]="form.plan" />
+  <input type="radio" value="premium" [formField]="form.plan" />
   Premium
 </label>
 ```
 
-Когда пользователь выбирает радиокнопку, `field` формы сохраняет значение из атрибута `value` этой радиокнопки.
-Например, выбор "Premium" устанавливает `form.plan().value()` в `"premium"`.
+Когда пользователь выбирает радиокнопку, `formField` формы сохраняет значение из атрибута `value` этой радиокнопки. Например, выбор «Premium» устанавливает `form.plan().value()` в `"premium"`.
 
-### Выпадающие списки (Select)
+### Выпадающие списки select {#select-dropdowns}
 
-Элементы select работают как со статическими, так и с динамическими опциями:
+Элементы select работают и со статическими, и с динамическими опциями:
 
-```html
+```angular-html
 <!-- Static options -->
-<select [field]="form.country">
+<select [formField]="form.country">
   <option value="">Select a country</option>
   <option value="us">United States</option>
   <option value="ca">Canada</option>
 </select>
 
 <!-- Dynamic options with @for -->
-<select [field]="form.productId">
+<select [formField]="form.productId">
   <option value="">Select a product</option>
   @for (product of products; track product.id) {
     <option [value]="product.id">{{ product.name }}</option>
@@ -215,12 +207,11 @@ const dateObject = new Date(form.eventDate().value());
 </select>
 ```
 
-ПРИМЕЧАНИЕ: Множественный выбор (`<select multiple>`) в настоящее время не поддерживается директивой `[field]`.
+NOTE: Множественный select (`<select multiple>`) сейчас не поддерживается директивой `[formField]`.
 
-## Валидация и состояние
+## Валидация и состояние {#validation-and-state}
 
-Signal Forms предоставляет встроенные валидаторы, которые вы можете применить к полям вашей формы. Чтобы добавить
-валидацию, передайте функцию схемы в качестве второго аргумента в `form()`:
+Signal Forms предоставляет встроенные валидаторы, которые можно применять к полям формы. Чтобы добавить валидацию, передайте функцию схемы вторым аргументом в `form()`:
 
 ```ts
 const loginForm = form(loginModel, (schemaPath) => {
@@ -230,29 +221,41 @@ const loginForm = form(loginModel, (schemaPath) => {
 });
 ```
 
-Функция схемы принимает параметр **schema path**, который предоставляет пути к вашим полям для настройки правил
-валидации.
+Функция схемы получает параметр **schema path**, дающий пути к полям для настройки правил валидации.
 
-Распространенные валидаторы включают:
+Распространённые валидаторы:
 
-- **`required()`** - Гарантирует, что поле имеет значение
-- **`email()`** - Проверяет формат электронной почты
-- **`min()`** / **`max()`** - Проверяет диапазоны чисел
-- **`minLength()`** / **`maxLength()`** - Проверяет длину строки или коллекции
-- **`pattern()`** - Проверяет соответствие regex паттерну
+- **`required()`** — проверяет, что у поля есть значение
+- **`email()`** — проверяет формат email
+- **`min()`** / **`max()`** — проверяют диапазоны чисел
+- **`minLength()`** / **`maxLength()`** — проверяют длину строки или коллекции
+- **`pattern()`** — проверяет по regex-шаблону
 
-Вы также можете настроить сообщения об ошибках, передав объект опций в качестве второго аргумента валидатору:
+Сообщения об ошибках можно настроить, передав объект опций вторым аргументом валидатора:
 
 ```ts
-required(schemaPath.email, { message: 'Email is required' });
-email(schemaPath.email, { message: 'Please enter a valid email address' });
+required(schemaPath.email, {message: 'Email is required'});
+email(schemaPath.email, {message: 'Please enter a valid email address'});
 ```
 
-Каждое поле формы предоставляет свое состояние валидации через сигналы. Например, вы можете проверить `field().valid()`,
-чтобы узнать, прошла ли валидация, `field().touched()`, чтобы узнать, взаимодействовал ли пользователь с ним, и
-`field().errors()`, чтобы получить список ошибок валидации.
+Каждый узел в `FieldTree` предоставляет состояние валидации и взаимодействия через реактивные сигналы.
 
-Вот полный пример:
+### Сигналы состояния FieldTree {#fieldtree-state-signals}
+
+Каждый узел дерева, включая корневой объект формы, предоставляет одни и те же сигналы для отслеживания состояния. Поскольку каждый узел — `FieldTree`, API мониторинга валидности и взаимодействия одинаков на каждом уровне.
+
+| Состояние    | Описание                                                                     |
+| ------------ | ------------------------------------------------------------------------------- |
+| `valid()`    | Возвращает `true`, если узел проходит все правила валидации                          |
+| `invalid()`  | Возвращает `true`, если есть ошибки валидации                                   |
+| `pending()`  | Возвращает `true`, если идёт асинхронная валидация                               |
+| `touched()`  | Возвращает `true`, если пользователь сфокусировал и снял фокус с поля или любого дочернего поля |
+| `dirty()`    | Возвращает `true`, если значение изменено пользователем                        |
+| `disabled()` | Возвращает `true`, если узел отключён                                          |
+| `readonly()` | Возвращает `true`, если узел только для чтения                                          |
+| `errors()`   | Возвращает массив ошибок валидации со свойствами `kind` и `message`      |
+
+### Полный пример {#complete-example-1}
 
 <docs-code-multifile preview path="adev/src/content/examples/signal-forms/src/login-validation/app/app.ts">
   <docs-code header="app.ts" path="adev/src/content/examples/signal-forms/src/login-validation/app/app.ts"/>
@@ -260,27 +263,15 @@ email(schemaPath.email, { message: 'Please enter a valid email address' });
   <docs-code header="app.css" path="adev/src/content/examples/signal-forms/src/login-validation/app/app.css"/>
 </docs-code-multifile>
 
-### Сигналы состояния поля
+## Следующие шаги {#next-steps}
 
-Каждое `field()` предоставляет следующие сигналы состояния:
+Чтобы узнать больше о Signal Forms и их устройстве, см. подробные руководства:
 
-| State        | Description                                                         |
-|--------------|---------------------------------------------------------------------|
-| `valid()`    | Возвращает `true`, если поле проходит все правила валидации         |
-| `touched()`  | Возвращает `true`, если пользователь сфокусировался и ушел с поля   |
-| `dirty()`    | Возвращает `true`, если пользователь изменил значение               |
-| `disabled()` | Возвращает `true`, если поле отключено (disabled)                   |
-| `readonly()` | Возвращает `true`, если поле доступно только для чтения (readonly)  |
-| `pending()`  | Возвращает `true`, если выполняется асинхронная валидация           |
-| `errors()`   | Возвращает массив ошибок валидации со свойствами `kind` и `message` |
+- [Обзор](guide/forms/signals/overview) — введение в Signal Forms и когда их использовать
+- [Модели форм](guide/forms/signals/models) — создание и управление данными форм с сигналами
+- [Управление состоянием полей](guide/forms/signals/field-state-management) — работа с состоянием валидации, отслеживанием взаимодействия и видимостью полей
+- [Валидация](guide/forms/signals/validation) — встроенные валидаторы, пользовательские правила и асинхронная валидация
 
-## Следующие шаги
-
-Чтобы узнать больше о Signal Forms и о том, как они работают, ознакомьтесь с подробными руководствами:
-
-- [Обзор](guide/forms/signals/overview) - Введение в Signal Forms и когда их использовать
-- [Модели форм](guide/forms/signals/models) - Создание и управление данными форм с помощью сигналов
-- [Управление состоянием поля](guide/forms/signals/field-state-management) - Работа с состоянием валидации,
-  отслеживанием взаимодействия и видимостью полей
-- [Валидация](guide/forms/signals/validation) - Встроенные валидаторы, пользовательские правила валидации и асинхронная
-  валидация
+<docs-pill-row>
+  <docs-pill title="Модульный дизайн с внедрением зависимостей" href="essentials/dependency-injection" />
+</docs-pill-row>

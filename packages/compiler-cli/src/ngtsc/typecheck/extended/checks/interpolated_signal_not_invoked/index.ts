@@ -10,7 +10,10 @@ import {
   AST,
   ASTWithSource,
   BindingType,
+  Conditional,
   Interpolation,
+  NonNullAssert,
+  ParenthesizedExpression,
   PrefixNot,
   PropertyRead,
   TmplAstBoundAttribute,
@@ -25,7 +28,12 @@ import ts from 'typescript';
 import {ErrorCode, ExtendedTemplateDiagnosticName} from '../../../../diagnostics';
 import {NgTemplateDiagnostic, SymbolKind, TypeCheckableDirectiveMeta} from '../../../api';
 import {isSignalReference} from '../../../src/symbol_util';
-import {TemplateCheckFactory, TemplateCheckWithVisitor, TemplateContext} from '../../api';
+import {
+  TemplateCheckFactory,
+  TemplateCheckWithVisitor,
+  TemplateContext,
+  formatExtendedError,
+} from '../../api';
 
 /** Names of known signal instance properties. */
 const SIGNAL_INSTANCE_PROPERTIES = new Set(['set', 'update', 'asReadonly']);
@@ -56,6 +64,10 @@ class InterpolatedSignalCheck extends TemplateCheckWithVisitor<ErrorCode.INTERPO
     }
     // check bound inputs like `[prop]="mySignal"` on an element or inline template
     else if (node instanceof TmplAstElement && node.inputs.length > 0) {
+      // Allow signals to be passed directly to foreign components, without invocation.
+      if (ctx.templateTypeChecker.getForeignComponent(component, node) !== null) {
+        return [];
+      }
       const directivesOfElement = ctx.templateTypeChecker.getDirectivesOfNode(component, node);
       return node.inputs.flatMap((input) =>
         checkBoundAttribute(ctx, component, directivesOfElement, input),
@@ -115,7 +127,11 @@ function checkBoundAttribute(
   }
 
   // otherwise, we check if the node is
-  const nodeAst = isPropertyReadNodeAst(node);
+  if (node.value instanceof ASTWithSource === false) {
+    return [];
+  }
+  const propertyReads = getPropertyReads(node.value.ast);
+
   if (
     // a bound property like `[prop]="mySignal"`
     (node.type === BindingType.Property ||
@@ -129,25 +145,45 @@ function checkBoundAttribute(
       node.type === BindingType.Animation ||
       // or an animation binding like `[@myAnimation]="mySignal"`
       node.type === BindingType.LegacyAnimation) &&
-    nodeAst
+    propertyReads.length > 0
   ) {
-    return buildDiagnosticForSignal(ctx, nodeAst, component);
+    return propertyReads.flatMap((nodeAst) => buildDiagnosticForSignal(ctx, nodeAst, component));
   }
 
   return [];
 }
 
-function isPropertyReadNodeAst(node: TmplAstBoundAttribute): PropertyRead | undefined {
-  if (node.value instanceof ASTWithSource === false) {
-    return undefined;
+function getPropertyReads(ast: AST): PropertyRead[] {
+  // Handle unary negation, such as `!mySignal`.
+  if (ast instanceof PrefixNot) {
+    return ast.expression instanceof PropertyRead ? [ast.expression] : [];
   }
-  if (node.value.ast instanceof PrefixNot && node.value.ast.expression instanceof PropertyRead) {
-    return node.value.ast.expression;
+
+  // Handle direct reads, such as `mySignal`.
+  if (ast instanceof PropertyRead) {
+    return [ast];
   }
-  if (node.value.ast instanceof PropertyRead) {
-    return node.value.ast;
+
+  // Handle ternary expressions, such as `flag ? mySignal : otherSignal`.
+  if (ast instanceof Conditional) {
+    return [
+      ...getPropertyReads(ast.condition),
+      ...getPropertyReads(ast.trueExp),
+      ...getPropertyReads(ast.falseExp),
+    ];
   }
-  return undefined;
+
+  // Handle parenthesized expressions, such as `(mySignal)`.
+  if (ast instanceof ParenthesizedExpression) {
+    return getPropertyReads(ast.expression);
+  }
+
+  // Handle non-null assertions, such as `mySignal!`.
+  if (ast instanceof NonNullAssert) {
+    return getPropertyReads(ast.expression);
+  }
+
+  return [];
 }
 
 function isFunctionInstanceProperty(name: string): boolean {
@@ -163,13 +199,21 @@ function buildDiagnosticForSignal(
   node: PropertyRead,
   component: ts.ClassDeclaration,
 ): Array<NgTemplateDiagnostic<ErrorCode.INTERPOLATED_SIGNAL_NOT_INVOKED>> {
-  // check for `{{ mySignal }}`
   const symbol = ctx.templateTypeChecker.getSymbolOfNode(node, component);
-  if (symbol !== null && symbol.kind === SymbolKind.Expression && isSignalReference(symbol)) {
+  if (
+    symbol !== null &&
+    symbol.kind === SymbolKind.Expression &&
+    isSignalReference(symbol, ctx.templateTypeChecker)
+  ) {
     const templateMapping = ctx.templateTypeChecker.getSourceMappingAtTcbLocation(
       symbol.tcbLocation,
     )!;
-    const errorString = `${node.name} is a function and should be invoked: ${node.name}()`;
+
+    const errorString = formatExtendedError(
+      ErrorCode.INTERPOLATED_SIGNAL_NOT_INVOKED,
+      `${node.name} is a function and should be invoked: ${node.name}()}`,
+    );
+
     const diagnostic = ctx.makeTemplateDiagnostic(templateMapping.span, errorString);
     return [diagnostic];
   }
@@ -182,19 +226,31 @@ function buildDiagnosticForSignal(
   if (!isFunctionInstanceProperty(node.name) && !isSignalInstanceProperty(node.name)) {
     return [];
   }
+
+  // If the receiver is not a PropertyRead, it means it's not a simple property access
+  // (e.g., it could be a MethodCall like `mySignal().set`). In that case, we assume
+  // it was invoked and skip the warning.
+  if (!(node.receiver instanceof PropertyRead)) {
+    return [];
+  }
+
   const symbolOfReceiver = ctx.templateTypeChecker.getSymbolOfNode(node.receiver, component);
   if (
     symbolOfReceiver !== null &&
     symbolOfReceiver.kind === SymbolKind.Expression &&
-    isSignalReference(symbolOfReceiver)
+    isSignalReference(symbolOfReceiver, ctx.templateTypeChecker)
   ) {
     const templateMapping = ctx.templateTypeChecker.getSourceMappingAtTcbLocation(
       symbolOfReceiver.tcbLocation,
     )!;
 
-    const errorString = `${
-      (node.receiver as PropertyRead).name
-    } is a function and should be invoked: ${(node.receiver as PropertyRead).name}()`;
+    const errorString = formatExtendedError(
+      ErrorCode.INTERPOLATED_SIGNAL_NOT_INVOKED,
+      `${
+        (node.receiver as PropertyRead).name
+      } is a function and should be invoked: ${(node.receiver as PropertyRead).name}()`,
+    );
+
     const diagnostic = ctx.makeTemplateDiagnostic(templateMapping.span, errorString);
     return [diagnostic];
   }

@@ -1,4 +1,4 @@
-load("//devtools/tools:defaults.bzl", "esbuild", "ng_project", "ng_web_test_suite", "sass_binary", "ts_project", "ts_test_library")
+load("//devtools/tools:defaults.bzl", "esbuild", "ng_project", "sass_binary", "ts_project", "ts_test_library", "zoneless_web_test_suite")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -12,6 +12,7 @@ ng_project(
     srcs = [
         "app.component.ts",
         "app.config.ts",
+        "konami-code.service.ts",
     ],
     angular_assets = [
         "app.component.html",
@@ -27,6 +28,7 @@ ng_project(
         "//:node_modules/@angular/platform-browser",
         "//:node_modules/rxjs",
         "//devtools/projects/ng-devtools",
+        "//devtools/projects/ng-devtools/src/lib/application-providers:deep_link",
         "//devtools/projects/ng-devtools/src/lib/application-services:frame_manager",
         "//devtools/projects/protocol",
     ],
@@ -39,6 +41,31 @@ ts_project(
     ],
     deps = [
         "//:node_modules/@types/chrome",
+    ],
+)
+
+ts_project(
+    name = "devtools_connected_flag",
+    srcs = [
+        "devtools-connected-flag.ts",
+    ],
+)
+
+esbuild(
+    name = "devtools_connected_flag_bundle",
+    srcs = [
+        "//:node_modules/tslib",
+        "//devtools/tools/esbuild:esbuild_base",
+        "//devtools/tools/esbuild:esbuild_config_iife",
+    ],
+    config = "//devtools/tools/esbuild:esbuild-iife.config.mjs",
+    entry_point = "devtools-connected-flag.ts",
+    format = "iife",
+    platform = "browser",
+    splitting = False,
+    target = "esnext",
+    deps = [
+        ":devtools_connected_flag",
     ],
 )
 
@@ -75,6 +102,7 @@ ts_project(
         "//:node_modules/@angular/cdk",
         "//:node_modules/@angular/core",
         "//:node_modules/@types/chrome",
+        "//devtools:node_modules/@types/firefox-webext-browser",
         "//devtools/projects/ng-devtools",
         "//devtools/projects/protocol",
     ],
@@ -92,8 +120,23 @@ ts_project(
 )
 
 ts_project(
-    name = "communication",
-    srcs = ["communication.ts"],
+    name = "comm_utils",
+    srcs = ["comm-utils.ts"],
+)
+
+ts_test_library(
+    name = "comm_utils_test_lib",
+    srcs = ["comm-utils.spec.ts"],
+    deps = [
+        ":comm_utils",
+    ],
+)
+
+zoneless_web_test_suite(
+    name = "comm_utils_test",
+    deps = [
+        ":comm_utils_test_lib",
+    ],
 )
 
 ts_project(
@@ -130,7 +173,7 @@ ts_project(
     ],
 )
 
-ng_web_test_suite(
+zoneless_web_test_suite(
     name = "tab_manager_test",
     deps = [
         ":tab_manager_test_lib",
@@ -155,7 +198,7 @@ ts_project(
     ],
     deps = [
         ":chrome_window_extensions",
-        ":communication",
+        ":comm_utils",
         ":same_page_message_bus",
         "//devtools/projects/ng-devtools-backend",
         "//devtools/projects/ng-devtools-backend/src/lib:highlighter",
@@ -169,19 +212,19 @@ ts_project(
     ],
     deps = [
         ":chrome_message_bus",
-        ":communication",
+        ":comm_utils",
         ":same_page_message_bus",
         "//devtools/projects/protocol",
     ],
 )
 
 ts_project(
-    name = "detect_angular_for_extension_icon",
+    name = "detect_angular",
     srcs = [
-        "detect-angular-for-extension-icon.ts",
+        "detect-angular.ts",
     ],
     deps = [
-        ":communication",
+        ":comm_utils",
         ":same_page_message_bus",
         "//devtools/projects/protocol",
         "//devtools/projects/shared-utils",
@@ -189,21 +232,20 @@ ts_project(
 )
 
 esbuild(
-    name = "detect_angular_for_extension_icon_bundle",
+    name = "detect_angular_bundle",
     srcs = [
         "//:node_modules/tslib",
         "//devtools/tools/esbuild:esbuild_base",
         "//devtools/tools/esbuild:esbuild_config_iife",
     ],
     config = "//devtools/tools/esbuild:esbuild-iife.config.mjs",
-    entry_point = "detect-angular-for-extension-icon.ts",
+    entry_point = "detect-angular.ts",
     format = "iife",
-    minify = True,
     platform = "browser",
     splitting = False,
     target = "esnext",
     deps = [
-        ":detect_angular_for_extension_icon",
+        ":detect_angular",
     ],
 )
 
@@ -217,7 +259,6 @@ esbuild(
     config = "//devtools/tools/esbuild:esbuild-iife.config.mjs",
     entry_point = "backend.ts",
     format = "iife",
-    minify = True,
     platform = "browser",
     splitting = False,
     target = "esnext",
@@ -236,7 +277,6 @@ esbuild(
     config = "//devtools/tools/esbuild:esbuild-iife.config.mjs",
     entry_point = "ng-validate.ts",
     format = "iife",
-    minify = True,
     platform = "browser",
     splitting = False,
     target = "esnext",
@@ -255,7 +295,6 @@ esbuild(
     config = "//devtools/tools/esbuild:esbuild-iife.config.mjs",
     entry_point = "background.ts",
     format = "iife",
-    minify = True,
     platform = "browser",
     splitting = False,
     target = "esnext",
@@ -274,7 +313,6 @@ esbuild(
     config = "//devtools/tools/esbuild:esbuild-iife.config.mjs",
     entry_point = "content-script.ts",
     format = "iife",
-    minify = True,
     platform = "browser",
     splitting = False,
     target = "esnext",

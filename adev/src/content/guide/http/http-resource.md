@@ -1,38 +1,28 @@
-# Реактивное получение данных с помощью `httpResource`
+# Реактивная загрузка данных с `httpResource`
 
-ВАЖНО: `httpResource` является [экспериментальным](reference/releases#experimental). Он готов к использованию, но может
-измениться до того, как станет стабильным.
+`httpResource` — реактивная обёртка вокруг `HttpClient`, которая даёт статус запроса и ответ как сигналы. Эти сигналы можно использовать с `computed`, `effect`, `linkedSignal` или любым другим реактивным API. Поскольку `httpResource` построен поверх `HttpClient`, он поддерживает те же возможности, например interceptor'ы.
 
-`httpResource` — это реактивная обертка вокруг `HttpClient`, которая предоставляет статус запроса и ответ в виде
-сигналов. Таким образом, вы можете использовать эти сигналы с `computed`, `effect`, `linkedSignal` или любым другим
-реактивным API. Поскольку он построен поверх `HttpClient`, `httpResource` поддерживает все те же функции, например,
-interceptors (перехватчики).
+Подробнее о паттерне `resource` в Angular см. [Асинхронная реактивность с `resource`](/guide/signals/resource).
 
-Подробнее о паттерне `resource` в Angular см. в разделе [Асинхронная реактивность с
-`resource`](/guide/signals/resource).
+## Использование `httpResource` {#using-httpresource}
 
-## Использование `httpResource`
+TIP: `httpResource` использует глобально доступный `HttpClient`. Используйте `provideHttpClient(...)` только когда нужно настроить HTTP-возможности, например interceptor'ы или опции XSRF. Подробнее см. [Настройка HttpClient](/guide/http/setup).
 
-СОВЕТ: Убедитесь, что вы включили `provideHttpClient` в провайдеры вашего приложения. Подробнее см. в
-разделе [Настройка HttpClient](/guide/http/setup).
-
-Вы можете определить HTTP-ресурс, вернув URL:
+HTTP-ресурс можно определить, вернув URL:
 
 ```ts
 userId = input.required<string>();
 
-user = httpResource(() => `/api/user/${userId()}`); // Реактивная функция в качестве аргумента
+user = httpResource(() => `/api/user/${userId()}`); // A reactive function as argument
 ```
 
-`httpResource` реактивен. Это означает, что всякий раз, когда изменяется один из сигналов, от которых он зависит (
-например, `userId`), ресурс отправляет новый HTTP-запрос.
-Если запрос уже выполняется, ресурс отменяет текущий запрос перед отправкой нового.
+`httpResource` реактивен: всякий раз, когда меняется один из сигналов, от которых он зависит (например, `userId`), ресурс испускает новый HTTP-запрос.
+Если запрос уже выполняется, ресурс отменяет незавершённый запрос перед выдачей нового.
 
-ПОЛЕЗНО: `httpResource` отличается от `HttpClient` тем, что инициирует запрос _активно_ (eagerly). В отличие от него,
-`HttpClient` инициирует запросы только при подписке на возвращаемый `Observable`.
+HELPFUL: `httpResource` отличается от `HttpClient` тем, что инициирует запрос _eagerly_. Напротив, `HttpClient` инициирует запросы только при подписке на возвращаемый `Observable`.
 
-Для более сложных запросов можно определить объект запроса, аналогичный тому, который принимает `HttpClient`.
-Каждое свойство объекта запроса, которое должно быть реактивным, должно состоять из сигнала.
+Для более сложных запросов можно определить объект запроса, похожий на запрос, принимаемый `HttpClient`.
+Каждое свойство объекта запроса, которое должно быть реактивным, следует составлять из сигнала.
 
 ```ts
 user = httpResource(() => ({
@@ -50,22 +40,21 @@ user = httpResource(() => ({
   mode: 'cors',
   redirect: 'error',
   priority: 'high',
-  cache : 'force-cache',
+  cache: 'force-cache',
   credentials: 'include',
   referrer: 'no-referrer',
   integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GhEXAMPLEKEY=',
-  referrerPolicy: 'no-referrer'
+  referrerPolicy: 'no-referrer',
 }));
 ```
 
-СОВЕТ: Избегайте использования `httpResource` для _мутаций_, таких как `POST` или `PUT`. Вместо этого отдавайте
-предпочтение прямому использованию API `HttpClient`.
+TIP: Избегайте использования `httpResource` для _мутаций_ вроде `POST` или `PUT`. Вместо этого предпочитайте напрямую использовать underlying API `HttpClient`.
 
-Сигналы `httpResource` можно использовать в шаблоне для управления тем, какие элементы должны отображаться.
+Сигналы `httpResource` можно использовать в шаблоне для управления тем, какие элементы отображать.
 
 ```angular-html
-@if(user.hasValue()) {
-  <user-details [user]="user.value()">
+@if (user.hasValue()) {
+  <user-details [user]="user.value()" />
 } @else if (user.error()) {
   <div>Could not load user information</div>
 } @else if (user.isLoading()) {
@@ -73,36 +62,30 @@ user = httpResource(() => ({
 }
 ```
 
-ПОЛЕЗНО: Чтение сигнала `value` у `resource`, находящегося в состоянии ошибки, вызывает исключение во время выполнения.
-Рекомендуется защищать чтение `value` с помощью проверки `hasValue()`.
+HELPFUL: Чтение сигнала `value` у `resource` в состоянии ошибки выбрасывает исключение в runtime. Рекомендуется защищать чтение `value` с помощью `hasValue()`.
 
-### Типы ответов
+### Типы ответа {#response-types}
 
-По умолчанию `httpResource` возвращает и парсит ответ как JSON. Однако вы можете указать альтернативный вариант возврата
-с помощью дополнительных функций в `httpResource`:
+По умолчанию `httpResource` возвращает и разбирает ответ как JSON. Однако можно указать альтернативный тип возврата дополнительными функциями на `httpResource`:
 
 ```ts
-httpResource.text(() => ({ … })); // возвращает строку в value()
+httpResource.text(() => ({ … })); // returns a string in value()
 
-httpResource.blob(() => ({ … })); // возвращает объект Blob в value()
+httpResource.blob(() => ({ … })); // returns a Blob object in value()
 
-httpResource.arrayBuffer(() => ({ … })); // возвращает ArrayBuffer в value()
+httpResource.arrayBuffer(() => ({ … })); // returns an ArrayBuffer in value()
 ```
 
-## Парсинг и валидация ответов
+## Разбор и валидация ответа {#response-parsing-and-validation}
 
-При получении данных может потребоваться валидация ответов по заранее определенной схеме, часто с использованием
-популярных open-source библиотек, таких как [Zod](https://zod.dev) или [Valibot](https://valibot.dev). Вы можете
-интегрировать подобные библиотеки валидации с `httpResource`, указав опцию `parse`. Тип возвращаемого значения функции
-`parse` определяет тип `value` ресурса.
+При загрузке данных может понадобиться валидировать ответы по заранее определённой схеме, часто с помощью популярных open-source библиотек вроде [Zod](https://zod.dev) или [Valibot](https://valibot.dev). Такие библиотеки валидации можно интегрировать с `httpResource`, указав опцию `parse`. Тип возврата функции `parse` определяет тип `value` ресурса.
 
-В следующем примере используется Zod для парсинга и валидации ответа от [StarWars API](https://swapi.info/). Тип ресурса
-соответствует выходному типу парсинга Zod.
+Следующий пример использует Zod для разбора и валидации ответа [StarWars API](https://swapi.info/). Ресурс затем типизируется так же, как выходной тип разбора Zod.
 
 ```ts
 const starWarsPersonSchema = z.object({
   name: z.string(),
-  height: z.number({ coerce: true }),
+  height: z.number({coerce: true}),
   edited: z.string().datetime(),
   films: z.array(z.string()),
 });
@@ -110,26 +93,21 @@ const starWarsPersonSchema = z.object({
 export class CharacterViewer {
   id = signal(1);
 
-  swPersonResource = httpResource(
-    () => `https://swapi.info/api/people/${this.id()}`,
-    { parse: starWarsPersonSchema.parse }
-  );
+  swPersonResource = httpResource(() => `https://swapi.info/api/people/${this.id()}`, {
+    parse: starWarsPersonSchema.parse,
+  });
 }
 ```
 
-## Тестирование httpResource
+## Тестирование httpResource {#testing-an-httpresource}
 
-Поскольку `httpResource` является оберткой вокруг `HttpClient`, вы можете тестировать `httpResource` с помощью тех же
-API, что и `HttpClient`. Подробнее см. в разделе [Тестирование HttpClient](/guide/http/testing).
+Поскольку `httpResource` — обёртка вокруг `HttpClient`, тестировать `httpResource` можно теми же API, что и `HttpClient`. Подробнее см. [Тестирование HttpClient](/guide/http/testing).
 
-Следующий пример показывает модульный тест для кода, использующего `httpResource`.
+Следующий пример показывает unit-тест для кода, использующего `httpResource`.
 
 ```ts
 TestBed.configureTestingModule({
-  providers: [
-    provideHttpClient(),
-    provideHttpClientTesting(),
-  ],
+  providers: [provideHttpClientTesting()],
 });
 
 const id = signal(0);

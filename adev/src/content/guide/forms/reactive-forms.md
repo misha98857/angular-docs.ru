@@ -1,140 +1,116 @@
-# Реактивные формы
+# Reactive forms
 
-Реактивные формы (Reactive forms) предоставляют подход к обработке ввода форм, основанный на моделях (model-driven),
-значения которых изменяются со временем.
-В этом руководстве показано, как создать и обновить простой элемент управления формы (form control), затем перейти к
-использованию нескольких элементов управления в группе, валидации значений формы и созданию динамических форм, где вы
-можете добавлять или удалять элементы управления во время выполнения.
+Reactive forms дают model-driven подход к обработке полей формы, значения которых меняются со временем.
+В этом руководстве показано, как создать и обновить базовый form control, использовать несколько controls в группе, валидировать значения формы и создавать динамические формы, в которых можно добавлять и удалять controls во время выполнения.
 
-## Обзор реактивных форм
+## Обзор reactive forms {#overview-of-reactive-forms}
 
-Реактивные формы используют явный и неизменяемый подход к управлению состоянием формы в определенный момент времени.
-Каждое изменение состояния формы возвращает новое состояние, что поддерживает целостность модели между изменениями.
-Реактивные формы построены на основе Observable-потоков, где входные данные формы и значения предоставляются в виде
-потоков входных значений, к которым можно получить синхронный доступ.
+Reactive forms используют явный и неизменяемый подход к управлению состоянием формы в конкретный момент времени.
+Каждое изменение состояния формы возвращает новое состояние, что сохраняет целостность модели между изменениями.
+Reactive forms построены вокруг observable-потоков: ввод и значения формы предоставляются как потоки, к которым можно обращаться синхронно.
 
-Реактивные формы также обеспечивают простой путь к тестированию, поскольку вы уверены, что ваши данные согласованы и
-предсказуемы при запросе.
-Любые потребители потоков имеют доступ к безопасному манипулированию этими данными.
+Reactive forms также упрощают тестирование, потому что данные при запросе согласованы и предсказуемы.
+Любые потребители этих потоков могут безопасно манипулировать данными.
 
-Реактивные формы отличаются от [template-driven форм](guide/forms/template-driven-forms) определенными особенностями.
-Реактивные формы предоставляют синхронный доступ к модели данных, неизменяемость с помощью операторов Observable и
-отслеживание изменений через Observable-потоки.
+Reactive forms отличаются от [template-driven forms](guide/forms/template-driven-forms) по ряду существенных пунктов.
+Reactive forms дают синхронный доступ к модели данных, неизменяемость через операторы Observable и отслеживание изменений через observable-потоки.
 
-Template-driven формы позволяют изменять данные прямо в шаблоне, но они менее явные, чем реактивные формы, поскольку
-полагаются на директивы, встроенные в шаблон, и на изменяемые данные для асинхронного отслеживания изменений.
-Смотрите [Обзор форм](guide/forms) для детального сравнения этих двух парадигм.
+Template-driven forms позволяют напрямую изменять данные в шаблоне, но менее явны, чем reactive forms: они опираются на директивы в шаблоне и на изменяемые данные для асинхронного отслеживания изменений.
+Подробное сравнение двух подходов см. в [обзоре форм](guide/forms).
 
-## Добавление простого элемента управления формы
+## Добавление базового form control {#adding-a-basic-form-control}
 
-Использование элементов управления формы (form controls) состоит из трех шагов.
+Чтобы использовать form controls, выполните три шага.
 
-1. Создайте новый компонент и зарегистрируйте модуль реактивных форм. Этот модуль объявляет директивы реактивных форм,
-   необходимые для их использования.
-2. Создайте экземпляр нового `FormControl`.
-3. Зарегистрируйте `FormControl` в шаблоне.
+1. Создайте новый компонент и подключите модуль reactive forms. Этот модуль объявляет директивы, необходимые для работы с reactive forms.
+1. Создайте экземпляр `FormControl`.
+1. Зарегистрируйте `FormControl` в шаблоне.
 
-Затем вы можете отобразить форму, добавив компонент в шаблон.
+Затем можно отобразить форму, добавив компонент в шаблон.
 
-Следующие примеры показывают, как добавить одиночный элемент управления формы.
-В примере пользователь вводит свое имя в поле ввода, приложение захватывает это значение и отображает текущее значение
-элемента управления формы.
+Следующие примеры показывают, как добавить один form control.
+В примере пользователь вводит имя в поле ввода, значение сохраняется, и отображается текущее значение элемента form control.
 
 <docs-workflow>
 
-<docs-step title="Создайте новый компонент и импортируйте ReactiveFormsModule">
-Используйте команду CLI `ng generate component`, чтобы создать компонент в вашем проекте, импортируйте `ReactiveFormsModule` из пакета `@angular/forms` и добавьте его в массив `imports` вашего компонента.
+<docs-step title="Generate a new component and import the ReactiveFormsModule">
+С помощью CLI-команды `ng generate component` создайте компонент в проекте, импортируйте `ReactiveFormsModule` из пакета `@angular/forms` и добавьте его в массив `imports` компонента.
 
-<docs-code header="name-editor.component.ts (excerpt)" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.ts" visibleRegion="imports" />
+<docs-code header="name-editor.component.ts (excerpt)" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.ts" region="imports" />
 </docs-step>
 
-<docs-step title="Объявите экземпляр FormControl">
-Используйте конструктор `FormControl`, чтобы установить его начальное значение, которое в данном случае является пустой строкой. Создавая эти элементы управления в классе компонента, вы получаете немедленный доступ к прослушиванию, обновлению и валидации состояния ввода формы.
+<docs-step title="Declare a FormControl instance">
+С помощью конструктора `FormControl` задайте начальное значение — в этом случае пустую строку. Создавая эти controls в классе компонента, вы сразу получаете доступ к прослушиванию, обновлению и валидации состояния поля формы.
 
-<docs-code header="name-editor.component.ts" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.ts" visibleRegion="create-control"/>
+<docs-code header="name-editor.component.ts" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.ts" region="create-control"/>
 </docs-step>
 
-<docs-step title="Зарегистрируйте элемент управления в шаблоне">
-После создания элемента управления в классе компонента, вы должны связать его с элементом управления формы в шаблоне. Обновите шаблон, используя привязку `formControl`, предоставляемую директивой `FormControlDirective`, которая также включена в `ReactiveFormsModule`.
+<docs-step title="Register the control in the template">
+После создания control в классе компонента его нужно связать с элементом form control в шаблоне. Обновите шаблон, используя привязку `formControl`, которую предоставляет `FormControlDirective` (также входит в `ReactiveFormsModule`).
 
-<docs-code header="name-editor.component.html" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.html" visibleRegion="control-binding" />
+<docs-code header="name-editor.component.html" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.html" region="control-binding" />
 
-Используя синтаксис привязки шаблона, элемент управления формы теперь зарегистрирован на элементе ввода `name` в
-шаблоне. Элемент управления формы и DOM-элемент взаимодействуют друг с другом: представление отражает изменения в
-модели, а модель отражает изменения в представлении.
+Благодаря синтаксису привязки в шаблоне form control теперь зарегистрирован на элементе ввода `name`. Form control и DOM-элемент обмениваются данными: представление отражает изменения модели, а модель — изменения представления.
 </docs-step>
 
-<docs-step title="Отобразите компонент">
+<docs-step title="Display the component">
 `FormControl`, назначенный свойству `name`, отображается, когда компонент `<app-name-editor>` добавляется в шаблон.
 
-<docs-code header="app.component.html (name editor)" path="adev/src/content/examples/reactive-forms/src/app/app.component.1.html" visibleRegion="app-name-editor"/>
+<docs-code header="app.component.html (name editor)" path="adev/src/content/examples/reactive-forms/src/app/app.component.1.html" region="app-name-editor"/>
 </docs-step>
 </docs-workflow>
 
-### Отображение значения элемента управления формы
+### Отображение значения form control {#displaying-a-form-control-value}
 
-Вы можете отобразить значение следующими способами:
+Значение можно отобразить следующими способами:
 
-- Через Observable `valueChanges`, где вы можете прослушивать изменения значения формы в шаблоне с помощью `AsyncPipe`
-  или в классе компонента с помощью метода `subscribe()`.
-- С помощью свойства `value`, которое дает вам снимок (snapshot) текущего значения.
+- Через Observable `valueChanges`, где можно слушать изменения значения формы в шаблоне с помощью `AsyncPipe` или в классе компонента методом `subscribe()`
+- Через свойство `value`, которое даёт снимок текущего значения
 
 Следующий пример показывает, как отобразить текущее значение с помощью интерполяции в шаблоне.
 
-<docs-code header="name-editor.component.html (control value)" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.html" visibleRegion="display-value"/>
+<docs-code header="name-editor.component.html (control value)" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.html" region="display-value"/>
 
-Отображаемое значение изменяется по мере того, как вы обновляете элемент управления формы.
+Отображаемое значение меняется при обновлении элемента form control.
 
-Реактивные формы предоставляют доступ к информации о данном элементе управления через свойства и методы, доступные в
-каждом экземпляре.
-Эти свойства и методы базового класса [AbstractControl](api/forms/AbstractControl 'API reference') используются для
-управления состоянием формы и определения момента отображения сообщений при
-обработке [валидации ввода](#validating-form-input 'Узнайте больше о валидации ввода формы').
+Reactive forms дают доступ к информации о control через свойства и методы каждого экземпляра.
+Эти свойства и методы базового класса [AbstractControl](api/forms/AbstractControl 'API reference') используются для управления состоянием формы и определения, когда показывать сообщения при [валидации ввода](#validating-form-input 'Learn more about validating form input').
 
-Узнайте о других свойствах и методах `FormControl`
-в [Справочнике API](api/forms/FormControl 'Подробный справочник синтаксиса').
+О других свойствах и методах `FormControl` читайте в [справочнике API](api/forms/FormControl 'Detailed syntax reference').
 
-### Замена значения элемента управления формы
+### Замена значения form control {#replacing-a-form-control-value}
 
-У реактивных форм есть методы для программного изменения значения элемента управления, что дает вам гибкость обновлять
-значение без взаимодействия с пользователем.
-Экземпляр элемента управления формы предоставляет метод `setValue()`, который обновляет значение элемента управления и
-проверяет структуру предоставленного значения на соответствие структуре элемента управления.
-Например, при получении данных формы из бэкенд-API или сервиса, используйте метод `setValue()`, чтобы обновить элемент
-управления новым значением, полностью заменяя старое.
+В reactive forms есть методы для программного изменения значения control, что позволяет обновлять значение без взаимодействия пользователя.
+Экземпляр form control предоставляет метод `setValue()`, который обновляет значение form control и проверяет структуру переданного значения относительно структуры control.
+Например, при получении данных формы из backend API или сервиса используйте `setValue()`, чтобы полностью заменить старое значение control новым.
 
-Следующий пример добавляет метод в класс компонента для обновления значения элемента управления на _Nancy_ с
-использованием метода `setValue()`.
+Следующий пример добавляет в класс компонента метод, который обновляет значение control на _Nancy_ с помощью `setValue()`.
 
-<docs-code header="name-editor.component.ts (update value)" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.ts" visibleRegion="update-value"/>
+<docs-code header="name-editor.component.ts (update value)" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.ts" region="update-value"/>
 
-Обновите шаблон, добавив кнопку для имитации обновления имени.
-Когда вы нажимаете кнопку **Update Name**, значение, введенное в элемент управления формы, отражается как его текущее
-значение.
+Обновите шаблон кнопкой, имитирующей обновление имени.
+При нажатии кнопки **Update Name** значение, введённое в элемент form control, отражается как текущее значение.
 
-<docs-code header="name-editor.component.html (update value)" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.html" visibleRegion="update-value"/>
+<docs-code header="name-editor.component.html (update value)" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.html" region="update-value"/>
 
-Модель формы является источником истины для элемента управления, поэтому при нажатии кнопки значение ввода изменяется
-внутри класса компонента, переопределяя его текущее значение.
+Модель формы — источник истины для control, поэтому при нажатии кнопки значение input меняется в классе компонента, перезаписывая текущее значение.
 
-ПОЛЕЗНО: В этом примере вы используете одиночный элемент управления.
-При использовании метода `setValue()` с экземпляром [группы форм](#grouping-form-controls)
-или [массива форм](#creating-dynamic-forms), значение должно соответствовать структуре группы или массива.
+HELPFUL: В этом примере используется один control.
+При использовании `setValue()` с экземпляром [form group](#grouping-form-controls) или [form array](#creating-dynamic-forms) значение должно соответствовать структуре группы или массива.
 
-## Группировка элементов управления формы {#grouping-form-controls}
+## Группировка form controls {#grouping-form-controls}
 
-Формы обычно содержат несколько связанных элементов управления.
-Реактивные формы предоставляют два способа группировки нескольких связанных элементов управления в единую форму ввода.
+Формы обычно содержат несколько связанных controls.
+Reactive forms дают два способа сгруппировать несколько связанных controls в одну форму ввода.
 
-| Группы форм | Детали                                                                                                                                                                                                                                                                                         |
-| :---------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Form group  | Определяет форму с фиксированным набором элементов управления, которыми вы можете управлять вместе. Основы групп форм обсуждаются в этом разделе. Вы также можете [вкладывать группы форм](#creating-nested-form-groups 'Узнайте больше о вложенных группах') для создания более сложных форм. |
-| Form array  | Определяет динамическую форму, где вы можете добавлять и удалять элементы управления во время выполнения. Вы также можете вкладывать массивы форм для создания более сложных форм. Подробнее об этой опции см. в разделе [Создание динамических форм](#creating-dynamic-forms).                |
+| Form groups | Подробности                                                                                                                                                                                                                                                |
+| :---------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Form group  | Определяет форму с фиксированным набором controls, которыми можно управлять вместе. Основы form group рассматриваются в этом разделе. Также можно [вкладывать form groups](#creating-nested-form-groups 'See more about nesting groups'), чтобы создавать более сложные формы. |
+| Form array  | Определяет динамическую форму, в которой можно добавлять и удалять controls во время выполнения. Form arrays также можно вкладывать для более сложных форм. Подробнее об этом варианте см. в разделе [Создание динамических форм](#creating-dynamic-forms).                              |
 
-Точно так же, как экземпляр элемента управления формы дает вам контроль над одним полем ввода, экземпляр группы форм
-отслеживает состояние формы для группы экземпляров элементов управления (например, формы).
-Каждый элемент управления в экземпляре группы форм отслеживается по имени при создании группы.
-Следующий пример показывает, как управлять несколькими экземплярами элементов управления формы в одной группе.
+Как экземпляр form control даёт управление одним полем ввода, так экземпляр form group отслеживает состояние формы для группы экземпляров form control \(например, формы\).
+Каждый control в экземпляре form group отслеживается по имени при создании form group.
+Следующий пример показывает, как управлять несколькими экземплярами form control в одной группе.
 
 Создайте компонент `ProfileEditor` и импортируйте классы `FormGroup` и `FormControl` из пакета `@angular/forms`.
 
@@ -142,188 +118,160 @@ Template-driven формы позволяют изменять данные пр
 ng generate component ProfileEditor
 ```
 
-<docs-code header="profile-editor.component.ts (imports)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.ts" visibleRegion="imports"/>
+<docs-code header="profile-editor.component.ts (imports)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.ts" region="imports"/>
 
-Чтобы добавить группу форм в этот компонент, выполните следующие шаги.
+Чтобы добавить form group в этот компонент, выполните следующие шаги.
 
 1. Создайте экземпляр `FormGroup`.
-2. Свяжите модель `FormGroup` и представление.
-3. Сохраните данные формы.
+1. Свяжите модель `FormGroup` и представление.
+1. Сохраните данные формы.
 
 <docs-workflow>
 
-<docs-step title="Создайте экземпляр FormGroup">
-Создайте свойство в классе компонента с именем `profileForm` и присвойте ему новый экземпляр группы форм. Чтобы инициализировать группу форм, передайте в конструктор объект с именованными ключами, сопоставленными с их элементами управления.
+<docs-step title="Create a FormGroup instance">
+Создайте в классе компонента свойство с именем `profileForm` и присвойте ему новый экземпляр form group. Чтобы инициализировать form group, передайте в конструктор объект с именованными ключами, сопоставленными с их controls.
 
-Для формы профиля добавьте два экземпляра элементов управления с именами `firstName` и `lastName`.
+Для формы профиля добавьте два экземпляра form control с именами `firstName` и `lastName`
 
-<docs-code header="profile-editor.component.ts (form group)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.ts" visibleRegion="formgroup"/>
+<docs-code header="profile-editor.component.ts (form group)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.ts" region="formgroup"/>
 
-Отдельные элементы управления формой теперь собраны в группу. Экземпляр `FormGroup` предоставляет значение своей модели
-как объект, сформированный из значений каждого элемента управления в группе. Экземпляр группы форм имеет те же
-свойства (например, `value` и `untouched`) и методы (например, `setValue()`), что и экземпляр элемента управления формы.
+Отдельные form controls теперь собраны в группу. Экземпляр `FormGroup` предоставляет значение модели как объект, собранный из значений каждого control в группе. У экземпляра form group те же свойства (например, `value` и `untouched`) и методы (например, `setValue()`), что и у экземпляра form control.
 </docs-step>
 
-<docs-step title="Свяжите модель FormGroup и представление">
-Группа форм отслеживает статус и изменения для каждого из своих элементов управления, поэтому, если один из элементов управления изменяется, родительский элемент управления также генерирует новый статус или изменение значения. Модель для группы поддерживается ее членами. После определения модели вы должны обновить шаблон, чтобы отразить модель в представлении.
+<docs-step title="Associate the FormGroup model and view">
+Form group отслеживает статус и изменения каждого своего control, поэтому если один из controls меняется, родительский control также испускает новый статус или изменение значения. Модель группы поддерживается её участниками. После определения модели нужно обновить шаблон, чтобы отразить модель в представлении.
 
-<docs-code header="profile-editor.component.html (template form group)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.html" visibleRegion="formgroup"/>
+<docs-code header="profile-editor.component.html (template form group)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.html" region="formgroup"/>
 
-Так же, как группа форм содержит группу элементов управления, `FormGroup` _profileForm_ привязывается к элементу `form`
-с помощью директивы `FormGroup`, создавая слой коммуникации между моделью и формой, содержащей поля ввода. Входное
-свойство `formControlName`, предоставляемое директивой `FormControlName`, связывает каждое отдельное поле ввода с
-элементом управления формы, определенным в `FormGroup`. Элементы управления формы взаимодействуют со своими
-соответствующими элементами. Они также сообщают об изменениях экземпляру группы форм, который является источником истины
-для значения модели.
+Как form group содержит группу controls, так _profileForm_ `FormGroup` привязывается к элементу `form` директивой `FormGroup`, создавая слой связи между моделью и формой с полями ввода. Input `formControlName`, предоставляемый директивой `FormControlName`, привязывает каждый отдельный input к form control, определённому в `FormGroup`. Form controls обмениваются данными со своими элементами. Они также сообщают об изменениях экземпляру form group, который является источником истины для значения модели.
 </docs-step>
 
-<docs-step title="Сохраните данные формы">
-Компонент `ProfileEditor` принимает ввод от пользователя, но в реальном сценарии вы хотите захватить значение формы и сделать его доступным для дальнейшей обработки вне компонента. Директива `FormGroup` прослушивает событие `submit`, генерируемое элементом `form`, и генерирует событие `ngSubmit`, которое вы можете связать с функцией обратного вызова. Добавьте слушатель события `ngSubmit` к тегу `form` с методом обратного вызова `onSubmit()`.
+<docs-step title="Save form data">
+Компонент `ProfileEditor` принимает ввод пользователя, но в реальном сценарии нужно захватить значение формы и сделать его доступным для дальнейшей обработки вне компонента. Директива `FormGroup` слушает событие `submit`, испускаемое элементом `form`, и испускает событие `ngSubmit`, которое можно привязать к callback-функции. Добавьте слушатель события `ngSubmit` к тегу `form` с callback-методом `onSubmit()`.
 
-<docs-code header="profile-editor.component.html (submit event)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.html" visibleRegion="ng-submit"/>
+<docs-code header="profile-editor.component.html (submit event)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.html" region="ng-submit"/>
 
-Метод `onSubmit()` в компоненте `ProfileEditor` захватывает текущее значение `profileForm`. Используйте `EventEmitter`,
-чтобы сохранить форму инкапсулированной и предоставить значение формы вне компонента. Следующий пример использует
-`console.warn` для вывода сообщения в консоль браузера.
+Метод `onSubmit()` в компоненте `ProfileEditor` захватывает текущее значение `profileForm`. Используйте `output()`, чтобы сохранить инкапсуляцию формы и предоставить значение формы вне компонента. В следующем примере `console.warn` записывает сообщение в консоль браузера.
 
-<docs-code header="profile-editor.component.ts (submit method)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" visibleRegion="on-submit"/>
+<docs-code header="profile-editor.component.ts (submit method)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" region="on-submit"/>
 
-Событие `submit` генерируется тегом `form` с использованием встроенного DOM-события. Вы запускаете событие, нажимая
-кнопку с типом `submit`. Это позволяет пользователю нажать клавишу **Enter**, чтобы отправить заполненную форму.
+Событие `submit` испускается тегом `form` через встроенное DOM-событие. Событие запускается нажатием кнопки с типом `submit`. Это позволяет пользователю нажать клавишу **Enter**, чтобы отправить заполненную форму.
 
-Используйте элемент `button`, чтобы добавить кнопку внизу формы для запуска отправки формы.
+Используйте элемент `button`, чтобы добавить кнопку внизу формы для отправки формы.
 
-<docs-code header="profile-editor.component.html (submit button)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.html" visibleRegion="submit-button"/>
+<docs-code header="profile-editor.component.html (submit button)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.html" region="submit-button"/>
 
-Кнопка в предыдущем фрагменте также имеет привязку `disabled`, чтобы отключать кнопку, когда `profileForm` невалидна. Вы
-еще не выполняете никакой валидации, поэтому кнопка всегда активна. Базовая валидация формы рассматривается в
-разделе [Валидация ввода формы](#validating-form-input).
+У кнопки в предыдущем фрагменте также есть привязка `disabled`, которая отключает кнопку, когда `profileForm` невалидна. Пока валидация не выполняется, кнопка всегда включена. Базовая валидация формы рассматривается в разделе [Валидация ввода формы](#validating-form-input).
 </docs-step>
 
-<docs-step title="Отобразите компонент">
-Чтобы отобразить компонент `ProfileEditor`, содержащий форму, добавьте его в шаблон компонента.
+<docs-step title="Display the component">
+Чтобы отобразить компонент `ProfileEditor` с формой, добавьте его в шаблон компонента.
 
-<docs-code header="app.component.html (profile editor)" path="adev/src/content/examples/reactive-forms/src/app/app.component.1.html" visibleRegion="app-profile-editor"/>
+<docs-code header="app.component.html (profile editor)" path="adev/src/content/examples/reactive-forms/src/app/app.component.1.html" region="app-profile-editor"/>
 
-`ProfileEditor` позволяет вам управлять экземплярами элементов управления формы для `firstName` и `lastName` внутри
-экземпляра группы форм.
+`ProfileEditor` позволяет управлять экземплярами form control для controls `firstName` и `lastName` внутри экземпляра form group.
 
-### Создание вложенных групп форм {#creating-nested-form-groups}
+### Создание вложенных form groups {#creating-nested-form-groups}
 
-Группы форм могут принимать как отдельные экземпляры элементов управления формы, так и другие экземпляры групп форм в
-качестве дочерних элементов.
-Это упрощает поддержку и логическую группировку сложных моделей форм.
+Form groups могут принимать в качестве дочерних элементов как отдельные экземпляры form control, так и другие экземпляры form group.
+Это упрощает поддержку сложных моделей форм и логическую группировку.
 
-При создании сложных форм управление различными областями информации проще осуществлять небольшими секциями.
-Использование вложенного экземпляра группы форм позволяет разбивать большие группы форм на более мелкие и управляемые.
+При создании сложных форм удобнее управлять разными областями информации в меньших секциях.
+Вложенный экземпляр form group позволяет разбить большие form groups на более мелкие и управляемые.
 
 Чтобы создать более сложные формы, выполните следующие шаги.
 
 1. Создайте вложенную группу.
-2. Сгруппируйте вложенную форму в шаблоне.
+1. Сгруппируйте вложенную форму в шаблоне.
 
-Некоторые типы информации естественным образом попадают в одну группу.
-Имя и адрес являются типичными примерами таких вложенных групп и используются в следующих примерах.
+Некоторые типы информации естественно относятся к одной группе.
+Имя и адрес — типичные примеры таких вложенных групп; они используются в следующих примерах.
 
 <docs-workflow>
-<docs-step title="Создайте вложенную группу">
-Чтобы создать вложенную группу в `profileForm`, добавьте вложенный элемент `address` в экземпляр группы форм.
+<docs-step title="Create a nested group">
+Чтобы создать вложенную группу в `profileForm`, добавьте вложенный элемент `address` в экземпляр form group.
 
-<docs-code header="profile-editor.component.ts (nested form group)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.ts" visibleRegion="nested-formgroup"/>
+<docs-code header="profile-editor.component.ts (nested form group)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.ts" region="nested-formgroup"/>
 
-В этом примере группа `address` объединяет текущие элементы управления `firstName` и `lastName` с новыми элементами
-управления `street`, `city`, `state` и `zip`. Несмотря на то, что элемент `address` в группе форм является дочерним по
-отношению к общему элементу `profileForm`, применяются те же правила изменения значения и статуса. Изменения статуса и
-значения из вложенной группы форм распространяются на родительскую группу форм, поддерживая согласованность с общей
-моделью.
+В этом примере `address group` объединяет текущие controls `firstName` и `lastName` с новыми controls `street`, `city`, `state` и `zip`. Хотя элемент `address` в form group является дочерним по отношению к общему элементу `profileForm` в form group, те же правила применяются к изменениям значения и статуса. Изменения статуса и значения из вложенной form group распространяются на родительскую form group, сохраняя согласованность с общей моделью.
 </docs-step>
 
-<docs-step title="Сгруппируйте вложенную форму в шаблоне">
-После обновления модели в классе компонента обновите шаблон, чтобы соединить экземпляр группы форм и его элементы ввода. Добавьте группу форм `address`, содержащую поля `street`, `city`, `state` и `zip`, в шаблон `ProfileEditor`.
+<docs-step title="Group the nested form in the template">
+После обновления модели в классе компонента обновите шаблон, чтобы связать экземпляр form group и его элементы ввода. Добавьте form group `address` с полями `street`, `city`, `state` и `zip` в шаблон `ProfileEditor`.
 
-<docs-code header="profile-editor.component.html (template nested form group)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.html" visibleRegion="formgroupname"/>
+<docs-code header="profile-editor.component.html (template nested form group)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.html" region="formgroupname"/>
 
-Форма `ProfileEditor` отображается как одна группа, но модель разбита дальше, чтобы представить логические области
-группировки.
+Форма `ProfileEditor` отображается как одна группа, но модель дополнительно разбита, чтобы отражать логические области группировки.
 
-Отобразите значение для экземпляра группы форм в шаблоне компонента, используя свойство `value` и `JsonPipe`.
+Отобразите значение экземпляра form group в шаблоне компонента с помощью свойства `value` и `JsonPipe`.
 </docs-step>
 </docs-workflow>
 
-### Обновление частей модели данных
+### Обновление частей модели данных {#updating-parts-of-the-data-model}
 
-При обновлении значения для экземпляра группы форм, содержащего несколько элементов управления, вы можете захотеть
-обновить только части модели.
-Этот раздел описывает, как обновлять конкретные части модели данных элемента управления формы.
+При обновлении значения экземпляра form group, содержащего несколько controls, может потребоваться обновить только части модели.
+В этом разделе рассматривается, как обновлять конкретные части модели данных form control.
 
-Существует два способа обновления значения модели:
+Есть два способа обновить значение модели:
 
-| Методы         | Детали                                                                                                                                                                               |
-| :------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `setValue()`   | Устанавливает новое значение для отдельного элемента управления. Метод `setValue()` строго придерживается структуры группы форм и заменяет все значение элемента управления целиком. |
-| `patchValue()` | Заменяет любые свойства, определенные в объекте, которые изменились в модели формы.                                                                                                  |
+| Методы        | Подробности                                                                                                                                                               |
+| :------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `setValue()`   | Задаёт новое значение для отдельного control. Метод `setValue()` строго следует структуре form group и полностью заменяет значение control. |
+| `patchValue()` | Заменяет любые свойства, определённые в объекте, которые изменились в модели формы.                                                                                     |
 
-Строгие проверки метода `setValue()` помогают отлавливать ошибки вложенности в сложных формах, в то время как
-`patchValue()` молчаливо игнорирует эти ошибки.
+Строгие проверки метода `setValue()` помогают выявлять ошибки вложенности в сложных формах, тогда как `patchValue()` при таких ошибках молча завершается неудачей.
 
-В `ProfileEditorComponent` используйте метод `updateProfile` со следующим примером, чтобы обновить имя и адрес улицы для
-пользователя.
+В `ProfileEditorComponent` используйте метод `updateProfile` со следующим примером, чтобы обновить имя и улицу пользователя.
 
-<docs-code header="profile-editor.component.ts (patch value)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.ts" visibleRegion="patch-value"/>
+<docs-code header="profile-editor.component.ts (patch value)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.ts" region="patch-value"/>
 
-Имитируйте обновление, добавив кнопку в шаблон для обновления профиля пользователя по требованию.
+Смоделируйте обновление, добавив в шаблон кнопку для обновления профиля пользователя по запросу.
 
-<docs-code header="profile-editor.component.html (update value)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.html" visibleRegion="patch-value"/>
+<docs-code header="profile-editor.component.html (update value)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.html" region="patch-value"/>
 
-Когда пользователь нажимает кнопку, модель `profileForm` обновляется новыми значениями для `firstName` и `street`.
-Обратите внимание, что `street` предоставляется в объекте внутри свойства `address`.
-Это необходимо, потому что метод `patchValue()` применяет обновление к структуре модели.
-`PatchValue()` обновляет только те свойства, которые определяет модель формы.
+Когда пользователь нажимает кнопку, модель `profileForm` обновляется новыми значениями для `firstName` и `street`. Обратите внимание, что `street` передаётся в объекте внутри свойства `address`.
+Это необходимо, потому что метод `patchValue()` применяет обновление относительно структуры модели.
+`patchValue()` обновляет только те свойства, которые определены в модели формы.
 
-## Использование сервиса FormBuilder для генерации элементов управления
+## Использование сервиса FormBuilder для генерации controls {#using-the-formbuilder-service-to-generate-controls}
 
-Создание экземпляров элементов управления формы вручную может стать повторяющимся процессом при работе с несколькими
-формами.
-Сервис `FormBuilder` предоставляет удобные методы для генерации элементов управления.
+Ручное создание экземпляров form control может стать повторяющимся при работе с несколькими формами.
+Сервис `FormBuilder` предоставляет удобные методы для генерации controls.
 
-Выполните следующие шаги, чтобы воспользоваться этим сервисом.
+Чтобы воспользоваться этим сервисом, выполните следующие шаги.
 
 1. Импортируйте класс `FormBuilder`.
-2. Внедрите сервис `FormBuilder`.
-3. Сгенерируйте содержимое формы.
+1. Внедрите сервис `FormBuilder`.
+1. Сгенерируйте содержимое формы.
 
-Следующие примеры показывают, как рефакторить компонент `ProfileEditor` для использования сервиса FormBuilder при
-создании экземпляров элементов управления и групп форм.
+Следующие примеры показывают, как рефакторить компонент `ProfileEditor`, чтобы использовать сервис form builder для создания экземпляров form control и form group.
 
 <docs-workflow>
-<docs-step title="Импортируйте класс FormBuilder">
+<docs-step title="Import the FormBuilder class">
 Импортируйте класс `FormBuilder` из пакета `@angular/forms`.
 
-<docs-code header="profile-editor.component.ts (import)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" visibleRegion="form-builder-imports"/>
+<docs-code header="profile-editor.component.ts (import)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="form-builder-imports"/>
 
 </docs-step>
 
-<docs-step title="Внедрите сервис FormBuilder">
-Сервис `FormBuilder` является внедряемым провайдером из модуля реактивных форм. Используйте функцию `inject()`, чтобы внедрить эту зависимость в ваш компонент.
+<docs-step title="Inject the FormBuilder service">
+Сервис `FormBuilder` — внедряемый провайдер из модуля reactive forms. Используйте функцию `inject()`, чтобы внедрить эту зависимость в компонент.
 
-<docs-code header="profile-editor.component.ts (property init)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" visibleRegion="inject-form-builder"/>
+<docs-code header="profile-editor.component.ts (property init)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="inject-form-builder"/>
 
 </docs-step>
-<docs-step title="Сгенерируйте элементы управления формы">
-У сервиса `FormBuilder` есть три метода: `control()`, `group()` и `array()`. Это фабричные методы для генерации экземпляров в классах ваших компонентов, включая элементы управления формы, группы форм и массивы форм. Используйте метод `group`, чтобы создать элементы управления `profileForm`.
+<docs-step title="Generate form controls">
+У сервиса `FormBuilder` три метода: `control()`, `group()` и `array()`. Это фабричные методы для генерации экземпляров в классах компонентов, включая form controls, form groups и form arrays. Используйте метод `group`, чтобы создать controls `profileForm`.
 
-<docs-code header="profile-editor.component.ts (form builder)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" visibleRegion="form-builder"/>
+<docs-code header="profile-editor.component.ts (form builder)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="form-builder"/>
 
-В предыдущем примере вы используете метод `group()` с тем же объектом для определения свойств в модели. Значение для
-каждого имени элемента управления — это массив, содержащий начальное значение в качестве первого элемента.
+В предыдущем примере метод `group()` используется с тем же объектом для определения свойств в модели. Значение для каждого имени control — массив, в котором первый элемент — начальное значение.
 
-СОВЕТ: Вы можете определить элемент управления только с начальным значением, но если вашим элементам управления нужна
-синхронная или асинхронная валидация, добавьте синхронные и асинхронные валидаторы в качестве второго и третьего
-элементов массива. Сравните использование FormBuilder с созданием экземпляров вручную.
+TIP: Можно определить control только с начальным значением, но если controls нуждаются в синхронной или асинхронной валидации, добавьте sync- и async-валидаторы как второй и третий элементы массива. Сравните использование form builder с ручным созданием экземпляров.
 
   <docs-code-multifile>
-    <docs-code header="profile-editor.component.ts (instances)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.ts" visibleRegion="formgroup-compare"/>
-    <docs-code header="profile-editor.component.ts (form builder)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" visibleRegion="formgroup-compare"/>
+    <docs-code header="profile-editor.component.ts (instances)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.1.ts" region="formgroup-compare"/>
+    <docs-code header="profile-editor.component.ts (form builder)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="formgroup-compare"/>
   </docs-code-multifile>
 </docs-step>
 
@@ -331,161 +279,181 @@ ng generate component ProfileEditor
 
 ## Валидация ввода формы {#validating-form-input}
 
-_Валидация формы_ используется для обеспечения полноты и корректности ввода пользователя.
-Этот раздел описывает добавление одного валидатора к элементу управления формы и отображение общего статуса формы.
-Валидация формы более подробно рассматривается в руководстве [Валидация формы](guide/forms/form-validation).
+_Валидация формы_ используется, чтобы убедиться, что ввод пользователя полный и корректный.
+В этом разделе рассматривается добавление одного валидатора к form control и отображение общего статуса формы.
+Валидация формы подробнее описана в руководстве [Валидация форм](guide/forms/form-validation).
 
-Выполните следующие шаги для добавления валидации формы.
+Чтобы добавить валидацию формы, выполните следующие шаги.
 
-1. Импортируйте функцию-валидатор в ваш компонент формы.
-2. Добавьте валидатор к полю в форме.
-3. Добавьте логику для обработки статуса валидации.
+1. Импортируйте функцию-валидатор в компонент формы.
+1. Добавьте валидатор к полю в форме.
+1. Добавьте логику обработки статуса валидации.
 
-Наиболее распространенная валидация — сделать поле обязательным.
-Следующий пример показывает, как добавить валидацию обязательного поля к элементу управления `firstName` и отобразить
-результат валидации.
+Самая распространённая валидация — сделать поле обязательным.
+Следующий пример показывает, как добавить required-валидацию к control `firstName` и отобразить результат валидации.
 
 <docs-workflow>
-<docs-step title="Импортируйте функцию-валидатор">
-Реактивные формы включают набор функций-валидаторов для распространенных случаев использования. Эти функции получают элемент управления для проверки и возвращают объект ошибки или значение null в зависимости от проверки валидации.
+<docs-step title="Import a validator function">
+Reactive forms включают набор функций-валидаторов для типичных сценариев. Эти функции принимают control для проверки и возвращают объект ошибки или значение null в зависимости от результата проверки.
 
 Импортируйте класс `Validators` из пакета `@angular/forms`.
 
-<docs-code header="profile-editor.component.ts (import)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" visibleRegion="validator-imports"/>
+<docs-code header="profile-editor.component.ts (import)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" region="validator-imports"/>
 </docs-step>
 
-<docs-step title="Сделайте поле обязательным">
-В компоненте `ProfileEditor` добавьте статический метод `Validators.required` в качестве второго элемента в массиве для элемента управления `firstName`.
+<docs-step title="Make a field required">
+В компоненте `ProfileEditor` добавьте статический метод `Validators.required` как второй элемент массива для control `firstName`.
 
-<docs-code header="profile-editor.component.ts (required validator)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" visibleRegion="required-validator"/>
+<docs-code header="profile-editor.component.ts (required validator)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" region="required-validator"/>
 </docs-step>
 
-<docs-step title="Отобразите статус формы">
-Когда вы добавляете обязательное поле к элементу управления формы, его начальный статус — invalid (невалидный). Этот статус invalid распространяется на родительский элемент группы форм, делая его статус также invalid. Получите доступ к текущему статусу экземпляра группы форм через его свойство `status`.
+<docs-step title="Display form status">
+Когда к form control добавляется обязательное поле, его начальный статус — invalid. Этот невалидный статус распространяется на родительский элемент form group, делая его статус invalid. Текущий статус экземпляра form group доступен через свойство `status`.
 
-Отобразите текущий статус `profileForm`, используя интерполяцию.
+Отобразите текущий статус `profileForm` с помощью интерполяции.
 
-<docs-code header="profile-editor.component.html (display status)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.html" visibleRegion="display-status"/>
+<docs-code header="profile-editor.component.html (display status)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.html" region="display-status"/>
 
-Кнопка **Submit** отключена, потому что `profileForm` невалидна из-за обязательного элемента управления `firstName`.
-После того как вы заполните поле `firstName`, форма станет валидной, и кнопка **Submit** станет активной.
+Кнопка **Submit** отключена, потому что `profileForm` невалидна из-за обязательного form control `firstName`. После заполнения поля `firstName` форма становится валидной, и кнопка **Submit** включается.
 
-Подробнее о валидации форм читайте в руководстве [Валидация формы](guide/forms/form-validation).
+Подробнее о валидации форм см. в руководстве [Валидация форм](guide/forms/form-validation).
 </docs-step>
 </docs-workflow>
 
 ## Создание динамических форм {#creating-dynamic-forms}
 
-`FormArray` — это альтернатива `FormGroup` для управления любым количеством безымянных элементов управления.
-Как и в случае с экземплярами групп форм, вы можете динамически вставлять и удалять элементы управления из экземпляров
-массивов форм, а значение и статус валидации экземпляра массива форм вычисляются на основе его дочерних элементов
-управления.
-Однако вам не нужно определять ключ для каждого элемента управления по имени, поэтому это отличный вариант, если вы
-заранее не знаете количество дочерних значений.
+`FormArray` — альтернатива `FormGroup` для управления любым числом безымянных controls.
+Как и с экземплярами form group, в экземпляры form array можно динамически вставлять и удалять controls, а значение и статус валидации экземпляра form array вычисляются из дочерних controls.
+Однако не нужно определять ключ для каждого control по имени, поэтому это отличный вариант, если заранее неизвестно число дочерних значений.
 
 Чтобы определить динамическую форму, выполните следующие шаги.
 
 1. Импортируйте класс `FormArray`.
-2. Определите элемент управления `FormArray`.
-3. Получите доступ к элементу управления `FormArray` с помощью метода-геттера.
-4. Отобразите массив форм в шаблоне.
+1. Определите control `FormArray`.
+1. Получите доступ к control `FormArray` через getter-метод.
+1. Отобразите form array в шаблоне.
 
-Следующий пример показывает, как управлять массивом _псевдонимов (aliases)_ в `ProfileEditor`.
+Следующий пример показывает, как управлять массивом _aliases_ в `ProfileEditor`.
 
 <docs-workflow>
-<docs-step title="Импортируйте класс `FormArray`">
-Импортируйте класс `FormArray` из `@angular/forms` для использования информации о типе. Сервис `FormBuilder` готов к созданию экземпляра `FormArray`.
+<docs-step title="Import the `FormArray` class">
+Импортируйте класс `FormArray` из `@angular/forms` для информации о типах. Сервис `FormBuilder` готов создать экземпляр `FormArray`.
 
-<docs-code header="profile-editor.component.ts (import)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" visibleRegion="form-array-imports"/>
+<docs-code header="profile-editor.component.ts (import)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="form-array-imports"/>
 </docs-step>
 
-<docs-step title="Определите элемент управления `FormArray`">
-Вы можете инициализировать массив форм с любым количеством элементов управления, от нуля до множества, определив их в массиве. Добавьте свойство `aliases` в экземпляр группы форм для `profileForm`, чтобы определить массив форм.
+<docs-step title="Define a `FormArray` control">
+Form array можно инициализировать любым числом controls — от нуля до многих — определив их в массиве. Добавьте свойство `aliases` в экземпляр form group для `profileForm`, чтобы определить form array.
 
-Используйте метод `FormBuilder.array()` для определения массива и метод `FormBuilder.control()` для заполнения массива
-начальным элементом управления.
+Используйте метод `FormBuilder.array()`, чтобы определить массив, и метод `FormBuilder.control()`, чтобы заполнить массив начальным control.
 
-<docs-code header="profile-editor.component.ts (aliases form array)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" visibleRegion="aliases"/>
+<docs-code header="profile-editor.component.ts (aliases form array)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" region="aliases"/>
 
-Элемент управления aliases в экземпляре группы форм теперь заполнен одним элементом управления, пока динамически не
-будут добавлены другие.
+Control aliases в экземпляре form group теперь заполнен одним control, пока динамически не будут добавлены дополнительные controls.
 </docs-step>
 
-<docs-step title="Получите доступ к элементу управления `FormArray`">
-Геттер обеспечивает доступ к псевдонимам в экземпляре массива форм по сравнению с повторением метода `profileForm.get()` для получения каждого экземпляра. Экземпляр массива форм представляет неопределенное количество элементов управления в массиве. Удобно получать доступ к элементу управления через геттер, и этот подход легко повторить для дополнительных элементов управления. <br />
+<docs-step title="Access the `FormArray` control">
+Getter даёт доступ к aliases в экземпляре form array по сравнению с повторным вызовом метода `profileForm.get()` для получения каждого экземпляра. Экземпляр form array представляет неопределённое число controls в массиве. Удобно обращаться к control через getter, и этот подход легко повторить для дополнительных controls. <br />
 
-Используйте синтаксис геттера для создания свойства класса `aliases`, чтобы получить элемент управления массива форм
-aliases из родительской группы форм.
+Используйте синтаксис getter, чтобы создать свойство класса `aliases` для получения form array control alias из родительской form group.
 
-<docs-code header="profile-editor.component.ts (aliases getter)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" visibleRegion="aliases-getter"/>
+<docs-code header="profile-editor.component.ts (aliases getter)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" region="aliases-getter"/>
 
-Поскольку возвращаемый элемент управления имеет тип `AbstractControl`, вам нужно предоставить явный тип для доступа к
-синтаксису методов экземпляра массива форм. Определите метод для динамической вставки элемента управления alias в массив
-форм aliases. Метод `FormArray.push()` вставляет элемент управления как новый элемент в массив; вы также можете передать
-массив элементов управления в FormArray.push(), чтобы зарегистрировать несколько элементов управления сразу.
+Поскольку возвращаемый control имеет тип `AbstractControl`, нужно явно указать тип, чтобы получить доступ к синтаксису методов экземпляра form array. Определите метод для динамической вставки alias control в form array aliases. Метод `FormArray.push()` вставляет control как новый элемент массива; также можно передать массив controls в FormArray.push(), чтобы зарегистрировать несколько controls сразу.
 
-<docs-code header="profile-editor.component.ts (add alias)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" visibleRegion="add-alias"/>
+<docs-code header="profile-editor.component.ts (add alias)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" region="add-alias"/>
 
-В шаблоне каждый элемент управления отображается как отдельное поле ввода.
+В шаблоне каждый control отображается как отдельное поле ввода.
 
 </docs-step>
 
-<docs-step title="Отобразите массив форм в шаблоне">
+<docs-step title="Display the form array in the template">
 
-Чтобы прикрепить псевдонимы из вашей модели формы, вы должны добавить их в шаблон. Подобно входному свойству
-`formGroupName`, предоставляемому `FormGroupNameDirective`, `formArrayName` связывает коммуникацию от экземпляра массива
-форм к шаблону с помощью `FormArrayNameDirective`.
+Чтобы привязать aliases из модели формы, их нужно добавить в шаблон. Аналогично input `formGroupName`, предоставляемому `FormGroupNameDirective`, `formArrayName` связывает обмен данными от экземпляра form array с шаблоном через `FormArrayNameDirective`.
 
-Добавьте следующий HTML шаблона после закрывающего тега `<div>` элемента `formGroupName`.
+Добавьте следующий HTML шаблона после закрывающего `</div>` элемента `formGroupName`.
 
-<docs-code header="profile-editor.component.html (aliases form array template)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.html" visibleRegion="formarrayname"/>
+<docs-code header="profile-editor.component.html (aliases form array template)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.html" region="formarrayname"/>
 
-Блок `@for` перебирает каждый экземпляр элемента управления формы, предоставляемый экземпляром массива форм aliases.
-Поскольку элементы массива форм безымянны, вы присваиваете индекс переменной `i` и передаете его каждому элементу
-управления для привязки к входному свойству `formControlName`.
+Блок `@for` перебирает каждый экземпляр form control, предоставляемый экземпляром form array aliases. Поскольку элементы form array безымянны, индекс присваивается переменной `i` и передаётся каждому control для привязки к input `formControlName`.
 
-Каждый раз, когда добавляется новый экземпляр alias, новому экземпляру массива форм предоставляется его элемент
-управления на основе индекса. Это позволяет отслеживать каждый отдельный элемент управления при вычислении статуса и
-значения корневого элемента управления.
+Каждый раз, когда добавляется новый экземпляр alias, новому экземпляру form array предоставляется его control на основе индекса. Это позволяет отслеживать каждый отдельный control при вычислении статуса и значения корневого control.
+
+NOTE: В zoneless-приложениях мутация модели reactive forms (например, вызов `FormArray.push()`) не планирует автоматически обнаружение изменений компонента. Если шаблон зависит от структурных изменений модели, таких как `aliases.controls`, убедитесь, что компонент уведомляет Angular о необходимости запустить обнаружение изменений, например связав Observable формы с `ChangeDetectorRef.markForCheck()`:
+
+```ts
+import {ChangeDetectorRef, Component, inject} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+
+@Component({
+  /* ... */
+})
+export class ProfileEditor {
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  constructor() {
+    this.profileForm.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.cdr.markForCheck());
+  }
+}
+```
 
 </docs-step>
 
-<docs-step title="Добавьте псевдоним">
+### Использование `FormArrayDirective` для form arrays верхнего уровня {#using-formarraydirective-for-top-level-form-arrays}
 
-Изначально форма содержит одно поле `Alias`. Чтобы добавить еще одно поле, нажмите кнопку **Add Alias**. Вы также можете
-проверить массив псевдонимов, сообщаемый моделью формы, отображаемый в `Form Value` внизу шаблона. Вместо экземпляра
-элемента управления формы для каждого псевдонима вы можете составить еще один экземпляр группы форм с дополнительными
-полями. Процесс определения элемента управления для каждого элемента такой же.
+Можно привязать `FormArray` напрямую к элементу `<form>` с помощью `FormArrayDirective`.  
+Это полезно, когда форма не использует `FormGroup` верхнего уровня, а сам массив представляет полную модель формы.
+
+```angular-ts
+import {Component} from '@angular/core';
+import {FormArray, FormControl} from '@angular/forms';
+
+@Component({
+  selector: 'form-array-example',
+  template: `
+    <form [formArray]="form">
+      @for (control of form.controls; track $index) {
+        <input [formControlName]="$index" />
+      }
+    </form>
+  `,
+})
+export class FormArrayExampleComponent {
+  controls = [new FormControl('fish'), new FormControl('cat'), new FormControl('dog')];
+
+  form = new FormArray(this.controls);
+}
+```
+
+<docs-step title="Add an alias">
+
+Изначально форма содержит одно поле `Alias`. Чтобы добавить ещё одно поле, нажмите кнопку **Add Alias**. Также можно проверить массив aliases, сообщаемый моделью формы и отображаемый как `Form Value` внизу шаблона. Вместо экземпляра form control для каждого alias можно составить другой экземпляр form group с дополнительными полями. Процесс определения control для каждого элемента тот же.
 </docs-step>
 
 </docs-workflow>
 
-## Унифицированные события изменения состояния элемента управления
+## Единые события изменения состояния control {#unified-control-state-change-events}
 
-Все элементы управления формы предоставляют единый унифицированный поток **событий изменения состояния элемента
-управления** через Observable `events` в `AbstractControl` (`FormControl`, `FormGroup`, `FormArray` и `FormRecord`).
-Этот унифицированный поток позволяет реагировать на изменения состояний **value** (значение), **status** (статус), \*
-\*pristine**, **touched** и **reset**, а также на **действия уровня формы**, такие как **submit\*\* (отправка), позволяя
-обрабатывать все обновления с помощью одной подписки вместо связывания нескольких Observable.
+Все form controls предоставляют единый поток **событий изменения состояния control** через Observable `events` на `AbstractControl` (`FormControl`, `FormGroup`, `FormArray` и `FormRecord`).
+Этот единый поток позволяет реагировать на изменения состояния **value**, **status**, **pristine**, **touched** и **reset**, а также на **действия уровня формы**, такие как **submit**, обрабатывая все обновления одной подпиской вместо подключения нескольких Observable.
 
-### Типы событий
+### Типы событий {#event-types}
 
-Каждый элемент, генерируемый `events`, является экземпляром определенного класса события:
+Каждый элемент, испускаемый `events`, — экземпляр конкретного класса события:
 
-- **`ValueChangeEvent`** — когда изменяется **значение** элемента управления.
-- **`StatusChangeEvent`** — когда **статус валидации** элемента управления обновляется до одного из значений
-  `FormControlStatus` (`VALID`, `INVALID`, `PENDING` или `DISABLED`).
-- **`PristineChangeEvent`** — когда изменяется состояние **pristine/dirty** элемента управления.
-- **`TouchedChangeEvent`** — когда изменяется состояние **touched/untouched** элемента управления.
-- **`FormResetEvent`** — когда элемент управления или форма сбрасываются, либо через API `reset()`, либо через нативное
-  действие.
+- **`ValueChangeEvent`** — когда меняется **value** control.
+- **`StatusChangeEvent`** — когда **статус валидации** control обновляется до одного из значений `FormControlStatus` (`VALID`, `INVALID`, `PENDING` или `DISABLED`).
+- **`PristineChangeEvent`** — когда меняется состояние **pristine/dirty** control.
+- **`TouchedChangeEvent`** — когда меняется состояние **touched/untouched** control.
+- **`FormResetEvent`** — когда control или форма сбрасывается через API `reset()` или нативное действие.
 - **`FormSubmittedEvent`** — когда форма отправляется.
 
-Все классы событий расширяют `ControlEvent` и включают ссылку `source` на `AbstractControl`, который инициировал
-изменение, что полезно в больших формах.
+Все классы событий расширяют `ControlEvent` и включают ссылку `source` на `AbstractControl`, инициировавший изменение, что полезно в больших формах.
 
 ```ts
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {
   FormControl,
   ValueChangeEvent,
@@ -498,7 +466,7 @@ import {
   FormGroup,
 } from '@angular/forms';
 
-@Component({/* ... */ })
+@Component(/* ... */)
 export class UnifiedEventsBasicComponent {
   form = new FormGroup({
     username: new FormControl(''),
@@ -534,28 +502,29 @@ export class UnifiedEventsBasicComponent {
 }
 ```
 
-### Фильтрация конкретных событий
+### Фильтрация конкретных событий {#filtering-specific-events}
 
-Предпочитайте операторы RxJS, когда вам нужно только подмножество типов событий.
+Предпочитайте операторы RxJS, когда нужны только определённые типы событий.
 
 ```ts
-import { filter } from 'rxjs/operators';
-import { StatusChangeEvent } from '@angular/forms';
+import {filter} from 'rxjs/operators';
+import {StatusChangeEvent} from '@angular/forms';
 
 control.events
   .pipe(filter((e) => e instanceof StatusChangeEvent))
   .subscribe((e) => console.log('Status:', e.status));
 ```
 
-### Объединение нескольких подписок
+### Объединение вместо нескольких подписок {#unifying-from-multiple-subscriptions}
 
 **До**
 
 ```ts
-import { combineLatest } from 'rxjs/operators';
+import {combineLatest} from 'rxjs/operators';
 
-combineLatest([control.valueChanges, control.statusChanges])
-  .subscribe(([value, status]) => { /* ... */ });
+combineLatest([control.valueChanges, control.statusChanges]).subscribe(([value, status]) => {
+  /* ... */
+});
 ```
 
 **После**
@@ -566,66 +535,178 @@ control.events.subscribe((e) => {
 });
 ```
 
-ПРИМЕЧАНИЕ: При изменении значения событие генерируется сразу после обновления значения этого элемента управления.
-Значение родительского элемента управления (например, если этот FormControl является частью FormGroup) обновляется
-позже, поэтому доступ к значению родительского элемента управления (используя свойство `value`) из колбэка этого события
-может привести к получению значения, которое еще не было обновлено. Подписывайтесь на `events` родительского элемента
-управления вместо этого.
+NOTE: При изменении значения emit происходит сразу после обновления значения этого control. Значение родительского control (например, если этот FormControl является частью FormGroup) обновляется позже, поэтому обращение к значению родительского control (через свойство `value`) из callback этого события может вернуть ещё не обновлённое значение. Вместо этого подписывайтесь на `events` родительского control.
 
-## Утилитарные функции для сужения типов элементов управления формы
+## Управление состоянием form control {#managing-form-control-state}
 
-Angular предоставляет четыре утилитарные функции, которые помогают определить конкретный тип `AbstractControl`. Эти
-функции действуют как **защитники типа (type guards)** и сужают тип элемента управления, когда возвращают `true`, что
-позволяет безопасно обращаться к свойствам, специфичным для подтипа, внутри того же блока.
+Reactive forms отслеживают состояние control через **touched/untouched** и **pristine/dirty**. Angular обновляет их автоматически при взаимодействии с DOM, но ими также можно управлять программно.
 
-| Утилитарная функция | Детали                                                              |
-| :------------------ | :------------------------------------------------------------------ |
-| `isFormControl`     | Возвращает `true`, когда элемент управления является `FormControl`. |
-| `isFormGroup`       | Возвращает `true`, когда элемент управления является `FormGroup`.   |
-| `isFormRecord`      | Возвращает `true`, когда элемент управления является `FormRecord`.  |
-| `isFormArray`       | Возвращает `true`, когда элемент управления является `FormArray`.   |
-
-Эти помощники особенно полезны в **кастомных валидаторах**, где сигнатура функции получает `AbstractControl`, но логика
-предназначена для конкретного вида элемента управления.
+**[`markAsTouched`](api/forms/FormControl#markAsTouched)** — Помечает control или форму как touched при событиях focus и blur, которые не меняют значение. По умолчанию распространяется на родительские controls.
 
 ```ts
-import { AbstractControl, isFormArray } from '@angular/forms';
-
-export function positiveValues(control: AbstractControl) {
-    if (!isFormArray(control)) {
-        return null; // Not a FormArray: validator is not applicable.
-    }
-
-    // Safe to access FormArray-specific API after narrowing.
-    const hasNegative = control.controls.some(c => c.value < 0);
-    return hasNegative ? { positiveValues: true } : null;
+// Show validation errors after user leaves a field
+onEmailBlur() {
+  const email = this.form.get('email');
+  email.markAsTouched();
 }
 ```
 
-## Сводка API реактивных форм
+**[`markAsUntouched`](api/forms/FormControl#markAsUntouched)** — Помечает control или форму как untouched. Каскадно применяется ко всем дочерним controls и пересчитывает статус touched всех родительских controls.
 
-В следующей таблице перечислены базовые классы и сервисы, используемые для создания и управления реактивными элементами
-управления формы.
-Для получения полной информации о синтаксисе см. справочную документацию API
-для [пакета Forms](api#forms 'API reference').
+```ts
+// Reset form state after successful submission
+onSubmitSuccess() {
+  this.form.markAsUntouched();
+  this.form.markAsPristine();
+}
+```
 
-### Классы
+**[`markAsDirty`](api/forms/FormControl#markAsDirty)** — Помечает control или форму как dirty, то есть значение было изменено. По умолчанию распространяется на родительские controls.
 
-| Класс             | Детали                                                                                                                                                                                                |
-| :---------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AbstractControl` | Абстрактный базовый класс для конкретных классов элементов управления формы `FormControl`, `FormGroup` и `FormArray`. Он предоставляет их общее поведение и свойства.                                 |
-| `FormControl`     | Управляет значением и статусом валидности отдельного элемента управления формы. Он соответствует HTML-элементу управления формы, такому как `<input>` или `<select>`.                                 |
-| `FormGroup`       | Управляет значением и статусом валидности группы экземпляров `AbstractControl`. Свойства группы включают ее дочерние элементы управления. Форма верхнего уровня в вашем компоненте — это `FormGroup`. |
-| `FormArray`       | Управляет значением и статусом валидности числового индексированного массива экземпляров `AbstractControl`.                                                                                           |
-| `FormBuilder`     | Внедряемый сервис, который предоставляет фабричные методы для создания экземпляров элементов управления.                                                                                              |
-| `FormRecord`      | Отслеживает значение и статус валидности коллекции экземпляров `FormControl`, каждый из которых имеет одинаковый тип значения.                                                                        |
+```ts
+// Mark programmatically changed values as modified
+autofillAddress() {
+  const previousAddress = getAddress();
+  this.form.patchValue(previousAddress, { emitEvent: false });
+  this.form.markAsDirty();
+}
+```
 
-### Директивы
+**[`markAsPristine`](api/forms/FormControl#markAsPristine)** — Помечает control или форму как pristine. Помечает все дочерние controls как pristine и пересчитывает статус pristine всех родительских controls.
 
-| Директива              | Детали                                                                                                    |
-| :--------------------- | :-------------------------------------------------------------------------------------------------------- |
-| `FormControlDirective` | Синхронизирует автономный (standalone) экземпляр `FormControl` с элементом управления формы.              |
-| `FormControlName`      | Синхронизирует `FormControl` в существующем экземпляре `FormGroup` с элементом управления формы по имени. |
-| `FormGroupDirective`   | Синхронизирует существующий экземпляр `FormGroup` с DOM-элементом.                                        |
-| `FormGroupName`        | Синхронизирует вложенный экземпляр `FormGroup` с DOM-элементом.                                           |
-| `FormArrayName`        | Синхронизирует вложенный экземпляр `FormArray` с DOM-элементом.                                           |
+```ts
+// Reset pristine state after saving to track new changes
+saveForm() {
+  this.api.save(this.form.value).subscribe(() => {
+    this.form.markAsPristine();
+  });
+}
+```
+
+**[`markAllAsDirty`](api/forms/FormControl#markAllAsDirty)** — Помечает control или форму и все их потомки как dirty.
+
+```ts
+// Mark imported data as dirty
+loadData(data: FormData) {
+  this.form.patchValue(data);
+  this.form.markAllAsDirty();
+}
+```
+
+**[`markAllAsTouched`](api/forms/FormControl#markAllAsTouched)** — Помечает control или форму и все их потомки как touched. Полезно для показа ошибок валидации по всей форме.
+
+```ts
+// Show all validation errors before submission
+onSubmit() {
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();
+    return;
+  }
+  this.saveForm();
+}
+```
+
+## Управление испусканием событий и распространением {#controlling-event-emission-and-propagation}
+
+При программном обновлении form controls есть точный контроль над тем, как изменения распространяются по иерархии формы и испускаются ли события.
+
+### Понимание испускания событий {#understanding-event-emission}
+
+По умолчанию `emitEvent: true` — любое изменение control испускает события через Observable `valueChanges` и `statusChanges`. Установка `emitEvent: false` подавляет эти испускания, что полезно при программной установке значений без запуска реактивного поведения вроде автосохранения, избежания циклических обновлений между controls или пакетных обновлений, когда события должны испуститься только один раз в конце.
+
+```ts
+@Component({
+  /* ... */
+})
+export class BlogPostEditor {
+  postForm = new FormGroup({
+    title: new FormControl(''),
+    content: new FormControl(''),
+  });
+
+  constructor() {
+    // Auto-save draft every time user types
+    this.postForm.valueChanges.subscribe((formValue) => {
+      this.autosaveDraft(formValue);
+    });
+  }
+
+  loadExistingDraft(savedDraft: {title: string; content: string}) {
+    // Restore draft without triggering auto-save
+    this.postForm.setValue(savedDraft, {emitEvent: false});
+  }
+}
+```
+
+### Понимание управления распространением {#understanding-propagation-control}
+
+По умолчанию `onlySelf: false` — обновления каскадно применяются к родительским controls, пересчитывая их значения и статус валидации. Установка `onlySelf: true` изолирует обновление текущим control, предотвращая уведомление родителя. Это полезно для пакетных операций, когда родительское обновление нужно запустить вручную один раз.
+
+```ts
+updatePostalCodeValidator(country: string) {
+  const postal = this.addressForm.get('postalCode');
+
+  const validators = country === 'US'
+    ? [Validators.maxLength(5)]
+    : [Validators.maxLength(7)];
+
+  postal.setValidators(validators);
+  postal.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+}
+```
+
+HELPFUL: О динамическом управлении валидаторами во время выполнения см. раздел [Управление валидаторами динамически в reactive forms](guide/forms/form-validation#managing-validators-dynamically-in-reactive-forms) в руководстве по валидации форм.
+
+## Утилитарные функции для сужения типов form control {#utility-functions-for-narrowing-form-control-types}
+
+Angular предоставляет четыре утилитарные функции, которые помогают определить конкретный тип `AbstractControl`. Эти функции работают как **type guards** и сужают тип control, когда возвращают `true`, что позволяет безопасно обращаться к свойствам подтипа внутри того же блока.
+
+| Утилитарная функция | Подробности                                             |
+| :--------------- | :-------------------------------------------------- |
+| `isFormControl`  | Возвращает `true`, когда control — это `FormControl`. |
+| `isFormGroup`    | Возвращает `true`, когда control — это `FormGroup`    |
+| `isFormRecord`   | Возвращает `true`, когда control — это `FormRecord`   |
+| `isFormArray`    | Возвращает `true`, когда control — это `FormArray`    |
+
+Эти помощники особенно полезны в **пользовательских валидаторах**, где сигнатура функции принимает `AbstractControl`, но логика предназначена для конкретного вида control.
+
+```ts
+import {AbstractControl, isFormArray} from '@angular/forms';
+
+export function positiveValues(control: AbstractControl) {
+  if (!isFormArray(control)) {
+    return null; // Not a FormArray: validator is not applicable.
+  }
+
+  // Safe to access FormArray-specific API after narrowing.
+  const hasNegative = control.controls.some((c) => c.value < 0);
+  return hasNegative ? {positiveValues: true} : null;
+}
+```
+
+## Сводка API reactive forms {#reactive-forms-api-summary}
+
+В следующей таблице перечислены базовые классы и сервисы, используемые для создания и управления reactive form controls.
+Полные детали синтаксиса см. в справочной документации API пакета [Forms](api#forms 'API reference').
+
+### Классы {#classes}
+
+| Класс             | Подробности                                                                                                                                                                                 |
+| :---------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AbstractControl` | Абстрактный базовый класс для конкретных классов form control `FormControl`, `FormGroup` и `FormArray`. Предоставляет их общее поведение и свойства.                           |
+| `FormControl`     | Управляет значением и статусом валидности отдельного form control. Соответствует HTML form control, такому как `<input>` или `<select>`.                                            |
+| `FormGroup`       | Управляет значением и состоянием валидности группы экземпляров `AbstractControl`. Свойства группы включают её дочерние controls. Форма верхнего уровня в компоненте — это `FormGroup`. |
+| `FormArray`       | Управляет значением и состоянием валидности численно индексированного массива экземпляров `AbstractControl`.                                                                                     |
+| `FormBuilder`     | Внедряемый сервис, предоставляющий фабричные методы для создания экземпляров control.                                                                                                     |
+| `FormRecord`      | Отслеживает значение и состояние валидности коллекции экземпляров `FormControl`, каждый из которых имеет одинаковый тип значения.                                                                  |
+
+### Директивы {#directives}
+
+| Директива              | Подробности                                                                                    |
+| :--------------------- | :----------------------------------------------------------------------------------------- |
+| `FormControlDirective` | Синхронизирует автономный экземпляр `FormControl` с элементом form control.                       |
+| `FormControlName`      | Синхронизирует `FormControl` в существующем экземпляре `FormGroup` с элементом form control по имени. |
+| `FormGroupDirective`   | Синхронизирует существующий экземпляр `FormGroup` с DOM-элементом.                                   |
+| `FormGroupName`        | Синхронизирует вложенный экземпляр `FormGroup` с DOM-элементом.                                      |
+| `FormArrayName`        | Синхронизирует вложенный экземпляр `FormArray` с DOM-элементом.                                      |
+| `FormArrayDirective`   | Синхронизирует автономный экземпляр `FormArray` с DOM-элементом.                                  |

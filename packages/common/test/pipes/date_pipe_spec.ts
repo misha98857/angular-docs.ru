@@ -6,11 +6,11 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
+import {Component, ɵregisterLocaleData, ɵunregisterLocaleData} from '@angular/core';
+import {TestBed} from '@angular/core/testing';
 import {DATE_PIPE_DEFAULT_OPTIONS, DatePipe} from '../../index';
 import localeEn from '../../locales/en';
 import localeEnExtra from '../../locales/extra/en';
-import {Component, ɵregisterLocaleData, ɵunregisterLocaleData} from '@angular/core';
-import {TestBed} from '@angular/core/testing';
 
 describe('DatePipe', () => {
   const isoStringWithoutTime = '2015-01-01';
@@ -76,6 +76,12 @@ describe('DatePipe', () => {
 
     it('should give precedence to the passed in format', () =>
       expect(pipe.transform('2017-01-11T10:14:39+0000', 'shortDate')).toEqual('1/11/17'));
+
+    it('should reject date formats that are too long', () => {
+      expect(() => pipe.transform(date, 'y'.repeat(257))).toThrowError(
+        /InvalidPipeArgument: 'NG02300: Date format is too long/,
+      );
+    });
 
     it('should use format provided in component as default format when no format is passed in', () => {
       @Component({
@@ -152,10 +158,6 @@ describe('DatePipe', () => {
     });
 
     it('should take timezone into account', () => {
-      expect(pipe.transform('2017-01-11T00:00:00', 'mediumDate', '-1200')).toEqual('Jan 10, 2017');
-    });
-
-    it('should take timezone into account with timezone offset', () => {
       expect(pipe.transform('2017-01-11T00:00:00', 'mediumDate', '-1200')).toEqual('Jan 10, 2017');
     });
 

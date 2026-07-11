@@ -54,3 +54,14 @@ baseline.json
 
 # Ignore cache created with the Angular CLI.
 .angular/
+
+# pnpm store
+.pnpm-store
+
+# Local Cursor agent rules/skills (fork tooling, not for the repo)
+.cursor/
+
+# Local agent/project memory junk
+.omc/
+
+.env

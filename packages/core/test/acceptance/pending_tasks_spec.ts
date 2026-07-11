@@ -78,6 +78,9 @@ describe('public PendingTasks', () => {
     // stability is delayed until a tick happens
     await expectAsync(applicationRefIsStable(appRef)).toBeResolvedTo(false);
     TestBed.inject(ApplicationRef).tick();
+    // Stability is not synchronous after a tick. We wait for a microtask
+    // in case there is a Promise inside tick that requires tick again
+    await Promise.resolve();
     await expectAsync(applicationRefIsStable(appRef)).toBeResolvedTo(true);
   });
 
@@ -112,6 +115,24 @@ describe('public PendingTasks', () => {
     rejectFn!();
     await expectAsync(appRef.whenStable()).toBeResolved();
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('should stop blocking stability if run function throws synchronously', async () => {
+    TestBed.configureTestingModule({
+      rethrowApplicationErrors: false,
+    });
+
+    const appRef = TestBed.inject(ApplicationRef);
+    const pendingTasks = TestBed.inject(PendingTasks);
+    const errorHandler = TestBed.inject(ErrorHandler);
+    const spy = spyOn(errorHandler, 'handleError');
+
+    pendingTasks.run(() => {
+      throw new Error('Sync error');
+    });
+    await expectAsync(appRef.whenStable()).toBeResolved();
+    expect(spy).toHaveBeenCalled();
+    expect(spy.calls.mostRecent().args[0].message).toContain('Sync error');
   });
 });
 

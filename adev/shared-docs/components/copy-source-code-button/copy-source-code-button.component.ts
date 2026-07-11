@@ -6,8 +6,8 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
+import {Clipboard} from '@angular/cdk/clipboard';
 import {
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -15,8 +15,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { Clipboard } from '@angular/cdk/clipboard';
-import { IconComponent } from '../icon/icon.component';
+import {IconComponent} from '../icon/icon.component';
 
 export const REMOVED_LINE_CLASS_NAME = '.line.remove';
 export const CONFIRMATION_DISPLAY_TIME_MS = 2000;
@@ -33,7 +32,6 @@ export const CONFIRMATION_DISPLAY_TIME_MS = 2000;
     '[class.docs-copy-source-code-button-success]': 'showCopySuccess()',
     '[class.docs-copy-source-code-button-failed]': 'showCopyFailure()',
   },
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CopySourceCodeButton {
   private readonly changeDetector = inject(ChangeDetectorRef);

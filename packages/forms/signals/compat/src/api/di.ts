@@ -12,14 +12,16 @@ import type {SignalFormsConfig} from '../../../src/api/di';
  * A value that can be used for `SignalFormsConfig.classes` to automatically add
  * the `ng-*` status classes from reactive forms.
  *
- * @experimental 21.0.1
+ * @see [Automatic status classes](guide/forms/signals/migration#automatic-status-classes)
+ *
+ * @publicApi 22.0
  */
 export const NG_STATUS_CLASSES: SignalFormsConfig['classes'] = {
-  'ng-touched': (state) => state.touched(),
-  'ng-untouched': (state) => !state.touched(),
-  'ng-dirty': (state) => state.dirty(),
-  'ng-pristine': (state) => !state.dirty(),
-  'ng-valid': (state) => state.valid(),
-  'ng-invalid': (state) => state.invalid(),
-  'ng-pending': (state) => state.pending(),
+  'ng-touched': ({state}) => state().touched(),
+  'ng-untouched': ({state}) => !state().touched(),
+  'ng-dirty': ({state}) => state().dirty(),
+  'ng-pristine': ({state}) => !state().dirty(),
+  'ng-valid': ({state}) => state().valid(),
+  'ng-invalid': ({state}) => state().invalid(),
+  'ng-pending': ({state}) => state().pending(),
 };

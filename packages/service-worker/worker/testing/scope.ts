@@ -181,11 +181,8 @@ export class SwTestHarnessImpl
     return new MockResponse(body, init);
   }
 
-  override newHeaders(headers: {[name: string]: string}): Headers {
-    return Object.keys(headers).reduce((mock, name) => {
-      mock.set(name, headers[name]);
-      return mock;
-    }, new MockHeaders());
+  override newHeaders(headers: HeadersInit): Headers {
+    return new MockHeaders(headers);
   }
 
   async skipWaiting(): Promise<void> {
@@ -285,10 +282,14 @@ export class SwTestHarnessImpl
     if (!this.eventHandlers.has('unhandledrejection')) {
       throw new Error('No unhandledrejection handler registered');
     }
+    const promise = Promise.reject(reason);
+    // We want to simulate an unhandled rejection, but we don't want the test runner (Node)
+    // to actually see an unhandled rejection and fail the test. So we attach a dummy handler.
+    promise.catch(() => {});
     const event = {
       reason,
-      promise: Promise.reject(reason),
-    } as PromiseRejectionEvent;
+      promise,
+    } as unknown as PromiseRejectionEvent;
     this.eventHandlers.get('unhandledrejection')!.call(this, event);
   }
 

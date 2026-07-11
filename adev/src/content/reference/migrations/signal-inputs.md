@@ -1,7 +1,7 @@
 # Миграция на input-сигналы
 
 Angular представил улучшенный API для input'ов, который считается готовым к использованию в продакшене начиная с версии 19.
-Подробнее о input-сигналах и их преимуществах читайте в [специальном руководстве](guide/signals/inputs).
+Подробнее о input-сигналах и их преимуществах читайте в [специальном руководстве](guide/components/inputs).
 
 Чтобы поддержать существующие команды, желающие использовать input-сигналы, команда Angular предоставляет автоматическую
 миграцию, которая преобразует поля `@Input` в новый API `input()`.
@@ -18,7 +18,7 @@ VSCode.
 Установите последнюю версию расширения VSCode и нажмите на поле `@Input`.
 Подробнее см. в разделе [ниже](#vscode-extension).
 
-## Что меняет миграция?
+## Что меняет миграция? {#what-does-the-migration-change}
 
 1. Члены класса `@Input()` обновляются до их эквивалента `input()` на основе сигналов.
 2. Ссылки на мигрированные input'ы обновляются для вызова сигнала.
@@ -31,10 +31,10 @@ VSCode.
 import {Component, Input} from '@angular/core';
 
 @Component({
-  template: `Name: {{name ?? ''}}`
+  template: `Name: {{ name ?? '' }}`,
 })
 export class MyComponent {
-  @Input() name: string|undefined = undefined;
+  @Input() name: string | undefined = undefined;
 
   someMethod(): number {
     if (this.name) {
@@ -51,7 +51,7 @@ export class MyComponent {
 import {Component, input} from '@angular/core';
 
 @Component({
-  template: `Name: {{name() ?? ''}}`
+  template: `Name: {{ name() ?? '' }}`,
 })
 export class MyComponent {
   readonly name = input<string>();
@@ -63,11 +63,10 @@ export class MyComponent {
     }
     return -1;
   }
-
 }
 ```
 
-## Опции конфигурации
+## Опции конфигурации {#configuration-options}
 
 Миграция поддерживает несколько опций для точной настройки под ваши конкретные нужды.
 

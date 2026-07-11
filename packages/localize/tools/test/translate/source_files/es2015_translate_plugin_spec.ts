@@ -6,16 +6,16 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 import {FileSystem, getFileSystem} from '@angular/compiler-cli/src/ngtsc/file_system';
+import {transformSync} from '@babel/core';
 import {ɵcomputeMsgId, ɵparseTranslation} from '../../../../index';
 import {ɵParsedTranslation} from '../../../../private';
-import {transformSync} from '@babel/core';
 
 import {Diagnostics} from '../../../src/diagnostics';
 import {TranslatePluginOptions} from '../../../src/source_file_utils';
 import {makeEs2015TranslatePlugin} from '../../../src/translate/source_files/es2015_translate_plugin';
 import {runInNativeFileSystem} from '../../helpers';
 
-runInNativeFileSystem(() => {
+runInNativeFileSystem('makeEs2015Plugin', () => {
   let fs: FileSystem;
 
   beforeEach(() => {
@@ -191,7 +191,7 @@ runInNativeFileSystem(() => {
     const cwd = fs.resolve('/');
     const filename = fs.resolve(cwd, 'app/dist/test.js');
     return transformSync(input, {
-      plugins: [makeEs2015TranslatePlugin(diagnostics, translations, pluginOptions)],
+      plugins: [() => makeEs2015TranslatePlugin(diagnostics, translations, pluginOptions)],
       filename,
       cwd,
     })!.code!;

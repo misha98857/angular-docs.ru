@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {DestroyRef, Injectable, inject, signal} from '@angular/core';
+import {DestroyRef, inject, signal, Service} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {Subject, Subscription, debounceTime, filter, map} from 'rxjs';
 
@@ -19,6 +19,8 @@ import {NodeRuntimeSandbox} from '../node-runtime-sandbox.service';
 import {TypingsLoader} from '../typings-loader.service';
 
 import {FileAndContentRecord} from '@angular/docs';
+import {DomSanitizer} from '@angular/platform-browser';
+import {NodeRuntimeState} from '../node-runtime-state.service';
 import {CODE_EDITOR_EXTENSIONS} from './constants/code-editor-extensions';
 import {LANGUAGES} from './constants/code-editor-languages';
 import {getAutocompleteExtension} from './extensions/autocomplete';
@@ -26,10 +28,9 @@ import {getDiagnosticsExtension} from './extensions/diagnostics';
 import {getTooltipExtension} from './extensions/tooltip';
 import {DiagnosticsState} from './services/diagnostics-state.service';
 import {TsVfsWorkerActions} from './workers/enums/actions';
+import {TYPESCRIPT_VFS_WORKER_FACTORY} from './workers/factory-provider';
 import {CodeChangeRequest} from './workers/interfaces/code-change-request';
 import {ActionMessage} from './workers/interfaces/message';
-import {NodeRuntimeState} from '../node-runtime-state.service';
-import {TYPESCRIPT_VFS_WORKER_FACTORY} from './workers/factory-provider';
 
 export interface EditorFile {
   filename: string;
@@ -63,7 +64,7 @@ const INITIAL_STATES = {
   createdFile$: undefined,
 };
 
-@Injectable({providedIn: 'root'})
+@Service()
 export class CodeMirrorEditor {
   // TODO: handle files created by the user, e.g. after running `ng generate component`
   readonly files = signal<EditorFile[]>(INITIAL_STATES.files);
@@ -81,6 +82,7 @@ export class CodeMirrorEditor {
   private readonly typingsLoader = inject(TypingsLoader);
   private readonly destroyRef = inject(DestroyRef);
   private readonly diagnosticsState = inject(DiagnosticsState);
+  private readonly domSanitizer = inject(DomSanitizer);
   private readonly tsVfsWorkerFactory = inject(TYPESCRIPT_VFS_WORKER_FACTORY);
   private tsVfsWorker: Worker | null = null;
 
@@ -181,6 +183,33 @@ export class CodeMirrorEditor {
     const editorState = this._editorStates.get(newFile.filename) ?? this.createEditorState();
 
     this._editorView.setState(editorState);
+  }
+
+  /**
+   * @description Scrolls the editor to the given 0-based line and character position.
+   * @param line Zero-based line index.
+   * @param character Zero-based character offset within the line.
+   */
+  scrollToLine(line: number, character: number = 0): void {
+    if (!this._editorView) return;
+
+    const state = this._editorView.state;
+    const doc = state.doc;
+
+    if (line < 0 || line >= doc.lines) {
+      console.warn(`Line ${line} is out of bounds (0-${doc.lines - 1})`);
+      return;
+    }
+
+    const lineObj = doc.line(line + 1);
+    const pos = lineObj.from + Math.min(character, lineObj.length);
+
+    this._editorView.dispatch({
+      selection: {anchor: pos, head: pos},
+      scrollIntoView: true,
+    });
+
+    this._editorView.focus();
   }
 
   private initTypescriptVfsWorker(): void {
@@ -405,7 +434,7 @@ export class CodeMirrorEditor {
 
         this.currentFile().language,
 
-        placeholderExtension('Type your code here...'),
+        placeholderExtension('Введите код здесь...'),
 
         ...this.getLanguageExtensions(),
       ],
@@ -426,7 +455,12 @@ export class CodeMirrorEditor {
           this.sendRequestToTsVfs,
           this.diagnosticsState,
         ),
-        getTooltipExtension(this.eventManager$, this.currentFile, this.sendRequestToTsVfs),
+        getTooltipExtension(
+          this.eventManager$,
+          this.currentFile,
+          this.sendRequestToTsVfs,
+          this.domSanitizer,
+        ),
       ];
     }
 

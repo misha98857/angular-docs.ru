@@ -8,8 +8,8 @@ import {HousingService} from '../housing.service';
   template: `
     <section>
       <form>
-        <input type="text" placeholder="Filter by city" />
-        <button class="primary" type="button">Search</button>
+        <input type="text" placeholder="Фильтр по городу" />
+        <button class="primary" type="button">Найти</button>
       </form>
     </section>
     <section class="results">

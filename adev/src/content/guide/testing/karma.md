@@ -5,11 +5,11 @@ Angular, [Karma](https://karma-runner.github.io) по-прежнему подд�
 приведены инструкции по тестированию вашего приложения Angular с использованием тест-раннера Karma и фреймворка
 тестирования [Jasmine](https://jasmine.github.io).
 
-## Настройка Karma и Jasmine
+## Настройка Karma и Jasmine {#setting-up-karma-and-jasmine}
 
 Вы можете настроить Karma и Jasmine для нового проекта или добавить их в существующий.
 
-### Для новых проектов
+### Для новых проектов {#for-new-projects}
 
 Чтобы создать новый проект с предварительно настроенными Karma и Jasmine, выполните команду `ng new` с опцией
 `--test-runner=karma`:
@@ -18,7 +18,7 @@ Angular, [Karma](https://karma-runner.github.io) по-прежнему подд�
 ng new my-karma-app --test-runner=karma
 ```
 
-### Для существующих проектов
+### Для существующих проектов {#for-existing-projects}
 
 Чтобы добавить Karma и Jasmine в существующий проект, выполните следующие шаги:
 
@@ -53,7 +53,7 @@ ng new my-karma-app --test-runner=karma
            "test": {
              "builder": "@angular/build:unit-test",
              "options": {
-               "runner": "karma",
+               "runner": "karma"
                // ... other options
              }
            }
@@ -73,15 +73,13 @@ ng new my-karma-app --test-runner=karma
      // ...
      "compilerOptions": {
        // ...
-       "types": [
-         "jasmine"
-       ]
-     },
+       "types": ["jasmine"]
+     }
      // ...
    }
    ```
 
-## Запуск тестов
+## Запуск тестов {#running-tests}
 
 После настройки проекта запустите тесты с помощью команды [`ng test`](cli/test):
 
@@ -116,12 +114,12 @@ TOTAL: 3 SUCCESS
 Тем временем команда `ng test` отслеживает изменения. Чтобы увидеть это в действии, внесите небольшое изменение в
 исходный файл и сохраните его. Тесты запустятся снова, браузер обновится, и появятся новые результаты тестов.
 
-## Конфигурация
+## Конфигурация {#configuration}
 
 Angular CLI берет на себя настройку Jasmine и Karma. Он создает полную конфигурацию в памяти на основе опций, указанных
 в файле `angular.json`.
 
-### Настройка конфигурации Karma
+### Настройка конфигурации Karma {#customizing-karma-configuration}
 
 Если вы хотите настроить Karma, вы можете создать файл `karma.conf.js`, выполнив следующую команду:
 
@@ -129,10 +127,10 @@ Angular CLI берет на себя настройку Jasmine и Karma. Он �
 ng generate config karma
 ```
 
-ПОЛЕЗНО: Подробнее о конфигурации Karma читайте
+HELPFUL: Подробнее о конфигурации Karma читайте
 в [руководстве по конфигурации Karma](http://karma-runner.github.io/6.4/config/configuration-file.html).
 
-### Установка тест-раннера в `angular.json`
+### Установка тест-раннера в `angular.json` {#setting-the-test-runner-in-angular-json}
 
 Чтобы явно установить Karma в качестве тест-раннера для вашего проекта, найдите цель `test` в файле `angular.json` и
 установите для опции `runner` значение `karma`:
@@ -147,7 +145,7 @@ ng generate config karma
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "runner": "karma",
+            "runner": "karma"
             // ... other options
           }
         }
@@ -157,7 +155,7 @@ ng generate config karma
 }
 ```
 
-## Контроль покрытия кода
+## Контроль покрытия кода {#code-coverage-enforcement}
 
 Чтобы обеспечить минимальный уровень покрытия кода, вы можете использовать свойство `check` в секции `coverageReporter`
 вашего файла `karma.conf.js`.
@@ -185,7 +183,7 @@ coverageReporter: {
 
 Это приведет к сбою выполнения тестов, если указанные пороги покрытия не будут достигнуты.
 
-## Тестирование в непрерывной интеграции (CI)
+## Тестирование в непрерывной интеграции (CI) {#testing-in-continuous-integration}
 
 Чтобы запустить тесты Karma в среде CI, используйте следующую команду:
 
@@ -193,17 +191,17 @@ coverageReporter: {
 ng test --no-watch --no-progress --browsers=ChromeHeadless
 ```
 
-ПРИМЕЧАНИЕ: Флаги `--no-watch` и `--no-progress` имеют решающее значение для Karma в средах CI, чтобы гарантировать, что
+NOTE: Флаги `--no-watch` и `--no-progress` имеют решающее значение для Karma в средах CI, чтобы гарантировать, что
 тесты запускаются один раз и корректно завершаются. Флаг `--browsers=ChromeHeadless` также необходим для запуска тестов
 в среде браузера без графического интерфейса.
 
-## Отладка тестов
+## Отладка тестов {#debugging-tests}
 
 Если ваши тесты работают не так, как ожидается, вы можете проверить и отладить их в браузере.
 
 Чтобы отладить приложение с помощью тест-раннера Karma:
 
-1. Откройте окно браузера Karma. См. [Настройка для тестирования](guide/testing/overview#set-up-for-testing), если вам
+1. Откройте окно браузера Karma. См. [Настройка для тестирования](guide/testing#set-up-for-testing), если вам
    нужна помощь с этим шагом.
 2. Нажмите кнопку **DEBUG**, чтобы открыть новую вкладку браузера и перезапустить тесты.
 3. Откройте **Инструменты разработчика** (Developer Tools) браузера. В Windows нажмите `Ctrl-Shift-I`. В macOS нажмите

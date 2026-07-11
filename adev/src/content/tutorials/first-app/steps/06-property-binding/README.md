@@ -5,12 +5,12 @@
 
 <docs-video src="https://www.youtube.com/embed/eM3zi_n7lNs?si=AsiczpWnMz5HhJqB&amp;start=599"/>
 
-## Чему вы научитесь
+## Чему вы научитесь {#what-youll-learn}
 
 - В вашем приложении появятся привязки данных в шаблоне `Home`.
 - Ваше приложение будет отправлять данные из `Home` в `HousingLocation`.
 
-## Концептуальный обзор Input-ов
+## Концептуальный обзор Input-ов {#conceptual-preview-of-inputs}
 
 В этом уроке вы продолжите процесс обмена данными от родительского компонента к дочернему, связывая данные с этими
 свойствами в шаблоне с помощью привязки свойств.
@@ -18,11 +18,11 @@
 Привязка свойств позволяет подключить переменную к `Input` в шаблоне Angular. Затем данные динамически привязываются к
 `Input`.
 
-Для более подробного объяснения обратитесь к руководству по [привязке свойств](guide/templates/property-binding).
+Для более подробного объяснения обратитесь к руководству по [привязке свойств](guide/templates/binding#css-class-and-style-property-bindings).
 
 <docs-workflow>
 
-<docs-step title="Обновите шаблон Home">
+<docs-step title="Update the `Home` template">
 На этом шаге добавляется привязка свойств к тегу `<app-housing-location>`.
 
 В редакторе кода:
@@ -37,7 +37,7 @@
 
    </docs-step>
 
-<docs-step title="Убедитесь, что код по-прежнему работает">
+<docs-step title="Confirm the code still works">
 1.  Сохраните изменения и убедитесь, что в приложении нет ошибок.
 1.  Исправьте все ошибки, прежде чем переходить к следующему шагу.
 </docs-step>
@@ -50,5 +50,5 @@
 Для получения дополнительной информации по темам, затронутым в этом уроке, посетите:
 
 <docs-pill-row>
-  <docs-pill href="/guide/templates/property-binding" title="Property binding (Привязка свойств)"/>
+  <docs-pill href="/guide/templates/binding#css-class-and-style-property-bindings" title="Property binding (Привязка свойств)"/>
 </docs-pill-row>

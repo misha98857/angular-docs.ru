@@ -1,22 +1,20 @@
-<docs-decorative-header title="Сигналы Angular" imgSrc="adev/src/assets/images/signals.svg"> <!-- markdownlint-disable-line -->
-Сигналы Angular — это система, которая детально отслеживает, как и где используется состояние вашего приложения, позволяя фреймворку оптимизировать обновления рендеринга.
+<docs-decorative-header title="Angular Signals" imgSrc="adev/src/assets/images/signals.svg"> <!-- markdownlint-disable-line -->
+Angular Signals — система, которая гранулярно отслеживает, как и где состояние используется в приложении, позволяя фреймворку оптимизировать обновления рендеринга.
 </docs-decorative-header>
 
-TIP: Ознакомьтесь с разделом [Основы](essentials/signals) перед изучением этого подробного руководства.
+TIP: Перед этим подробным руководством ознакомьтесь с [Essentials](essentials/signals) по Angular.
 
-## Что такое сигналы?
+## Что такое сигналы? {#what-are-signals}
 
-**Сигнал (signal)** — это обертка вокруг значения, которая может уведомлять заинтересованных потребителей при изменении
-этого значения. Сигналы могут содержать любые значения: от примитивов до сложных структур данных.
+**Сигнал** — обёртка вокруг значения, которая уведомляет заинтересованных потребителей при изменении этого значения. Сигналы могут содержать любое значение — от примитивов до сложных структур данных.
 
-Вы читаете значение сигнала, вызывая его функцию-геттер, что позволяет Angular отслеживать места использования сигнала.
+Значение сигнала читается вызовом его getter-функции, что позволяет Angular отслеживать, где сигнал используется.
 
-Сигналы могут быть _записываемыми (writable)_ или _только для чтения (read-only)_.
+Сигналы могут быть _writable_ или _read-only_.
 
-### Записываемые сигналы (Writable signals)
+### Writable-сигналы {#writable-signals}
 
-Записываемые сигналы предоставляют API для непосредственного обновления их значений. Вы создаете записываемые сигналы,
-вызывая функцию `signal` с начальным значением:
+Writable-сигналы предоставляют API для прямого обновления своих значений. Создавайте writable-сигналы вызовом функции `signal` с начальным значением:
 
 ```ts
 const count = signal(0);
@@ -25,60 +23,88 @@ const count = signal(0);
 console.log('The count is: ' + count());
 ```
 
-Чтобы изменить значение записываемого сигнала, либо установите его напрямую через `.set()`:
+Чтобы изменить значение writable-сигнала, либо задайте его напрямую через `.set()`:
 
 ```ts
 count.set(3);
 ```
 
-либо используйте операцию `.update()` для вычисления нового значения на основе предыдущего:
+либо используйте операцию `.update()`, чтобы вычислить новое значение из предыдущего:
 
 ```ts
 // Increment the count by 1.
-count.update(value => value + 1);
+count.update((value) => value + 1);
 ```
 
-Записываемые сигналы имеют тип `WritableSignal`.
+Writable-сигналы имеют тип `WritableSignal`.
 
-### Вычисляемые сигналы (Computed signals)
+#### Преобразование writable-сигналов в readonly {#converting-writable-signals-to-readonly}
 
-**Вычисляемые сигналы (Computed signals)** — это сигналы только для чтения, которые получают свое значение из других
-сигналов. Вы определяете вычисляемые сигналы, используя функцию `computed` и указывая функцию вывода (derivation
-function):
+`WritableSignal` предоставляет метод `asReadonly()`, который возвращает readonly-версию сигнала. Это полезно, когда нужно предоставить значение сигнала потребителям без возможности изменять его напрямую:
+
+```ts
+@Service()
+export class CounterState {
+  // Private writable state
+  private readonly _count = signal(0);
+
+  readonly count = this._count.asReadonly(); // public readonly
+
+  increment() {
+    this._count.update((v) => v + 1);
+  }
+}
+
+@Component({
+  /* ... */
+})
+export class AwesomeCounter {
+  state = inject(CounterState);
+
+  count = this.state.count; // can read but not modify
+
+  increment() {
+    this.state.increment();
+  }
+}
+```
+
+Readonly-сигнал отражает любые изменения исходного writable-сигнала, но не может быть изменён методами `set()` или `update()`.
+
+IMPORTANT: У readonly-сигналов **нет** встроенного механизма, который предотвращал бы глубокую мутацию их значения.
+
+### Computed-сигналы {#computed-signals}
+
+**Computed-сигналы** — read-only сигналы, которые выводят своё значение из других сигналов. Определяйте computed-сигналы с помощью функции `computed` и указания derivation:
 
 ```typescript
 const count: WritableSignal<number> = signal(0);
 const doubleCount: Signal<number> = computed(() => count() * 2);
 ```
 
-Сигнал `doubleCount` зависит от сигнала `count`. Всякий раз, когда обновляется `count`, Angular знает, что `doubleCount`
-также необходимо обновить.
+Сигнал `doubleCount` зависит от сигнала `count`. Когда `count` обновляется, Angular знает, что `doubleCount` тоже нужно обновить.
 
-#### Вычисляемые сигналы вычисляются лениво и мемоизируются
+#### Computed-сигналы лениво вычисляются и мемоизируются {#computed-signals-are-both-lazily-evaluated-and-memoized}
 
-Функция вывода `doubleCount` не запускается для вычисления значения до тех пор, пока вы не прочитаете `doubleCount` в
-первый раз. Вычисленное значение затем кэшируется, и при повторном чтении `doubleCount` вернется кэшированное значение
-без пересчета.
+Функция derivation у `doubleCount` не выполняется для расчёта значения, пока вы впервые не прочитаете `doubleCount`. Вычисленное значение затем кэшируется, и при повторном чтении `doubleCount` возвращается кэшированное значение без пересчёта.
 
-Если вы затем измените `count`, Angular узнает, что кэшированное значение `doubleCount` больше не действительно, и при
-следующем чтении `doubleCount` его новое значение будет вычислено.
+Если затем изменить `count`, Angular знает, что кэшированное значение `doubleCount` больше недействительно, и при следующем чтении `doubleCount` будет вычислено новое значение.
 
-В результате вы можете безопасно выполнять в вычисляемых сигналах ресурсоемкие операции, такие как фильтрация массивов.
+В результате в computed-сигналах можно безопасно выполнять вычислительно дорогие derivation — например, фильтрацию массивов.
 
-#### Вычисляемые сигналы не являются записываемыми
+#### Computed-сигналы не являются writable {#computed-signals-are-not-writable-signals}
 
-Вы не можете напрямую присваивать значения вычисляемому сигналу. То есть:
+Нельзя напрямую присваивать значения computed-сигналу. То есть
 
 ```ts
 doubleCount.set(3);
 ```
 
-вызовет ошибку компиляции, так как `doubleCount` не является `WritableSignal`.
+вызывает ошибку компиляции, потому что `doubleCount` не является `WritableSignal`.
 
-#### Зависимости вычисляемых сигналов динамичны
+#### Зависимости computed-сигналов динамичны {#computed-signal-dependencies-are-dynamic}
 
-Отслеживаются только те сигналы, которые фактически были прочитаны во время выполнения функции вывода. Например, в этом
-`computed` сигнал `count` читается только в том случае, если сигнал `showCount` истинен:
+Отслеживаются только сигналы, реально прочитанные во время derivation. Например, в этом `computed` сигнал `count` читается только если сигнал `showCount` равен true:
 
 ```ts
 const showCount = signal(false);
@@ -92,170 +118,44 @@ const conditionalCount = computed(() => {
 });
 ```
 
-Когда вы читаете `conditionalCount`, если `showCount` равен `false`, возвращается сообщение "Nothing to see here!" _без_
-чтения сигнала `count`. Это означает, что если вы позже обновите `count`, это _не_ приведет к пересчету
-`conditionalCount`.
+Когда вы читаете `conditionalCount`, если `showCount` равен `false`, возвращается сообщение «Nothing to see here!» _без_ чтения сигнала `count`. Это значит, что последующее обновление `count` _не_ приведёт к пересчёту `conditionalCount`.
 
-Если вы установите `showCount` в `true`, а затем снова прочитаете `conditionalCount`, функция вывода выполнится заново и
-пойдет по ветке, где `showCount` равен `true`, возвращая сообщение со значением `count`. Изменение `count` после этого
-сделает недействительным кэшированное значение `conditionalCount`.
+Если задать `showCount` в `true` и снова прочитать `conditionalCount`, derivation выполнится заново и пойдёт по ветке, где `showCount` равен `true`, вернув сообщение со значением `count`. Изменение `count` тогда инвалидирует кэшированное значение `conditionalCount`.
 
-Обратите внимание, что зависимости могут как добавляться, так и удаляться в процессе вычисления. Если вы позже
-установите `showCount` обратно в `false`, то `count` больше не будет считаться зависимостью `conditionalCount`.
+Зависимости могут удаляться во время derivation так же, как и добавляться. Если позже вернуть `showCount` в `false`, то `count` больше не будет считаться зависимостью `conditionalCount`.
 
-## Чтение сигналов в компонентах `OnPush`
+## Реактивные контексты {#reactive-contexts}
 
-Когда вы читаете сигнал внутри шаблона компонента с `OnPush`, Angular отслеживает этот сигнал как зависимость
-компонента. Когда значение этого сигнала изменяется, Angular
-автоматически [помечает](api/core/ChangeDetectorRef#markforcheck) компонент, чтобы гарантировать его обновление при
-следующем запуске обнаружения изменений. Обратитесь к
-руководству [Пропуск поддеревьев компонентов](best-practices/skipping-subtrees) для получения дополнительной информации
-о компонентах `OnPush`.
+**Реактивный контекст** — runtime-состояние, в котором Angular отслеживает чтения сигналов, чтобы установить зависимость. Код, читающий сигнал, — _consumer_, а читаемый сигнал — _producer_.
 
-## Эффекты (Effects)
+Angular автоматически входит в реактивный контекст при:
 
-Сигналы полезны тем, что уведомляют заинтересованных потребителей об изменениях. **Эффект (effect)** — это операция,
-которая выполняется всякий раз, когда изменяется одно или несколько значений сигналов. Вы можете создать эффект с
-помощью функции `effect`:
+- Выполнении callback `effect`, `afterRenderEffect`.
+- Вычислении `computed`-сигнала.
+- Вычислении `linkedSignal`.
+- Вычислении params или loader-функции `resource`.
+- Рендеринге шаблона компонента (включая bindings в [свойстве host](guide/components/host-elements#binding-to-the-host-element)).
+
+Во время этих операций Angular создаёт _живое_ соединение. Если отслеживаемый сигнал изменится, Angular _в итоге_ повторно выполнит consumer.
+
+### Проверка реактивного контекста {#asserts-the-reactive-context}
+
+Angular предоставляет вспомогательную функцию `assertNotInReactiveContext`, чтобы утверждать, что код не выполняется внутри реактивного контекста. Передайте ссылку на вызывающую функцию, чтобы сообщение об ошибке указывало на правильную точку входа API при сбое assertion. Это даёт более ясное и actionable сообщение об ошибке, чем общая ошибка реактивного контекста.
 
 ```ts
-effect(() => {
-  console.log(`The current count is: ${count()}`);
-});
-```
+import {assertNotInReactiveContext} from '@angular/core';
 
-Эффекты всегда выполняются **хотя бы один раз.** Когда эффект выполняется, он отслеживает любые чтения значений
-сигналов. Всякий раз, когда любое из этих значений сигналов изменяется, эффект выполняется снова. Подобно вычисляемым
-сигналам, эффекты отслеживают свои зависимости динамически и учитывают только те сигналы, которые были прочитаны при
-последнем выполнении.
-
-Эффекты всегда выполняются **асинхронно**, во время процесса обнаружения изменений.
-
-### Случаи использования эффектов
-
-Эффекты редко нужны в большинстве кодовых баз приложений, но могут быть полезны в конкретных обстоятельствах. Вот
-несколько примеров ситуаций, когда `effect` может быть хорошим решением:
-
-- Логирование отображаемых данных и их изменений (для аналитики или отладки).
-- Синхронизация данных с `window.localStorage`.
-- Добавление пользовательского поведения DOM, которое нельзя выразить с помощью синтаксиса шаблона.
-- Выполнение пользовательского рендеринга в `<canvas>`, библиотеку диаграмм или другую стороннюю библиотеку UI.
-
-<docs-callout critical title="Когда не следует использовать эффекты">
-Избегайте использования эффектов для распространения изменений состояния. Это может привести к ошибкам `ExpressionChangedAfterItHasBeenChecked`, бесконечным циклическим обновлениям или ненужным циклам обнаружения изменений.
-
-Вместо этого используйте `computed` сигналы для моделирования состояния, которое зависит от другого состояния.
-</docs-callout>
-
-### Контекст внедрения (Injection context)
-
-По умолчанию вы можете создать `effect()` только внутри [контекста внедрения](guide/di/dependency-injection-context) (где у вас есть доступ к функции [`inject`](/api/core/inject)). Самый простой способ выполнить это требование — вызвать `effect` внутри `constructor` компонента, директивы или сервиса:
-
-```ts
-@Component({...})
-export class EffectiveCounterComponent {
-  readonly count = signal(0);
-  constructor() {
-    // Register a new effect.
-    effect(() => {
-      console.log(`The count is: ${this.count()}`);
-    });
-  }
+function subscribeToEvents() {
+  assertNotInReactiveContext(subscribeToEvents);
+  // Safe to proceed - subscription logic here
 }
 ```
 
-В качестве альтернативы вы можете присвоить эффект полю (что также дает ему описательное имя).
+### Чтение без отслеживания зависимостей {#reading-without-tracking-dependencies}
 
-```ts
-@Component({...})
-export class EffectiveCounterComponent {
-  readonly count = signal(0);
+Иногда нужно выполнить код, который может читать сигналы внутри реактивной функции вроде `computed` или `effect`, _не_ создавая зависимость.
 
-  private loggingEffect = effect(() => {
-    console.log(`The count is: ${this.count()}`);
-  });
-}
-```
-
-Чтобы создать эффект вне конструктора, вы можете передать `Injector` в `effect` через его опции:
-
-```ts
-@Component({...})
-export class EffectiveCounterComponent {
-  readonly count = signal(0);
-  private injector = inject(Injector);
-
-  initializeLogging(): void {
-    effect(() => {
-      console.log(`The count is: ${this.count()}`);
-    }, {injector: this.injector});
-  }
-}
-```
-
-### Уничтожение эффектов
-
-Когда вы создаете эффект, он автоматически уничтожается при уничтожении его содержащего контекста. Это означает, что
-эффекты, созданные внутри компонентов, уничтожаются при уничтожении компонента. То же самое касается эффектов внутри
-директив, сервисов и т.д.
-
-Эффекты возвращают `EffectRef`, который вы можете использовать для их ручного уничтожения, вызвав метод `.destroy()`. Вы
-можете комбинировать это с опцией `manualCleanup`, чтобы создать эффект, который существует до тех пор, пока не будет
-уничтожен вручную. Будьте осторожны и не забывайте очищать такие эффекты, когда они больше не нужны.
-
-## Продвинутые темы
-
-### Функции равенства сигналов
-
-При создании сигнала вы можете опционально предоставить функцию равенства, которая будет использоваться для проверки
-того, действительно ли новое значение отличается от предыдущего.
-
-```ts
-import _ from 'lodash';
-
-const data = signal(['test'], {equal: _.isEqual});
-
-// Even though this is a different array instance, the deep equality
-// function will consider the values to be equal, and the signal won't
-// trigger any updates.
-data.set(['test']);
-```
-
-Функции равенства могут быть предоставлены как для записываемых, так и для вычисляемых сигналов.
-
-HELPFUL: По умолчанию сигналы используют ссылочное равенство (сравнение [
-`Object.is()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/is)).
-
-### Проверка типов сигналов
-
-Вы можете использовать `isSignal`, чтобы проверить, является ли значение `Signal`:
-
-```ts
-const count = signal(0);
-const doubled = computed(() => count() * 2);
-
-isSignal(count); // true
-isSignal(doubled); // true
-isSignal(42); // false
-```
-
-Чтобы конкретно проверить, является ли сигнал записываемым, используйте `isWritableSignal`:
-
-```ts
-const count = signal(0);
-const doubled = computed(() => count() * 2);
-
-isWritableSignal(count); // true
-isWritableSignal(doubled); // false
-```
-
-### Чтение без отслеживания зависимостей
-
-В редких случаях вам может понадобиться выполнить код, который читает сигналы внутри реактивной функции (например,
-`computed` или `effect`) _без_ создания зависимости.
-
-Например, предположим, что при изменении `currentUser` должно логироваться значение `counter`. Вы можете создать
-`effect`, который читает оба сигнала:
+Например, предположим, что при изменении `currentUser` нужно залогировать значение `counter`. Можно создать `effect`, который читает оба сигнала:
 
 ```ts
 effect(() => {
@@ -263,11 +163,9 @@ effect(() => {
 });
 ```
 
-Этот пример будет логировать сообщение, когда изменяется _либо_ `currentUser`, _либо_ `counter`. Однако, если эффект
-должен запускаться только при изменении `currentUser`, то чтение `counter` является лишь попутным, и изменения `counter`
-не должны вызывать логирование нового сообщения.
+Этот пример залогирует сообщение при изменении _либо_ `currentUser`, _либо_ `counter`. Однако если effect должен выполняться только при изменении `currentUser`, то чтение `counter` случайно, и изменения `counter` не должны логировать новое сообщение.
 
-Вы можете предотвратить отслеживание чтения сигнала, вызвав его геттер с помощью `untracked`:
+Можно предотвратить отслеживание чтения сигнала, вызвав его getter через `untracked`:
 
 ```ts
 effect(() => {
@@ -275,8 +173,7 @@ effect(() => {
 });
 ```
 
-`untracked` также полезен, когда эффекту необходимо вызвать некоторый внешний код, который не должен рассматриваться как
-зависимость:
+`untracked` также полезен, когда effect нужно вызвать внешний код, который не должен считаться зависимостью:
 
 ```ts
 effect(() => {
@@ -289,28 +186,94 @@ effect(() => {
 });
 ```
 
-### Функции очистки эффектов
+### Реактивный контекст и асинхронные операции {#reactive-context-and-async-operations}
 
-Эффекты могут запускать длительные операции, которые следует отменить, если эффект будет уничтожен или запустится снова
-до завершения первой операции. Когда вы создаете эффект, ваша функция может опционально принимать функцию `onCleanup` в
-качестве первого параметра. Эта функция `onCleanup` позволяет зарегистрировать колбэк, который вызывается перед началом
-следующего запуска эффекта или при уничтожении эффекта.
+Реактивный контекст активен только для синхронного кода. Любые чтения сигналов после асинхронной границы не отслеживаются как зависимости.
 
-```ts
-effect((onCleanup) => {
-  const user = currentUser();
-
-  const timer = setTimeout(() => {
-    console.log(`1 second ago, the user became ${user}`);
-  }, 1000);
-
-  onCleanup(() => {
-    clearTimeout(timer);
-  });
+```ts {avoid}
+effect(async () => {
+  const data = await fetchUserData();
+  // Reactive context is lost here - theme() won't be tracked
+  console.log(`User: ${data.name}, Theme: ${theme()}`);
 });
 ```
 
-## Использование сигналов с RxJS
+Чтобы все чтения сигналов отслеживались, читайте сигналы до `await`. Это включает передачу их как аргументов в awaited-функцию, поскольку аргументы вычисляются синхронно:
 
-Смотрите [Взаимодействие RxJS с сигналами Angular](ecosystem/rxjs-interop) для подробностей о совместимости между
-сигналами и RxJS.
+```ts {prefer}
+effect(async () => {
+  const currentTheme = theme(); // Read before await
+  const data = await fetchUserData();
+  console.log(`User: ${data.name}, Theme: ${currentTheme}`);
+});
+```
+
+```ts {prefer}
+effect(async () => {
+  // Also works: signal is read before await (as function argument)
+  await renderContent(docContent());
+});
+```
+
+## Продвинутые derivation {#advanced-derivations}
+
+Пока `computed` обрабатывает простые readonly derivation, иногда нужен writable state, зависящий от других сигналов.
+Подробнее см. руководство [Dependent state with linkedSignal](/guide/signals/linked-signal).
+
+Все API сигналов синхронны — `signal`, `computed`, `input` и т.д. Однако приложениям часто нужно работать с данными, доступными асинхронно. `Resource` даёт способ включить async-данные в signal-based код приложения и при этом читать их синхронно. Подробнее см. руководство [Async reactivity with resources](/guide/signals/resource).
+
+## Выполнение side effects на нереактивных API {#executing-side-effects-on-non-reactive-apis}
+
+Синхронные или асинхронные derivation рекомендуются, когда нужно реагировать на изменения состояния. Однако это покрывает не все сценарии, и иногда нужно реагировать на изменения сигналов на нереактивных API. Используйте `effect` или `afterRenderEffect` для таких случаев. Подробнее см. руководство [Side effects for non-reactive APIs](/guide/signals/effect).
+
+## Чтение сигналов в компонентах `OnPush` {#reading-signals-in-onpush-components}
+
+Когда вы читаете сигнал в шаблоне компонента `OnPush`, Angular отслеживает сигнал как зависимость этого компонента. Когда значение сигнала меняется, Angular автоматически [помечает](api/core/ChangeDetectorRef#markforcheck) компонент, чтобы он обновился при следующем запуске change detection. См. руководство [Skipping component subtrees](best-practices/skipping-subtrees) для дополнительной информации о компонентах `OnPush`.
+
+## Продвинутые темы {#advanced-topics}
+
+### Функции равенства сигналов {#signal-equality-functions}
+
+При создании сигнала можно опционально предоставить функцию равенства, которая будет проверять, действительно ли новое значение отличается от предыдущего.
+
+```ts
+import isEqual from 'lodash/isEqual';
+
+const data = signal(['test'], {equal: isEqual});
+
+// Even though this is a different array instance, the deep equality
+// function will consider the values to be equal, and the signal won't
+// trigger any updates.
+data.set(['test']);
+```
+
+Функции равенства можно предоставлять и writable, и computed-сигналам.
+
+HELPFUL: По умолчанию сигналы используют ссылочное равенство (сравнение [`Object.is()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/is)).
+
+### Проверка типов сигналов {#type-checking-signals}
+
+Можно использовать `isSignal`, чтобы проверить, является ли значение `Signal`:
+
+```ts
+const count = signal(0);
+const doubled = computed(() => count() * 2);
+
+isSignal(count); // true
+isSignal(doubled); // true
+isSignal(42); // false
+```
+
+Чтобы специально проверить, является ли сигнал writable, используйте `isWritableSignal`:
+
+```ts
+const count = signal(0);
+const doubled = computed(() => count() * 2);
+
+isWritableSignal(count); // true
+isWritableSignal(doubled); // false
+```
+
+## Использование сигналов с RxJS {#using-signals-with-rxjs}
+
+См. [RxJS interop with Angular signals](ecosystem/rxjs-interop) для деталей о взаимодействии сигналов и RxJS.

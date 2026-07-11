@@ -9,7 +9,6 @@
 import {
   afterNextRender,
   booleanAttribute,
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   effect,
@@ -86,7 +85,6 @@ import {
 @Component({
   selector: 'as-split',
   exportAs: 'asSplit',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: [`./split.component.scss`],
   template: `<ng-content></ng-content>
     @for (_ of displayedAreas; track $index) {
@@ -101,9 +99,9 @@ import {
           (mouseup)="clickGutter($event, $index + 1)"
           (touchend)="clickGutter($event, $index + 1)"
         >
-        @if(showGutterIcon()) {  
-          <div class="as-split-gutter-icon"></div>
-        }
+          @if (showGutterIcon()) {
+            <div class="as-split-gutter-icon"></div>
+          }
         </div>
       }
     }`,

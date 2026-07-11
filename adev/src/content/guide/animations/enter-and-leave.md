@@ -1,23 +1,17 @@
-# Анимация приложений с помощью `animate.enter` и `animate.leave`
+# Анимация приложений с `animate.enter` и `animate.leave`
 
-Хорошо спроектированные анимации могут сделать использование приложения более приятным и понятным, но они нужны не
-только для красоты. Анимации могут улучшить ваше приложение и пользовательский опыт несколькими способами:
+Хорошо продуманные анимации делают приложение понятнее и привлекательнее — и это не только косметика.
+Анимации улучшают приложение и пользовательский опыт несколькими способами:
 
-- Без анимации переходы на веб-страницах могут казаться резкими и неприятными.
-- Движение значительно улучшает пользовательский опыт, позволяя пользователям заметить реакцию приложения на их
-  действия.
-- Хорошие анимации могут плавно направлять внимание пользователя в ходе рабочего процесса.
+- Без анимаций переходы на веб-странице могут казаться резкими и неприятными
+- Движение сильно улучшает UX, поэтому анимации дают пользователям шанс заметить реакцию приложения на их действия
+- Хорошие анимации плавно направляют внимание пользователя по всему workflow
 
-Angular предоставляет `animate.enter` и `animate.leave` для анимации элементов приложения. Эти две функции применяют
-CSS-классы входа (enter) и выхода (leave) в подходящие моменты или вызывают функции для применения анимаций из сторонних
-библиотек. `animate.enter` и `animate.leave` не являются директивами. Это специальный API, поддерживаемый
-непосредственно компилятором Angular. Их можно использовать непосредственно на элементах, а также в качестве привязки к
-хосту (host binding).
+Angular предоставляет `animate.enter` и `animate.leave` для анимации элементов приложения. Эти две возможности в нужный момент применяют enter- и leave-CSS-классы или вызывают функции для анимаций из сторонних библиотек. `animate.enter` и `animate.leave` — не директивы. Это специальный API, поддерживаемый напрямую компилятором Angular. Их можно использовать прямо на элементах, а также как host binding.
 
-## `animate.enter`
+## `animate.enter` {#animateenter}
 
-Вы можете использовать `animate.enter` для анимации элементов при их _появлении_ в DOM. Вы можете определить анимации
-входа, используя CSS-классы с переходами (transitions) или keyframe-анимациями.
+`animate.enter` позволяет анимировать элементы при их _появлении_ в DOM. Enter-анимации можно задавать CSS-классами с transitions или keyframe-анимациями.
 
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/enter-and-leave/enter.ts">
     <docs-code header="enter.ts" path="adev/src/content/examples/animations/src/app/enter-and-leave/enter.ts" />
@@ -25,21 +19,13 @@ CSS-классы входа (enter) и выхода (leave) в подходящ�
     <docs-code header="enter.css" path="adev/src/content/examples/animations/src/app/enter-and-leave/enter.css"/>
 </docs-code-multifile>
 
-Когда анимация завершается, Angular удаляет класс или классы, указанные в `animate.enter`, из DOM. Классы анимации
-присутствуют только пока анимация активна.
+Когда анимация завершается, Angular удаляет из DOM класс или классы, указанные в `animate.enter`. Классы анимации присутствуют только пока анимация активна.
 
-ПРИМЕЧАНИЕ: При использовании нескольких keyframe-анимаций или свойств перехода (transition) на одном элементе, Angular
-удаляет все классы только _после_ завершения самой длительной анимации.
+NOTE: При нескольких keyframe-анимациях или transition-свойствах на элементе Angular удаляет все классы только _после_ завершения самой длинной анимации.
 
-Вы можете использовать `animate.enter` с любыми другими возможностями Angular, такими как управляющие конструкции (
-control flow) или динамические выражения. `animate.enter` принимает как одну строку с классом (или несколькими классами,
-разделенными пробелами), так и массив строк классов.
+`animate.enter` можно использовать с любыми другими возможностями Angular — control flow, динамическими выражениями и т.д. `animate.enter` принимает как одну строку классов (несколько классов через пробел), так и массив строк классов.
 
-Краткое замечание об использовании CSS-переходов: Если вы решите использовать переходы вместо keyframe-анимаций, классы,
-добавленные к элементу с помощью `animate.enter`, представляют состояние, _к которому_ будет стремиться анимация.
-Базовый CSS элемента — это то, как элемент будет выглядеть без анимации (что, вероятно, похоже на конечное состояние
-CSS-перехода). Поэтому вам всё равно нужно использовать `@starting-style`, чтобы задать подходящее состояние _от
-которого_ (from) будет работать переход.
+Кратко о CSS transitions: если вы выбираете transitions вместо keyframe-анимаций, классы, добавленные к элементу через `animate.enter`, представляют состояние, _к которому_ будет анимироваться transition. Базовый CSS элемента — это то, как элемент выглядит без анимаций, что обычно похоже на конечное состояние CSS transition. Поэтому его всё равно нужно сочетать с `@starting-style`, чтобы у transition было корректное состояние _from_.
 
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/enter-and-leave/enter-binding.ts">
     <docs-code header="enter-binding.ts" path="adev/src/content/examples/animations/src/app/enter-and-leave/enter-binding.ts" />
@@ -47,10 +33,9 @@ CSS-перехода). Поэтому вам всё равно нужно исп
     <docs-code header="enter-binding.css" path="adev/src/content/examples/animations/src/app/enter-and-leave/enter-binding.css"/>
 </docs-code-multifile>
 
-## `animate.leave`
+## `animate.leave` {#animateleave}
 
-Вы можете использовать `animate.leave` для анимации элементов при их _удалении_ из DOM. Вы можете определить анимации
-выхода, используя CSS-классы с трансформациями или keyframe-анимациями.
+`animate.leave` позволяет анимировать элементы при их _удалении_ из DOM. Leave-анимации можно задавать CSS-классами с transforms или keyframe-анимациями.
 
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/enter-and-leave/leave.ts">
     <docs-code header="leave.ts" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave.ts" />
@@ -58,13 +43,11 @@ CSS-перехода). Поэтому вам всё равно нужно исп
     <docs-code header="leave.css" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave.css"/>
 </docs-code-multifile>
 
-По завершении анимации Angular автоматически удаляет анимированный элемент из DOM.
+Когда анимация завершается, Angular автоматически удаляет анимированный элемент из DOM.
 
-ПРИМЕЧАНИЕ: При использовании нескольких keyframe-анимаций или свойств перехода (transition) на одном элементе, Angular
-ожидает удаления элемента только _после_ завершения самой длительной из этих анимаций.
+NOTE: При нескольких keyframe-анимациях или transition-свойствах на элементе Angular ждёт удаления элемента только _после_ завершения самой длинной из этих анимаций.
 
-`animate.leave` также можно использовать с Сигналами и другими привязками. Вы можете использовать `animate.leave` с
-одним или несколькими классами. Укажите их либо как простую строку с пробелами, либо как массив строк.
+`animate.leave` также можно использовать с сигналами и другими привязками. Можно указать один класс или несколько — простой строкой с пробелами или массивом строк.
 
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-binding.ts">
     <docs-code header="leave-binding.ts" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-binding.ts" />
@@ -72,11 +55,19 @@ CSS-перехода). Поэтому вам всё равно нужно исп
     <docs-code header="leave-binding.css" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-binding.css"/>
 </docs-code-multifile>
 
-## Привязка событий, функции и сторонние библиотеки
+### Порядок удаления элементов {#element-removal-order}
 
-И `animate.enter`, и `animate.leave` поддерживают синтаксис привязки событий, позволяющий вызывать функции. Вы можете
-использовать этот синтаксис для вызова функции в коде компонента или использования сторонних библиотек анимации, таких
-как [GSAP](https://gsap.com/), [anime.js](https://animejs.com/) или любой другой JavaScript-библиотеки анимации.
+В том, как запускаются анимации `animate.leave` и когда анимация произойдёт, есть нюансы. `animate.leave` работает, если размещён на удаляемом элементе; если `animate.leave` размещён на элементе, который является _потомком_ удаляемого, дочерние анимации произойдут _до_ удаления родительского узла из DOM. Так можно уверенно анимировать уход дочерних элементов, не давая родителю исчезнуть раньше времени.
+
+<docs-code-multifile preview path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.ts">
+    <docs-code header="leave.ts" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.ts" />
+    <docs-code header="leave.html" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.html" />
+    <docs-code header="leave.css" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.css"/>
+</docs-code-multifile>
+
+## Привязки событий, функции и сторонние библиотеки {#event-bindings-functions-and-third-party-libraries}
+
+И `animate.enter`, и `animate.leave` поддерживают синтаксис привязки событий с вызовами функций. Так можно вызвать функцию в коде компонента или использовать сторонние библиотеки анимаций — [GSAP](https://gsap.com/), [anime.js](https://animejs.com/) или любую другую JavaScript-библиотеку анимаций.
 
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-event.ts">
     <docs-code header="leave-event.ts" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-event.ts" />
@@ -84,52 +75,39 @@ CSS-перехода). Поэтому вам всё равно нужно исп
     <docs-code header="leave-event.css" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-event.css"/>
 </docs-code-multifile>
 
-Объект `$event` имеет тип `AnimationCallbackEvent`. Он содержит элемент в свойстве `target` и предоставляет функцию
-`animationComplete()` для уведомления фреймворка о завершении анимации.
+Объект `$event` имеет тип `AnimationCallbackEvent`. Он включает элемент как `target` и предоставляет функцию `animationComplete()`, чтобы уведомить фреймворк о завершении анимации.
 
-ВАЖНО: Вы **должны** вызвать функцию `animationComplete()` при использовании `animate.leave`, чтобы Angular удалил
-элемент.
+IMPORTANT: При использовании `animate.leave` вы **должны** вызвать `animationComplete()`, чтобы Angular удалил элемент.
 
-Если вы не вызовете `animationComplete()` при использовании `animate.leave`, Angular вызовет эту функцию автоматически
-после четырехсекундной задержки. Вы можете настроить длительность задержки, предоставив токен `MAX_ANIMATION_TIMEOUT` в
-миллисекундах.
+Если при `animate.leave` не вызвать `animationComplete()`, Angular вызовет функцию автоматически через четыре секунды. Длительность задержки можно настроить, предоставив токен `MAX_ANIMATION_TIMEOUT` в миллисекундах.
 
 ```typescript
   { provide: MAX_ANIMATION_TIMEOUT, useValue: 6000 }
 ```
 
-## Совместимость с устаревшими анимациями Angular
+## Совместимость с устаревшими Angular Animations {#compatibility-with-legacy-angular-animations}
 
-Вы не можете использовать устаревшие анимации (legacy animations) вместе с `animate.enter` и `animate.leave` в одном
-компоненте. Это приведет к тому, что классы входа останутся на элементе или удаляемые узлы не будут удалены. В остальном
-допустимо использовать и устаревшие анимации, и новые `animate.enter` и `animate.leave` в рамках одного _приложения_.
-Единственное предостережение касается проекции контента. Если вы проецируете контент из одного компонента с устаревшими
-анимациями в другой компонент с `animate.enter` или `animate.leave` (или наоборот), это приведет к такому же поведению,
-как если бы они использовались вместе в одном компоненте. Это не поддерживается.
+Нельзя использовать legacy-анимации вместе с `animate.enter` и `animate.leave` в одном компоненте. Это приведёт к тому, что enter-классы останутся на элементе или уходящие узлы не будут удалены. В остальном можно использовать и legacy-анимации, и новые `animate.enter` / `animate.leave` в одном _приложении_. Единственная оговорка — проекция контента. Если проецировать контент из компонента с legacy-анимациями в компонент с `animate.enter` или `animate.leave` (или наоборот), поведение будет таким же, как при совместном использовании в одном компоненте. Это не поддерживается.
 
-## Тестирование
+## Тестирование {#testing}
 
-TestBed предоставляет встроенную поддержку включения или отключения анимаций в тестовой среде. CSS-анимации требуют
-наличия браузера для запуска, а многие API недоступны в тестовой среде. По умолчанию TestBed отключает анимации в
-тестовых средах.
+TestBed предоставляет встроенную поддержку включения и отключения анимаций в тестовом окружении. CSS-анимации требуют браузера, и многие API в тестовом окружении недоступны. По умолчанию TestBed отключает анимации в тестах.
 
-Если вы хотите проверить, что анимации работают в браузерном тесте (например, в end-to-end тесте), вы можете настроить
-TestBed на включение анимаций, указав `animationsEnabled: true` в конфигурации теста.
+Если нужно проверить, что анимации работают в браузерном тесте (например, end-to-end), можно настроить TestBed на включение анимаций, указав `animationsEnabled: true` в конфигурации теста.
 
 ```typescript
-  TestBed.configureTestingModule({animationsEnabled: true});
+TestBed.configureTestingModule({animationsEnabled: true});
 ```
 
-Это настроит анимации в вашей тестовой среде так, чтобы они вели себя как обычно.
+Это настроит анимации в тестовом окружении на обычное поведение.
 
-ПРИМЕЧАНИЕ: Некоторые тестовые среды не генерируют события анимации, такие как `animationstart`, `animationend` и их
-эквиваленты для переходов (transition).
+NOTE: Некоторые тестовые окружения не эмитят события анимации вроде `animationstart`, `animationend` и их transition-эквиваленты.
 
-## Подробнее об анимациях в Angular
+## Дополнительно об анимациях Angular {#more-on-angular-animations}
 
-Возможно, вас также заинтересует следующее:
+Вас также могут заинтересовать:
 
 <docs-pill-row>
-  <docs-pill href="guide/animations/css" title="Сложные анимации с помощью CSS"/>
-  <docs-pill href="guide/routing/route-transition-animations" title="Анимации переходов маршрутов"/>
+  <docs-pill href="guide/animations/css" title="Complex Animations with CSS"/>
+  <docs-pill href="guide/routing/route-transition-animations" title="Route transition animations"/>
 </docs-pill-row>

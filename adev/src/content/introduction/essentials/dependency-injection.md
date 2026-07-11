@@ -1,28 +1,24 @@
-<docs-decorative-header title="Внедрение зависимостей (Dependency Injection)" imgSrc="adev/src/assets/images/dependency_injection.svg"> <!-- markdownlint-disable-line -->
-Повторно используйте код и управляйте поведением во всем приложении и тестах.
+<docs-decorative-header title="Внедрение зависимостей" imgSrc="adev/src/assets/images/dependency_injection.svg"> <!-- markdownlint-disable-line -->
+Переиспользуйте код и управляйте поведением во всём приложении и в тестах.
 </docs-decorative-header>
 
-Когда вам нужно разделить логику между компонентами, Angular использует шаблон
-проектирования [внедрение зависимостей](guide/di), который позволяет вам создать "сервис". Сервис позволяет вам внедрять
-код в компоненты, управляя им из единого источника истины.
+Когда нужно делиться логикой между компонентами, Angular использует паттерн проектирования [внедрения зависимостей](guide/di), который позволяет создать «сервис» для внедрения кода в компоненты при управлении им из единого источника истины.
 
-## Что такое сервисы?
+## Что такое сервисы? {#what-are-services}
 
-Сервисы — это повторно используемые части кода, которые могут быть внедрены.
+Сервисы — это переиспользуемые фрагменты кода, которые можно внедрять.
 
-Подобно определению компонента, сервисы состоят из следующего:
+Подобно определению компонента, сервис состоит из следующего:
 
-- **Декоратор TypeScript**, который объявляет класс как сервис Angular через `@Injectable` и позволяет вам определить,
-  какая часть приложения может получить доступ к сервису через свойство `providedIn` (обычно это `'root'`), чтобы
-  разрешить доступ к сервису в любом месте приложения.
-- **Класс TypeScript**, который определяет желаемый код, который будет доступен при внедрении сервиса.
+- **Декоратор TypeScript**, объявляющий класс сервисом Angular через `@Service` и позволяющий определить сервис, доступный в любом месте приложения.
+- **Класс TypeScript**, определяющий нужный код, который будет доступен при внедрении сервиса
 
 Вот пример сервиса `Calculator`.
 
 ```angular-ts
-import {Injectable} from '@angular/core';
+import {Service} from '@angular/core';
 
-@Injectable({providedIn: 'root'})
+@Service()
 export class Calculator {
   add(x: number, y: number) {
     return x + y;
@@ -30,35 +26,34 @@ export class Calculator {
 }
 ```
 
-## Как использовать сервис
+## Как использовать сервис {#how-to-use-a-service}
 
-Когда вы хотите использовать сервис в компоненте, вам нужно:
+Чтобы использовать сервис в компоненте, нужно:
 
-1. Импортировать сервис.
-2. Объявить поле класса, куда внедряется сервис. Присвоить полю класса результат вызова встроенной функции [`inject`](/api/core/inject), которая создает сервис.
+1. Импортировать сервис
+2. Объявить поле класса, куда внедряется сервис. Присвоить полю результат вызова встроенной функции [`inject`](/api/core/inject), которая создаёт сервис
 
 Вот как это может выглядеть в компоненте `Receipt`:
 
 ```angular-ts
-import { Component, inject } from '@angular/core';
-import { Calculator } from './calculator';
+import {Component, inject} from '@angular/core';
+import {Calculator} from './calculator';
 
 @Component({
   selector: 'app-receipt',
   template: `<h1>The total is {{ totalCost }}</h1>`,
 })
-
 export class Receipt {
   private calculator = inject(Calculator);
   totalCost = this.calculator.add(50, 25);
 }
 ```
 
-В этом примере `Calculator` используется путем вызова функции Angular `inject` и передачи ей сервиса.
+В этом примере `Calculator` используется путём вызова функции Angular [`inject`](/api/core/inject) с передачей в неё сервиса.
 
-## Следующий шаг
+## Следующий шаг {#next-step}
 
 <docs-pill-row>
-  <docs-pill title="Следующие шаги после Основ" href="essentials/next-steps" />
-  <docs-pill title="Углубленное руководство по внедрению зависимостей" href="guide/di" />
+  <docs-pill title="Следующие шаги после «Основ»" href="essentials/next-steps" />
+  <docs-pill title="Подробное руководство по внедрению зависимостей" href="guide/di" />
 </docs-pill-row>

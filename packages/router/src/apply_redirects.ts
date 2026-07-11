@@ -10,9 +10,8 @@ import {Injector, runInInjectionContext, ɵRuntimeError as RuntimeError} from '@
 
 import {RuntimeErrorCode} from './errors';
 import {NavigationCancellationCode} from './events';
-import {RedirectFunction, Route} from './models';
+import {PartialMatchRouteSnapshot, RedirectFunction, Route} from './models';
 import {navigationCancelingError} from './navigation_canceling_error';
-import {ActivatedRouteSnapshot} from './router_state';
 import {Params, PRIMARY_OUTLET} from './shared';
 import {UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree} from './url_tree';
 import {wrapIntoObservable} from './utils/collection';
@@ -86,7 +85,7 @@ export class ApplyRedirects {
     segments: UrlSegment[],
     redirectTo: string | RedirectFunction,
     posParams: {[k: string]: UrlSegment},
-    currentSnapshot: ActivatedRouteSnapshot,
+    currentSnapshot: PartialMatchRouteSnapshot,
     injector: Injector,
   ): Promise<UrlTree> {
     const redirect = await getRedirectResult(redirectTo, currentSnapshot, injector);
@@ -143,7 +142,8 @@ export class ApplyRedirects {
   ): UrlSegmentGroup {
     const updatedSegments = this.createSegments(redirectTo, group.segments, segments, posParams);
 
-    let children: {[n: string]: UrlSegmentGroup} = {};
+    // Keyed by outlet name, which can be `__proto__`, so use a null-prototype map.
+    let children: {[n: string]: UrlSegmentGroup} = Object.create(null);
     Object.entries(group.children).forEach(([name, child]) => {
       children[name] = this.createSegmentGroup(redirectTo, child, segments, posParams);
     });
@@ -194,19 +194,14 @@ export class ApplyRedirects {
 
 function getRedirectResult(
   redirectTo: string | RedirectFunction,
-  currentSnapshot: ActivatedRouteSnapshot,
+  currentSnapshot: PartialMatchRouteSnapshot,
   injector: Injector,
 ): Promise<string | UrlTree> {
   if (typeof redirectTo === 'string') {
     return Promise.resolve(redirectTo);
   }
   const redirectToFn = redirectTo;
-  const {queryParams, fragment, routeConfig, url, outlet, params, data, title} = currentSnapshot;
   return firstValueFrom(
-    wrapIntoObservable(
-      runInInjectionContext(injector, () =>
-        redirectToFn({params, data, queryParams, fragment, routeConfig, url, outlet, title}),
-      ),
-    ),
+    wrapIntoObservable(runInInjectionContext(injector, () => redirectToFn(currentSnapshot))),
   );
 }

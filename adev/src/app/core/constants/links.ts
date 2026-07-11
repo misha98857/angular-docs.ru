@@ -8,6 +8,7 @@
 
 export const ANGULAR_LINKS = {
   GITHUB: 'https://github.com/angular/angular',
+  X: 'https://x.com/angular',
   MEDIUM: 'https://blog.angular.dev',
   YOUTUBE: 'https://www.youtube.com/angular',
   DISCORD: 'https://discord.gg/angular',

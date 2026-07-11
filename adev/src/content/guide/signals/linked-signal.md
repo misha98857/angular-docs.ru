@@ -57,7 +57,7 @@ shippingOptions.set(['Email', 'Will Call', 'Postal service']);
 console.log(selectedOption()); // 'Email'
 ```
 
-## Учет предыдущего состояния
+## Учет предыдущего состояния {#accounting-for-previous-state}
 
 В некоторых случаях вычисление для `linkedSignal` должно учитывать предыдущее значение самого `linkedSignal`.
 
@@ -121,11 +121,11 @@ export class ShippingMethodPicker {
 свойства: `previous.source` — это предыдущее значение источника, и `previous.value` — это предыдущее значение
 `linkedSignal`. Вы можете использовать эти предыдущие значения для определения нового результата вычисления.
 
-ПОЛЕЗНО: При использовании параметра `previous` необходимо явно указывать аргументы обобщенного типа (generic type
+HELPFUL: При использовании параметра `previous` необходимо явно указывать аргументы обобщенного типа (generic type
 arguments) для `linkedSignal`. Первый обобщенный тип соответствует типу `source`, а второй определяет тип возвращаемого
 значения `computation`.
 
-## Пользовательское сравнение на равенство
+## Пользовательское сравнение на равенство {#custom-equality-comparison}
 
 `linkedSignal`, как и любой другой сигнал, может быть настроен с пользовательской функцией равенства. Эта функция
 используется зависимостями ниже по потоку для определения того, изменилось ли значение `linkedSignal` (результат
@@ -145,4 +145,66 @@ const activeUserEditCopy = linkedSignal({
   computation: user => user,
   equal: (a, b) => a.id === b.id,
 });
+```
+
+## Настройка операции set {#customizing-the-set-operation}
+
+Иногда операции `set` и `update` у `linkedSignal` нужно направлять обратно в источник истины, а не обновлять значение самого `linkedSignal` напрямую. Такое поведение можно настроить, передав функцию `set` в опциях.
+
+Пользовательская функция `set` получает два аргумента:
+
+1. Новое устанавливаемое значение.
+2. Функцию `rawSet`, которую можно вызвать, чтобы обновить внутреннее состояние `linkedSignal` напрямую (как при поведении по умолчанию).
+
+NOTE: С помощью `rawSet` можно обновить значение `linkedSignal` напрямую. Это полезно, если нужно избежать повторного запуска вычисления — например, когда оно дорогое, а результат уже известен.
+
+### Запись обратно в исходный сигнал {#writing-back-to-a-source-signal}
+
+Рассмотрим компонент, который отображает и позволяет редактировать температуру в градусах Фаренгейта, но в качестве источника истины использует сигнал в градусах Цельсия:
+
+```typescript
+const tempC = signal(0);
+const tempF = linkedSignal(() => (tempC() * 9) / 5 + 32, {
+  set: (valF) => tempC.set(((valF - 32) * 5) / 9),
+});
+
+console.log(tempF()); // 32
+
+// Setting Fahrenheit updates Celsius, which reactively updates Fahrenheit
+tempF.set(212);
+console.log(tempC()); // 100
+console.log(tempF()); // 212
+```
+
+### Обновление свойства внутри родительского объекта {#updating-a-property-inside-a-parent-object}
+
+Ещё один распространённый сценарий — обновление конкретного свойства внутри родительского объекта. Родитель хранится в сигнале, а вы связываетесь со вложенным свойством:
+
+```typescript
+interface Order {
+  id: number;
+  shippingMethod: string;
+}
+
+const order = signal<Order>({
+  id: 42,
+  shippingMethod: 'Ground',
+});
+
+const shippingMethod = linkedSignal(() => order().shippingMethod, {
+  set: (newMethod) => {
+    // Perform an immutable update to write the change back to the order
+    order.update((currentOrder) => ({
+      ...currentOrder,
+      shippingMethod: newMethod,
+    }));
+  },
+});
+
+console.log(shippingMethod()); // 'Ground'
+
+// Updating the shippingMethod updates the parent order object
+shippingMethod.set('Air');
+console.log(order()); // { id: 42, shippingMethod: 'Air' }
+console.log(shippingMethod()); // 'Air'
 ```

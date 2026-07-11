@@ -1,39 +1,29 @@
-# Рендеринг шаблонов из родительского компонента с помощью `ng-content`
+# Рендер шаблонов из родительского компонента с `ng-content`
 
-`<ng-content>` — это специальный элемент, который принимает разметку или фрагмент шаблона и управляет тем, как
-компоненты отображают контент. Он не создает реальный DOM-элемент.
+`<ng-content>` — специальный элемент, который принимает разметку или фрагмент шаблона и управляет тем, как компоненты рендерят контент. Он не создаёт реальный DOM-элемент.
 
-Ниже приведен пример компонента `BaseButton`, который принимает любую разметку от своего родительского компонента.
+Ниже пример компонента `BaseButton`, который принимает любую разметку от родителя.
 
-```angular-ts
-// ./base-button/base-button.component.ts
-import { Component } from '@angular/core';
+```angular-ts {header:'base-button/base-button.ts'}
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'button[baseButton]',
-  template: `
-      <ng-content />
-  `,
+  template: `<ng-content />`,
 })
 export class BaseButton {}
 ```
 
-```angular-ts
-// ./app.component.ts
-import { Component } from '@angular/core';
-import { BaseButton } from './base-button/base-button.component';
+```angular-ts {header:'app.ts'}
+import {Component} from '@angular/core';
+import {BaseButton} from './base-button';
 
 @Component({
   selector: 'app-root',
   imports: [BaseButton],
-  template: `
-    <button baseButton>
-      Next <span class="icon arrow-right"></span>
-    </button>
-  `,
+  template: `<button baseButton>Next <span class="icon arrow-right"></span></button>`,
 })
-export class AppComponent {}
+export class App {}
 ```
 
-Чтобы узнать больше о других способах использования этого паттерна, ознакомьтесь с [подробным руководством по
-`<ng-content>`](/guide/components/content-projection).
+Подробнее см. [подробное руководство по `<ng-content>`](/guide/components/content-projection) — там описаны и другие способы использования этого паттерна.

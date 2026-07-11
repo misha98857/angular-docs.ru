@@ -44,6 +44,7 @@ import {
   getValidConstructorDependencies,
   InjectableClassRegistry,
   makeDuplicateDeclarationError,
+  parseStandaloneOption,
   toFactoryMetadata,
   unwrapExpression,
   wrapTypeReference,
@@ -80,9 +81,12 @@ export class PipeSymbol extends SemanticSymbol {
   }
 }
 
-export class PipeDecoratorHandler
-  implements DecoratorHandler<Decorator, PipeHandlerData, PipeSymbol, unknown>
-{
+export class PipeDecoratorHandler implements DecoratorHandler<
+  Decorator,
+  PipeHandlerData,
+  PipeSymbol,
+  unknown
+> {
   constructor(
     private reflector: ReflectionHost,
     private evaluator: PartialEvaluator,
@@ -120,6 +124,10 @@ export class PipeDecoratorHandler
     }
   }
 
+  isStandalone(decorator: Readonly<Decorator>): boolean {
+    return parseStandaloneOption(decorator, this.evaluator, this.implicitStandaloneValue);
+  }
+
   analyze(
     clazz: ClassDeclaration,
     decorator: Readonly<Decorator>,
@@ -127,7 +135,7 @@ export class PipeDecoratorHandler
     this.perf.eventCount(PerfEvent.AnalyzePipe);
 
     const name = clazz.name.text;
-    const type = wrapTypeReference(this.reflector, clazz);
+    const type = wrapTypeReference(clazz);
 
     if (decorator.args === null) {
       throw new FatalDiagnosticError(

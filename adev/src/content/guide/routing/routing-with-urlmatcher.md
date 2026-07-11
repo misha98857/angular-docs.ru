@@ -10,11 +10,11 @@ Angular Router поддерживает мощную стратегию сопо
 Angular.
 Этот сопоставитель ищет в URL хендл (имя пользователя).
 
-## Цели
+## Цели {#objectives}
 
 Реализовать `UrlMatcher` из Angular для создания пользовательского сопоставителя маршрутов.
 
-## Создание примера приложения
+## Создание примера приложения {#create-a-sample-application}
 
 Используя Angular CLI, создайте новое приложение _angular-custom-route-match_.
 Помимо стандартного каркаса приложения Angular, вы также создадите компонент _profile_.
@@ -40,13 +40,13 @@ Angular.
 
 1. В редакторе кода найдите файл `profile.component.html` и замените его содержимое следующим HTML-кодом.
 
-   <docs-code header="profile/profile.component.html" path="adev/src/content/examples/routing-with-urlmatcher/src/app/profile/profile.component.html"/>
+   <docs-code header="profile.html" path="adev/src/content/examples/routing-with-urlmatcher/src/app/profile/profile.html"/>
 
 1. В редакторе кода найдите файл `app.component.html` и замените его содержимое следующим HTML-кодом.
 
-   <docs-code header="app.component.html" path="adev/src/content/examples/routing-with-urlmatcher/src/app/app.component.html"/>
+   <docs-code header="app.html" path="adev/src/content/examples/routing-with-urlmatcher/src/app/app.html"/>
 
-## Настройка маршрутов приложения
+## Настройка маршрутов приложения {#configure-your-routes-for-your-application}
 
 Теперь, когда каркас приложения готов, нужно добавить возможности маршрутизации в файл `app.config.ts`.
 В рамках этого процесса вы создадите пользовательский сопоставитель URL, который ищет хендл в URL.
@@ -78,7 +78,7 @@ Angular.
 HELPFUL: Пользовательский сопоставитель URL ведет себя так же, как и любое другое определение маршрута. Вы можете
 определять дочерние маршруты или маршруты с ленивой загрузкой так же, как и для любого другого маршрута.
 
-## Чтение параметров маршрута
+## Чтение параметров маршрута {#reading-the-route-parameters}
 
 Когда пользовательский сопоставитель готов, можно привязать параметр маршрута в компоненте `profile`.
 
@@ -90,7 +90,7 @@ HELPFUL: Пользовательский сопоставитель URL вед�
 username = input.required<string>();
 ```
 
-## Проверка пользовательского сопоставителя URL
+## Проверка пользовательского сопоставителя URL {#test-your-custom-url-matcher}
 
 Теперь, когда код написан, можно протестировать пользовательский сопоставитель URL.
 
@@ -108,7 +108,7 @@ username = input.required<string>();
 
    На странице появится новое предложение `Hello, Angular!`.
 
-## Следующие шаги
+## Следующие шаги {#next-steps}
 
 Сопоставление шаблонов с помощью Angular Router дает большую гибкость при работе с динамическими URL-адресами в
 приложении.

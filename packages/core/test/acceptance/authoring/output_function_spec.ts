@@ -194,6 +194,40 @@ describe('output() function', () => {
     expect(dir.effectCount).toEqual(1);
   });
 
+  it('should not skip subsequent listeners if an earlier listener unsubscribes', () => {
+    @Directive({
+      selector: '[dir]',
+    })
+    class Dir {
+      myEvent = output<number>();
+    }
+
+    @Component({template: '<div dir></div>', imports: [Dir]})
+    class App {}
+
+    const fixture = TestBed.createComponent(App);
+    const dir = fixture.debugElement.children[0].injector.get(Dir);
+    fixture.detectChanges();
+
+    let firstValue: number | undefined;
+    let secondValue: number | undefined;
+
+    const firstSubscription = dir.myEvent.subscribe((v) => {
+      firstValue = v;
+      firstSubscription.unsubscribe(); // Synchronously unsubscribe during the emit loop
+    });
+
+    const secondSubscription = dir.myEvent.subscribe((v) => {
+      secondValue = v;
+    });
+
+    dir.myEvent.emit(1);
+
+    expect(firstValue).toEqual(1);
+    expect(secondValue).toEqual(1);
+    secondSubscription.unsubscribe();
+  });
+
   describe('outputFromObservable()', () => {
     it('should support using a `Subject` as source', () => {
       @Directive({
@@ -299,7 +333,7 @@ describe('output() function', () => {
       @Component({
         template: `
           <div dir></div>
-          <div dir (onBla)="true"></div>
+          <div dir (onBla)="(true)"></div>
         `,
         imports: [Dir],
       })
@@ -324,9 +358,7 @@ describe('output() function', () => {
       }
 
       @Component({
-        template: `
-          <div dir (onBla)="true"></div>
-        `,
+        template: ` <div dir (onBla)="(true)"></div> `,
         imports: [Dir],
       })
       class App {}
