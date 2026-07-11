@@ -4,7 +4,7 @@ Angular Language Service предоставляет редакторам код�
 подсказки и навигацию внутри шаблонов Angular.
 Он работает как с внешними шаблонами в отдельных HTML-файлах, так и со встроенными (in-line) шаблонами.
 
-## Настройка опций компилятора для Angular Language Service
+## Настройка опций компилятора для Angular Language Service {#configuring-compiler-options-for-the-angular-language-service}
 
 Чтобы включить новейшие функции языкового сервиса, установите опцию `strictTemplates` в файле `tsconfig.json` в значение
 `true`, как показано в следующем примере:
@@ -20,7 +20,7 @@ Angular Language Service предоставляет редакторам код�
 Для получения дополнительной информации см. руководство
 по [опциям компилятора Angular](reference/configs/angular-compiler-options).
 
-## Возможности
+## Возможности {#features}
 
 Ваш редактор автоматически определяет, что вы открываете файл Angular.
 Затем он использует Angular Language Service для чтения файла `tsconfig.json`, находит все шаблоны в вашем приложении и
@@ -33,7 +33,7 @@ Angular Language Service предоставляет редакторам код�
 - Быстрая справка (Quick info)
 - Переход к определению (Go to definition)
 
-### Автодополнение
+### Автодополнение {#autocompletion}
 
 Автодополнение может ускорить процесс разработки, предоставляя контекстные варианты и подсказки по мере ввода текста.
 В этом примере показано автодополнение внутри интерполяции.
@@ -44,14 +44,14 @@ Angular Language Service предоставляет редакторам код�
 Также существует автодополнение внутри элементов.
 Любые элементы, которые вы используете как селекторы компонентов, будут отображаться в списке автодополнения.
 
-### Проверка ошибок
+### Проверка ошибок {#error-checking}
 
 Angular Language Service может предупреждать вас об ошибках в коде.
 В этом примере Angular не знает, что такое `orders` и откуда оно берется.
 
 <img alt="проверка ошибок" src="assets/images/guide/language-service/language-error.gif">
 
-### Быстрая справка и навигация
+### Быстрая справка и навигация {#quick-info-and-navigation}
 
 Функция быстрой справки позволяет навести курсор на элементы, чтобы увидеть, откуда берутся компоненты, директивы и
 модули.
@@ -60,7 +60,7 @@ Angular Language Service может предупреждать вас об ош�
 
 <img alt="навигация" src="assets/images/guide/language-service/language-navigation.gif">
 
-## Angular Language Service в вашем редакторе
+## Angular Language Service в вашем редакторе {#angular-language-service-in-your-editor}
 
 Angular Language Service в настоящее время доступен как расширение
 для [Visual Studio Code](https://code.visualstudio.com), [WebStorm](https://www.jetbrains.com/webstorm), [Sublime Text](https://www.sublimetext.com), [Zed](https://zed.dev), [Neovim](https://neovim.io)
@@ -201,7 +201,7 @@ Angular Language Service можно использовать с Neovim с пом
 
 В [Zed](https://zed.dev) установите расширение из [Extensions: Marketplace](https://zed.dev/extensions/angular).
 
-## Как работает Language Service
+## Как работает Language Service {#how-the-language-service-works}
 
 Когда вы используете редактор с языковым сервисом, редактор запускает отдельный процесс языкового сервиса и общается с
 ним через [RPC](https://ru.wikipedia.org/wiki/Удалённый_вызов_процедур),
@@ -223,7 +223,7 @@ HTML AST может только сказать компилятору, что �
 Затем Angular Language Service смотрит на `data.---` в его контексте, запрашивает у TypeScript Language Service, какие
 члены есть у `data`, и возвращает список возможностей.
 
-## Дополнительная информация
+## Дополнительная информация {#more-information}
 
 - Для получения более подробной информации о реализации
   см. [исходный код Angular Language Service](https://github.com/angular/angular/blob/main/packages/language-service/src)

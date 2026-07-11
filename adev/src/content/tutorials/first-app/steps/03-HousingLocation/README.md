@@ -4,7 +4,7 @@
 
 <docs-video src="https://www.youtube.com/embed/R0nRX8jD2D0?si=U4ONEbPvtptdUHTt&amp;start=440"/>
 
-## Чему вы научитесь
+## Чему вы научитесь {#what-youll-learn}
 
 - В вашем приложении появится новый компонент `HousingLocation`, который отображает сообщение, подтверждающее его
   добавление в приложение.

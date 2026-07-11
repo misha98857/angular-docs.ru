@@ -15,7 +15,7 @@ export const ROUTE_TITLE_PROPERTY = 'label';
 export const ROUTE_PARENT_PROPERTY = 'parent';
 export const TITLE_SUFFIX = 'Angular';
 export const TITLE_SEPARATOR = ' • ';
-export const DEFAULT_PAGE_TITLE = 'Overview';
+export const DEFAULT_PAGE_TITLE = 'Обзор';
 
 export const TITLE_OG_META_TAG = 'og:title';
 export const TITLE_TWITTER_META_TAG = 'twitter:title';

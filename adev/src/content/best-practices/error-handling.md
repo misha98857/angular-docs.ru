@@ -19,7 +19,7 @@ API, должен включать обработку ошибок (наприм
 для пользователя сообщение об ошибке или повторить запрос, вместо того чтобы позволить ошибке распространиться без
 обработки.
 
-## Необработанные ошибки передаются в `ErrorHandler`
+## Необработанные ошибки передаются в `ErrorHandler` {#unhandled-errors-are-reported-to-the-errorhandler}
 
 Angular сообщает о необработанных ошибках в корневой `ErrorHandler` приложения. При предоставлении пользовательского
 `ErrorHandler`, укажите его в `ApplicationConfig` при вызове `bootstrapApplication`.
@@ -68,7 +68,7 @@ export class GlobalErrorHandler implements ErrorHandler {
 }
 ```
 
-### `TestBed` повторно выбрасывает ошибки по умолчанию
+### `TestBed` повторно выбрасывает ошибки по умолчанию {#testbed-rethrows-errors-by-default}
 
 Во многих случаях `ErrorHandler` может только логировать ошибки и позволять приложению продолжать работу. Однако в
 тестах вы почти всегда хотите, чтобы эти ошибки всплывали. `TestBed` в Angular повторно выбрасывает неожиданные ошибки,
@@ -78,7 +78,7 @@ export class GlobalErrorHandler implements ErrorHandler {
 _не_ выбрасывал повторно ошибки приложения](api/core/testing/TestModuleMetadata#rethrowApplicationErrors) с помощью
 `TestBed.configureTestingModule({rethrowApplicationErrors: false})`.
 
-## Глобальные слушатели ошибок
+## Глобальные слушатели ошибок {#global-error-listeners}
 
 Ошибки, которые не перехвачены ни кодом приложения, ни экземпляром приложения фреймворка, могут достичь глобальной
 области видимости. Ошибки, достигающие глобальной области видимости, могут иметь непредвиденные последствия, если их не
@@ -86,7 +86,7 @@ _не_ выбрасывал повторно ошибки приложения](
 незамеченными, и посетители сайта могут увидеть их в консоли браузера. Angular предоставляет глобальные слушатели для
 обеих сред, чтобы учесть эти проблемы.
 
-### Рендеринг на стороне клиента
+### Рендеринг на стороне клиента {#client-side-rendering}
 
 Добавление [`provideBrowserGlobalErrorListeners()`](/api/core/provideBrowserGlobalErrorListeners)
 в [ApplicationConfig](guide/di/dependency-injection#at-the-application-root-level-using-applicationconfig) добавляет
@@ -96,7 +96,7 @@ _не_ выбрасывал повторно ошибки приложения](
 пользовательских слушателей. Если вы предоставляете пользовательские слушатели, вы можете удалить
 `provideBrowserGlobalErrorListeners`.
 
-### Рендеринг на стороне сервера и гибридный рендеринг
+### Рендеринг на стороне сервера и гибридный рендеринг {#server-side-and-hybrid-rendering}
 
 При использовании [Angular с SSR](guide/ssr), Angular автоматически добавляет слушатели `'unhandledRejection'` и
 `'uncaughtException'` к процессу сервера. Эти обработчики предотвращают сбой сервера и вместо этого логируют

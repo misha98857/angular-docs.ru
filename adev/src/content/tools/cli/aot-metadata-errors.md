@@ -2,7 +2,7 @@
 
 Ниже приведены ошибки метаданных, с которыми вы можете столкнуться, с объяснениями и предлагаемыми исправлениями.
 
-## Форма выражения не поддерживается (Expression form not supported)
+## Форма выражения не поддерживается (Expression form not supported) {#expression-form-not-supported}
 
 HELPFUL: Компилятор встретил выражение, которое он не понял при оценке метаданных Angular.
 
@@ -27,7 +27,7 @@ const prop = typeof Fooish; // typeof недопустим в метаданны
 компилятора при написании метаданных Angular, и с осторожностью относитесь к новым или необычным возможностям
 TypeScript.
 
-## Ссылка на локальный (неэкспортируемый) символ (Reference to a local (non-exported) symbol)
+## Ссылка на локальный (неэкспортируемый) символ (Reference to a local (non-exported) symbol) {#reference-to-a-local-non-exported-symbol}
 
 HELPFUL: Ссылка на локальный \(неэкспортируемый\) символ 'symbol name'. Рассмотрите возможность экспорта символа.
 
@@ -162,7 +162,7 @@ export let someTemplate = '<h1>Greetings from Angular</h1>';
 export class MyComponent {}
 ```
 
-## Ссылка на неэкспортируемый класс (Reference to a non-exported class)
+## Ссылка на неэкспортируемый класс (Reference to a non-exported class) {#reference-to-a-non-exported-class}
 
 HELPFUL: _Ссылка на неэкспортируемый класс `<class name>`._
 _Рассмотрите возможность экспорта класса._
@@ -198,7 +198,7 @@ export abstract class MyStrategy { }
   …
 ```
 
-## Ссылка на неэкспортируемую функцию (Reference to a non-exported function)
+## Ссылка на неэкспортируемую функцию (Reference to a non-exported function) {#reference-to-a-non-exported-function}
 
 HELPFUL: _Метаданные ссылаются на функцию, которая не была экспортирована._
 
@@ -231,7 +231,7 @@ export function myStrategy() { … }
   …
 ```
 
-## Вызовы функций не поддерживаются (Function calls are not supported)
+## Вызовы функций не поддерживаются (Function calls are not supported) {#function-calls-are-not-supported}
 
 HELPFUL: _Вызовы функций не поддерживаются. Рассмотрите возможность замены функции или лямбда-выражения ссылкой на
 экспортируемую функцию._
@@ -283,7 +283,7 @@ export function someValueFactory() {
   …
 ```
 
-## Деструктурированная переменная или константа не поддерживается (Destructured variable or constant not supported)
+## Деструктурированная переменная или константа не поддерживается (Destructured variable or constant not supported) {#destructured-variable-or-constant-not-supported}
 
 HELPFUL: _Ссылка на экспортируемую деструктурированную переменную или константу не поддерживается компилятором шаблонов.
 Рассмотрите возможность упрощения, чтобы избежать деструктуризации._
@@ -320,7 +320,7 @@ import { configuration } from './configuration';
   …
 ```
 
-## Не удалось разрешить тип (Could not resolve type)
+## Не удалось разрешить тип (Could not resolve type) {#could-not-resolve-type}
 
 HELPFUL: _Компилятор встретил тип и не может определить, какой модуль экспортирует этот тип._
 
@@ -388,7 +388,7 @@ export class MyComponent {
 }
 ```
 
-## Ожидалось имя (Name expected)
+## Ожидалось имя (Name expected) {#name-expected}
 
 HELPFUL: _Компилятор ожидал имя в выражении, которое он оценивал._
 
@@ -406,7 +406,7 @@ provider: [{ provide: Foo, useValue: { 0: 'test' } }]
 provider: [{ provide: Foo, useValue: { '0': 'test' } }]
 ```
 
-## Неподдерживаемое имя члена перечисления (Unsupported enum member name)
+## Неподдерживаемое имя члена перечисления (Unsupported enum member name) {#unsupported-enum-member-name}
 
 HELPFUL: _Angular не смог определить
 значение [члена перечисления](https://www.typescriptlang.org/docs/handbook/enums.html), на который вы ссылались в
@@ -434,7 +434,7 @@ enum Colors {
 
 Избегайте ссылок на перечисления (enum) со сложными инициализаторами или вычисляемыми свойствами.
 
-## Тегированные шаблонные строки не поддерживаются (Tagged template expressions are not supported)
+## Тегированные шаблонные строки не поддерживаются (Tagged template expressions are not supported) {#tagged-template-expressions-are-not-supported}
 
 HELPFUL: _Тегированные шаблонные строки не поддерживаются в метаданных._
 
@@ -458,7 +458,7 @@ _функция-тег_, встроенная в JavaScript ES2015.
 
 AOT-компилятор не поддерживает тегированные шаблонные строки; избегайте их в выражениях метаданных.
 
-## Ожидалась ссылка на символ (Symbol reference expected)
+## Ожидалась ссылка на символ (Symbol reference expected) {#symbol-reference-expected}
 
 HELPFUL: _Компилятор ожидал ссылку на символ в месте, указанном в сообщении об ошибке._
 

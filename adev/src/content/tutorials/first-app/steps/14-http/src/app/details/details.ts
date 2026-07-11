@@ -12,7 +12,7 @@ import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
       <img
         class="listing-photo"
         [src]="housingLocation?.photo"
-        alt="Exterior photo of {{ housingLocation?.name }}"
+        alt="Фото экстерьера {{ housingLocation?.name }}"
         crossorigin
       />
       <section class="listing-description">
@@ -20,25 +20,25 @@ import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
         <p class="listing-location">{{ housingLocation?.city }}, {{ housingLocation?.state }}</p>
       </section>
       <section class="listing-features">
-        <h2 class="section-heading">About this housing location</h2>
+        <h2 class="section-heading">Об этом объекте жилья</h2>
         <ul>
-          <li>Units available: {{ housingLocation?.availableUnits }}</li>
-          <li>Does this location have wifi: {{ housingLocation?.wifi }}</li>
-          <li>Does this location have laundry: {{ housingLocation?.laundry }}</li>
+          <li>Доступно единиц: {{ housingLocation?.availableUnits }}</li>
+          <li>Есть ли Wi‑Fi: {{ housingLocation?.wifi }}</li>
+          <li>Есть ли прачечная: {{ housingLocation?.laundry }}</li>
         </ul>
       </section>
       <section class="listing-apply">
-        <h2 class="section-heading">Apply now to live here</h2>
+        <h2 class="section-heading">Подайте заявку, чтобы жить здесь</h2>
         <form [formGroup]="applyForm" (submit)="submitApplication()">
-          <label for="first-name">First Name</label>
+          <label for="first-name">Имя</label>
           <input id="first-name" type="text" formControlName="firstName" />
 
-          <label for="last-name">Last Name</label>
+          <label for="last-name">Фамилия</label>
           <input id="last-name" type="text" formControlName="lastName" />
 
           <label for="email">Email</label>
           <input id="email" type="email" formControlName="email" />
-          <button type="submit" class="primary">Apply now</button>
+          <button type="submit" class="primary">Подать заявку</button>
         </form>
       </section>
     </article>

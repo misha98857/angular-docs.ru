@@ -21,7 +21,7 @@ ng generate @angular/core:ngstyle-to-style
 <div [style]="{'background-color': 'red'}">
 ```
 
-## Параметры конфигурации
+## Параметры конфигурации {#configuration-options}
 
 Процесс миграции поддерживает несколько параметров для точной настройки под ваши конкретные нужды.
 

@@ -1,5 +1,5 @@
 {
-  "title": "Your first Angular app",
+  "title": "Ваше первое приложение Angular",
   "type": "editor",
   "nextTutorial": "first-app",
   "openFiles": ["src/app/app.ts"]

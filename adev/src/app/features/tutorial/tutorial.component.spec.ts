@@ -166,7 +166,7 @@ describe('Tutorial', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    expect(revealAnswerButton.nativeElement.textContent?.trim()).toBe('Reset');
+    expect(revealAnswerButton.nativeElement.textContent?.trim()).toBe('Сбросить');
   });
 
   it('should not reveal the answer when button is disabled', async () => {

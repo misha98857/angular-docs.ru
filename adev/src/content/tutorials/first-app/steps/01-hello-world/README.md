@@ -6,7 +6,7 @@
 
 <docs-video src="https://www.youtube.com/embed/UnOwDuliqZA?si=uML-cDRbrxmYdD_9"/>
 
-## Что вы узнаете
+## Что вы узнаете {#what-youll-learn}
 
 Обновленное приложение, которое вы получите после этого урока, подтвердит, что вы и ваша IDE готовы к созданию
 приложения Angular.

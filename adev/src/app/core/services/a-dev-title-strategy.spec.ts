@@ -43,7 +43,7 @@ describe('ADevTitleStrategy', () => {
       children: [
         {
           path: 'child',
-          data: {label: 'Overview', parent: {label: 'Fourth'}},
+          data: {label: 'Обзор', parent: {label: 'Fourth'}},
           component: FakeComponent,
         },
       ],
@@ -97,7 +97,7 @@ describe('ADevTitleStrategy', () => {
     await router.navigateByUrl('/fourth/child');
     service.updateTitle(router.routerState.snapshot);
 
-    expect(title.setTitle).toHaveBeenCalledOnceWith('Fourth • Overview • Angular');
+    expect(title.setTitle).toHaveBeenCalledOnceWith('Fourth • Обзор • Angular');
   });
 
   it('should update meta tags when title is updated', async () => {

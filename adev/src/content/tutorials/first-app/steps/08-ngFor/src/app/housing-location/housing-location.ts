@@ -8,7 +8,7 @@ import {HousingLocationInfo} from '../housinglocation';
       <img
         class="listing-photo"
         [src]="housingLocation().photo"
-        alt="Exterior photo of {{ housingLocation().name }}"
+        alt="Фото экстерьера {{ housingLocation().name }}"
         crossorigin
       />
       <h2 class="listing-heading">{{ housingLocation().name }}</h2>

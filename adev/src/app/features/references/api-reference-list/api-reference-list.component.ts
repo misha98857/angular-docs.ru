@@ -79,7 +79,7 @@ export default class ApiReferenceList {
 
   protected readonly statusLabels = {
     [STATUSES.stable]: 'Стабильный',
-    [STATUSES.developerPreview]: 'Developer Preview',
+    [STATUSES.developerPreview]: 'Превью для разработчиков',
     [STATUSES.experimental]: 'Экспериментальный',
     [STATUSES.deprecated]: 'Устаревший',
   };
