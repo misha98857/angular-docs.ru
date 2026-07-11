@@ -3,7 +3,7 @@
 Для большинства приложений наступает момент, когда требуется больше одной страницы. Когда это время неизбежно наступает,
 маршрутизация становится важной частью производительности для пользователей.
 
-Примечание: Узнайте больше о [маршрутизации в подробном руководстве](/guide/routing).
+NOTE: Узнайте больше о [маршрутизации в подробном руководстве](/guide/routing).
 
 В этом упражнении вы узнаете, как настроить ваше приложение для использования Angular Router.
 
@@ -34,15 +34,15 @@ export const routes: Routes = [];
 1. Импортируйте `routes` из `./app.routes.ts`.
 1. Вызовите функцию `provideRouter`, передав `routes` в качестве аргумента, внутри массива `providers`.
 
-```ts {highlight:[2,3,6]}
+<docs-code language="ts" highlight="[2,3,6]">
 import {ApplicationConfig} from '@angular/core';
 import {provideRouter} from '@angular/router';
 import {routes} from './app.routes';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes)],
+providers: [provideRouter(routes)],
 };
-```
+</docs-code>
 
 </docs-step>
 
@@ -53,13 +53,12 @@ export const appConfig: ApplicationConfig = {
 
 Обновите шаблон для `App`, добавив `<router-outlet />`
 
-```angular-ts {highlight:[11]}
+<docs-code language="angular-ts" highlight="[11]">
 import {RouterOutlet} from '@angular/router';
 
 @Component({
 ...
-template: `
-    <nav>
+template: `     <nav>
       <a href="/">Home</a>
       |
       <a href="/user">User</a>
@@ -69,7 +68,7 @@ template: `
 imports: [RouterOutlet],
 })
 export class App {}
-```
+</docs-code>
 
 </docs-step>
 

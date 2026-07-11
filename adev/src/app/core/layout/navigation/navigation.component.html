@@ -3,7 +3,7 @@
   [attr.id]="PRIMARY_NAV_ID"
   class="wrapper"
   (docsClickOutside)="closeMobileNav()"
-  [docsClickOutsideIgnore]="[SECONDARY_NAV_ID]"
+  [docsClickOutsideIgnore]="[SECONDARY_NAV_ID, SEARCH_DIALOG_ID]"
 >
   <!-- Mobile nav bar -->
   <div class="adev-mobile-nav-bar">
@@ -81,7 +81,7 @@
         class="adev-nav-item adev-nav-item--logo"
         [class.adev-nav-item--active]="activeRouteItem() === PAGE_PREFIX.HOME"
       >
-        <a aria-label="Angular homepage" routerLink="/">
+        <a aria-label="Главная страница Angular" routerLink="/">
           <!-- Logo Symbol -->
           @if (!isUwu) {
             <svg
@@ -148,7 +148,7 @@
         <div class="adev-nav-item">
           <button
             type="button"
-            aria-label="Select Angular version"
+            aria-label="Выбрать версию Angular"
             role="menu"
             class="adev-version-button"
             [class.adev-mini-menu-open]="openedMenu() === 'version-picker'"
@@ -170,7 +170,7 @@
           </button>
 
           <ng-template #docsVersionMiniMenu>
-            <ul class="adev-mini-menu adev-version-picker" cdkMenu>
+            <ul class="adev-mini-menu adev-mini-menu--version adev-version-picker" cdkMenu>
               @for (item of versions(); track item) {
                 <li>
                   <a type="button" cdkMenuItem [href]="item.url" [aria-label]="item.displayName">
@@ -190,7 +190,7 @@
           type="button"
           (click)="toggleSearchDialog($event)"
           title="Поиск по документации"
-          [aria-label]="'Open search dialog with ' + searchTitle"
+          [aria-label]="'Открыть поиск: ' + searchTitle"
         >
           <svg
             aria-hidden="true"
@@ -248,7 +248,7 @@
               d="m5.668 10-5-5 5-5 1.187 1.188L3.022 5.02l3.813 3.812L5.668 10Zm6.667 0-1.188-1.188L14.98 4.98l-3.812-3.812L12.335 0l5 5-5 5Z"
             />
           </svg>
-          <span class="adev-nav-item__label">Руководства</span>
+          <span class="adev-nav-item__label">Туториалы</span>
         </a>
       </li>
 
@@ -296,28 +296,29 @@
         <button
           type="button"
           [cdkMenuTriggerFor]="socialMiniMenu"
-          [cdkMenuPosition]="miniMenuPositions"
-          aria-label="Open social media links"
+          [cdkMenuPosition]="bottomMiniMenuPositions"
+          aria-label="Открыть ссылки на социальные сети"
           (cdkMenuClosed)="closeMenu()"
           (cdkMenuOpened)="openMenu('social')"
+          aria-controls="social-mini-menu"
         >
           <docs-icon role="presentation">more_horiz</docs-icon>
         </button>
 
         <ng-template #socialMiniMenu>
-          <ul class="adev-mini-menu" cdkMenu>
+          <ul class="adev-mini-menu adev-mini-menu--social" cdkMenu id="social-mini-menu">
             <li>
               <a
                 [href]="ngLinks.YOUTUBE"
                 cdkMenuItem
-                title="Angular YouTube channel"
+                title="Канал Angular на YouTube"
                 target="_blank"
                 rel="noopener"
               >
                 <!-- Youtube Icon -->
                 <svg
                   width="20"
-                  height="15"
+                  height="20"
                   viewBox="0 0 20 15"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -330,16 +331,38 @@
             </li>
             <li>
               <a
+                [href]="ngLinks.X"
+                cdkMenuItem
+                title="Профиль Angular в X (ранее Twitter)"
+                target="_blank"
+                rel="noopener"
+              >
+                <!-- X Icon -->
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 17 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M0.04145 0.04432l6.56351 8.77603L0 15.95564h1.48651l5.78263-6.24705 4.6722 6.24705h5.05865l-6.9328-9.26967L16.21504.04432h-1.48651l-5.32552 5.75341L5.1001.04432H.04145Zm2.18602 1.09497h2.32396l10.26221 13.72122h-2.32396L2.22747 1.13928Z"
+                  />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a
                 [href]="ngLinks.BLUESKY"
                 cdkMenuItem
-                title="Angular Bluesky profile"
+                title="Профиль Angular в Bluesky"
                 target="_blank"
                 rel="noopener"
               >
                 <!-- Bluesky Icon -->
                 <svg
-                  width="16"
-                  height="16"
+                  width="20"
+                  height="20"
                   viewBox="0 0 16 16"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -354,7 +377,7 @@
               <a
                 [href]="ngLinks.MEDIUM"
                 cdkMenuItem
-                title="Angular Medium blog"
+                title="Блог Angular на Medium"
                 target="_blank"
                 rel="noopener"
               >
@@ -370,11 +393,11 @@
               <a
                 [href]="ngLinks.GITHUB"
                 cdkMenuItem
-                title="Angular Github"
+                title="Angular на GitHub"
                 target="_blank"
                 rel="noopener"
               >
-                <!-- Github Icon -->
+                <!-- GitHub Icon -->
                 <svg
                   width="20"
                   height="20"
@@ -394,7 +417,7 @@
               <a
                 [href]="ngLinks.DISCORD"
                 cdkMenuItem
-                title="Angular Discord"
+                title="Angular в Discord"
                 target="_blank"
                 rel="noopener"
               >
@@ -414,6 +437,28 @@
                 </svg>
               </a>
             </li>
+            <li>
+              <a
+                [href]="ngLinks.STACKOVERFLOW"
+                cdkMenuItem
+                title="Angular на Stack Overflow"
+                target="_blank"
+                rel="noopener"
+              >
+                <!-- Stack Overflow Icon -->
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 26 31"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="m22.18 16.32.05.02-.02.01za19 19 0 0 0-2.45 4.14l-.03.07q-.94 2.19-1.29 4.6v.03a18 18 0 0 0-.05 4.85H.01v-4.88h15.94l.1-.6L.69 20.48l1.28-4.7 15.55 4.1.22-.46-13.96-7.96 2.47-4.22 14.16 8.07.34-.4L9.15 3.47 12.65 0l11.78 11.64 1.25 1.23q-1.97 1.5-3.5 3.44"
+                  />
+                </svg>
+              </a>
+            </li>
           </ul>
         </ng-template>
       </div>
@@ -422,8 +467,8 @@
         <button
           type="button"
           [cdkMenuTriggerFor]="themeMiniMenu"
-          [cdkMenuPosition]="miniMenuPositions"
-          [aria-label]="'Change theme. Current theme: ' + theme()"
+          [cdkMenuPosition]="bottomMiniMenuPositions"
+          [aria-label]="'Сменить тему. Текущая тема: ' + theme()"
           aria-controls="theme-mini-menu"
           [aria-expanded]="openedMenu() === 'theme-picker'"
           aria-haspopup="menu"
@@ -447,11 +492,11 @@
 
         <ng-template #themeMiniMenu>
           <ul
-            class="adev-mini-menu"
+            class="adev-mini-menu adev-mini-menu--theme"
             cdkMenu
             id="theme-mini-menu"
             role="menu"
-            aria-label="Theme options"
+            aria-label="Варианты темы"
           >
             <li role="none">
               <button
@@ -460,10 +505,10 @@
                 role="menuitemradio"
                 [aria-checked]="theme() === 'auto'"
                 (click)="setTheme('auto')"
-                aria-label="Set default system theme"
+                aria-label="Системная тема"
               >
                 <docs-icon class="docs-icon_high-contrast" aria-hidden="true">routine</docs-icon>
-                <span>System</span>
+                <span>Системная</span>
               </button>
             </li>
             <li role="none">
@@ -473,10 +518,10 @@
                 role="menuitemradio"
                 [aria-checked]="theme() === 'dark'"
                 (click)="setTheme('dark')"
-                aria-label="Set dark theme"
+                aria-label="Тёмная тема"
               >
                 <docs-icon class="docs-icon_high-contrast" aria-hidden="true">dark_mode</docs-icon>
-                <span>Dark</span>
+                <span>Тёмная</span>
               </button>
             </li>
             <li role="none">
@@ -486,10 +531,10 @@
                 role="menuitemradio"
                 [aria-checked]="theme() === 'light'"
                 (click)="setTheme('light')"
-                aria-label="Set light theme"
+                aria-label="Светлая тема"
               >
                 <docs-icon class="docs-icon_high-contrast" aria-hidden="true">light_mode</docs-icon>
-                <span>Light</span>
+                <span>Светлая</span>
               </button>
             </li>
           </ul>

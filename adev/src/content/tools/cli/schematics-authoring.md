@@ -14,7 +14,7 @@ Schematic описывает конвейер преобразований, ко
 Когда Schematic запускается, преобразования записываются в память и применяются к реальной файловой системе только после
 подтверждения их валидности.
 
-## Концепции Schematics {#schematics-concepts}
+## Концепции Schematics
 
 Публичный API для Schematics определяет классы, представляющие основные концепции.
 
@@ -38,7 +38,7 @@ Schematic описывает конвейер преобразований, ко
 дерева сливаются с базовым деревом.
 Изменение может быть принято, проигнорировано или вызвать исключение.
 
-### Определение правил и действий {#defining-rules-and-actions}
+### Определение правил и действий
 
 Когда вы создаете новый пустой Schematic с помощью [Schematics CLI](#schematics-cli), сгенерированная входная функция
 является _фабрикой правил_ (rule factory).
@@ -64,18 +64,19 @@ export function helloWorld(_options: any): Rule {
 проектами Angular CLI и многим другим.
 
 ```ts {header: "index.ts"}
+
 import {
-  JsonAstObject,
-  JsonObject,
-  JsonValue,
-  Path,
-  normalize,
-  parseJsonAst,
-  strings,
+JsonAstObject,
+JsonObject,
+JsonValue,
+Path,
+normalize,
+parseJsonAst,
+strings,
 } from '@angular-devkit/core';
 ```
 
-### Определение входных опций с помощью схемы и интерфейсов {#defining-input-options-with-a-schema-and-interfaces}
+### Определение входных опций с помощью схемы и интерфейсов
 
 Правила могут собирать значения опций от вызывающей стороны и внедрять их в шаблоны.
 Опции, доступные вашим правилам, с их допустимыми значениями и значениями по умолчанию, определяются в файле JSON-схемы
@@ -103,7 +104,7 @@ Schematic-а, `<schematic>/schema.json`.
 См. примеры файлов схем для команд Angular CLI в [
 `@schematics/angular`](https://github.com/angular/angular-cli/blob/main/packages/schematics/angular/application/schema.json).
 
-### Подсказки (Prompts) в Schematics {#schematic-prompts}
+### Подсказки (Prompts) в Schematics
 
 _Подсказки_ (prompts) Schematics вводят взаимодействие с пользователем при выполнении.
 Настройте опции Schematic-а, чтобы отображать пользователю настраиваемый вопрос.
@@ -136,7 +137,7 @@ world".
 }
 ```
 
-#### Сокращенный синтаксис подсказок {#prompt-short-form-syntax}
+#### Сокращенный синтаксис подсказок
 
 В этих примерах используется сокращенная форма синтаксиса подсказок, предоставляющая только текст вопроса.
 В большинстве случаев этого достаточно.
@@ -168,12 +169,19 @@ world".
 создает меню из возможных значений.
 
 ```json {header: "schema.json"}
+
 {
   "style": {
     "description": "The file extension or preprocessor to use for style files.",
     "type": "string",
     "default": "css",
-    "enum": ["css", "scss", "sass", "less", "styl"],
+    "enum": [
+      "css",
+      "scss",
+      "sass",
+      "less",
+      "styl"
+    ],
     "x-prompt": "Which stylesheet format would you like to use?"
   }
 }
@@ -185,7 +193,7 @@ JSON-схеме.
 Это гарантирует, что любые значения, переданные в Schematic, соответствуют ожиданиям реализации Schematic-а, поэтому вам
 не нужно добавлять дополнительные проверки в коде Schematic-а.
 
-#### Полный синтаксис подсказок {#prompt-long-form-syntax}
+#### Полный синтаксис подсказок
 
 Синтаксис поля `x-prompt` поддерживает полную форму для случаев, когда требуется дополнительная настройка и контроль над
 подсказкой.
@@ -205,30 +213,33 @@ JSON-схеме.
 Используя полную форму, Schematic может обеспечить более явное форматирование вариантов меню.
 
 ```json {header: "schema.json"}
+
 {
   "style": {
     "description": "The file extension or preprocessor to use for style files.",
     "type": "string",
     "default": "css",
-    "enum": ["css", "scss", "sass", "less"],
+    "enum": [
+      "css",
+      "scss",
+      "sass",
+      "less"
+    ],
     "x-prompt": {
       "message": "Which stylesheet format would you like to use?",
       "type": "list",
       "items": [
-        {"value": "css", "label": "CSS"},
-        {"value": "scss", "label": "SCSS [ https://sass-lang.com/documentation/syntax#scss ]"},
-        {
-          "value": "sass",
-          "label": "Sass [ https://sass-lang.com/documentation/syntax#the-indented-syntax ]"
-        },
-        {"value": "less", "label": "Less [ https://lesscss.org/ ]"}
+        { "value": "css", "label": "CSS" },
+        { "value": "scss", "label": "SCSS [ https://sass-lang.com/documentation/syntax#scss ]" },
+        { "value": "sass", "label": "Sass [ https://sass-lang.com/documentation/syntax#the-indented-syntax ]" },
+        { "value": "less", "label": "Less [ https://lesscss.org/ ]" }
       ]
     }
   }
 }
 ```
 
-#### Схема x-prompt {#x-prompt-schema}
+#### Схема x-prompt
 
 JSON-схема, определяющая опции Schematic-а, поддерживает расширения, позволяющие декларативно определять подсказки и их
 поведение.
@@ -236,6 +247,7 @@ JSON-схема, определяющая опции Schematic-а, поддер�
 Следующая JSON-схема является полным описанием синтаксиса полной формы для поля `x-prompt`.
 
 ```json {header: "x-prompt schema"}
+
 {
   "oneOf": [
     {
@@ -265,13 +277,17 @@ JSON-схема, определяющая опции Schematic-а, поддер�
                   },
                   "value": {}
                 },
-                "required": ["value"]
+                "required": [
+                  "value"
+                ]
               }
             ]
           }
         }
       },
-      "required": ["message"]
+      "required": [
+        "message"
+      ]
     }
   ]
 }
@@ -301,7 +317,7 @@ CLI.
 используя Schematics CLI.
 См. [Schematics для библиотек](tools/cli/schematics-for-libraries).
 
-### Создание коллекции Schematics {#creating-a-schematics-collection}
+### Создание коллекции Schematics
 
 Следующая команда создает новый Schematic с именем `hello-world` в новой папке проекта с тем же именем.
 
@@ -332,7 +348,7 @@ code .
 функциональность вашего Schematic-а.
 Имя каждого Schematic-а должно быть уникальным в пределах коллекции.
 
-### Запуск Schematic-а {#running-a-schematic}
+### Запуск Schematic-а
 
 Используйте команду `schematics` для запуска именованного Schematic-а.
 Укажите путь к папке проекта, имя Schematic-а и любые обязательные опции в следующем формате.
@@ -353,7 +369,7 @@ schematics .:hello-world
 
 ```
 
-### Добавление Schematic-а в коллекцию {#adding-a-schematic-to-a-collection}
+### Добавление Schematic-а в коллекцию
 
 Чтобы добавить Schematic в существующую коллекцию, используйте ту же команду, что и для создания нового проекта
 Schematics, но запустите её внутри папки проекта.
@@ -370,7 +386,7 @@ schematics blank --name=goodbye-world
 Она также добавляет имя, описание и фабричную функцию для нового Schematic-а в схему коллекции в файле
 `collection.json`.
 
-## Содержимое коллекции {#collection-contents}
+## Содержимое коллекции
 
 Верхний уровень корневой папки проекта коллекции содержит конфигурационные файлы, папку `node_modules` и папку `src/`.
 Папка `src/` содержит подпапки для именованных Schematics в коллекции и схему `collection.json`, которая описывает
@@ -378,8 +394,10 @@ schematics blank --name=goodbye-world
 Каждый Schematic создается с именем, описанием и фабричной функцией.
 
 ```json
+
 {
-  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "$schema":
+     "../node_modules/@angular-devkit/schematics/collection-schema.json",
   "schematics": {
     "hello-world": {
       "description": "A blank schematic.",
@@ -387,6 +405,7 @@ schematics blank --name=goodbye-world
     }
   }
 }
+
 ```
 
 - Свойство `$schema` указывает схему, которую CLI использует для валидации.
@@ -401,7 +420,7 @@ schematics blank --name=goodbye-world
 - Необязательный массив `aliases` задает одну или несколько строк, которые можно использовать для вызова Schematic-а.
   Например, Schematic для команды Angular CLI "generate" имеет псевдоним "g", что позволяет использовать команду `ng g`.
 
-### Именованные Schematics {#named-schematics}
+### Именованные Schematics
 
 Когда вы используете Schematics CLI для создания пустого проекта Schematics, новый пустой Schematic является первым
 членом коллекции и имеет то же имя, что и коллекция.

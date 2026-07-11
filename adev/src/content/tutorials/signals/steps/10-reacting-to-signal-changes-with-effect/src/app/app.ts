@@ -14,8 +14,7 @@ import {Component, computed, signal} from '@angular/core';
             Dark
           } @else {
             Light
-          }
-          Theme
+          } Theme
         </button>
 
         @if (!isLoggedIn()) {
@@ -28,8 +27,7 @@ import {Component, computed, signal} from '@angular/core';
       <div class="info">
         <p>Current theme: {{ theme() }}</p>
         <p>User: {{ username() }}</p>
-        <p>
-          Status:
+        <p>Status:
           @if (isLoggedIn()) {
             Logged in
           } @else {

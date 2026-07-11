@@ -1,6 +1,6 @@
 # Отписка с помощью `takeUntilDestroyed`
 
-СОВЕТ: Это руководство предполагает, что вы знакомы
+TIP: Это руководство предполагает, что вы знакомы
 с [жизненным циклом компонентов и директив](guide/components/lifecycle).
 
 Оператор `takeUntilDestroyed` из `@angular/core/rxjs-interop` предоставляет лаконичный и надежный способ автоматической
@@ -22,7 +22,7 @@ export class UserProfile {
     // Эта подписка на Observable 'notifications' автоматически
     // отменяется при уничтожении компонента 'UserProfile'.
     const messages: Observable<string> = this.dispatcher.notifications;
-    messages.pipe(takeUntilDestroyed()).subscribe((message) => {
+    messages.pipe(takeUntilDestroyed()).subscribe(message => {
       this.popup.show(message);
     });
   }
@@ -46,7 +46,7 @@ export class UserProfile {
     // Всегда передавайте `DestroyRef`, если вызываете `takeUntilDestroyed` вне
     // контекста внедрения.
     const messages: Observable<string> = this.dispatcher.notifications;
-    messages.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((message) => {
+    messages.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(message => {
       this.popup.show(message);
     });
   }

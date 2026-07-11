@@ -1,10 +1,12 @@
-# Создание фрагментов шаблона с ng-template
+# Создание фрагментов шаблона с помощью ng-template
 
-Под вдохновением от [нативного элемента `<template>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template), элемент `<ng-template>` позволяет объявить **фрагмент шаблона** — секцию контента, которую можно динамически или программно отрендерить.
+Вдохновленный [нативным элементом `<template>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template),
+элемент `<ng-template>` позволяет объявлять **фрагмент шаблона** — секцию контента, которую можно рендерить динамически
+или программно.
 
 ## Создание фрагмента шаблона {#creating-a-template-fragment}
 
-Фрагмент шаблона можно создать внутри шаблона любого компонента с помощью элемента `<ng-template>`:
+Вы можете создать фрагмент шаблона внутри шаблона любого компонента с помощью элемента `<ng-template>`:
 
 ```angular-html
 <p>This is a normal element</p>
@@ -14,9 +16,10 @@
 </ng-template>
 ```
 
-При рендеринге вышеприведённого кода содержимое элемента `<ng-template>` не отображается на странице. Вместо этого можно получить ссылку на фрагмент шаблона и написать код для его динамического рендеринга.
+При рендеринге приведенного выше кода содержимое элемента `<ng-template>` не отображается на странице. Вместо этого вы
+можете получить ссылку на фрагмент шаблона и написать код для его динамического рендеринга.
 
-### Контекст привязки для фрагментов {#binding-context-for-fragments}
+### Привязка контекста для фрагментов {#binding-context-for-fragments}
 
 Фрагменты шаблона могут содержать привязки с динамическими выражениями:
 
@@ -30,21 +33,24 @@ export class ItemCounter {
 }
 ```
 
-Выражения или операторы в фрагменте шаблона вычисляются относительно компонента, в котором объявлен фрагмент, независимо от того, где он рендерится.
+Выражения или инструкции во фрагменте шаблона вычисляются в контексте компонента, в котором объявлен фрагмент,
+независимо от того, где этот фрагмент рендерится.
 
 ## Получение ссылки на фрагмент шаблона {#getting-a-reference-to-a-template-fragment}
 
-Ссылку на фрагмент шаблона можно получить одним из трёх способов:
+Вы можете получить ссылку на фрагмент шаблона одним из трех способов:
 
-- Объявив [переменную ссылки на шаблон](guide/templates/variables#template-reference-variables) на элементе `<ng-template>`
-- Запросив фрагмент с помощью [запроса компонента или директивы](guide/components/queries)
-- Внедрив фрагмент в директиву, применённую непосредственно к элементу `<ng-template>`.
+- Объявив [переменную ссылки на шаблон](/guide/templates/variables#template-reference-variables) на элементе
+  `<ng-template>`
+- Запросив фрагмент с помощью [запроса компонента или директивы](/guide/components/queries)
+- Внедрив фрагмент в директиву, которая применяется непосредственно к элементу `<ng-template>`.
 
-Во всех трёх случаях фрагмент представлен объектом [TemplateRef](api/core/TemplateRef).
+Во всех трех случаях фрагмент представлен объектом [TemplateRef](/api/core/TemplateRef).
 
-### Ссылка на фрагмент шаблона через переменную ссылки на шаблон {#referencing-a-template-fragment-with-a-template-reference-variable}
+### Ссылка на фрагмент шаблона с помощью переменной {#referencing-a-template-fragment-with-a-template-reference-variable}
 
-Можно добавить переменную ссылки на шаблон к элементу `<ng-template>` для ссылки на этот фрагмент в других частях того же файла шаблона:
+Вы можете добавить переменную ссылки на шаблон к элементу `<ng-template>`, чтобы ссылаться на этот фрагмент в других
+частях того же файла шаблона:
 
 ```angular-html
 <p>This is a normal element</p>
@@ -54,13 +60,14 @@ export class ItemCounter {
 </ng-template>
 ```
 
-Затем можно ссылаться на этот фрагмент в любом другом месте шаблона через переменную `myFragment`.
+Затем вы можете ссылаться на этот фрагмент в любом другом месте шаблона через переменную `myFragment`.
 
-### Ссылка на фрагмент шаблона через запросы {#referencing-a-template-fragment-with-queries}
+### Ссылка на фрагмент шаблона с помощью запросов {#referencing-a-template-fragment-with-queries}
 
-Ссылку на фрагмент шаблона можно получить с помощью любого [API запросов компонента или директивы](guide/components/queries).
+Вы можете получить ссылку на фрагмент шаблона, используя
+любой [API запросов компонентов или директив](/guide/components/queries).
 
-Объект `TemplateRef` можно запросить напрямую с помощью запроса `viewChild`.
+Вы можете запросить объект `TemplateRef` напрямую, используя запрос `viewChild`.
 
 ```angular-ts
 @Component({
@@ -78,9 +85,11 @@ export class ComponentWithFragment {
 }
 ```
 
-Затем можно ссылаться на этот фрагмент в коде компонента или его шаблоне, как на любой другой член класса.
+Затем вы можете ссылаться на этот фрагмент в коде вашего компонента или в шаблоне компонента, как на любой другой член
+класса.
 
-Если шаблон содержит несколько фрагментов, можно присвоить имя каждому, добавив переменную ссылки на шаблон к каждому элементу `<ng-template>` и запрашивать фрагменты по этому имени:
+Если шаблон содержит несколько фрагментов, вы можете присвоить имя каждому фрагменту, добавив переменную ссылки на
+шаблон к каждому элементу `<ng-template>` и запрашивая фрагменты по этому имени:
 
 ```angular-ts
 @Component({
@@ -103,15 +112,16 @@ export class ComponentWithFragment {
 }
 ```
 
-Аналогично, можно ссылаться на эти фрагменты в коде компонента или его шаблоне, как на любые другие члены класса.
+Опять же, вы можете ссылаться на эти фрагменты в коде компонента или в шаблоне компонента, как на любые другие члены
+класса.
 
 ### Внедрение фрагмента шаблона {#injecting-a-template-fragment}
 
-Директива может внедрить `TemplateRef`, если она применена непосредственно к элементу `<ng-template>`:
+Директива может внедрить `TemplateRef`, если эта директива применена непосредственно к элементу `<ng-template>`:
 
 ```angular-ts
 @Directive({
-  selector: '[myDirective]',
+  selector: '[myDirective]'
 })
 export class MyDirective {
   private fragment = inject(TemplateRef);
@@ -124,23 +134,28 @@ export class MyDirective {
 </ng-template>
 ```
 
-Затем можно ссылаться на этот фрагмент в коде директивы, как на любой другой член класса.
+Затем вы можете ссылаться на этот фрагмент в коде директивы, как на любой другой член класса.
 
 ## Рендеринг фрагмента шаблона {#rendering-a-template-fragment}
 
-Получив ссылку на объект `TemplateRef` фрагмента шаблона, можно отрендерить фрагмент одним из двух способов: в шаблоне с помощью директивы `NgTemplateOutlet` или в TypeScript-коде с помощью `ViewContainerRef`.
+Как только у вас есть ссылка на объект `TemplateRef` фрагмента шаблона, вы можете отрендерить фрагмент одним из двух
+способов: в вашем шаблоне с помощью директивы `NgTemplateOutlet` или в вашем TypeScript-коде с помощью
+`ViewContainerRef`.
 
 ### Использование `NgTemplateOutlet` {#using-ngtemplateoutlet}
 
-Директива `NgTemplateOutlet` из `@angular/common` принимает `TemplateRef` и рендерит фрагмент как **соседний элемент** к элементу с outlet. Как правило, `NgTemplateOutlet` следует использовать на [элементе `<ng-container>`](guide/templates/ng-container).
+Директива `NgTemplateOutlet` из `@angular/common` принимает `TemplateRef` и рендерит фрагмент как **соседний элемент**
+для элемента с аутлетом. Обычно следует использовать `NgTemplateOutlet` на элементе [
+`<ng-container>`](/guide/templates/ng-container).
 
 Сначала импортируйте `NgTemplateOutlet`:
 
 ```typescript
-import {NgTemplateOutlet} from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 ```
 
-Следующий пример объявляет фрагмент шаблона и рендерит его в элемент `<ng-container>` с помощью `NgTemplateOutlet`:
+Следующий пример объявляет фрагмент шаблона и рендерит этот фрагмент в элемент `<ng-container>` с помощью
+`NgTemplateOutlet`:
 
 ```angular-html
 <p>This is a normal element</p>
@@ -152,7 +167,7 @@ import {NgTemplateOutlet} from '@angular/common';
 <ng-container *ngTemplateOutlet="myFragment"></ng-container>
 ```
 
-Этот пример производит следующий DOM:
+Этот пример создает следующий DOM:
 
 ```angular-html
 <p>This is a normal element</p>
@@ -161,11 +176,16 @@ import {NgTemplateOutlet} from '@angular/common';
 
 ### Использование `ViewContainerRef` {#using-viewcontainerref}
 
-**Контейнер представлений** — это узел в дереве компонентов Angular, который может содержать контент. Любой компонент или директива может внедрить `ViewContainerRef` для получения ссылки на контейнер представлений, соответствующий расположению этого компонента или директивы в DOM.
+**Контейнер представления** (view container) — это узел в дереве компонентов Angular, который может содержать контент.
+Любой компонент или директива могут внедрить `ViewContainerRef`, чтобы получить ссылку на контейнер представления,
+соответствующий местоположению этого компонента или директивы в DOM.
 
-Можно использовать метод `createEmbeddedView` на `ViewContainerRef` для динамического рендеринга фрагмента шаблона. При рендеринге фрагмента с помощью `ViewContainerRef` Angular добавляет его в DOM как следующего соседа компонента или директивы, внедрившей `ViewContainerRef`.
+Вы можете использовать метод `createEmbeddedView` в `ViewContainerRef` для динамического рендеринга фрагмента шаблона.
+Когда вы рендерите фрагмент с помощью `ViewContainerRef`, Angular добавляет его в DOM как следующий соседний элемент
+компонента или директивы, внедрившей `ViewContainerRef`.
 
-Следующий пример показывает компонент, принимающий ссылку на фрагмент шаблона в качестве входного параметра и рендерящий этот фрагмент в DOM по нажатию кнопки.
+Следующий пример показывает компонент, который принимает ссылку на фрагмент шаблона в качестве входного параметра (
+input) и рендерит этот фрагмент в DOM при нажатии кнопки.
 
 ```angular-ts
 @Component({
@@ -198,7 +218,7 @@ export class MyOutlet {
 }
 ```
 
-В примере выше нажатие кнопки "Show" даёт следующий результат:
+В примере выше нажатие кнопки "Show" приводит к следующему выводу:
 
 ```angular-html
 <component-with-fragment>
@@ -212,104 +232,41 @@ export class MyOutlet {
 
 ## Передача параметров при рендеринге фрагмента шаблона {#passing-parameters-when-rendering-a-template-fragment}
 
-При объявлении фрагмента шаблона с помощью `<ng-template>` можно дополнительно объявить параметры, принимаемые фрагментом. При рендеринге фрагмента можно опционально передать объект `context`, соответствующий этим параметрам. Данные из этого объекта контекста можно использовать в выражениях привязок и операторах наряду со ссылками на данные компонента, в котором объявлен фрагмент.
+При объявлении фрагмента шаблона с помощью `<ng-template>` вы можете дополнительно объявить параметры, принимаемые
+фрагментом. При рендеринге фрагмента вы можете опционально передать объект `context`, соответствующий этим параметрам.
+Вы можете использовать данные из этого объекта контекста в выражениях привязки и инструкциях, в дополнение к ссылкам на
+данные из компонента, в котором объявлен фрагмент.
 
-Каждый параметр записывается как атрибут с префиксом `let-`, значение которого соответствует имени свойства в объекте контекста:
+Каждый параметр записывается как атрибут с префиксом `let-`, значение которого соответствует имени свойства в объекте
+контекста:
 
 ```angular-html
 <ng-template let-pizzaTopping="topping">
-  <p>You selected: {{ pizzaTopping }}</p>
+  <p>You selected: {{pizzaTopping}}</p>
 </ng-template>
 ```
 
 ### Использование `NgTemplateOutlet` {#using-ngtemplateoutlet-with-parameters}
 
-Объект контекста можно привязать к входному параметру `ngTemplateOutletContext`:
+Вы можете привязать объект контекста к входному свойству `ngTemplateOutletContext`:
 
 ```angular-html
 <ng-template #myFragment let-pizzaTopping="topping">
-  <p>You selected: {{ pizzaTopping }}</p>
+  <p>You selected: {{pizzaTopping}}</p>
 </ng-template>
 
-<ng-container [ngTemplateOutlet]="myFragment" [ngTemplateOutletContext]="{topping: 'onion'}" />
+<ng-container
+  [ngTemplateOutlet]="myFragment"
+  [ngTemplateOutletContext]="{topping: 'onion'}"
+/>
 ```
 
 ### Использование `ViewContainerRef` {#using-viewcontainerref-with-parameters}
 
-Объект контекста можно передать как второй аргумент в `createEmbeddedView`:
-
-```ts
-this.viewContainer.createEmbeddedView(this.myFragment, {topping: 'onion'});
-```
-
-## Предоставление инжекторов фрагментам шаблона {#providing-injectors-to-template-fragments}
-
-При рендеринге фрагмента шаблона его контекст инжектора берётся из **места объявления шаблона**, а не из места его рендеринга. Это поведение можно переопределить, предоставив пользовательский инжектор.
-
-### Использование `NgTemplateOutlet` {#using-ngtemplateoutlet-with-injectors}
-
-Пользовательский `Injector` можно передать во входной параметр `ngTemplateOutletInjector`:
+Вы можете передать объект контекста в качестве второго аргумента в `createEmbeddedView`:
 
 ```angular-ts
-export const THEME_DATA = new InjectionToken<string>('THEME_DATA', {
-  factory: () => 'light',
-});
-
-@Component({
-  selector: 'themed-panel',
-  template: `<div [class]="theme">...</div>`,
-})
-export class ThemedPanel {
-  theme = inject(THEME_DATA);
-}
-
-@Component({
-  selector: 'root',
-  imports: [NgTemplateOutlet, ThemedPanel],
-  template: `
-    <ng-template #myFragment>
-      <themed-panel />
-    </ng-template>
-    <ng-container *ngTemplateOutlet="myFragment; injector: customInjector" />
-  `,
-})
-export class Root {
-  customInjector = Injector.create({
-    providers: [{provide: THEME_DATA, useValue: 'dark'}],
-  });
-}
-```
-
-#### Наследование инжектора outlet {#inheriting-the-outlets-injector}
-
-Можно установить `ngTemplateOutletInjector` в строку `'outlet'`, чтобы встроенное представление наследовало инжектор из места расположения outlet в DOM, а не из места объявления шаблона.
-
-```angular-html
-<ng-template #node let-items>
-  <item-component>
-    @for (child of items; track $index) {
-      <ng-container
-        *ngTemplateOutlet="node; context: {$implicit: child.children}; injector: 'outlet'"
-      />
-    }
-  </item-component>
-</ng-template>
-
-<ng-container *ngTemplateOutlet="node; context: {$implicit: topLevelItems}" />
-```
-
-Каждый рекурсивный рендеринг шаблона `node` наследует инжектор от окружающего `<item-component>`, позволяя каждому вложенному уровню получать доступ к провайдерам, ограниченным его родительским компонентом.
-
-NOTE: Это полезно для построения рекурсивных структур или в любой ситуации, когда рендерящемуся шаблону нужен доступ к провайдерам из дерева компонентов в месте outlet.
-
-### Использование `ViewContainerRef` {#using-viewcontainerref-with-injectors}
-
-Пользовательский инжектор можно передать как часть объекта параметров в `createEmbeddedView`:
-
-```ts
-this.viewContainer.createEmbeddedView(this.myFragment, context, {
-  injector: myCustomInjector,
-});
+this.viewContainer.createEmbeddedView(this.myFragment, {topping: 'onion'});
 ```
 
 ## Структурные директивы {#structural-directives}
@@ -317,9 +274,11 @@ this.viewContainer.createEmbeddedView(this.myFragment, context, {
 **Структурная директива** — это любая директива, которая:
 
 - Внедряет `TemplateRef`
-- Внедряет `ViewContainerRef` и программно рендерит внедрённый `TemplateRef`
+- Внедряет `ViewContainerRef` и программно рендерит внедренный `TemplateRef`
 
-Angular поддерживает специальный удобный синтаксис для структурных директив. Если применить директиву к элементу и предварить её селектор символом звёздочки (`*`), Angular интерпретирует весь элемент вместе с его содержимым как фрагмент шаблона:
+Angular поддерживает специальный удобный синтаксис для структурных директив. Если вы применяете директиву к элементу и
+добавляете префикс звездочки (`*`) к селектору директивы, Angular интерпретирует весь элемент и все его содержимое как
+фрагмент шаблона:
 
 ```angular-html
 <section *myDirective>
@@ -337,13 +296,16 @@ Angular поддерживает специальный удобный синт�
 </ng-template>
 ```
 
-Разработчики обычно используют структурные директивы для условного рендеринга фрагментов или рендеринга фрагментов несколько раз.
+Разработчики обычно используют структурные директивы для условного рендеринга фрагментов или рендеринга фрагментов
+несколько раз.
 
-Подробнее см. в разделе [Структурные директивы](guide/directives/structural-directives).
+Для получения более подробной информации см. [Структурные директивы](/guide/directives/structural-directives).
 
 ## Дополнительные ресурсы {#additional-resources}
 
-Примеры использования `ng-template` в других библиотеках:
+Примеры использования `ng-template` в других библиотеках можно найти здесь:
 
-- [Вкладки Angular Material](https://material.angular.dev/components/tabs/overview) — ничего не рендерится в DOM до активации вкладки
-- [Таблица Angular Material](https://material.angular.dev/components/table/overview) — позволяет разработчикам определять различные способы рендеринга данных
+- [Вкладки из Angular Material](https://material.angular.dev/components/tabs/overview) — ничего не рендерится в DOM,
+  пока вкладка не будет активирована
+- [Таблица из Angular Material](https://material.angular.dev/components/table/overview) — позволяет разработчикам
+  определять различные способы отображения данных

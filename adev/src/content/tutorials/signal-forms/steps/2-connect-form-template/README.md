@@ -1,22 +1,22 @@
-# Подключение формы к шаблону
+# Подключите форму к шаблону
 
-Теперь нужно подключить форму к шаблону с помощью директивы `[formField]`. Это создаёт двустороннюю привязку данных между моделью формы и элементами ввода.
+Теперь нужно связать форму с шаблоном через директиву `[formField]`. Она создаёт двустороннюю привязку данных между моделью формы и элементами ввода.
 
-В этом уроке вы узнаете, как:
+В этом уроке вы научитесь:
 
-- Импортировать директиву `FormField`
-- Использовать директиву `[formField]` для привязки полей формы к элементам ввода
-- Подключить текстовые поля и чекбоксы к вашей форме
-- Отображать значения полей формы в шаблоне
+- импортировать директиву `FormField`;
+- использовать `[formField]` для привязки полей формы к input;
+- подключать текстовые поля и чекбоксы к форме;
+- отображать значения полей формы в шаблоне.
 
-Давайте свяжем шаблон!
+Давайте подключим шаблон!
 
 <hr />
 
 <docs-workflow>
 
 <docs-step title="Import the FormField directive">
-Импортируйте директиву `FormField` из `@angular/forms/signals` и добавьте её в массив imports вашего компонента:
+Импортируйте директиву `FormField` из `@angular/forms/signals` и добавьте её в массив imports компонента:
 
 ```ts
 import { form, FormField } from '@angular/forms/signals';
@@ -32,7 +32,7 @@ import { form, FormField } from '@angular/forms/signals';
 </docs-step>
 
 <docs-step title="Bind the email field">
-В вашем шаблоне добавьте директиву `[formField]` к полю ввода email:
+В шаблоне добавьте директиву `[formField]` к полю email:
 
 ```html
 <input type="email" [formField]="loginForm.email" />
@@ -42,7 +42,7 @@ import { form, FormField } from '@angular/forms/signals';
 </docs-step>
 
 <docs-step title="Bind the password field">
-Добавьте директиву `[formField]` к полю ввода пароля:
+Добавьте директиву `[formField]` к полю password:
 
 ```html
 <input type="password" [formField]="loginForm.password" />
@@ -51,7 +51,7 @@ import { form, FormField } from '@angular/forms/signals';
 </docs-step>
 
 <docs-step title="Bind the checkbox field">
-Добавьте директиву `[formField]` к полю чекбокса:
+Добавьте директиву `[formField]` к чекбоксу:
 
 ```html
 <input type="checkbox" [formField]="loginForm.rememberMe" />
@@ -60,7 +60,7 @@ import { form, FormField } from '@angular/forms/signals';
 </docs-step>
 
 <docs-step title="Display the form values">
-Ниже формы есть раздел отладки для отображения текущих значений формы. Отобразите значение каждого поля с помощью `.value()`:
+Под формой есть отладочная секция для текущих значений. Отобразите значение каждого поля через `.value()`:
 
 ```angular-html
 <p>Email: {{ loginForm.email().value() }}</p>
@@ -68,11 +68,11 @@ import { form, FormField } from '@angular/forms/signals';
 <p>Remember me: {{ loginForm.rememberMe().value() ? 'Yes' : 'No' }}</p>
 ```
 
-Значения полей формы являются сигналами, поэтому отображаемые значения обновляются автоматически по мере ввода.
+Значения полей формы — это сигналы, поэтому отображаемые значения обновляются автоматически при вводе.
 </docs-step>
 
 </docs-workflow>
 
-Отличная работа! Вы подключили форму к шаблону и отобразили значения формы. Директива `[formField]` автоматически обрабатывает двустороннюю привязку данных — по мере ввода сигнал `loginModel` обновляется, и отображаемые значения обновляются немедленно.
+Отличная работа! Вы подключили форму к шаблону и отобразили значения. Директива `[formField]` автоматически обеспечивает двустороннюю привязку: при вводе обновляется сигнал `loginModel`, и отображаемые значения меняются сразу.
 
-Далее вы узнаете, [как добавить валидацию в форму](/tutorials/signal-forms/3-add-validation)!
+Далее — [как добавить валидацию в форму](/tutorials/signal-forms/3-add-validation)!

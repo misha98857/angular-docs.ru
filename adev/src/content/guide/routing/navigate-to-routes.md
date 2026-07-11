@@ -1,10 +1,12 @@
-# Navigate to routes
+# Навигация по маршрутам
 
-The RouterLink directive is Angular's declarative approach to navigation. It allows you to use standard anchor elements (`<a>`) that seamlessly integrate with Angular's routing system.
+Директива RouterLink — это декларативный подход Angular к навигации. Она позволяет использовать стандартные элементы
+ссылок (`<a>`), которые бесшовно интегрируются с системой маршрутизации Angular.
 
-## How to use RouterLink
+## Как использовать RouterLink {#how-to-use-routerlink}
 
-Instead of using regular anchor elements `<a>` with an `href` attribute, you add a RouterLink directive with the appropriate path in order to leverage Angular routing.
+Вместо использования обычных элементов `<a>` с атрибутом `href`, вы добавляете директиву RouterLink с соответствующим
+путем, чтобы задействовать маршрутизацию Angular.
 
 ```angular-ts
 import {RouterLink} from '@angular/router';
@@ -15,16 +17,18 @@ import {RouterLink} from '@angular/router';
       <a routerLink="/user-profile">User profile</a>
       <a routerLink="/settings">Settings</a>
     </nav>
-  `,
+  `
   imports: [RouterLink],
   ...
 })
 export class App {}
 ```
 
-### Using absolute or relative links
+### Использование абсолютных или относительных ссылок {#using-absolute-or-relative-links}
 
-**Relative URLs** in Angular routing allow you to define navigation paths relative to the current route's location. This is in contrast to **absolute URLs** which contain the full path with the protocol (e.g., `http://`) and the **root domain** (e.g., `google.com`).
+**Относительные URL** в маршрутизации Angular позволяют определять пути навигации относительно текущего местоположения
+маршрута. Это отличается от **абсолютных URL**, которые содержат полный путь с протоколом (например, `http://`) и \*
+\*корневым доменом\*\* (например, `google.com`).
 
 ```angular-html
 <!-- Absolute URL -->
@@ -34,13 +38,16 @@ export class App {}
 <a href="/essentials">Angular Essentials Guide</a>
 ```
 
-In this example, the first example contains the full path with the protocol (i.e., `https://`) and the root domain (i.e., `angular.dev`) explicitly defined for the essentials page. In contrast, the second example assumes the user is already on the correct root domain for `/essentials`.
+В этом примере первый вариант содержит полный путь с протоколом (т.е. `https://`) и корневым доменом (т.е.
+`angular.dev`), явно определенным для страницы essentials. Напротив, второй пример предполагает, что пользователь уже
+находится на правильном корневом домене для `/essentials`.
 
-Generally speaking, relative URLs are preferred as they are more maintainable across applications since they don’t need to know their absolute position within the routing hierarchy.
+Как правило, предпочтительнее использовать относительные URL, так как их легче поддерживать в разных приложениях,
+поскольку им не нужно знать свое абсолютное положение в иерархии маршрутизации.
 
-### How relative URLs work
+### Как работают относительные URL {#how-relative-urls-work}
 
-Angular routing has two syntaxes for defining relative URLs: strings and arrays.
+Маршрутизация Angular имеет два синтаксиса для определения относительных URL: строки и массивы.
 
 ```angular-html
 <!-- Navigates user to /dashboard -->
@@ -48,17 +55,19 @@ Angular routing has two syntaxes for defining relative URLs: strings and arrays.
 <a [routerLink]="['dashboard']">Dashboard</a>
 ```
 
-HELPFUL: Passing a string is the most common way to define relative URLs.
+HELPFUL: Передача строки — самый распространенный способ определения относительных URL.
 
-When you need to define dynamic parameters in a relative URL, use the array syntax:
+Когда нужно определить динамические параметры в относительном URL, используйте синтаксис массива:
 
 ```angular-html
 <a [routerLink]="['user', currentUserId]">Current User</a>
 ```
 
-In addition, Angular routing allows you to specify whether you want the path to be relative to the current URL or to the root domain based on whether the relative path is prefixed with a forward slash (`/`) or not.
+Кроме того, маршрутизация Angular позволяет указать, должен ли путь быть относительным к текущему URL или к корневому
+домену, в зависимости от того, начинается ли относительный путь с косой черты (`/`) или нет.
 
-For example, if the user is on `example.com/settings`, here is how different relative paths can be defined for various scenarios:
+Например, если пользователь находится на `example.com/settings`, вот как можно определить различные относительные пути
+для разных сценариев:
 
 ```angular-html
 <!-- Navigates to /settings/notifications -->
@@ -67,23 +76,28 @@ For example, if the user is on `example.com/settings`, here is how different rel
 
 <!-- Navigates to /team/:teamId/user/:userId -->
 <a routerLink="/team/123/user/456">User 456</a>
-<a [routerLink]="['/team', teamId, 'user', userId]">Current User</a>
+<a [routerLink]="['/team', teamId, 'user', userId]">Current User</a>”
 ```
 
-## Programmatic navigation to routes
+## Программная навигация по маршрутам {#programmatic-navigation-to-routes}
 
-While `RouterLink` handles declarative navigation in templates, Angular provides programmatic navigation for scenarios where you need to navigate based on logic, user actions, or application state. By injecting `Router`, you can dynamically navigate to routes, pass parameters, and control navigation behavior in your TypeScript code.
+В то время как `RouterLink` обрабатывает декларативную навигацию в шаблонах, Angular предоставляет программную навигацию
+для сценариев, где необходимо переходить по маршрутам на основе логики, действий пользователя или состояния приложения.
+Внедряя `Router`, вы можете динамически переходить к маршрутам, передавать параметры и управлять поведением навигации в
+вашем TypeScript-коде.
 
 ### `router.navigate()`
 
-You can use the `router.navigate()` method to programmatically navigate between routes by specifying a URL path array.
+Вы можете использовать метод `router.navigate()` для программной навигации между маршрутами, указав массив путей URL.
 
 ```angular-ts
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
-  template: ` <button (click)="navigateToProfile()">View Profile</button> `,
+  template: `
+    <button (click)="navigateToProfile()">View Profile</button>
+  `
 })
 export class AppDashboard {
   private router = inject(Router);
@@ -97,57 +111,55 @@ export class AppDashboard {
 
     // With query parameters
     this.router.navigate(['/search'], {
-      queryParams: {category: 'books', sort: 'price'},
+      queryParams: { category: 'books', sort: 'price' }
     });
 
     // With matrix parameters
-    this.router.navigate(['/products', {featured: true, onSale: true}]);
+    this.router.navigate(['/products', { featured: true, onSale: true }]);
   }
 }
 ```
 
-`router.navigate()` supports both simple and complex routing scenarios, allowing you to pass route parameters, [query parameters](/guide/routing/read-route-state#query-parameters), and control navigation behavior.
+`router.navigate()` поддерживает как простые, так и сложные сценарии маршрутизации, позволяя передавать параметры
+маршрута, [параметры запроса (query parameters)](/guide/routing/read-route-state#query-parameters) и управлять
+поведением навигации.
 
-You can also build dynamic navigation paths relative to your component’s location in the routing tree using the `relativeTo` option.
+Вы также можете создавать динамические пути навигации относительно местоположения вашего компонента в дереве
+маршрутизации, используя опцию `relativeTo`.
 
 ```angular-ts
-import {Router, ActivatedRoute} from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-user-detail',
   template: `
     <button (click)="navigateToEdit()">Edit User</button>
     <button (click)="navigateToParent()">Back to List</button>
-  `,
+  `
 })
-export class UserDetail {
+export class UserDetailComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+
+  constructor() {}
 
   // Navigate to a sibling route
   navigateToEdit() {
     // From: /users/123
     // To:   /users/123/edit
-    this.router.navigate(['edit'], {relativeTo: this.route});
+    this.router.navigate(['edit'], { relativeTo: this.route });
   }
 
   // Navigate to parent
   navigateToParent() {
     // From: /users/123
     // To:   /users
-    this.router.navigate(['..'], {relativeTo: this.route});
-  }
-
-  navigateToList() {
-    // Angular resolves the commands array as a single navigation path relative to the current route.
-    // From: /users/123
-    // Result: /users/list
-    this.router.navigate(['..', 'list'], {relativeTo: this.route});
+    this.router.navigate(['..'], { relativeTo: this.route });
   }
 }
 ```
 
-When navigating multiple levels up, all `..` segments must be in the **first element** of the commands array. The router only parses `..` from the first command string — subsequent array elements are treated as literal path segments.
+При навигации на несколько уровней вверх все сегменты `..` должны находиться в **первом элементе** массива команд. Роутер разбирает `..` только из первой строки команды — последующие элементы массива обрабатываются как литеральные сегменты пути.
 
 ```angular-ts {prefer}
 // From: /team/123/users/456
@@ -155,7 +167,7 @@ When navigating multiple levels up, all `..` segments must be in the **first ele
 this.router.navigate(['../../settings'], {relativeTo: this.route});
 ```
 
-When using `relativeTo`, never prefix the first command with `/`. A leading `/` makes the navigation absolute and ignores `relativeTo` entirely.
+При использовании `relativeTo` никогда не добавляйте `/` в начало первой команды. Ведущий `/` делает навигацию абсолютной и полностью игнорирует `relativeTo`.
 
 ```angular-ts {prefer}
 // From: /team/123/users/456
@@ -172,7 +184,9 @@ this.router.navigate(['/edit'], {relativeTo: this.route});
 
 ### `router.navigateByUrl()`
 
-The `router.navigateByUrl()` method provides a direct way to programmatically navigate using URL path strings rather than array segments. This method is ideal when you have a full URL path and need to perform absolute navigation, especially when working with externally provided URLs or deep linking scenarios.
+Метод `router.navigateByUrl()` предоставляет прямой способ программной навигации с использованием строковых путей URL, а
+не сегментов массива. Этот метод идеально подходит, когда у вас есть полный путь URL и нужно выполнить абсолютную
+навигацию, особенно при работе с внешними URL или сценариями глубоких ссылок (deep linking).
 
 ```ts
 // Standard route navigation
@@ -188,65 +202,20 @@ router.navigateByUrl('/products/123?view=details#reviews');
 router.navigateByUrl('/search?category=books&sortBy=price');
 
 // With matrix parameters
-router.navigateByUrl('/sales-awesome;isOffer=true;showModal=false');
+router.navigateByUrl('/sales-awesome;isOffer=true;showModal=false')
 ```
 
-In the event you need to replace the current URL in history, `navigateByUrl` also accepts a configuration object that has a `replaceUrl` option.
+В случае, если вам нужно заменить текущий URL в истории, `navigateByUrl` также принимает объект конфигурации с опцией
+`replaceUrl`.
 
 ```ts
 // Replace current URL in history
 router.navigateByUrl('/checkout', {
-  replaceUrl: true,
+  replaceUrl: true
 });
 ```
 
-### Display a different URL in the address bar
+## Следующие шаги {#next-steps}
 
-You can pass a browserUrl option to navigateByUrl to display a different URL in the browser's address bar than the one used for route matching.
-
-This is useful when you want to redirect a user to a different route—such as an error page—without changing the URL that the user originally tried to visit.
-
-```ts
-router.navigateByUrl('/not-found', {browserUrl: '/products/missing-item'});
-```
-
-Angular navigates to and renders the `/not-found` route, but the browser address bar shows `/products/missing-item`.
-
-NOTE: `browserUrl` only affects what appears in the browser's address bar.
-
-## Customizing the browser URL with RouterLink
-
-The `RouterLink` directive also supports a `browserUrl` input, which lets you control the URL displayed in the browser's address bar when a link is clicked, independently of the route Angular navigates to.
-
-```angular-html
-<!-- Navigates to /dashboard, but the address bar shows /home -->
-<a [routerLink]="['/dashboard']" [browserUrl]="'/home'">Go to Dashboard</a>
-```
-
-You can also bind a `UrlTree` for more dynamic use cases:
-
-```angular-ts
-import {Component, inject} from '@angular/core';
-import {Router, RouterLink, UrlTree} from '@angular/router';
-
-@Component({
-  template: `
-    <a [routerLink]="['/products', product.id]" [browserUrl]="displayUrl">
-      {{ product.name }}
-    </a>
-  `,
-  imports: [RouterLink],
-})
-export class ProductList {
-  private router = inject(Router);
-
-  product = {id: 42, name: 'Widget'};
-
-  // Create a UrlTree to display in the address bar
-  displayUrl: UrlTree = this.router.createUrlTree(['/products', 'widget']);
-}
-```
-
-## Next steps
-
-Learn how to [read route state](/guide/routing/read-route-state) to create responsive and context-aware components.
+Узнайте, как [читать состояние маршрута](/guide/routing/read-route-state), чтобы создавать отзывчивые и
+контекстно-зависимые компоненты.

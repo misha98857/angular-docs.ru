@@ -2,7 +2,7 @@
 
 Если вы хотите управлять формами программно, а не полагаться исключительно на шаблон, ответом станут реактивные формы.
 
-Примечание: Подробнее о [реактивных формах читайте в подробном руководстве](/guide/forms/reactive-forms).
+NOTE: Подробнее о [реактивных формах читайте в подробном руководстве](/guide/forms/reactive-forms).
 
 В этом упражнении вы узнаете, как настраивать реактивные формы.
 
@@ -101,23 +101,24 @@ export class App {
 
 В классе компонента добавьте метод `handleSubmit()` для обработки отправки формы.
 
-```ts
+<docs-code language="ts">
 handleSubmit() {
   alert(
     this.profileForm.value.name + ' | ' + this.profileForm.value.email
   );
 }
-```
-
+</docs-code>
 </docs-step>
 
 <docs-step title="Add `ngSubmit` to the form">
 У вас есть доступ к значениям формы, теперь пришло время обработать событие отправки и использовать метод `handleSubmit`.
 В Angular для этой цели есть специальный обработчик событий под названием `ngSubmit`. Обновите элемент формы, чтобы вызывать метод `handleSubmit` при отправке формы.
 
-```angular-html {highlight:[3]}
-<form [formGroup]="profileForm" (ngSubmit)="handleSubmit()"></form>
-```
+<docs-code language="angular-html" highlight="[3]">
+<form
+  [formGroup]="profileForm"
+  (ngSubmit)="handleSubmit()">
+</docs-code>
 
 </docs-step>
 

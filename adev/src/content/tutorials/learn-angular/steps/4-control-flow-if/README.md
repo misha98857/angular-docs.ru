@@ -5,7 +5,7 @@
 
 Для реализации условного отображения в шаблонах Angular использует синтаксис `@if`.
 
-Примечание: Подробнее
+NOTE: Подробнее
 об [управлении потоком читайте в руководстве по основам](/essentials/templates#control-flow-with-if-and-for).
 
 В этом уроке вы научитесь использовать условные конструкции в шаблонах.
@@ -53,13 +53,10 @@ export class App {
 
 Вот пример:
 
-```angular-html
+```angular-ts
 template: `
-@if (isServerRunning) {
-  ...
-} @else {
-  ...
-}
+  @if (isServerRunning) { ... }
+  @else { ... }
 `;
 ```
 

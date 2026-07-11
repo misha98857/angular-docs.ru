@@ -13,8 +13,7 @@ import {Component, input, signal} from '@angular/core';
             Hide
           } @else {
             Show
-          }
-          Details
+          } Details
         </button>
       </div>
       @if (showDetails()) {

@@ -4,14 +4,14 @@
 
 <docs-video src="https://www.youtube.com/embed/eM3zi_n7lNs?si=MIl5NcRxvcLjYt5f&amp;start=477"/>
 
-ПРИМЕЧАНИЕ: В этом видео используется старый синтаксис, но основные концепции остаются актуальными.
+NOTE: В этом видео используется старый синтаксис, но основные концепции остаются актуальными.
 
-## Чему вы научитесь {#what-youll-learn}
+## Чему вы научитесь
 
 - Вы добавите набор данных в приложение.
 - Ваше приложение будет отображать список элементов из нового набора данных, используя `@for`.
 
-## Концептуальный обзор `@for` {#conceptual-preview-of-for}
+## Концептуальный обзор `@for`
 
 В Angular `@for` — это особый тип [блока управления потоком](/guide/templates/control-flow), используемый для
 динамического повторения данных в шаблоне. В чистом JavaScript вы бы использовали цикл for — `@for` предоставляет
@@ -33,7 +33,7 @@
 1. Обновите класс `Home`, добавив свойство `housingLocationList`. Обновите свой код, чтобы он соответствовал следующему:
    <docs-code language="angular-ts"  header="Add housingLocationList property in home.ts" path="adev/src/content/tutorials/first-app/steps/09-services/src/app/home/home.ts" visibleLines="26-131"/>
 
-   ВАЖНО: Не удаляйте декоратор `@Component`, вы обновите этот код в следующем шаге.
+   IMPORTANT: Не удаляйте декоратор `@Component`, вы обновите этот код в следующем шаге.
 
 </docs-step>
 

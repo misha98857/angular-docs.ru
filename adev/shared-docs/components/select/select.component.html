@@ -4,7 +4,7 @@
       [attr.id]="id()"
       [attr.name]="name()"
       [value]="displayValue()"
-      placeholder="Select an option"
+      placeholder="Выберите вариант"
       readonly
       [tabindex]="-1"
     />
@@ -35,7 +35,7 @@
                 #innerCombobox="ngCombobox"
                 #searchInput
                 class="docs-select-search-input"
-                placeholder="Search..."
+                placeholder="Поиск..."
                 [(value)]="searchString"
                 [alwaysExpanded]="true"
                 (keydown.escape)="onSearchEscape($event)"
@@ -43,7 +43,11 @@
             </div>
 
             <div aria-live="polite" class="cdk-visually-hidden">
-              {{ filteredOptions().length === 0 ? 'No results found for ' + searchString() : '' }}
+              {{
+                filteredOptions().length === 0
+                  ? 'Ничего не найдено по запросу «' + searchString() + '»'
+                  : ''
+              }}
             </div>
 
             <ng-template ngComboboxPopup [combobox]="innerCombobox">
@@ -55,7 +59,7 @@
                       class="docs-select-no-results-angie"
                       aria-hidden="true"
                     />
-                    <span>No results found</span>
+                    <span>Ничего не найдено</span>
                   </div>
                 }
                 <div

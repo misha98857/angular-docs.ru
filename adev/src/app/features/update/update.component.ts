@@ -69,7 +69,7 @@ export default class UpdateComponent {
   };
 
   protected readonly optionList: Option[] = [
-    {id: 'ngUpgrade', name: 'ngUpgrade', description: 'to combine AngularJS & Angular'},
+    {id: 'ngUpgrade', name: 'ngUpgrade', description: 'для объединения AngularJS и Angular'},
     {id: 'material', name: 'Angular Material', description: ''},
     {id: 'windows', name: 'Windows', description: ''},
   ];
@@ -150,7 +150,7 @@ export default class UpdateComponent {
 
     if (tagName === 'CODE') {
       this.clipboard.copy(textContent!);
-      this.snackBar.open('Copied to clipboard', '', {duration: 2000});
+      this.snackBar.open('Скопировано в буфер обмена', '', {duration: 2000});
     }
   }
 
@@ -161,17 +161,17 @@ export default class UpdateComponent {
 
     // Refuse to generate recommendations for downgrades
     if (this.to.number < this.from.number) {
-      alert('We do not support downgrading versions of Angular.');
+      alert('Мы не поддерживаем понижение версий Angular.');
       return;
     }
 
-    const labelTitle = 'Guide to update your Angular application';
-    const labelBasic = 'basic applications';
-    const labelMedium = 'medium applications';
-    const labelAdvanced = 'advanced applications';
+    const labelTitle = 'Руководство по обновлению приложения Angular';
+    const labelBasic = 'базовых приложений';
+    const labelMedium = 'средних приложений';
+    const labelAdvanced = 'продвинутых приложений';
 
     this.title.set(`${labelTitle} v${this.from.name} -> v${this.to.name}
-    for
+    для
     ${this.level < 2 ? labelBasic : this.level < 3 ? labelMedium : labelAdvanced}`);
 
     // Find applicable steps and organize them into before, during, and after upgrade
@@ -263,7 +263,7 @@ export default class UpdateComponent {
 
     // Provide npm/yarn instructions for versions before 6
     if (this.to.number < 600) {
-      const actionMessage = `Update all of your dependencies to the latest Angular and the right version of TypeScript.`;
+      const actionMessage = `Обновите все зависимости до актуальной версии Angular и подходящей версии TypeScript.`;
 
       if (isWindows) {
         const packages =
@@ -274,18 +274,18 @@ export default class UpdateComponent {
           additionalDeps;
 
         upgradeStep = {
-          step: 'General Update',
+          step: 'Общее обновление',
           action: `${actionMessage}
-          If you are using Windows, you can use:
+          Если вы используете Windows, выполните:
 
 \`${this.packageManager} ${packages}\``,
         } as Step;
       } else {
         const packages = `@angular/{${angularPackages.join(',')}}@${angularVersion} ${additionalDeps}`;
         upgradeStep = {
-          step: 'General update',
+          step: 'Общее обновление',
           action: `${actionMessage}
-          If you are using Linux/Mac, you can use:
+          Если вы используете Linux/Mac, выполните:
 
 \`${this.packageManager} ${packages}\``,
         } as Step;
@@ -307,12 +307,12 @@ export default class UpdateComponent {
 
   protected getComplexityLevelName(level: ApplicationComplexity): string {
     const names: Record<ApplicationComplexity, string> = {
-      [ApplicationComplexity.Basic]: 'Basic',
-      [ApplicationComplexity.Medium]: 'Medium',
-      [ApplicationComplexity.Advanced]: 'Advanced',
+      [ApplicationComplexity.Basic]: 'Базовый',
+      [ApplicationComplexity.Medium]: 'Средний',
+      [ApplicationComplexity.Advanced]: 'Продвинутый',
     };
 
-    return names[level] ?? 'Unknown';
+    return names[level] ?? 'Неизвестно';
   }
 
   private replaceVariables(action: string): string {

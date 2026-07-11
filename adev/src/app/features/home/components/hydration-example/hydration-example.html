@@ -54,7 +54,7 @@
             @for (evt of eventQueue(); track $index) {
               <div class="log-entry animate-in">
                 <span class="log-index">0{{ $index + 1 }}</span>
-                <span class="log-tag">event:</span>
+                <span class="log-tag">событие:</span>
                 <span class="log-msg">{{ evt }}</span>
               </div>
             }
@@ -83,7 +83,7 @@
 
           <!-- Viewport Content -->
           <div class="viewport">
-            @if (currentState() === 'Server-Side Rendering...') {
+            @if (currentState() === 'Серверный рендеринг...') {
               <div class="ssr-overlay animate-fade">
                 <div class="ssr-spinner">
                   <div class="spinner-outer"></div>
@@ -100,7 +100,7 @@
                   <p class="viewport-subtitle">Сочетание немедленных и отложенных триггеров гидратации.</p>
                 </div>
                 <div class="viewport-stats">
-                  <div class="stats-label">Main App</div>
+                  <div class="stats-label">Основное приложение</div>
                   <div class="stats-value font-tabular">{{ progress() }}%</div>
                 </div>
               </div>
@@ -130,7 +130,7 @@
                       </div>
                       @if (card.clickCount > 0) {
                         <div class="click-badge font-tabular animate-zoom">
-                          <span class="badge-label">CLICKS:</span> {{ card.clickCount }}
+                          <span class="badge-label">КЛИКИ:</span> {{ card.clickCount }}
                         </div>
                       }
                     </div>
@@ -144,17 +144,17 @@
                       @if (card.isHydrating) {
                         <div class="tag tag-deferred animate-slide-in">
                           <span class="tag-dot spin"></span>
-                          Hydrating...
+                          Гидратация...
                         </div>
                       } @else if (!card.isHydrated) {
                         <div class="tag tag-deferred">
                           <span class="tag-dot pulse"></span>
-                          Static
+                          Статичный
                         </div>
                       } @else {
                         <div class="tag tag-hydrated animate-slide-in">
                           <span class="tag-dot"></span>
-                          Hydrated
+                          Гидратирован
                         </div>
                       }
                     </div>
@@ -200,7 +200,7 @@
       <div class="explainer-item">
         <h5 class="explainer-title"><span class="dot-green"></span> Воспроизведение событий</h5>
         <p class="explainer-text">
-          Клики пользователя не теряются. Angular записывает события в фазе «Static» и
+          Клики пользователя не теряются. Angular записывает события в фазе «Статичный» и
           воспроизводит их после гидратации.
         </p>
       </div>

@@ -46,7 +46,7 @@ export const CONFIRMATION_DISPLAY_TIME_MS = 1000;
     },
   ],
   host: {
-    '[ariaLabel]': '"Copy link to " + label()',
+    '[ariaLabel]': '"Скопировать ссылку на " + label()',
     '(click)': 'copyLink()',
     'matTooltipPosition': 'above',
     '[class.docs-copy-link-success]': 'showCopySuccess()',

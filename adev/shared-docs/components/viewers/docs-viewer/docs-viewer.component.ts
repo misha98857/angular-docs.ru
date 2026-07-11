@@ -204,7 +204,6 @@ export class DocViewer {
     const preview = Boolean(placeholder.getAttribute('preview'));
     const hideCode = Boolean(placeholder.getAttribute('hideCode'));
     const title = placeholder.getAttribute('header') ?? undefined;
-    const style = placeholder.getAttribute('style') ?? undefined;
     const firstCodeSnippetTitle =
       snippets.length > 0 ? (snippets[0].title ?? snippets[0].name) : undefined;
     const exampleRef = this.viewContainer.createComponent(ExampleViewer);
@@ -217,7 +216,6 @@ export class DocViewer {
       preview,
       hideCode,
       id: this.countOfExamples,
-      style,
     });
 
     exampleRef.setInput('githubUrl', `${GITHUB_CONTENT_URL}/${snippets[0].name}`);
@@ -270,9 +268,7 @@ export class DocViewer {
   private loadCopySourceCodeButtons(): void {
     const staticCodeSnippets = <Element[]>(
       Array.from(
-        this.elementRef.nativeElement.querySelectorAll(
-          '.docs-code:not([mermaid],[hideCopy],.docs-no-copy)',
-        ),
+        this.elementRef.nativeElement.querySelectorAll('.docs-code:not([mermaid],.docs-no-copy)'),
       )
     );
 
@@ -292,7 +288,7 @@ export class DocViewer {
       const copyLinkButtonRef = this.viewContainer.createComponent(CopyLinkButton);
       copyLinkButtonRef.setInput('href', href);
       copyLinkButtonRef.setInput('label', label);
-      copyLinkButtonRef.setInput('matTooltip', `Copy link to ${label}`);
+      copyLinkButtonRef.setInput('matTooltip', `Скопировать ссылку на ${label}`);
 
       anchor.appendChild(copyLinkButtonRef.location.nativeElement);
     }
@@ -438,7 +434,7 @@ export class DocViewer {
       const iframe = this.document.createElement('iframe');
       iframe.className = 'docs-video';
       iframe.src = src;
-      iframe.title = facade.getAttribute('data-video-title') ?? 'Video player';
+      iframe.title = facade.getAttribute('data-video-title') ?? 'Видеоплеер';
       iframe.setAttribute('allow', 'accelerometer; encrypted-media; gyroscope; picture-in-picture');
       iframe.setAttribute('allowfullscreen', '');
       iframe.setAttribute('credentialless', '');

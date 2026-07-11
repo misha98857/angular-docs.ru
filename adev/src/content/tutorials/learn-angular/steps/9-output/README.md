@@ -6,7 +6,7 @@
 
 Angular использует функцию `output()` для реализации такого поведения.
 
-Примечание: Узнайте больше о [пользовательских событиях в руководстве по output](/guide/components/outputs).
+NOTE: Узнайте больше о [пользовательских событиях в руководстве по output](/guide/components/outputs).
 
 В этом упражнении вы узнаете, как использовать функцию `output()` для взаимодействия с компонентами.
 
@@ -15,26 +15,26 @@ Angular использует функцию `output()` для реализаци
 Чтобы создать канал связи от дочернего компонента к родительскому, используйте функцию `output` для инициализации
 свойства класса.
 
-```ts {header:"child.ts"}
+<docs-code header="child.ts" language="ts">
 @Component({...})
 class Child {
   incrementCountEvent = output<number>();
 }
-```
+</docs-code>
 
 Теперь компонент может генерировать события, которые может прослушивать родительский компонент. События вызываются с
 помощью метода `emit`:
 
-```ts {header:"child.ts"}
+<docs-code header="child.ts" language="ts">
 class Child {
   ...
 
-  onClick() {
-    this.count++;
-    this.incrementCountEvent.emit(this.count);
-  }
+onClick() {
+this.count++;
+this.incrementCountEvent.emit(this.count);
 }
-```
+}
+</docs-code>
 
 Функция emit сгенерирует событие того же типа, который был определен в `output`.
 
@@ -49,11 +49,11 @@ class Child {
 <docs-step title="Complete `addItem` method">
 В `child.ts` обновите метод `addItem`; используйте следующий код в качестве логики:
 
-```ts {header:"child.ts", highlight:[2]}
+<docs-code header="child.ts" highlight="[2]" language="ts">
 addItem() {
   this.addItemEvent.emit('🐢');
 }
-```
+</docs-code>
 
 </docs-step>
 

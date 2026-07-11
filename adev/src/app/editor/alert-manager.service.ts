@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import { Injectable, inject } from '@angular/core';
-import { LOCAL_STORAGE, WINDOW, isMobile } from '@angular/docs';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ErrorSnackBar, ErrorSnackBarData } from '../core/services/errors-handling/error-snack-bar';
+import {inject, Service} from '@angular/core';
+import {LOCAL_STORAGE, WINDOW, isMobile} from '@angular/docs';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorSnackBar, ErrorSnackBarData} from '../core/services/errors-handling/error-snack-bar';
 
 export const MAX_RECOMMENDED_WEBCONTAINERS_INSTANCES = 3;
 export const WEBCONTAINERS_COUNTER_KEY = 'numberOfWebcontainers';
@@ -19,7 +19,7 @@ export enum AlertReason {
   MOBILE,
 }
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class AlertManager {
   private readonly localStorage = inject(LOCAL_STORAGE);
   private readonly window = inject(WINDOW);

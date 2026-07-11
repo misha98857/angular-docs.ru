@@ -10,18 +10,18 @@
 строку.
 
 ```ts
-import {Routes} from '@angular/router';
+import { Routes } from '@angular/router';
 
 const routes: Routes = [
   // Simple redirect
-  {path: 'marketing', redirectTo: 'newsletter'},
+  { path: 'marketing', redirectTo: 'newsletter' },
 
   // Redirect with path parameters
-  {path: 'legacy-user/:id', redirectTo: 'users/:id'},
+  { path: 'legacy-user/:id', redirectTo: 'users/:id' },
 
   // Redirect any other URLs that don’t match
   // (also known as a "wildcard" redirect)
-  {path: '**', redirectTo: '/login'},
+  { path: '**', redirectTo: '/login' }
 ];
 ```
 
@@ -73,7 +73,9 @@ export const routes: Routes = [
 путь.
 
 ```ts
-export const routes: Routes = [{path: '', redirectTo: '/dashboard', pathMatch: 'full'}];
+export const routes: Routes = [
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+];
 ```
 
 В этом примере каждый раз, когда пользователь посещает корневой URL (т.е. `''`), роутер перенаправляет его на страницу
@@ -82,14 +84,16 @@ export const routes: Routes = [{path: '', redirectTo: '/dashboard', pathMatch: '
 Любые последующие страницы (например, `/login`, `/about`, `/product/id` и т.д.) игнорируются и не вызывают
 перенаправления.
 
-СОВЕТ: Будьте осторожны при настройке перенаправления на корневой странице (т.е. `"/"` или `""`). Если вы не установите
+TIP: Будьте осторожны при настройке перенаправления на корневой странице (т.е. `"/"` или `""`). Если вы не установите
 `pathMatch: 'full'`, роутер будет перенаправлять все URL.
 
 Чтобы проиллюстрировать это подробнее: если бы в примере с `news` из предыдущего раздела использовался
 `pathMatch: 'full'`:
 
 ```ts
-export const routes: Routes = [{path: 'news', redirectTo: '/blog', pathMatch: 'full'}];
+export const routes: Routes = [
+  { path: 'news', redirectTo: '/blog', pathMatch: 'full' },
+];
 ```
 
 Это означает, что:
@@ -111,8 +115,8 @@ export const routes: Routes = [{path: 'news', redirectTo: '/blog', pathMatch: 'f
 Вот пример, где пользователь перенаправляется в разное меню в зависимости от времени суток:
 
 ```ts
-import {Routes} from '@angular/router';
-import {Menu} from './menu';
+import { Routes } from '@angular/router';
+import { MenuComponent } from './menu/menu.component';
 
 export const routes: Routes = [
   {
@@ -134,16 +138,16 @@ export const routes: Routes = [
       } else {
         return `/restaurant/${location}/menu/dinner`;
       }
-    },
+    }
   },
 
   // Destination routes
-  {path: 'restaurant/:location/menu/breakfast', component: Menu},
-  {path: 'restaurant/:location/menu/lunch', component: Menu},
-  {path: 'restaurant/:location/menu/dinner', component: Menu},
+  { path: 'restaurant/:location/menu/breakfast', component: MenuComponent },
+  { path: 'restaurant/:location/menu/lunch', component: MenuComponent },
+  { path: 'restaurant/:location/menu/dinner', component: MenuComponent },
 
   // Default redirect
-  {path: '', redirectTo: '/restaurant/downtown/menu', pathMatch: 'full'},
+  { path: '', redirectTo: '/restaurant/downtown/menu', pathMatch: 'full' }
 ];
 ```
 

@@ -22,11 +22,11 @@ export type ComponentAlignment = 'left' | 'center' | 'right';
   template: `
     @if (animation(); as anim) {
       <div class="deck" [class]="[alignment()]">
-        <div class="progress-bar" (click)="seek($event)" title="Seek">
+        <div class="progress-bar" (click)="seek($event)" title="Перемотать">
           <div class="progress" [style.width]="progressPerc()"></div>
         </div>
         <div class="controls">
-          <button (click)="anim.back(TIMESTEP)" title="Go back">⏪</button>
+          <button (click)="anim.back(TIMESTEP)" title="Назад">⏪</button>
           <button
             (click)="playPause()"
             [attr.title]="!anim.isPlaying() ? 'Play' : 'Pause'"
@@ -34,8 +34,8 @@ export type ComponentAlignment = 'left' | 'center' | 'right';
           >
             {{ !anim.isPlaying() ? '▶️' : '⏸️' }}
           </button>
-          <button (click)="anim.stop()" title="Stop">⏹️</button>
-          <button (click)="anim.forward(TIMESTEP)" title="Go forward">⏩</button>
+          <button (click)="anim.stop()" title="Стоп">⏹️</button>
+          <button (click)="anim.forward(TIMESTEP)" title="Вперёд">⏩</button>
         </div>
       </div>
     }
@@ -48,7 +48,7 @@ export type ComponentAlignment = 'left' | 'center' | 'right';
       bottom: 30px;
       padding: 10px;
       border-radius: 12px;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0,0,0, 0.7);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.1);
       z-index: 999999;

@@ -6,7 +6,7 @@
 Angular использует концепцию, называемую `input`. Это похоже на `props` в других фреймворках. Чтобы создать свойство
 `input`, используйте функцию `input()`.
 
-Примечание: Подробнее
+NOTE: Подробнее
 о [приеме данных с помощью входных свойств читайте в руководстве по inputs](/guide/components/inputs).
 
 В этом упражнении вы узнаете, как использовать функцию `input()` для отправки информации в компоненты.
@@ -15,31 +15,31 @@ Angular использует концепцию, называемую `input`. �
 
 Чтобы создать свойство `input`, добавьте функцию `input()` для инициализации свойства класса компонента:
 
-```ts {header:"user.ts"}
+<docs-code header="user.ts" language="ts">
 class User {
   occupation = input<string>();
 }
-```
+</docs-code>
 
 Когда вы готовы передать значение через `input`, значения можно задать в шаблонах, используя синтаксис атрибутов. Вот
 пример:
 
-```angular-ts {header:"app.ts", highlight:[3]}
+<docs-code header="app.ts" language="angular-ts" highlight="[3]">
 @Component({
   ...
   template: `<app-user occupation="Angular Developer"></app-user>`
 })
 export class App {}
-```
+</docs-code>
 
 Функция `input` возвращает `InputSignal`. Вы можете прочитать значение, вызвав этот сигнал.
 
-```angular-ts {header:"user.ts"}
+<docs-code header="user.ts" language="angular-ts">
 @Component({
   ...
   template: `<p>The user's occupation is {{occupation()}}</p>`
 })
-```
+</docs-code>
 
 <docs-workflow>
 

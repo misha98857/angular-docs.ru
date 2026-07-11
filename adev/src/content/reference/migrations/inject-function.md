@@ -11,37 +11,37 @@
 ng generate @angular/core:inject
 ```
 
-#### До (Before) {#before}
+#### До (Before)
 
 ```typescript
-import {Component, Inject, Optional} from '@angular/core';
-import {MyService} from './service';
-import {DI_TOKEN} from './token';
+import { Component, Inject, Optional } from '@angular/core';
+import { MyService } from './service';
+import { DI_TOKEN } from './token';
 
 @Component()
 export class MyComp {
   constructor(
     private service: MyService,
-    @Inject(DI_TOKEN) @Optional() readonly token: string,
+    @Inject(DI_TOKEN) @Optional() readonly token: string
   ) {}
 }
 ```
 
-#### После (After) {#after}
+#### После (After)
 
 ```typescript
-import {Component, inject} from '@angular/core';
-import {MyService} from './service';
-import {DI_TOKEN} from './token';
+import { Component, inject } from '@angular/core';
+import { MyService } from './service';
+import { DI_TOKEN } from './token';
 
 @Component()
 export class MyComp {
   private service = inject(MyService);
-  readonly token = inject(DI_TOKEN, {optional: true});
+  readonly token = inject(DI_TOKEN, { optional: true });
 }
 ```
 
-## Опции миграции {#migration-options}
+## Опции миграции
 
 Миграция включает несколько опций для настройки результата.
 
@@ -63,11 +63,11 @@ Angular не проверяет, что параметры абстрактны�
 декораторами Angular наследуются от других классов с декораторами Angular. Если вы включите эту опцию, миграция
 сгенерирует дополнительную сигнатуру конструктора для сохранения обратной совместимости ценой увеличения объема кода.
 
-#### До (Before) {#before}
+#### До (Before)
 
 ```typescript
-import {Component} from '@angular/core';
-import {MyService} from './service';
+import { Component } from '@angular/core';
+import { MyService } from './service';
 
 @Component()
 export class MyComp {
@@ -75,7 +75,7 @@ export class MyComp {
 }
 ```
 
-#### После (After) {#after}
+#### После (After)
 
 ```typescript
 import { Component } from '@angular/core';
@@ -100,36 +100,36 @@ constructor() {}
 ошибок компиляции. Если вы включите эту опцию, миграция добавит утверждение non-null (оператор `!`) после вызова
 `inject()`, чтобы соответствовать старому типу, ценой потенциального сокрытия ошибок типизации.
 
-**ПРИМЕЧАНИЕ:** Утверждения non-null не будут добавлены к параметрам, которые уже типизированы как допускающие null,
+NOTE: Утверждения non-null не будут добавлены к параметрам, которые уже типизированы как допускающие null,
 поскольку код, зависящий от них, вероятно, уже учитывает их возможность быть null.
 
-#### До (Before) {#before}
+#### До (Before)
 
 ```typescript
-import {Component, Inject, Optional} from '@angular/core';
-import {TOKEN_ONE, TOKEN_TWO} from './token';
+import { Component, Inject, Optional } from '@angular/core';
+import { TOKEN_ONE, TOKEN_TWO } from './token';
 
 @Component()
 export class MyComp {
   constructor(
     @Inject(TOKEN_ONE) @Optional() private tokenOne: number,
-    @Inject(TOKEN_TWO) @Optional() private tokenTwo: string | null,
+    @Inject(TOKEN_TWO) @Optional() private tokenTwo: string | null
   ) {}
 }
 ```
 
-#### После (After) {#after}
+#### После (After)
 
 ```typescript
-import {Component, inject} from '@angular/core';
-import {TOKEN_ONE, TOKEN_TWO} from './token';
+import { Component, inject } from '@angular/core';
+import { TOKEN_ONE, TOKEN_TWO } from './token';
 
 @Component()
 export class MyComp {
   // Note the `!` at the end.
-  private tokenOne = inject(TOKEN_ONE, {optional: true})!;
+  private tokenOne = inject(TOKEN_ONE, { optional: true })!;
 
   // Does not have `!` at the end, because the type was already nullable.
-  private tokenTwo = inject(TOKEN_TWO, {optional: true});
+  private tokenTwo = inject(TOKEN_TWO, { optional: true });
 }
 ```

@@ -15,18 +15,18 @@
     Наши папки с руководством по бренду содержат файлы дизайна, рекомендации и примеры от сообщества по адаптации бренда.
     Подробнее об адаптации логотипа читайте в разделе ниже.
   </docs-card>
-  <docs-card title="Angular mascot" href="https://drive.google.com/drive/folders/1uX4H3exWWpwPqh52Bxig3GLS736gBEAf?usp=drive_link" link="Download from Google Drive">
-    ![Angular mascot cheerful](assets/images/press-kit/angular_mascot_cheerful.png "Angular mascot cheerful")
-    Angie is the official mascot of the Angular framework. The mascot folders contain different file formats and poses of our friendly companion for use in your community assets and presentations.
+  <docs-card title="Маскот Angular" href="https://drive.google.com/drive/folders/1uX4H3exWWpwPqh52Bxig3GLS736gBEAf?usp=drive_link" link="Скачать с Google Диска">
+    ![Весёлый маскот Angular](assets/images/press-kit/angular_mascot_cheerful.png "Весёлый маскот Angular")
+    Angie — официальный маскот фреймворка Angular. Папки с маскотом содержат разные форматы файлов и позы нашего дружелюбного компаньона для использования в материалах сообщества и презентациях.
   </docs-card>
 </docs-card-container>
 
-## Пресса и СМИ {#press-and-media}
+## Пресса и СМИ
 
 По вопросам прессы и СМИ, пожалуйста, свяжитесь с нами по адресу press@angular.io. По вопросам для разработчиков
 обращайтесь на devrel@angular.io.
 
-## Адаптация логотипа {#adapting-the-logo}
+## Адаптация логотипа
 
 Успех Angular глубоко связан с нашим сообществом. Мы знаем, что многие сообщества, митапы, конференции, блоги,
 веб-сайты, YouTube-каналы и разработчики построили свой бренд на основе нашего. Этот логотип предназначен для нас и
@@ -69,9 +69,9 @@ devrel@angular.io для получения дополнительной пом�
 
 </docs-workflow>
 
-## Устаревшие логотипы {#deprecated-logos}
+## Устаревшие логотипы
 
-### Angular 2016 года (v3-v16) {#2016-angular-v3-v16}
+### Angular 2016 года (v3-v16)
 
 В 2023 году мы представили обновленный логотип вместе с v17. Мы не рекомендуем использовать прежний логотип Angular во
 избежание путаницы. Вы можете ознакомиться со старым пресс-китом на

@@ -3,7 +3,7 @@
     <iframe
       class="adev-embedded-editor-preview"
       allow="cross-origin-isolated"
-      title="Editor preview"
+      title="Предпросмотр редактора"
       [src]="previewUrlForIFrame()"
     ></iframe>
   } @else {
@@ -20,25 +20,25 @@
       />
       @switch (loadingProgressValue()) {
         @case (loadingEnum.NOT_STARTED) {
-          <span class="adev-embedded-editor-preview-loading-starting">Starting</span>
+          <span class="adev-embedded-editor-preview-loading-starting">Запуск</span>
         }
         @case (loadingEnum.BOOT) {
-          <span class="adev-embedded-editor-preview-loading-boot">Booting</span>
+          <span class="adev-embedded-editor-preview-loading-boot">Загрузка</span>
         }
         @case (loadingEnum.LOAD_FILES) {
-          <span class="adev-embedded-editor-preview-loading-load-files">Creating project</span>
+          <span class="adev-embedded-editor-preview-loading-load-files">Создание проекта</span>
         }
         @case (loadingEnum.INSTALL) {
-          <span class="adev-embedded-editor-preview-loading-install">Installing packages</span>
+          <span class="adev-embedded-editor-preview-loading-install">Установка пакетов</span>
         }
         @case (loadingEnum.START_DEV_SERVER) {
           <span class="adev-embedded-editor-preview-loading-start-dev-server">
-            Initializing dev server
+            Инициализация dev-сервера
           </span>
         }
       }
       <progress
-        title="Preview progress"
+        title="Прогресс предпросмотра"
         [value]="loadingProgressValue()"
         [max]="loadingEnum.READY"
       ></progress>

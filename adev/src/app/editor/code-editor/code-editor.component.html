@@ -31,8 +31,8 @@
               <button
                 type="button"
                 class="docs-rename-file"
-                aria-label="rename file"
-                matTooltip="Rename file"
+                aria-label="Переименовать файл"
+                matTooltip="Переименовать файл"
                 matTooltipPosition="above"
                 (click)="onRenameButtonClick()"
               >
@@ -43,8 +43,8 @@
               <button
                 type="button"
                 class="docs-delete-file"
-                aria-label="Delete file"
-                matTooltip="Delete file"
+                aria-label="Удалить файл"
+                matTooltip="Удалить файл"
                 matTooltipPosition="above"
                 (click)="deleteFile(file.filename)"
               >
@@ -76,8 +76,8 @@
         type="button"
         class="adev-add-file"
         (click)="onAddButtonClick()"
-        aria-label="Add a new file"
-        matTooltip="Add a new file"
+        aria-label="Добавить новый файл"
+        matTooltip="Добавить новый файл"
         matTooltipPosition="above"
       >
         <docs-icon>add</docs-icon>
@@ -88,7 +88,7 @@
   <button
     class="adev-editor-download-button"
     type="button"
-    aria-label="Open current code in editor in an online editor"
+    aria-label="Открыть текущий код в онлайн-редакторе"
     [cdkMenuTriggerFor]="launcherMenu"
   >
     <docs-icon>launch</docs-icon>
@@ -96,15 +96,15 @@
   <!-- launcher dropdown window -->
   <ng-template #launcherMenu>
     <div class="adev-editor-dropdown" cdkMenu>
-      <button cdkMenuItem (click)="openCurrentCodeInStackBlitz()">Open in StackBlitz</button>
+      <button cdkMenuItem (click)="openCurrentCodeInStackBlitz()">Открыть в StackBlitz</button>
     </div>
   </ng-template>
   <button
     class="adev-editor-download-button"
     type="button"
     (click)="downloadCurrentCodeEditorState()"
-    aria-label="Download current source code"
-    matTooltip="Download current source code"
+    aria-label="Скачать текущий исходный код"
+    matTooltip="Скачать текущий исходный код"
     matTooltipPosition="above"
   >
     <docs-icon>download</docs-icon>
@@ -120,16 +120,7 @@
     </button>
     <ul>
       @for (error of errors(); track error) {
-        <li>
-          <a
-            class="adev-error-location-link"
-            href="#"
-            (click)="$event.preventDefault(); openFileAtLocation(error)"
-          >
-            (line: {{ error.lineNumber }}:{{ error.characterPosition }})
-          </a>
-          {{ error.message }}
-        </li>
+        <li>(line: {{ error.lineNumber }}:{{ error.characterPosition }}) {{ error.message }}</li>
       }
     </ul>
   </div>
