@@ -27,4 +27,4 @@ export class Version {
 /**
  * @publicApi
  */
-export const VERSION = /* @__PURE__ */ new Version('21.0');
+export const VERSION = /* @__PURE__ */ new Version('22.0');

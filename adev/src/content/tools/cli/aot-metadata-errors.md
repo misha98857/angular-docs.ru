@@ -6,7 +6,7 @@
 
 HELPFUL: Компилятор встретил выражение, которое он не понял при оценке метаданных Angular.
 
-Возможности языка, выходящие за рамки [ограниченного синтаксиса выражений](tools/cli/aot-compiler#expression-syntax)
+Возможности языка, выходящие за рамки [ограниченного синтаксиса выражений](tools/cli/aot-compiler#expression-syntax-limitations)
 компилятора, могут вызвать эту ошибку, как показано в следующем примере:
 
 ```ts
@@ -23,7 +23,7 @@ const prop = typeof Fooish; // typeof недопустим в метаданны
 Вы можете использовать `typeof` и скобочную нотацию в обычном коде приложения.
 Вы просто не можете использовать эти возможности внутри выражений, определяющих метаданные Angular.
 
-Избегайте этой ошибки, придерживаясь [ограниченного синтаксиса выражений](tools/cli/aot-compiler#expression-syntax)
+Избегайте этой ошибки, придерживаясь [ограниченного синтаксиса выражений](tools/cli/aot-compiler#expression-syntax-limitations)
 компилятора при написании метаданных Angular, и с осторожностью относитесь к новым или необычным возможностям
 TypeScript.
 
@@ -65,9 +65,7 @@ let foo = 42; // инициализирована
 Компилятор [свернет](tools/cli/aot-compiler#code-folding) выражение в провайдер, как если бы вы написали это:
 
 ```ts
-providers: [
-  { provide: Foo, useValue: 42 }
-]
+providers: [{provide: Foo, useValue: 42}];
 ```
 
 В качестве альтернативы, вы можете исправить это, экспортировав `foo` с расчетом на то, что `foo` будет присвоено
@@ -100,7 +98,7 @@ export let someTemplate: string; // экспортирована, но не ин
 
 @Component({
   selector: 'my-component',
-  template: someTemplate
+  template: someTemplate,
 })
 export class MyComponent {}
 ```
@@ -127,7 +125,7 @@ export let someTemplate: string;
 
 @Component({
   selector: 'my-component',
-  template: someTemplate
+  template: someTemplate,
 })
 export class MyComponent {}
 ```
@@ -136,11 +134,11 @@ export class MyComponent {}
 
 ```ts
 // ERROR - там тоже не инициализирована
-import { someTemplate } from './config';
+import {someTemplate} from './config';
 
 @Component({
   selector: 'my-component',
-  template: someTemplate
+  template: someTemplate,
 })
 export class MyComponent {}
 ```
@@ -157,7 +155,7 @@ export let someTemplate = '<h1>Greetings from Angular</h1>';
 
 @Component({
   selector: 'my-component',
-  template: someTemplate
+  template: someTemplate,
 })
 export class MyComponent {}
 ```
@@ -184,7 +182,7 @@ abstract class MyStrategy { }
 ```
 
 Angular генерирует фабрику класса в отдельном модуле, и эта
-фабрика [может обращаться только к экспортируемым классам](tools/cli/aot-compiler#exported-symbols).
+фабрика [может обращаться только к экспортируемым классам](tools/cli/aot-compiler#public-or-protected-symbols).
 Чтобы исправить эту ошибку, экспортируйте указанный класс.
 
 ```ts
@@ -217,7 +215,7 @@ function myStrategy() { … }
 ```
 
 Angular генерирует фабрику класса в отдельном модуле, и эта
-фабрика [может обращаться только к экспортируемым функциям](tools/cli/aot-compiler#exported-symbols).
+фабрика [может обращаться только к экспортируемым функциям](tools/cli/aot-compiler#public-or-protected-symbols).
 Чтобы исправить эту ошибку, экспортируйте функцию.
 
 ```ts
@@ -237,7 +235,7 @@ HELPFUL: _Вызовы функций не поддерживаются. Рас�
 экспортируемую функцию._
 
 Компилятор в настоящее время не
-поддерживает [функциональные выражения или лямбда-функции](tools/cli/aot-compiler#function-expression).
+поддерживает [функциональные выражения или лямбда-функции](tools/cli/aot-compiler#functions-and-static-method-calls).
 Например, вы не можете установить `useFactory` провайдера на анонимную функцию или стрелочную функцию следующим образом.
 
 ```ts
@@ -396,14 +394,14 @@ HELPFUL: _Компилятор ожидал имя в выражении, кот
 
 ```ts
 // ERROR
-provider: [{ provide: Foo, useValue: { 0: 'test' } }]
+provider: [{provide: Foo, useValue: {0: 'test'}}];
 ```
 
 Измените имя свойства на нечисловое.
 
 ```ts
 // CORRECTED
-provider: [{ provide: Foo, useValue: { '0': 'test' } }]
+provider: [{provide: Foo, useValue: {'0': 'test'}}];
 ```
 
 ## Неподдерживаемое имя члена перечисления (Unsupported enum member name) {#unsupported-enum-member-name}

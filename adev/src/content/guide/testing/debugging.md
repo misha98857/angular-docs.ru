@@ -22,7 +22,7 @@
 позволяет использовать собственные инструменты разработчика браузера.
 
 1. Убедитесь, что у вас установлен провайдер браузера. См. инструкции по настройке в
-   разделе [Запуск тестов в браузере](guide/testing/overview#running-tests-in-a-browser).
+   разделе [Запуск тестов в браузере](guide/testing/migrating-to-vitest#5-configure-browser-mode-optional).
 2. Запустите команду `ng test` с флагами `--browsers` и `--debug`:
    ```shell
    ng test --browsers=chromium --debug

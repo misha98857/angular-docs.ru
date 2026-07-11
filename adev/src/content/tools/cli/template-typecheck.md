@@ -71,7 +71,6 @@ Angular сохраняет поведение флага `fullTemplateTypeCheck`
 Рассмотрим следующий пример.
 
 ```ts {header:"User interface"}
-
 interface User {
   name: string;
   address: {
@@ -79,16 +78,13 @@ interface User {
     state: string;
   };
 }
-
 ```
 
 ```html
-
 <div *ngFor="let user of users">
   <h2>{{config.title}}</h2>
   <span>City: {{user.address.city}}</span>
 </div>
-
 ```
 
 Теги `<h2>` и `<span>` находятся во встроенном представлении `*ngFor`.
@@ -160,7 +156,6 @@ interface User {
 В качестве примера рассмотрим следующий компонент:
 
 ```angular-ts
-
 export interface User {
   name: string;
 }
@@ -172,13 +167,11 @@ export interface User {
 export class UserDetailComponent {
   user = input.required<User>();
 }
-
 ```
 
 Шаблон `AppComponent` использует этот компонент следующим образом:
 
 ```angular-ts
-
 @Component({
   selector: 'app-root',
   template: '<user-detail [user]="selectedUser"></user-detail>',
@@ -186,7 +179,6 @@ export class UserDetailComponent {
 export class AppComponent {
   selectedUser: User | null = null;
 }
-
 ```
 
 Здесь, во время проверки типов шаблона для `AppComponent`, привязка `[user]="selectedUser"` соответствует входному
@@ -200,7 +192,7 @@ TypeScript проверяет присваивание в соответстви
 типам внутри шаблона.
 Сделайте требования к типам входных данных для ваших собственных директив максимально конкретными, предоставив функции
 защиты шаблона (template-guard) в определении директивы.
-См. [Улучшение проверки типов в шаблонах для пользовательских директив](guide/directives/structural-directives#directive-type-checks)
+См. [Улучшение проверки типов в шаблонах для пользовательских директив](guide/directives/structural-directives#improving-template-type-checking-for-custom-directives)
 в этом руководстве.
 
 ### Строгие проверки null (Strict null checks) {#strict-null-checks}
@@ -231,18 +223,14 @@ TypeScript проверяет присваивание в соответстви
 - В шаблоне включите оператор утверждения non-null `!` в конце выражения, допускающего null, например:
 
 ```html
-
 <user-detail [user]="user!"></user-detail>
-
 ```
 
 В этом примере компилятор игнорирует несовместимость типов в отношении nullability, так же как и в коде TypeScript.
 В случае с Pipe `async` обратите внимание, что выражение нужно заключить в скобки, как здесь:
 
 ```html
-
 <user-detail [user]="(user$ | async)!"></user-detail>
-
 ```
 
 - Полностью отключить строгие проверки null в шаблонах Angular.
@@ -257,7 +245,7 @@ TypeScript проверяет присваивание в соответстви
 Во-первых, включение `strictNullChecks` и включение `null` в тип входного свойства, где это уместно, сообщает вашим
 потребителям, могут ли они предоставить значение `null` или нет.
 Кроме того, можно предоставить подсказки типов, специфичные для средства проверки типов шаблонов.
-См. [Улучшение проверки типов в шаблонах для пользовательских директив](guide/directives/structural-directives#directive-type-checks)
+См. [Улучшение проверки типов в шаблонах для пользовательских директив](guide/directives/structural-directives#improving-template-type-checking-for-custom-directives)
 и [Приведение типов в сеттерах Input](#input-setter-coercion).
 
 ## Приведение типов в сеттерах Input {#input-setter-coercion}
@@ -269,7 +257,6 @@ TypeScript проверяет присваивание в соответстви
 Рассмотрим следующую директиву:
 
 ```angular-ts
-
 @Component({
   selector: 'submit-button',
   template: `
@@ -279,9 +266,8 @@ TypeScript проверяет присваивание в соответстви
   `,
 })
 class SubmitButton {
-  disabled = input.required({transform: booleanAttribute });
+  disabled = input.required({transform: booleanAttribute});
 }
-
 ```
 
 Здесь входное свойство `disabled` компонента передается в `<button>` в шаблоне.
@@ -289,17 +275,13 @@ class SubmitButton {
 Но предположим, что потребитель использует это входное свойство в шаблоне как атрибут:
 
 ```html
-
 <submit-button disabled></submit-button>
-
 ```
 
 Это имеет тот же эффект, что и привязка:
 
 ```html
-
 <submit-button [disabled]="''"></submit-button>
-
 ```
 
 Во время выполнения входное свойство будет установлено в пустую строку, которая не является значением `boolean`.
@@ -327,7 +309,6 @@ TypeScript до версии 4.3 требовал, чтобы геттер и с
 Включите это, добавив статическое свойство с префиксом `ngAcceptInputType_` в класс компонента:
 
 ```ts
-
 class SubmitButton {
   private _disabled: boolean;
 
@@ -337,12 +318,11 @@ class SubmitButton {
   }
 
   set disabled(value: boolean) {
-    this._disabled = (value === '') || value;
+    this._disabled = value === '' || value;
   }
 
-  static ngAcceptInputType_disabled: boolean|'';
+  static ngAcceptInputType_disabled: boolean | '';
 }
-
 ```
 
 Начиная с TypeScript 4.3, сеттер можно объявить принимающим тип `boolean|''`, что делает поле приведения типа сеттера
@@ -366,13 +346,11 @@ class SubmitButton {
 В следующем примере приведение `person` к типу `any` подавляет ошибку `Property address does not exist`.
 
 ```angular-ts
-
 @Component({
   selector: 'my-component',
-  template: '{{$any(person).address.street}}'
+  template: '{{$any(person).address.street}}',
 })
 class MyComponent {
   person?: Person;
 }
-
 ```

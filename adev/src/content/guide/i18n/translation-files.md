@@ -26,7 +26,7 @@
 1. Перейдите в корневую директорию вашего проекта.
 1. Запустите следующую команду CLI.
 
-<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" visibleRegion="extract-i18n-default"/>
+<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" region="extract-i18n-default"/>
 
 Команда `extract-i18n` создает файл исходного языка с именем `messages.xlf` в корневой директории вашего проекта.
 Для получения дополнительной информации о формате XML Localization Interchange File Format (XLIFF, версия 1.2)
@@ -49,7 +49,7 @@
 
 В следующем примере путь вывода указывается как опция.
 
-<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" visibleRegion="extract-i18n-output-path"/>
+<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" region="extract-i18n-output-path"/>
 
 ### Изменение формата файла исходного языка {#change-the-source-language-file-format}
 
@@ -71,7 +71,7 @@ HELPFUL: Формат XMB генерирует файлы исходного я�
 
 Следующий пример демонстрирует несколько форматов перевода.
 
-<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" visibleRegion="extract-i18n-formats"/>
+<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" region="extract-i18n-formats"/>
 
 ### Изменение имени файла исходного языка {#change-the-source-language-file-name}
 
@@ -81,7 +81,7 @@ HELPFUL: Формат XMB генерирует файлы исходного я�
 
 Следующий пример демонстрирует именование выходного файла.
 
-<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" visibleRegion="extract-i18n-out-file"/>
+<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" region="extract-i18n-out-file"/>
 
 ## Создание файла перевода для каждого языка {#create-a-translation-file-for-each-language}
 
@@ -142,7 +142,7 @@ HELPFUL: Формат XMB генерирует файлы исходного я�
    Это _единица перевода_, также известная как _текстовый узел_, которая представляет собой перевод тега приветствия
    `<h1>`, ранее помеченного атрибутом `i18n`.
 
-   <docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" visibleRegion="translated-hello-before"/>
+   <docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" visibleRegion="translated-hello-before"/>
 
    `id="introductionHeader"` — это [пользовательский ID][GuideI18nOptionalManageMarkedText], но без префикса `@@`,
    требуемого в исходном HTML.
@@ -150,7 +150,7 @@ HELPFUL: Формат XMB генерирует файлы исходного я�
 1. Скопируйте элемент `<source>... </source>` в текстовом узле, переименуйте его в `target`, а затем замените содержимое
    французским текстом.
 
-   <docs-code header="src/locale/messages.fr.xlf (<trans-unit>, после перевода)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" visibleRegion="translated-hello"/>
+   <docs-code header="src/locale/messages.fr.xlf (<trans-unit>, после перевода)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" visibleRegion="translated-hello"/>
 
    В более сложном переводе информация и контекст
    в [элементах описания и значения][GuideI18nCommonPrepareAddHelpfulDescriptionsAndMeanings] помогают выбрать
@@ -159,7 +159,7 @@ HELPFUL: Формат XMB генерирует файлы исходного я�
 1. Переведите остальные текстовые узлы.
    Следующий пример показывает, как переводить.
 
-<docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" visibleRegion="translated-other-nodes"/>
+<docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" visibleRegion="translated-other-nodes"/>
 
 IMPORTANT: Не изменяйте ID единиц перевода.
 Каждый атрибут `id` генерируется Angular и зависит от содержимого текста компонента и назначенного значения (meaning).
@@ -184,7 +184,7 @@ HELPFUL: Правила множественного числа для язык�
 
 Следующий пример показывает, как переводить.
 
-<docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" visibleRegion="translated-plural"/>
+<docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" visibleRegion="translated-plural"/>
 
 ## Перевод альтернативных выражений {#translate-alternate-expressions}
 
@@ -194,23 +194,23 @@ Angular также извлекает альтернативные выраже�
 
 Следующий пример показывает выражение ICU `select` в шаблоне компонента.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" visibleRegion="i18n-select"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" region="i18n-select"/>
 
 В этом примере Angular извлекает выражение в две единицы перевода.
 Первая содержит текст за пределами условия `select` и использует заполнитель для `select` \(`<x id="ICU">`\):
 
-<docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" visibleRegion="translate-select-1"/>
+<docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" visibleRegion="translate-select-1"/>
 
 IMPORTANT: При переводе текста перемещайте заполнитель при необходимости, но не удаляйте его.
 Если вы удалите заполнитель, выражение ICU будет удалено из вашего переведенного приложения.
 
 Следующий пример показывает вторую единицу перевода, содержащую условие `select`.
 
-<docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" visibleRegion="translate-select-2"/>
+<docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" visibleRegion="translate-select-2"/>
 
 Следующий пример показывает обе единицы перевода после завершения перевода.
 
-<docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" visibleRegion="translated-select"/>
+<docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" visibleRegion="translated-select"/>
 
 ## Перевод вложенных выражений {#translate-nested-expressions}
 
@@ -221,15 +221,15 @@ Angular извлекает выражение в две единицы пере�
 
 Следующий пример показывает первую единицу перевода, содержащую текст за пределами вложенного выражения.
 
-<docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" visibleRegion="translate-nested-1"/>
+<docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" visibleRegion="translate-nested-1"/>
 
 Следующий пример показывает вторую единицу перевода, содержащую полное вложенное выражение.
 
-<docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" visibleRegion="translate-nested-2"/>
+<docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" visibleRegion="translate-nested-2"/>
 
 Следующий пример показывает обе единицы перевода после перевода.
 
-<docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf.html" visibleRegion="translate-nested"/>
+<docs-code header="src/locale/messages.fr.xlf (<trans-unit>)" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" visibleRegion="translate-nested"/>
 
 ## Что дальше {#what-s-next}
 

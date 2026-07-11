@@ -59,7 +59,7 @@ URL-адреса внутри приложения могут быть неот�
 HTML5».
 
 HELPFUL: Навигация в стиле HTML5 используется роутером по умолчанию.
-В разделе [LocationStrategy и стили URL браузера](common-router-tasks#locationstrategy-and-browser-url-styles) узнайте,
+В разделе [LocationStrategy и стили URL браузера](guide/routing/common-router-tasks#locationstrategy-and-browser-url-styles) узнайте,
 почему стиль HTML5 предпочтительнее, как настроить его поведение и как переключиться на старый стиль хеша \(`#`\), если
 это необходимо.
 
@@ -72,7 +72,9 @@ HELPFUL: Навигация в стиле HTML5 используется роу�
 Если папка `app` является корнем приложения, как в данном случае, установите значение `href` в `index.html`, как
 показано здесь.
 
-<docs-code header="index.html (base-href)" path="adev/src/content/examples/router/src/index.html" region="base-href"/>
+```html
+<base href="/" />
+```
 
 ### HTML5 URL и `<base href>` {#html5-urls-and-the-base-href}
 
@@ -94,7 +96,7 @@ scheme    authority      path        query   fragment
 `<base href>`](https://developer.mozilla.org/docs/Web/HTML/Element/base 'base href') в `<head>` файла `index.html`.
 
 ```angular-html
-<base href="/">
+<base href="/" />
 ```
 
 Без этого тега браузер может не загрузить ресурсы (изображения, CSS, скрипты) при «глубоких ссылках» (deep linking) в
@@ -130,9 +132,7 @@ scheme    authority      path        query   fragment
 `RouterModule.forRoot()` в `AppModule`.
 
 ```ts
-providers: [
-  provideRouter(appRoutes, withHashLocation())
-]
+providers: [provideRouter(appRoutes, withHashLocation())];
 ```
 
 При использовании `RouterModule.forRoot` это настраивается с помощью `useHash: true` во втором аргументе:

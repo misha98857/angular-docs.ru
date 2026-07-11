@@ -6,7 +6,7 @@
 выполнять вычисления.
 
 NOTE: Узнайте больше
-о [добавлении маршрутов в ваше приложение в подробном руководстве](/guide/routing/common-router-tasks#add-your-routes-to-your-application).
+о [добавлении маршрутов в ваше приложение в подробном руководстве](/guide/routing/define-routes#adding-the-router-to-your-application).
 
 В этом задании вы узнаете, как задействовать директиву `RouterLink`, чтобы максимально эффективно использовать Angular
 Router.

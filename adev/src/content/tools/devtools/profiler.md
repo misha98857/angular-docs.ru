@@ -17,7 +17,7 @@ Angular DevTools.
 Чтобы завершить запись, снова нажмите на круг **Stop recording**.
 
 Вы также можете импортировать существующую запись.
-Подробнее об этой функции читайте в разделе [Импорт записи](tools/devtools#import-and-export-recordings).
+Подробнее об этой функции читайте в разделе [Импорт записи](tools/devtools/profiler#import-and-export-recordings).
 
 ## Понимание выполнения вашего приложения {#understand-your-applications-execution}
 

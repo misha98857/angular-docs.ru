@@ -2,7 +2,7 @@
 
 В Angular представлены улучшенные API для запросов, которые считаются готовыми к использованию в продакшене начиная с
 версии v19.
-Подробнее о сигнальных запросах и их преимуществах читайте в [специальном руководстве](guide/signals/queries).
+Подробнее о сигнальных запросах и их преимуществах читайте в [специальном руководстве](guide/components/queries).
 
 Чтобы поддержать команды, желающие использовать сигнальные запросы, команда Angular предоставляет автоматическую
 миграцию, которая преобразует существующие поля с декораторами запросов в новый API.
@@ -33,10 +33,10 @@ VSCode.
 import {Component, ContentChild} from '@angular/core';
 
 @Component({
-  template: `Has ref: {{someRef ? 'Yes' : 'No'}}`
+  template: `Has ref: {{ someRef ? 'Yes' : 'No' }}`,
 })
 export class MyComponent {
-  @ContentChild('someRef') ref: ElementRef|undefined = undefined;
+  @ContentChild('someRef') ref: ElementRef | undefined = undefined;
 
   someMethod(): void {
     if (this.ref) {
@@ -52,7 +52,7 @@ export class MyComponent {
 import {Component, contentChild} from '@angular/core';
 
 @Component({
-  template: `Has ref: {{someRef() ? 'Yes' : 'No'}}`
+  template: `Has ref: {{ someRef() ? 'Yes' : 'No' }}`,
 })
 export class MyComponent {
   readonly ref = contentChild<ElementRef>('someRef');

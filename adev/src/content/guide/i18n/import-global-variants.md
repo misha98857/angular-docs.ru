@@ -21,7 +21,7 @@ HELPFUL: Базовая установка Angular уже содержит да�
 Например, вы можете импортировать глобальные варианты для французского языка \(`fr`\) в файле `main.ts`, где происходит
 инициализация (bootstrap) приложения.
 
-<docs-code header="src/main.ts (импорт локали)" path="adev/src/content/examples/i18n/src/main.ts" visibleRegion="global-locale"/>
+<docs-code header="src/main.ts (import locale)" path="adev/src/content/examples/i18n/src/main.ts" region="global-locale"/>
 
 HELPFUL: В приложении на основе `NgModules` импорт следует выполнять в вашем `app.module`.
 

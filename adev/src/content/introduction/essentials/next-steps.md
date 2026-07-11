@@ -27,7 +27,7 @@
 Вот некоторые подробные руководства, которые могут вас заинтересовать:
 
 <docs-pill-row>
-  <docs-pill title="Углубленное руководство по компонентам" href="guide/components/importing" />
+  <docs-pill title="Углубленное руководство по компонентам" href="guide/components#imports-in-the-component-decorator" />
   <docs-pill title="Углубленное руководство по шаблонам" href="guide/templates" />
   <docs-pill title="Углубленное руководство по формам" href="/guide/forms" />
 </docs-pill-row>

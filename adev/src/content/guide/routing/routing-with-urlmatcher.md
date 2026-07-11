@@ -40,11 +40,11 @@ Angular.
 
 1. В редакторе кода найдите файл `profile.component.html` и замените его содержимое следующим HTML-кодом.
 
-   <docs-code header="profile/profile.component.html" path="adev/src/content/examples/routing-with-urlmatcher/src/app/profile/profile.component.html"/>
+   <docs-code header="profile.html" path="adev/src/content/examples/routing-with-urlmatcher/src/app/profile/profile.html"/>
 
 1. В редакторе кода найдите файл `app.component.html` и замените его содержимое следующим HTML-кодом.
 
-   <docs-code header="app.component.html" path="adev/src/content/examples/routing-with-urlmatcher/src/app/app.component.html"/>
+   <docs-code header="app.html" path="adev/src/content/examples/routing-with-urlmatcher/src/app/app.html"/>
 
 ## Настройка маршрутов приложения {#configure-your-routes-for-your-application}
 

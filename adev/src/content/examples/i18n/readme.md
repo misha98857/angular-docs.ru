@@ -1,6 +1,6 @@
 # Angular i18n Internationalization Example
 
-This sample comes from the Angular documentation's "[Example Angular Internationalization application](https://angular.dev/guide/i18n/example)" page.
+This sample comes from the Angular documentation's "[Example Angular Internationalization application](guide/i18n/example)" page.
 
 ## Install and Run the Download
 

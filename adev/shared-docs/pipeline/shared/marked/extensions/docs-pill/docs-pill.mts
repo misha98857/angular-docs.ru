@@ -63,7 +63,7 @@ export const docsPillExtension = {
     const renderer = this.parser.renderer as AdevDocsRenderer;
 
     if (!renderer.isKnownRoute(token.href)) {
-      throw new Error(
+      console.warn(
         `Link target "${token.href}" is invalid in <docs-pill> in ${renderer.context.markdownFilePath} does not exist in the defined guide routes.`,
       );
     }

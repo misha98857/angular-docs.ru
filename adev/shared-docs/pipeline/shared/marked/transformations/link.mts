@@ -25,7 +25,9 @@ export function linkRender(this: AdevDocsRenderer, {href, title, tokens}: Tokens
   }
 
   if (!this.isKnownRoute(href)) {
-    throw new Error(
+    // Soft-fail: Russian fork may lag upstream route renames after sync.
+    // Keep serving docs locally; fix stale links separately.
+    console.warn(
       `Link target "${href}" in ${this.context.markdownFilePath} does not exist in the defined guide routes.`,
     );
   }

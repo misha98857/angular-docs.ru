@@ -63,7 +63,7 @@ export class GlobalErrorHandler implements ErrorHandler {
       description: `Screen: ${url} | ${errorMessage}`,
     });
 
-    console.error(GlobalErrorHandler.name, { error });
+    console.error(GlobalErrorHandler.name, {error});
   }
 }
 ```
@@ -89,7 +89,7 @@ _не_ выбрасывал повторно ошибки приложения](
 ### Рендеринг на стороне клиента {#client-side-rendering}
 
 Добавление [`provideBrowserGlobalErrorListeners()`](/api/core/provideBrowserGlobalErrorListeners)
-в [ApplicationConfig](guide/di/dependency-injection#at-the-application-root-level-using-applicationconfig) добавляет
+в [ApplicationConfig](guide/di/defining-dependency-providers#application-bootstrap) добавляет
 слушатели `'error'` и `'unhandledrejection'` к окну браузера и пересылает эти ошибки в `ErrorHandler`. Angular CLI
 генерирует новые приложения с этим провайдером по умолчанию. Команда Angular рекомендует обрабатывать эти глобальные
 ошибки для большинства приложений либо с помощью встроенных слушателей фреймворка, либо с помощью собственных

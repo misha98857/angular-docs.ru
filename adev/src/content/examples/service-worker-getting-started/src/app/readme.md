@@ -1,6 +1,6 @@
 # Instructions for Angular Universal Example Download
 
-This is the downloaded sample code for the [Angular Universal (Standalone) guide](https://angular.dev/guide/ssr).
+This is the downloaded sample code for the [Angular Universal (Standalone) guide](guide/ssr).
 
 ## Install and Run
 

@@ -17,7 +17,7 @@ NOTE: Подробнее
 Чтобы выполнить привязку к атрибуту элемента, заключите имя атрибута в квадратные скобки. Вот пример:
 
 ```angular-html
-<img alt="photo" [src]="imageURL">
+<img alt="photo" [src]="imageURL" />
 ```
 
 В этом примере значение атрибута `src` будет привязано к свойству класса `imageURL`. Какое бы значение ни имело свойство
@@ -51,4 +51,4 @@ export class App {
 Теперь div стал редактируемым. Отличная работа 👍
 
 Привязка свойств — одна из многих мощных возможностей Angular. Если вы хотите узнать больше, ознакомьтесь
-с [документацией Angular](guide/templates/property-binding).
+с [документацией Angular](guide/templates/binding#css-class-and-style-property-bindings).

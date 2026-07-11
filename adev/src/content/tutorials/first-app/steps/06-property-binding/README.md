@@ -18,7 +18,7 @@
 Привязка свойств позволяет подключить переменную к `Input` в шаблоне Angular. Затем данные динамически привязываются к
 `Input`.
 
-Для более подробного объяснения обратитесь к руководству по [привязке свойств](guide/templates/property-binding).
+Для более подробного объяснения обратитесь к руководству по [привязке свойств](guide/templates/binding#css-class-and-style-property-bindings).
 
 <docs-workflow>
 
@@ -50,5 +50,5 @@
 Для получения дополнительной информации по темам, затронутым в этом уроке, посетите:
 
 <docs-pill-row>
-  <docs-pill href="/guide/templates/property-binding" title="Property binding (Привязка свойств)"/>
+  <docs-pill href="/guide/templates/binding#css-class-and-style-property-bindings" title="Property binding (Привязка свойств)"/>
 </docs-pill-row>

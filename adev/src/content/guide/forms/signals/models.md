@@ -419,7 +419,7 @@ orderForm.items[0].quantity; // FieldTree<number>
 
 Элементы массива, содержащие объекты, автоматически получают tracking-идентичности, что помогает сохранять состояние поля даже при смене позиции элементов в массиве. Это гарантирует, что состояние валидации и взаимодействия пользователя корректно сохраняются при переупорядочивании массивов.
 
-<!-- TBD: For dynamic arrays and complex array operations, see the [Working with arrays guide](guide/forms/signals/arrays). -->
+<!-- TBD: For dynamic arrays and complex array operations, see the [Working with arrays guide](guide/forms/signals/models). -->
 
 ## Следующие шаги {#next-steps}
 
@@ -430,5 +430,5 @@ orderForm.items[0].quantity; // FieldTree<number>
   <docs-pill href="guide/forms/signals/field-state-management" title="Field state management" />
   <docs-pill href="guide/forms/signals/validation" title="Validation" />
   <docs-pill href="guide/forms/signals/custom-controls" title="Custom controls" />
-  <!-- <docs-pill href="guide/forms/signals/arrays" title="Working with Arrays" /> -->
+  <!-- <docs-pill href="guide/forms/signals/models" title="Working with Arrays" /> -->
 </docs-pill-row>

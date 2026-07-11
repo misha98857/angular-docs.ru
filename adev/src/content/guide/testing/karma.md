@@ -53,7 +53,7 @@ ng new my-karma-app --test-runner=karma
            "test": {
              "builder": "@angular/build:unit-test",
              "options": {
-               "runner": "karma",
+               "runner": "karma"
                // ... other options
              }
            }
@@ -73,10 +73,8 @@ ng new my-karma-app --test-runner=karma
      // ...
      "compilerOptions": {
        // ...
-       "types": [
-         "jasmine"
-       ]
-     },
+       "types": ["jasmine"]
+     }
      // ...
    }
    ```
@@ -147,7 +145,7 @@ HELPFUL: Подробнее о конфигурации Karma читайте
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "runner": "karma",
+            "runner": "karma"
             // ... other options
           }
         }
@@ -203,7 +201,7 @@ NOTE: Флаги `--no-watch` и `--no-progress` имеют решающее з�
 
 Чтобы отладить приложение с помощью тест-раннера Karma:
 
-1. Откройте окно браузера Karma. См. [Настройка для тестирования](guide/testing/overview#set-up-for-testing), если вам
+1. Откройте окно браузера Karma. См. [Настройка для тестирования](guide/testing#set-up-for-testing), если вам
    нужна помощь с этим шагом.
 2. Нажмите кнопку **DEBUG**, чтобы открыть новую вкладку браузера и перезапустить тесты.
 3. Откройте **Инструменты разработчика** (Developer Tools) браузера. В Windows нажмите `Ctrl-Shift-I`. В macOS нажмите

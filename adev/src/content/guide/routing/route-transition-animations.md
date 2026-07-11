@@ -1,7 +1,7 @@
 # Анимации переходов между маршрутами
 
 Анимации переходов между маршрутами улучшают пользовательский опыт, обеспечивая плавные визуальные переходы при
-навигации между различными представлениями в вашем Angular-приложении. [Angular Router](/guide/routing/overview)
+навигации между различными представлениями в вашем Angular-приложении. [Angular Router](/guide/routing)
 включает встроенную поддержку браузерного API View Transitions, что позволяет создавать бесшовные анимации при смене
 маршрутов в поддерживаемых браузерах.
 
@@ -37,7 +37,7 @@ Angular Router интегрирует View Transitions в жизненный ц�
 время навигации Роутер:
 
 1. **Завершает подготовку навигации** — Выполняются сопоставление
-   маршрутов, [ленивая загрузка](/guide/routing/define-routes#lazily-loaded-components), [Guards](/guide/routing/route-guards)
+   маршрутов, [ленивая загрузка](/guide/routing/loading-strategies#lazily-loaded-components-and-routes), [Guards](/guide/routing/route-guards)
    и [Resolvers](/guide/routing/data-resolvers).
 2. **Инициализирует View Transition** — Роутер вызывает `startViewTransition`, когда маршруты готовы к активации.
 3. **Обновляет DOM** — Роутер активирует новые маршруты и деактивирует старые внутри колбэка перехода.
@@ -57,25 +57,23 @@ Angular Router интегрирует View Transitions в жизненный ц�
 ### Загрузка Standalone-приложения {#standalone-bootstrap}
 
 ```ts
-import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter, withViewTransitions } from '@angular/router';
-import { routes } from './app.routes';
+import {bootstrapApplication} from '@angular/platform-browser';
+import {provideRouter, withViewTransitions} from '@angular/router';
+import {routes} from './app.routes';
 
 bootstrapApplication(MyApp, {
-  providers: [
-    provideRouter(routes, withViewTransitions()),
-  ]
+  providers: [provideRouter(routes, withViewTransitions())],
 });
 ```
 
 ### Загрузка с NgModule {#ngmodule-bootstrap}
 
 ```ts
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {enableViewTransitions: true})]
+  imports: [RouterModule.forRoot(routes, {enableViewTransitions: true})],
 })
 export class AppRouting {}
 ```
@@ -126,7 +124,7 @@ export class AppRouting {}
 ```
 
 IMPORTANT: Определяйте анимации View Transitions в файле глобальных стилей, а не в стилях
-компонента. [Инкапсуляция представления](/guide/components/styling#view-encapsulation) в Angular изолирует стили
+компонента. [Инкапсуляция представления](/guide/components/styling#style-scoping) в Angular изолирует стили
 компонента, что не позволяет им корректно воздействовать на псевдоэлементы перехода.
 
 [Попробуйте обновленный пример "count" на StackBlitz](https://stackblitz.com/edit/stackblitz-starters-fwn4i7?file=src%2Fmain.ts)
@@ -147,8 +145,8 @@ IMPORTANT: Определяйте анимации View Transitions в файл�
 пропустить переходы для определенных типов навигации:
 
 ```ts
-import { inject } from '@angular/core';
-import { Router, withViewTransitions } from '@angular/router';
+import {inject} from '@angular/core';
+import {Router, withViewTransitions} from '@angular/router';
 
 withViewTransitions({
   onViewTransitionCreated: ({transition}) => {
@@ -167,7 +165,7 @@ withViewTransitions({
       transition.skipTransition();
     }
   },
-})
+});
 ```
 
 Этот пример пропускает View Transition, когда навигация изменяет
