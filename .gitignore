@@ -63,3 +63,5 @@ baseline.json
 
 # Local agent/project memory junk
 .omc/
+
+.env
