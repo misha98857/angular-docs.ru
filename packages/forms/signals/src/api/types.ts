@@ -8,8 +8,8 @@
 
 import {Injector, Signal, WritableSignal} from '@angular/core';
 import {AbstractControl} from '@angular/forms';
-import type {FormField} from '../directive/form_field_directive';
-import type {MetadataKey, ValidationError} from './rules';
+import type {FormField} from '../directive/form_field';
+import type {MetadataKey, NgValidationError, ValidationError} from './rules';
 
 /**
  * Symbol used to retain generic type information when it would otherwise be lost.
@@ -19,7 +19,9 @@ declare const ɵɵTYPE: unique symbol;
 /**
  * Options that can be specified when submitting a form.
  *
- * @experimental 21.2
+ * @see [Form submission](guide/forms/signals/form-submission)
+ *
+ * @publicApi 22.0
  */
 export interface FormSubmitOptions<TRootModel, TSubmittedModel> {
   /**
@@ -52,7 +54,7 @@ export interface FormSubmitOptions<TRootModel, TSubmittedModel> {
    * Whether to ignore any of the validators when submitting:
    * - 'pending': Will submit if there are no invalid validators, pending validators do not block submission (default)
    * - 'none': Will not submit unless all validators are passing, pending validators block submission
-   * - 'ignore': Will always submit regardless of invalid or pending validators
+   * - 'all': Will always submit regardless of invalid or pending validators
    */
   ignoreValidators?: 'pending' | 'none' | 'all';
 }
@@ -60,7 +62,9 @@ export interface FormSubmitOptions<TRootModel, TSubmittedModel> {
 /**
  * Options for the `markAsTouched` method.
  *
- * @experimental 21.2.0
+ * @see [Touched state](guide/forms/signals/field-state-management#touched-state)
+ *
+ * @publicApi 22.0
  */
 export interface MarkAsTouchedOptions {
   /**
@@ -74,14 +78,14 @@ export interface MarkAsTouchedOptions {
  * A type that represents either a single value of type `T` or a readonly array of `T`.
  * @template T The type of the value(s).
  *
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type OneOrMany<T> = T | readonly T[];
 
 /**
  * The kind of `FieldPath` (`Root`, `Child` of another `FieldPath`, or `Item` in a `FieldPath` array)
  *
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type PathKind = PathKind.Root | PathKind.Child | PathKind.Item;
 export declare namespace PathKind {
@@ -115,8 +119,10 @@ export declare namespace PathKind {
 /**
  * A reason for a field's disablement.
  *
+ * @see [Disabled reasons](guide/forms/signals/form-logic#disabled-reasons)
+ *
  * @category logic
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export interface DisabledReason {
   /** The field that is disabled. */
@@ -128,8 +134,10 @@ export interface DisabledReason {
 /**
  * The absence of an error which indicates a successful validation result.
  *
+ * @see [Validation basics](guide/forms/signals/validation#validation-basics)
+ *
  * @category types
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type ValidationSuccess = null | undefined | void;
 
@@ -144,8 +152,10 @@ export type ValidationSuccess = null | undefined | void;
  *
  * @template E the type of error (defaults to {@link ValidationError}).
  *
+ * @see [Validation errors](guide/forms/signals/validation#validation-errors)
+ *
  * @category types
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type TreeValidationResult<
   E extends ValidationError.WithOptionalFieldTree = ValidationError.WithOptionalFieldTree,
@@ -161,8 +171,10 @@ export type TreeValidationResult<
  *
  * @template E the type of error (defaults to {@link ValidationError}).
  *
+ * @see [Validation errors](guide/forms/signals/validation#validation-errors)
+ *
  * @category types
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type ValidationResult<E extends ValidationError = ValidationError> =
   | ValidationSuccess
@@ -177,8 +189,10 @@ export type ValidationResult<E extends ValidationError = ValidationError> =
  *
  * @template E the type of error (defaults to {@link ValidationError}).
  *
+ * @see [Async validation](guide/forms/signals/validation#async-validation)
+ *
  * @category types
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type AsyncValidationResult<E extends ValidationError = ValidationError> =
   | ValidationResult<E>
@@ -190,8 +204,10 @@ export type AsyncValidationResult<E extends ValidationError = ValidationError> =
  * @template TValue The type of the value stored in the field.
  * @template TKey The type of the property key which this field resides under in its parent.
  *
+ * @see [Accessing field state](guide/forms/signals/field-state-management#accessing-field-state)
+ *
  * @category types
- * @experimental 21.2
+ * @publicApi 22.0
  */
 export type Field<TValue, TKey extends string | number = string | number> = () => FieldState<
   TValue,
@@ -211,7 +227,7 @@ export type Field<TValue, TKey extends string | number = string | number> = () =
  *   For readonly, use {@link ReadonlyFieldTree}.
  *
  * @category types
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type FieldTree<
   TModel,
@@ -232,9 +248,9 @@ export type FieldTree<
     ? CompatFieldState<TModel, TKey, TMode>
     : FieldStateByMode<TModel, TKey, TMode>) &
     // Children:
-    ([TModel] extends [AbstractControl]
+    (TModel extends AbstractControl
       ? object
-      : [TModel] extends [ReadonlyArray<infer U>]
+      : TModel extends ReadonlyArray<infer U>
         ? ReadonlyArrayLike<MaybeFieldTree<U, number, TMode>>
         : TModel extends Record<string, any>
           ? Subfields<TModel, TMode>
@@ -244,7 +260,7 @@ export type FieldTree<
  * A readonly {@link FieldTree}.
  *
  * @category types
- * @experimental 22.0
+ * @publicApi 22.0
  */
 export type ReadonlyFieldTree<TModel, TKey extends string | number = string | number> = FieldTree<
   TModel,
@@ -258,7 +274,7 @@ export type ReadonlyFieldTree<TModel, TKey extends string | number = string | nu
  * @template TModel The type of the data which the parent field is wrapped around.
  * @template TMode Determines whether the field state is readonly or writable.
  *
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type Subfields<TModel, TMode extends 'writable' | 'readonly' = 'writable'> = {
   readonly [K in keyof TModel as TModel[K] extends Function ? never : K]: MaybeFieldTree<
@@ -275,12 +291,13 @@ export type Subfields<TModel, TMode extends 'writable' | 'readonly' = 'writable'
  *
  * @template T The array item type.
  *
- * @experimental 21.0
+ * @publicApi 22.0
  */
-export type ReadonlyArrayLike<T> = Pick<
-  ReadonlyArray<T>,
-  number | 'length' | typeof Symbol.iterator
->;
+export interface ReadonlyArrayLike<T> {
+  readonly [n: number]: T;
+  readonly length: number;
+  [Symbol.iterator](): IterableIterator<T>;
+}
 
 /**
  * Helper type for defining `FieldTree`. Given a type `TValue` that may include `undefined`,
@@ -293,7 +310,7 @@ export type ReadonlyArrayLike<T> = Pick<
  * @template TKey The type of the property key which this field resides under in its parent.
  * @template TMode Determines whether the field state is readonly or writable.
  *
- * @experimental 22.0
+ * @publicApi 22.0
  */
 export type MaybeFieldTree<
   TModel,
@@ -307,8 +324,9 @@ export type MaybeFieldTree<
  * @template TValue The type of the data which the field is wrapped around.
  * @template TKey The type of the property key which this field resides under in its parent.
  *
+ *
  * @category structure
- * @experimental 22.0
+ * @publicApi 22.0
  */
 export interface ReadonlyFieldState<TValue, TKey extends string | number = string | number> {
   /**
@@ -345,28 +363,28 @@ export interface ReadonlyFieldState<TValue, TKey extends string | number = strin
    *
    * Applies to `<input>` with a numeric or date `type` attribute and custom controls.
    */
-  readonly max?: Signal<number | undefined>;
+  readonly max: Signal<NonNullable<TValue> | undefined> | undefined;
 
   /**
    * A signal indicating the field's maximum string length, if applicable.
    *
    * Applies to `<input>`, `<textarea>`, and custom controls.
    */
-  readonly maxLength?: Signal<number | undefined>;
+  readonly maxLength: Signal<number | undefined> | undefined;
 
   /**
    * A signal indicating the field's minimum value, if applicable.
    *
    * Applies to `<input>` with a numeric or date `type` attribute and custom controls.
    */
-  readonly min?: Signal<number | undefined>;
+  readonly min: Signal<NonNullable<TValue> | undefined> | undefined;
 
   /**
    * A signal indicating the field's minimum string length, if applicable.
    *
    * Applies to `<input>`, `<textarea>`, and custom controls.
    */
-  readonly minLength?: Signal<number | undefined>;
+  readonly minLength: Signal<number | undefined> | undefined;
 
   /**
    * A signal of a unique name for the field, by default based on the name of its parent field.
@@ -412,6 +430,10 @@ export interface ReadonlyFieldState<TValue, TKey extends string | number = strin
    */
   readonly hidden: Signal<boolean>;
   readonly disabledReasons: Signal<readonly DisabledReason[]>;
+
+  /**
+   * A signal containing the {@link errors} of the field itself, excluding its descendants.
+   */
   readonly errors: Signal<ValidationError.WithFieldTree[]>;
 
   /**
@@ -492,8 +514,10 @@ export interface ReadonlyFieldState<TValue, TKey extends string | number = strin
  * @template TValue The type of the data which the field is wrapped around.
  * @template TKey The type of the property key which this field resides under in its parent.
  *
+ * @see [Field state management](guide/forms/signals/field-state-management)
+ *
  * @category structure
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export interface FieldState<
   TValue,
@@ -536,6 +560,20 @@ export interface FieldState<
   markAsTouched(options?: MarkAsTouchedOptions): void;
 
   /**
+   * Gets the first validation error of the given kind on this field.
+   *
+   * This method is reactive and will re-evaluate when the field's errors change if called
+   * within a reactive context (e.g. `computed` or `effect`).
+   *
+   * @param kind The kind of error (e.g. 'required', 'min').
+   * @returns The first matching error, or `undefined` if none.
+   */
+  getError<K extends NgValidationError['kind']>(
+    kind: K,
+  ): (Extract<NgValidationError, {kind: K}> & ValidationError.WithFieldTree) | undefined;
+  getError(kind: string): ValidationError.WithFieldTree | undefined;
+
+  /**
    * Resets the {@link touched} and {@link dirty} state of the field and its descendants.
    *
    * Note this does not change the data model, which can be reset directly if desired.
@@ -543,13 +581,19 @@ export interface FieldState<
    * @param value Optional value to set to the form. If not passed, the value will not be changed.
    */
   reset(value?: TValue): void;
+  /**
+   * Reloads all asynchronous validators for this field and its descendants.
+   */
+  reloadValidation(): void;
 }
 
 /**
  * This is FieldState also providing access to the wrapped FormControl.
  *
+ * @see [Migrating existing forms to Signal Forms](guide/forms/signals/migration)
+ *
  * @category interop
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type CompatFieldState<
   TControl extends AbstractControl,
@@ -566,8 +610,10 @@ export type CompatFieldState<
 /**
  * A readonly {@link CompatFieldState}.
  *
+ * @see [Migrating existing forms to Signal Forms](guide/forms/signals/migration)
+ *
  * @category interop
- * @experimental 22.0
+ * @publicApi 22.0
  */
 export type ReadonlyCompatFieldState<
   TControl extends AbstractControl,
@@ -591,7 +637,10 @@ export type FieldStateByMode<
 /**
  * Represents a binding between a field and a UI control through a {@link FormField} directive.
  *
- * @experimental 22.0
+ * @see [Focus a form control bound to a form field](guide/forms/signals/field-state-management#focus-a-form-control-bound-to-a-form-field)
+ * @see [How the FormField directive works](guide/forms/signals/custom-controls#how-the-formfield-directive-works)
+ *
+ * @publicApi 22.0
  */
 export interface FormFieldBinding {
   /**
@@ -621,7 +670,10 @@ export interface FormFieldBinding {
 /**
  * Allows declaring whether the Rules are supported for a given path.
  *
- * @experimental 21.0
+ * @see [Schemas and schema composability](guide/forms/signals/schemas)
+ * @see [Migrating existing forms to Signal Forms](guide/forms/signals/migration)
+ *
+ * @publicApi 22.0
  **/
 export type SchemaPathRules = SchemaPathRules.Supported | SchemaPathRules.Unsupported;
 
@@ -645,8 +697,11 @@ export declare namespace SchemaPathRules {
  * @template TValue The type of the data which the form is wrapped around.
  * @template TPathKind The kind of path (root field, child field, or item of an array)
  *
+ * @see [The schema function](guide/forms/signals/validation#the-schema-function)
+ * @see [Schemas and schema composability](guide/forms/signals/schemas)
+ *
  * @category types
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type SchemaPath<
   TValue,
@@ -663,8 +718,10 @@ export type SchemaPath<
 /**
  * Schema path used if the value is an AbstractControl.
  *
+ * @see [Migrating existing forms to Signal Forms](guide/forms/signals/migration)
+ *
  * @category interop
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type CompatSchemaPath<
   TControl extends AbstractControl,
@@ -686,7 +743,10 @@ export type CompatSchemaPath<
  * It mirrors the structure of a given data structure, and allows applying rules to the appropriate
  * fields.
  *
- * @experimental 21.0
+ * @see [The schema function](guide/forms/signals/validation#the-schema-function)
+ * @see [Schemas and schema composability](guide/forms/signals/schemas)
+ *
+ * @publicApi 22.0
  */
 export type SchemaPathTree<TModel, TPathKind extends PathKind = PathKind.Root> =
   // Note: We use `[TModel]` here to avoid distributing over a union type model.
@@ -697,10 +757,10 @@ export type SchemaPathTree<TModel, TPathKind extends PathKind = PathKind.Root> =
     ? CompatSchemaPath<TModel, TPathKind>
     : SchemaPath<TModel, SchemaPathRules.Supported, TPathKind>) &
     // Subpaths
-    (TModel extends AbstractControl
+    ([TModel] extends [AbstractControl]
       ? unknown
       : // Array paths have no subpaths
-        TModel extends ReadonlyArray<any>
+        [TModel] extends [ReadonlyArray<any>]
         ? unknown
         : // Object subfields
           TModel extends Record<string, any>
@@ -718,7 +778,9 @@ export type SchemaPathTree<TModel, TPathKind extends PathKind = PathKind.Root> =
  * @template TValue The type of the data which the field is wrapped around.
  * @template TPathKind The kind of path (root field, child field, or item of an array)
  *
- * @experimental 21.0
+ * @see [Schemas and schema composability](guide/forms/signals/schemas)
+ *
+ * @publicApi 22.0
  */
 export type MaybeSchemaPathTree<TModel, TPathKind extends PathKind = PathKind.Root> =
   | (TModel & undefined)
@@ -762,8 +824,10 @@ export type MaybeSchemaPathTree<TModel, TPathKind extends PathKind = PathKind.Ro
  *
  * @template TModel Data type.
  *
+ * @see [Create reusable schemas with schema](guide/forms/signals/schemas#create-reusable-schemas-with-schema)
+ *
  * @category types
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type Schema<in TModel> = {
   [ɵɵTYPE]: SchemaFn<TModel, PathKind.Root>;
@@ -787,8 +851,10 @@ export type Schema<in TModel> = {
  * @template TModel Data type.
  * @template TPathKind The kind of path this schema function can be bound to.
  *
+ * @see [Schemas and schema composability](guide/forms/signals/schemas)
+ *
  * @category types
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type SchemaFn<TModel, TPathKind extends PathKind = PathKind.Root> = (
   p: SchemaPathTree<TModel, TPathKind>,
@@ -800,8 +866,10 @@ export type SchemaFn<TModel, TPathKind extends PathKind = PathKind.Root> = (
  * @template TModel The type of data stored in the form that this schema function is attached to.
  * @template TPathKind The kind of path this schema function can be bound to.
  *
+ * @see [Schemas and schema composability](guide/forms/signals/schemas)
+ *
  * @category types
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type SchemaOrSchemaFn<TModel, TPathKind extends PathKind = PathKind.Root> =
   | Schema<TModel>
@@ -816,7 +884,7 @@ export type SchemaOrSchemaFn<TModel, TPathKind extends PathKind = PathKind.Root>
  * @template TPathKind The kind of path the logic is applied to (root field, child field, or item of an array)
  *
  * @category types
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type LogicFn<TValue, TReturn, TPathKind extends PathKind = PathKind.Root> = (
   ctx: FieldContext<TValue, TPathKind>,
@@ -829,8 +897,10 @@ export type LogicFn<TValue, TReturn, TPathKind extends PathKind = PathKind.Root>
  * @template TValue The type of value stored in the field being validated
  * @template TPathKind The kind of path being validated (root field, child field, or item of an array)
  *
+ * @see [Custom validation rules](guide/forms/signals/validation#using-validate)
+ *
  * @category validation
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type FieldValidator<TValue, TPathKind extends PathKind = PathKind.Root> = LogicFn<
   TValue,
@@ -845,8 +915,10 @@ export type FieldValidator<TValue, TPathKind extends PathKind = PathKind.Root> =
  * @template TValue The type of value stored in the field being validated
  * @template TPathKind The kind of path being validated (root field, child field, or item of an array)
  *
+ * @see [Custom validation rules](guide/forms/signals/validation#using-validatetree)
+ *
  * @category types
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type TreeValidator<TValue, TPathKind extends PathKind = PathKind.Root> = LogicFn<
   TValue,
@@ -863,7 +935,7 @@ export type TreeValidator<TValue, TPathKind extends PathKind = PathKind.Root> = 
  * @template TPathKind The kind of path being validated (root field, child field, or item of an array)
  * @see [Signal Form Validation](/guide/forms/signals/validation)
  * @category types
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type Validator<TValue, TPathKind extends PathKind = PathKind.Root> = LogicFn<
   TValue,
@@ -875,8 +947,10 @@ export type Validator<TValue, TPathKind extends PathKind = PathKind.Root> = Logi
  * Provides access to the state of the current field as well as functions that can be used to look
  * up state of other fields based on a `FieldPath`.
  *
+ * @see [Understanding the field context](guide/forms/signals/cross-field-logic#understanding-the-field-context)
+ *
  * @category types
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type FieldContext<
   TValue,
@@ -890,7 +964,9 @@ export type FieldContext<
 /**
  * The base field context that is available for all fields.
  *
- * @experimental 21.0
+ * @see [Understanding the field context](guide/forms/signals/cross-field-logic#understanding-the-field-context)
+ *
+ * @publicApi 22.0
  */
 export interface RootFieldContext<TValue> {
   /** A signal containing the value of the current field. */
@@ -903,13 +979,24 @@ export interface RootFieldContext<TValue> {
   /** Gets the value of the field represented by the given path. */
   valueOf<PValue>(p: SchemaPath<PValue, SchemaPathRules>): PValue;
 
+  // Note: These methods use a tautological conditional type (`[P] extends [any] ? ... : never`).
+  // This is required because the `FieldNodeContext` implementation returns a deferred conditional
+  // type from `FieldTreeBase` (e.g. `[P] extends [AbstractControl] ? ...`).
+  // TypeScript is strictly invariant when matching generic method signatures and will throw an
+  // assignability error if the interface signature is fully resolved while the implementation
+  // signature is a deferred conditional. This tautological wrapper mimics the deferred
+  // structure so that TypeScript accepts the assignment gracefully.
   /** Gets the state of the field represented by the given path. */
   stateOf<PControl extends AbstractControl>(
     p: CompatSchemaPath<PControl>,
-  ): ReadonlyCompatFieldState<PControl>;
-  stateOf<PValue>(p: SchemaPath<PValue, SchemaPathRules>): ReadonlyFieldState<PValue>;
+  ): [PControl] extends [any] ? ReadonlyCompatFieldState<PControl> : never;
+  stateOf<PValue>(
+    p: SchemaPath<PValue, SchemaPathRules>,
+  ): [PValue] extends [any] ? ReadonlyFieldState<PValue> : never;
   /** Gets the field represented by the given path. */
-  fieldTreeOf<PModel>(p: SchemaPathTree<PModel>): ReadonlyFieldTree<PModel>;
+  fieldTreeOf<PModel>(
+    p: SchemaPathTree<PModel>,
+  ): [PModel] extends [any] ? ReadonlyFieldTree<PModel> : never;
   /** The list of keys that lead from the root field to the current field. */
   readonly pathKeys: Signal<readonly string[]>;
 }
@@ -918,7 +1005,7 @@ export interface RootFieldContext<TValue> {
  * Field context that is available for all fields that are a child of another field.
  *
  * @category structure
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export interface ChildFieldContext<TValue> extends RootFieldContext<TValue> {
   /** The key of the current field in its parent field. */
@@ -928,7 +1015,7 @@ export interface ChildFieldContext<TValue> extends RootFieldContext<TValue> {
 /**
  * Field context that is available for all fields that are an item in an array field.
  *
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export interface ItemFieldContext<TValue> extends ChildFieldContext<TValue> {
   /** The index of the current field in its parent field. */
@@ -938,7 +1025,7 @@ export interface ItemFieldContext<TValue> extends ChildFieldContext<TValue> {
 /**
  * Gets the item type of an object that is possibly an array.
  *
- * @experimental 21.0
+ * @publicApi 22.0
  */
 export type ItemType<T extends Object> = T extends ReadonlyArray<any> ? T[number] : T[keyof T];
 
@@ -951,7 +1038,9 @@ export type ItemType<T extends Object> = T extends ReadonlyArray<any> ? T[number
  * @template TValue The type of value stored in the field.
  * @template TPathKind The kind of path the debouncer is applied to (root field, child field, or item of an array).
  *
- * @experimental 21.0
+ * @see [Debouncing form updates](guide/forms/signals/form-logic#delay-input-operations-with-debounce)
+ *
+ * @publicApi 22.0
  */
 export type Debouncer<TValue, TPathKind extends PathKind = PathKind.Root> = (
   context: FieldContext<TValue, TPathKind>,

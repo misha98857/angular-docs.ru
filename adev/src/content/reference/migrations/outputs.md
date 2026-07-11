@@ -1,23 +1,25 @@
-# Миграция на функцию output
+# Migration to output function
 
-В Angular v17.3 был представлен улучшенный API для outputs, который считается готовым к использованию в продакшене начиная с v19. Этот API имитирует API `input()`, но не основан на Signals.
-Подробнее о пользовательских событиях с функцией output и её преимуществах читайте в [специальном руководстве](guide/components/outputs).
+Angular introduced an improved API for outputs in v17.3 that is considered
+production ready as of v19. This API mimics the `input()` API but is not based on Signals.
+Read more about custom events output function and its benefits in the [dedicated guide](guide/components/outputs).
 
-Для поддержки существующих проектов, желающих использовать функцию output, команда Angular предоставляет автоматизированную миграцию, которая преобразует пользовательские события `@Output` в новый API `output()`.
+To support existing projects that would like to use output function, the Angular team
+provides an automated migration that converts `@Output` custom events to the new `output()` API.
 
-Запустите схематик с помощью следующей команды:
+Run the schematic using the following command:
 
 ```bash
 ng generate @angular/core:output-migration
 ```
 
-## Что изменяет миграция? {#what-does-the-migration-change}
+## What does the migration change?
 
-1. Члены класса с `@Output()` обновляются до их эквивалента с `output()`.
-2. Импорты в файлах компонентов или директив на уровне TypeScript-модуля также обновляются.
-3. Вызовы API, такие как `event.next()`, использование которых не рекомендуется, мигрируются на `event.emit()`, а вызовы `event.complete()` удаляются.
+1. `@Output()` class members are updated to their `output()` equivalent.
+2. Imports in the file of components or directives, at TypeScript module level, are updated as well.
+3. Migrates API calls like `event.next()`, whose use is not recommended, to `event.emit()` and removes `event.complete()` calls.
 
-**До**
+**Before**
 
 ```typescript
 import {Component, Output, EventEmitter} from '@angular/core';
@@ -34,7 +36,7 @@ export class MyComponent {
 }
 ```
 
-**После**
+**After**
 
 ```typescript
 import {Component, output} from '@angular/core';
@@ -51,33 +53,35 @@ export class MyComponent {
 }
 ```
 
-## Параметры конфигурации {#configuration-options}
+## Configuration options
 
-Миграция поддерживает несколько параметров для тонкой настройки под ваши конкретные нужды.
+The migration supports a few options for fine tuning the migration to your specific needs.
 
 ### `--path`
 
-Если не указан, миграция запросит путь и обновит всё рабочее пространство Angular CLI.
-Используйте этот параметр, чтобы ограничить миграцию конкретной поддиректорией.
+If not specified, the migration will ask you for a path and update your whole Angular CLI workspace.
+You can limit the migration to a specific sub-directory using this option.
 
 ### `--analysis-dir`
 
-В крупных проектах этот параметр позволяет сократить количество анализируемых файлов.
-По умолчанию миграция анализирует всё рабочее пространство, независимо от параметра `--path`, чтобы обновить все ссылки, затронутые миграцией `@Output()`.
+In large projects you may use this option to reduce the amount of files being analyzed.
+By default, the migration analyzes the whole workspace, regardless of the `--path` option, in
+order to update all references affected by an `@Output()` migration.
 
-С помощью этого параметра можно ограничить анализ подпапкой. Обратите внимание, что в таком случае любые ссылки за пределами этой директории будут молча пропущены, что может привести к ошибкам сборки.
+With this option, you can limit analysis to a sub-folder. Note that this means that any
+references outside this directory are silently skipped, potentially breaking your build.
 
-Используйте эти параметры следующим образом:
+Use these options as shown below:
 
 ```bash
 ng generate @angular/core:output-migration --path src/app/sub-folder
 ```
 
-## Исключения {#exceptions}
+## Exceptions
 
-В некоторых случаях миграция не изменяет код.
-Одним из таких исключений является случай, когда событие используется с методом `pipe()`.
-Следующий код не будет мигрирован:
+In some cases, the migration will not touch the code.
+One of these exceptions is the case where the event is used with a `pipe()` method.
+The following code won't be migrated:
 
 ```typescript
 export class MyDialogComponent {

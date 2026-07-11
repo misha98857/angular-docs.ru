@@ -9,6 +9,7 @@
 import {CommonModule} from '@angular/common';
 import {By} from '@angular/platform-browser';
 import {expect} from '@angular/private/testing/matchers';
+import {timeout} from '@angular/private/testing';
 import {BehaviorSubject} from 'rxjs';
 import {
   ApplicationRef,
@@ -88,6 +89,8 @@ describe('change detection', () => {
       selector: 'test-cmp',
       template: ` <ng-template #vm="vm" viewManipulation>{{ 'change-detected' }}</ng-template> `,
       imports: [ViewManipulation],
+
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestCmpt {}
 
@@ -128,7 +131,10 @@ describe('change detection', () => {
         }
       }
 
-      @Component({template: '<ng-template #template></ng-template>'})
+      @Component({
+        template: '<ng-template #template></ng-template>',
+        changeDetection: ChangeDetectionStrategy.Eager,
+      })
       class Container {
         @ViewChild('template', {read: ViewContainerRef, static: true}) vcr!: ViewContainerRef;
       }
@@ -159,7 +165,10 @@ describe('change detection', () => {
         }
       }
 
-      @Component({template: '<ng-template #template></ng-template>'})
+      @Component({
+        template: '<ng-template #template></ng-template>',
+        changeDetection: ChangeDetectionStrategy.Eager,
+      })
       class Container {
         @ViewChild('template', {read: ViewContainerRef, static: true}) vcr!: ViewContainerRef;
       }
@@ -182,6 +191,8 @@ describe('change detection', () => {
           <ng-template #vm="vm" viewManipulation>{{ increment('embeddedView') }}</ng-template>
         `,
         imports: [ViewManipulation],
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         increment(counter: 'componentView' | 'embeddedView') {
@@ -365,6 +376,8 @@ describe('change detection', () => {
           '[class.x]': 'x',
         },
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class HasHostBinding {
         x = true;
@@ -375,6 +388,8 @@ describe('change detection', () => {
         template: '<has-host-binding></has-host-binding>',
         inputs: ['input'],
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class Child {
         /**
@@ -398,6 +413,8 @@ describe('change detection', () => {
         selector: 'root',
         template: '<child [input]="3"></child>',
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class Root {}
 
@@ -431,6 +448,8 @@ describe('change detection', () => {
       selector: 'my-app',
       template: '<my-comp [name]="name"></my-comp>',
       standalone: false,
+
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class MyApp {
       @ViewChild(MyComponent) comp!: MyComponent;
@@ -524,6 +543,8 @@ describe('change detection', () => {
         selector: 'button-parent',
         template: '<my-comp></my-comp><button id="parent" (click)="noop()"></button>',
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class ButtonParent {
         @ViewChild(MyComponent) comp!: MyComponent;
@@ -566,6 +587,8 @@ describe('change detection', () => {
         selector: 'my-button-app',
         template: '<button-parent></button-parent>',
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class MyButtonApp {
         @ViewChild(ButtonParent) parent!: ButtonParent;
@@ -661,6 +684,8 @@ describe('change detection', () => {
         selector: 'parent-comp',
         template: `{{ doCheckCount }} - <my-comp></my-comp>`,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class ParentComp implements DoCheck {
         @ViewChild(MyComp) myComp!: MyComp;
@@ -751,6 +776,8 @@ describe('change detection', () => {
         @Component({
           template: '<my-comp dir></my-comp>',
           standalone: false,
+
+          changeDetection: ChangeDetectionStrategy.Eager,
         })
         class MyApp {
           @ViewChild(MyComp) myComp!: MyComp;
@@ -772,6 +799,8 @@ describe('change detection', () => {
         @Component({
           template: '{{ value }}<div dir></div>',
           standalone: false,
+
+          changeDetection: ChangeDetectionStrategy.Eager,
         })
         class MyApp {
           @ViewChild(MyComp) myComp!: MyComp;
@@ -796,6 +825,8 @@ describe('change detection', () => {
         @Component({
           template: '{{ name }}<div *ngIf="showing" dir></div>',
           standalone: false,
+
+          changeDetection: ChangeDetectionStrategy.Eager,
         })
         class MyApp {
           @ViewChild(Dir) dir!: Dir;
@@ -818,6 +849,8 @@ describe('change detection', () => {
         @Component({
           template: '{{ value }}',
           standalone: false,
+
+          changeDetection: ChangeDetectionStrategy.Eager,
         })
         class DetectChangesComp implements OnInit {
           value = 0;
@@ -842,6 +875,8 @@ describe('change detection', () => {
           @Component({
             template: '<child-comp [inp]="true"></child-comp>',
             standalone: false,
+
+            changeDetection: ChangeDetectionStrategy.Eager,
           })
           class ParentComp {
             constructor(public cdr: ChangeDetectorRef) {}
@@ -854,6 +889,8 @@ describe('change detection', () => {
             template: '{{inp}}',
             selector: 'child-comp',
             standalone: false,
+
+            changeDetection: ChangeDetectionStrategy.Eager,
           })
           class ChildComp {
             @Input() inp: any = '';
@@ -896,6 +933,8 @@ describe('change detection', () => {
         @Component({
           template: '{{doCheckCount}}',
           standalone: false,
+
+          changeDetection: ChangeDetectionStrategy.Eager,
         })
         class DetectChangesComp {
           doCheckCount = 0;
@@ -920,6 +959,8 @@ describe('change detection', () => {
           selector: 'app',
           template: ` <div *ngIf="visible" #ref>Visible text</div> `,
           standalone: false,
+
+          changeDetection: ChangeDetectionStrategy.Eager,
         })
         class App {
           @ViewChildren('ref') ref!: QueryList<any>;
@@ -956,6 +997,8 @@ describe('change detection', () => {
           selector: 'structural-comp',
           template: '{{ value }}',
           standalone: false,
+
+          changeDetection: ChangeDetectionStrategy.Eager,
         })
         class StructuralComp {
           @Input() tmp!: TemplateRef<any>;
@@ -973,6 +1016,8 @@ describe('change detection', () => {
             template:
               '<ng-template #foo let-ctx="ctx">{{ ctx.value }}</ng-template><structural-comp [tmp]="foo"></structural-comp>',
             standalone: false,
+
+            changeDetection: ChangeDetectionStrategy.Eager,
           })
           class App {
             @ViewChild(StructuralComp) structuralComp!: StructuralComp;
@@ -1003,6 +1048,8 @@ describe('change detection', () => {
           @Component({
             template: '<ng-template #foo>Template text</ng-template><structural-comp [tmp]="foo">',
             standalone: false,
+
+            changeDetection: ChangeDetectionStrategy.Eager,
           })
           class App {
             @ViewChild(StructuralComp) structuralComp!: StructuralComp;
@@ -1026,6 +1073,8 @@ describe('change detection', () => {
         selector: 'detached-comp',
         template: '{{ value }}',
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class DetachedComp implements DoCheck {
         value = 'one';
@@ -1041,6 +1090,8 @@ describe('change detection', () => {
       @Component({
         template: '<detached-comp></detached-comp>',
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class MyApp {
         @ViewChild(DetachedComp) comp!: DetachedComp;
@@ -1154,6 +1205,8 @@ describe('change detection', () => {
         @Component({
           template: '<on-push-comp [value]="value"></on-push-comp>',
           standalone: false,
+
+          changeDetection: ChangeDetectionStrategy.Eager,
         })
         class OnPushApp {
           @ViewChild(OnPushComp) onPushComp!: OnPushComp;
@@ -1349,6 +1402,8 @@ describe('change detection', () => {
         selector: 'no-changes-comp',
         template: '{{ value }}',
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class NoChangesComp {
         value = 1;
@@ -1376,6 +1431,8 @@ describe('change detection', () => {
       @Component({
         template: '{{ value }} - <no-changes-comp></no-changes-comp>',
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class AppComp {
         value = 1;
@@ -1423,6 +1480,8 @@ describe('change detection', () => {
         @Component({
           template: '<span *ngIf="showing">{{ showing }}</span>',
           standalone: false,
+
+          changeDetection: ChangeDetectionStrategy.Eager,
         })
         class EmbeddedViewApp {
           showing = true;
@@ -1517,7 +1576,7 @@ describe('change detection', () => {
           fixture.detectChanges();
 
           fixture.componentInstance.state = 'new';
-          await new Promise<void>((resolve) => setTimeout(resolve, 10));
+          await timeout(10);
 
           expect(error!.code).toEqual(RuntimeErrorCode.EXPRESSION_CHANGED_AFTER_CHECKED);
         });
@@ -1546,7 +1605,7 @@ describe('change detection', () => {
           // markForCheck schedules change detection
           fixture.componentInstance.changeDetectorRef.markForCheck();
           // wait beyond the exhaustive check interval
-          await new Promise<void>((resolve) => setTimeout(resolve, 1));
+          await timeout(1);
 
           expect(error).toBeUndefined();
         });
@@ -1611,6 +1670,8 @@ describe('change detection', () => {
             @Component({
               template: `<on-push-comp></on-push-comp>`,
               standalone: false,
+
+              changeDetection: ChangeDetectionStrategy.Eager,
             })
             class TestApp {
               @ViewChild(OnPushComp) onPushComp!: OnPushComp;
@@ -1661,6 +1722,8 @@ describe('change detection', () => {
           @Component({
             template: `<on-push-comp></on-push-comp>`,
             standalone: false,
+
+            changeDetection: ChangeDetectionStrategy.Eager,
           })
           class TestApp {
             @ViewChild(OnPushComp) onPushComp!: OnPushComp;
@@ -1690,6 +1753,8 @@ describe('change detection', () => {
     @Component({
       template: '...',
       standalone: false,
+
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class MyApp {
       a: string = 'a';

@@ -1,55 +1,56 @@
-# Настройка поведения маршрутов
+# Customizing route behavior
 
-Angular Router предоставляет мощные точки расширения, позволяющие настраивать поведение маршрутов в приложении. Хотя поведение маршрутизации по умолчанию хорошо работает для большинства приложений, конкретные требования часто требуют пользовательских реализаций для оптимизации производительности, специализированной обработки URL или сложной логики маршрутизации.
+Angular Router provides powerful extension points that allow you to customize how routes behave in your application. While the default routing behavior works well for most applications, specific requirements often demand custom implementations for performance optimization, specialized URL handling, or complex routing logic.
 
-Настройка маршрутов может стать ценной, когда приложению нужно:
+Route customization can become valuable when your application needs:
 
-- **Сохранение состояния компонента** между навигациями во избежание повторного получения данных
-- **Стратегическая ленивая загрузка модулей** на основе поведения пользователя или сетевых условий
-- **Интеграция внешних URL** или обработка маршрутов Angular рядом с устаревшими системами
-- **Динамическое сопоставление маршрутов** на основе условий во время выполнения, выходящих за рамки простых шаблонов путей
+- **Component state preservation** across navigations to avoid re-fetching data
+- **Strategic lazy module loading** based on user behavior or network conditions
+- **External URL integration** or handling Angular routes alongside legacy systems
+- **Dynamic route matching** based on runtime conditions beyond simple path
+  patterns
 
-NOTE: Перед реализацией пользовательских стратегий убедитесь, что поведение маршрутизатора по умолчанию не соответствует вашим потребностям. Маршрутизация Angular по умолчанию оптимизирована для распространённых сценариев использования и обеспечивает наилучший баланс производительности и простоты. Настройка стратегий маршрутов может создать дополнительную сложность кода и повлиять на использование памяти, если не управлять этим тщательно.
+NOTE: Before implementing custom strategies, ensure the default router behavior doesn't meet your needs. Angular's default routing is optimized for common use cases and provides the best balance of performance and simplicity. Customizing route strategies can create additional code complexity and have performance implications on memory usage if not carefully managed.
 
-## Параметры конфигурации маршрутизатора {#router-configuration-options}
+## Router configuration options
 
-`withRouterConfig` или `RouterModule.forRoot` позволяют предоставлять дополнительные `RouterConfigOptions` для настройки поведения маршрутизатора.
+The `withRouterConfig` or `RouterModule.forRoot` allows providing additional `RouterConfigOptions` to adjust the Router’s behavior.
 
-### Обработка отменённых навигаций {#handle-canceled-navigations}
+### Handle canceled navigations
 
-`canceledNavigationResolution` управляет тем, как маршрутизатор восстанавливает историю браузера при отмене навигации. Значение по умолчанию — `'replace'`, которое возвращается к URL до навигации с помощью `location.replaceState`. На практике это означает, что всякий раз, когда адресная строка уже была обновлена для навигации — например, при нажатии кнопок «назад» или «вперёд» браузера, — запись истории перезаписывается «откатом», если навигация не удалась или была отклонена Guard-ом.
-Переключение на `'computed'` сохраняет синхронизацию текущего индекса истории с навигацией Angular, поэтому отмена навигации по кнопке «назад» вызывает навигацию «вперёд» (и наоборот) для возврата на исходную страницу.
+`canceledNavigationResolution` controls how the Router restores browser history when a navigation is canceled. The default value is `'replace'`, which reverts to the pre-navigation URL with `location.replaceState`. In practice, this means that any time the address bar has already been updated for the navigation, such as with the browser back or forward buttons, the history entry is overwritten with the "rollback" if the navigation fails or is rejected by a guard.
+Switching to `'computed'` keeps the in-flight history index in sync with the Angular navigation, so canceling a back button navigation triggers a forward navigation (and vice versa) to return to the original page.
 
-Этот параметр наиболее полезен, когда приложение использует `urlUpdateStrategy: 'eager'` или когда Guard-ы часто отменяют popstate-навигации, инициированные браузером.
+This setting is most helpful when your app uses `urlUpdateStrategy: 'eager'` or when guards frequently cancel popstate navigations initiated by the browser.
 
 ```ts
 provideRouter(routes, withRouterConfig({canceledNavigationResolution: 'computed'}));
 ```
 
-### Реакция на навигации к тому же URL {#react-to-same-url-navigations}
+### React to same-URL navigations
 
-`onSameUrlNavigation` настраивает поведение при попытке пользователя перейти к текущему URL. Значение по умолчанию `'ignore'` пропускает обработку, тогда как `'reload'` перезапускает Guard-ы и Resolver-ы и обновляет экземпляры компонентов.
+`onSameUrlNavigation` configures what should happen when the user asks to navigate to the current URL. The default `'ignore'` skips work, while `'reload'` re-runs guards and resolvers and refreshes component instances.
 
-Это полезно, когда нужно, чтобы повторные клики по фильтру списка, элементу левой навигации или кнопке обновления вызывали новое получение данных, даже если URL не меняется.
+This is useful when you want repeated clicks on a list filter, left-nav item, or refresh button to trigger new data retrieval even though the URL does not change.
 
 ```ts
 provideRouter(routes, withRouterConfig({onSameUrlNavigation: 'reload'}));
 ```
 
-Также можно управлять этим поведением для отдельных навигаций, а не глобально. Это позволяет сохранять значение по умолчанию `'ignore'`, выборочно включая поведение перезагрузки для конкретных случаев:
+You can also control this behavior on individual navigations rather than globally. This allows you to keep the default of `'ignore'` while selectively enabling reload behavior for specific use cases:
 
 ```ts
 router.navigate(['/some-path'], {onSameUrlNavigation: 'reload'});
 ```
 
-### Управление наследованием параметров {#control-parameter-inheritance}
+### Control parameter inheritance
 
-`paramsInheritanceStrategy` определяет, как параметры маршрута и данные передаются из родительских маршрутов.
+`paramsInheritanceStrategy` defines how route parameters and data flow from parent routes.
 
-При значении по умолчанию `'emptyOnly'` дочерние маршруты наследуют параметры только тогда, когда их путь пуст или родитель не объявляет компонент.
+By default (`'always'`), child routes automatically inherit parameters, route data, and resolved values from parent routes.
 
 ```ts
-provideRouter(routes, withRouterConfig({paramsInheritanceStrategy: 'always'}));
+provideRouter(routes, withRouterConfig({paramsInheritanceStrategy: 'emptyOnly'}));
 ```
 
 ```ts
@@ -86,7 +87,7 @@ export class Customer {
 }
 ```
 
-Использование `'always'` гарантирует, что матричные параметры, данные маршрута и разрешённые значения доступны глубже в дереве маршрутов — удобно при совместном использовании контекстных идентификаторов в различных функциональных областях, например:
+This ensures matrix parameters, route data, and resolved values are available further down the route tree—handy when you share contextual identifiers across feature areas such as:
 
 ```text {hideCopy}
 /org/:orgId/projects/:projectId/customers/:customerId
@@ -106,31 +107,31 @@ export class Customer {
 }
 ```
 
-### Управление обновлением URL {#decide-when-the-url-updates}
+### Decide when the URL updates
 
-`urlUpdateStrategy` определяет, когда Angular записывает в адресную строку браузера. Значение по умолчанию `'deferred'` ожидает успешной навигации перед изменением URL. Используйте `'eager'` для немедленного обновления при начале навигации. Немедленное обновление упрощает отображение запрошенного URL в случае сбоя навигации из-за Guard-ов или ошибок, но может кратковременно показывать URL в процессе выполнения при наличии долго работающих Guard-ов.
+`urlUpdateStrategy` determines when Angular writes to the browser address bar. The default `'deferred'` waits for a successful navigation before changing the URL. Use `'eager'` to update immediately when navigation starts. Eager updates make it easier to surface the attempted URL if navigation fails due to guards or errors, but can briefly show an in-progress URL if you have long-running guards.
 
-Учитывайте это, когда аналитической системе нужно видеть запрошенный маршрут, даже если Guard-ы его блокируют.
+Consider this when your analytics pipeline needs to see the attempted route even if guards block it.
 
 ```ts
 provideRouter(routes, withRouterConfig({urlUpdateStrategy: 'eager'}));
 ```
 
-### Выбор обработки параметров запроса по умолчанию {#choose-default-query-parameter-handling}
+### Choose default query parameter handling
 
-`defaultQueryParamsHandling` устанавливает резервное поведение для `Router.createUrlTree`, когда вызов не указывает `queryParamsHandling`. `'replace'` является значением по умолчанию и заменяет существующую строку запроса. `'merge'` объединяет предоставленные значения с текущими, а `'preserve'` сохраняет существующие параметры запроса, если не предоставлены новые.
+`defaultQueryParamsHandling` sets the fallback behavior for `Router.createUrlTree` when the call does not specify `queryParamsHandling`. `'replace'` is the default and swaps out the existing query string. `'merge'` combines the provided values with the current ones, and `'preserve'` keeps the existing query parameters unless you explicitly supply new ones.
 
 ```ts
 provideRouter(routes, withRouterConfig({defaultQueryParamsHandling: 'merge'}));
 ```
 
-Это особенно полезно для страниц поиска и фильтрации для автоматического сохранения существующих фильтров при предоставлении дополнительных параметров.
+This is especially helpful for search and filter pages to automatically retain existing filters when additional parameters are provided.
 
-### Настройка обработки конечного слеша {#configure-trailing-slash-handling}
+### Configure trailing slash handling
 
-По умолчанию сервис `Location` удаляет конечные слеши из URL при чтении.
+By default, the `Location` service strips trailing slashes from URLs on read.
 
-Можно настроить сервис `Location` для добавления конечного слеша ко всем URL, записываемым в браузер, предоставив `TrailingSlashPathLocationStrategy` в приложении.
+You can configure the `Location` service to force a trailing slash on all URLs written to the browser by providing the `TrailingSlashPathLocationStrategy` in your application.
 
 ```ts
 import {LocationStrategy, TrailingSlashPathLocationStrategy} from '@angular/common';
@@ -140,7 +141,7 @@ bootstrapApplication(App, {
 });
 ```
 
-Также можно принудительно запретить сервису `Location` добавлять конечный слеш ко всем URL, предоставив `NoTrailingSlashPathLocationStrategy`.
+You can also force the `Location` service to never have a trailing slash on all URLs written to the browser by providing the `NoTrailingSlashPathLocationStrategy` in your application.
 
 ```ts
 import {LocationStrategy, NoTrailingSlashPathLocationStrategy} from '@angular/common';
@@ -150,49 +151,49 @@ bootstrapApplication(App, {
 });
 ```
 
-Эти стратегии влияют только на URL, записываемый в браузер.
-`Location.path()` и `Location.normalize()` по-прежнему будут удалять конечные слеши при чтении URL.
+These strategies only affect the URL written to the browser.
+`Location.path()` and `Location.normalize()` will continue to strip trailing slashes when reading the URL.
 
-Angular Router предоставляет четыре основные области для настройки:
+Angular Router exposes four main areas for customization:
 
   <docs-pill-row>
-    <docs-pill href="#route-reuse-strategy" title="Стратегия повторного использования маршрутов"/>
-    <docs-pill href="#preloading-strategy" title="Стратегия предварительной загрузки"/>
-    <docs-pill href="#url-handling-strategy" title="Стратегия обработки URL"/>
-    <docs-pill href="#custom-route-matchers" title="Пользовательские сопоставители маршрутов"/>
+    <docs-pill href="#route-reuse-strategy" title="Route reuse strategy"/>
+    <docs-pill href="#preloading-strategy" title="Preloading strategy"/>
+    <docs-pill href="#url-handling-strategy" title="URL handling strategy"/>
+    <docs-pill href="#custom-route-matchers" title="Custom route matchers"/>
   </docs-pill-row>
 
-## Стратегия повторного использования маршрутов {#route-reuse-strategy}
+## Route reuse strategy
 
-Стратегия повторного использования маршрутов управляет тем, уничтожает ли Angular компоненты и воссоздаёт их при навигации или сохраняет для повторного использования. По умолчанию Angular уничтожает экземпляры компонентов при переходе с маршрута и создаёт новые при возврате.
+Route reuse strategy controls whether Angular destroys and recreates components during navigation or preserves them for reuse. By default, Angular destroys component instances when navigating away from a route and creates new instances when navigating back.
 
-### Когда реализовывать повторное использование маршрутов {#when-to-implement-route-reuse}
+### When to implement route reuse
 
-Пользовательские стратегии повторного использования маршрутов полезны для приложений, которым нужно:
+Custom route reuse strategies benefit applications that need:
 
-- **Сохранение состояния форм** — сохранять частично заполненные формы при уходе пользователя и возврате
-- **Удержание затратных данных** — избегать повторного получения больших наборов данных или сложных вычислений
-- **Поддержание позиции прокрутки** — сохранять позиции прокрутки в длинных списках или реализациях бесконечной прокрутки
-- **Интерфейсы с вкладками** — поддерживать состояние компонентов при переключении между вкладками
+- **Form state preservation** - Keep partially completed forms when users navigate away and return
+- **Expensive data retention** - Avoid re-fetching large datasets or complex calculations
+- **Scroll position maintenance** - Preserve scroll positions in long lists or infinite scroll implementations
+- **Tab-like interfaces** - Maintain component state when switching between tabs
 
-### Создание пользовательской стратегии повторного использования маршрутов {#creating-a-custom-route-reuse-strategy}
+### Creating a custom route reuse strategy
 
-Класс `RouteReuseStrategy` Angular позволяет настраивать поведение навигации через концепцию «отсоединённых дескрипторов маршрутов».
+Angular's `RouteReuseStrategy` class allows you to customize navigation behavior through the concept of "detached route handles."
 
-«Отсоединённые дескрипторы маршрутов» — это способ Angular хранить экземпляры компонентов и всю иерархию представлений. При отсоединении маршрута Angular сохраняет в памяти экземпляр компонента, его дочерние компоненты и всё связанное состояние. Это сохранённое состояние позже можно повторно прикрепить при возврате к маршруту.
+"Detached route handles" are Angular's way of storing component instances and their entire view hierarchy. When a route is detached, Angular preserves the component instance, its child components, and all associated state in memory. This preserved state can later be reattached when navigating back to the route.
 
-Класс `RouteReuseStrategy` предоставляет следующие методы, управляющие жизненным циклом компонентов маршрутов:
+The `RouteReuseStrategy` class provides the following methods that control the lifecycle of route components:
 
-| Метод                                                                          | Описание                                                                                                                                                      |
-| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`shouldDetach`](api/router/RouteReuseStrategy#shouldDetach)                   | Определяет, должен ли маршрут быть сохранён для последующего повторного использования при уходе с него                                                        |
-| [`store`](api/router/RouteReuseStrategy#store)                                 | Сохраняет отсоединённый дескриптор маршрута, когда `shouldDetach` возвращает `true`                                                                           |
-| [`shouldAttach`](api/router/RouteReuseStrategy#shouldAttach)                   | Определяет, должен ли сохранённый маршрут быть повторно прикреплён при переходе к нему                                                                        |
-| [`retrieve`](api/router/RouteReuseStrategy#retrieve)                           | Возвращает ранее сохранённый дескриптор маршрута для повторного прикрепления                                                                                  |
-| [`shouldReuseRoute`](api/router/RouteReuseStrategy#shouldReuseRoute)           | Определяет, должен ли маршрутизатор повторно использовать текущий экземпляр маршрута вместо его уничтожения при навигации                                     |
-| [`shouldDestroyInjector`](api/router/RouteReuseStrategy#shouldDestroyInjector) | (Экспериментально) Определяет, должен ли маршрутизатор уничтожить инжектор отсоединённого маршрута, когда он больше не хранится                               |
+| Method                                                                         | Description                                                                                                         |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| [`shouldDetach`](api/router/RouteReuseStrategy#shouldDetach)                   | Determines if a route should be stored for later reuse when navigating away                                         |
+| [`store`](api/router/RouteReuseStrategy#store)                                 | Stores the detached route handle when `shouldDetach` returns true                                                   |
+| [`shouldAttach`](api/router/RouteReuseStrategy#shouldAttach)                   | Determines if a stored route should be reattached when navigating to it                                             |
+| [`retrieve`](api/router/RouteReuseStrategy#retrieve)                           | Returns the previously stored route handle for reattachment                                                         |
+| [`shouldReuseRoute`](api/router/RouteReuseStrategy#shouldReuseRoute)           | Determines if the router should reuse the current route instance instead of destroying it during navigation         |
+| [`shouldDestroyInjector`](api/router/RouteReuseStrategy#shouldDestroyInjector) | (Experimental) Determines if the router should destroy the injector of a detached route when it is no longer stored |
 
-Следующий пример демонстрирует пользовательскую стратегию повторного использования маршрутов, которая выборочно сохраняет состояние компонентов на основе метаданных маршрута:
+The following example demonstrates a custom route reuse strategy that selectively preserves component state based on route metadata:
 
 ```ts
 import {
@@ -243,11 +244,11 @@ export class CustomRouteReuseStrategy implements RouteReuseStrategy {
 }
 ```
 
-### Ручное уничтожение отсоединённых дескрипторов маршрутов {#manually-destroying-detached-route-handles}
+### Manually destroying detached route handles
 
-При реализации пользовательской стратегии `RouteReuseStrategy` может потребоваться вручную уничтожить `DetachedRouteHandle`, если он больше не нужен без повторного прикрепления. Например, если стратегия имеет ограничение размера кэша или срок действия дескрипторов, необходимо обеспечить правильное уничтожение компонента и его состояния во избежание утечек памяти.
+When implementing a custom `RouteReuseStrategy`, you may need to manually destroy a `DetachedRouteHandle` if you decide to discard it without reattaching it. For example, if your strategy has a cache size limit or expires handles after a certain time, you must ensure the component and its state are properly destroyed to avoid memory leaks.
 
-Поскольку `DetachedRouteHandle` является непрозрачным типом, нельзя напрямую вызвать метод уничтожения. Вместо этого используйте функцию `destroyDetachedRouteHandle`, предоставляемую маршрутизатором.
+Since `DetachedRouteHandle` is an opaque type, you cannot call a destroy method directly on it. Instead, use the `destroyDetachedRouteHandle` function provided by the Router.
 
 ```ts
 import {destroyDetachedRouteHandle} from '@angular/router';
@@ -262,13 +263,13 @@ if (this.handles.size > MAX_CACHE_SIZE) {
 }
 ```
 
-NOTE: Избегайте использования пути маршрута в качестве ключа при наличии Guard-ов `canMatch`, так как это может привести к дублирующимся записям.
+NOTE: Avoid using the route path as the key when `canMatch` guards are involved, as it may lead to duplicate entries.
 
-### (Экспериментально) Автоматическая очистка неиспользуемых инжекторов маршрутов {#experimental-automatic-cleanup-of-unused-route-injectors}
+### (Experimental) Automatic cleanup of unused route injectors
 
-По умолчанию Angular не уничтожает инжекторы отсоединённых маршрутов, даже если они больше не хранятся в `RouteReuseStrategy`. Это главным образом потому, что такой уровень управления памятью не нужен большинству приложений.
+By default, Angular does not destroy the injectors of detached routes, even if they are no longer stored by the `RouteReuseStrategy`. This is primarily because this level of memory management is not commonly needed for most applications.
 
-Для включения автоматической очистки неиспользуемых инжекторов маршрутов можно использовать функцию `withExperimentalAutoCleanupInjectors` в конфигурации маршрутизатора. Эта функция проверяет, какие маршруты в настоящее время хранятся стратегией после навигаций, и уничтожает инжекторы отсоединённых маршрутов, не хранящихся стратегией повторного использования.
+To enable automatic cleanup of unused route injectors, you can use the `withExperimentalAutoCleanupInjectors` feature in your router configuration. This feature checks which routes are currently stored by the strategy after navigations and destroys the injectors of any detached routes that are not currently stored by the reuse strategy.
 
 ```ts
 import {provideRouter, withExperimentalAutoCleanupInjectors} from '@angular/router';
@@ -278,11 +279,11 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-Если пользовательская стратегия `RouteReuseStrategy` не предоставлена или расширяет `BaseRouteReuseStrategy`, инжекторы теперь будут уничтожаться при неактивном маршруте.
+If you do not provide a custom `RouteReuseStrategy` or your custom strategy extends `BaseRouteReuseStrategy`, injectors will now be destroyed when the route is inactive.
 
-#### Очистка с пользовательской стратегией `RouteReuseStrategy` {#cleanup-with-a-custom-routereusestrategy}
+#### Cleanup with a custom `RouteReuseStrategy`
 
-Если приложение использует пользовательскую стратегию `RouteReuseStrategy` _и_ она не расширяет `BaseRouteReuseStrategy`, необходимо реализовать `shouldDestroyInjector`, чтобы указать маршрутизатору, у каких маршрутов следует уничтожать инжекторы:
+If your application uses a custom `RouteReuseStrategy` _and_ the strategy does not extend `BaseRouteReuseStrategy`, you must implement `shouldDestroyInjector` to tell the router which routes should have their injectors destroyed:
 
 ```ts
 @Injectable()
@@ -295,7 +296,7 @@ export class CustomRouteReuseStrategy implements RouteReuseStrategy {
 }
 ```
 
-Если стратегия когда-либо хранит `DetachedRouteHandle`, также необходимо сообщить об этом маршрутизатору, чтобы он не уничтожил инжекторы, необходимые для отсоединённого дескриптора:
+If your strategy ever stores a `DetachedRouteHandle`, you will also need to tell the Router about these so it does not destroy any injectors needed by that detached handle:
 
 ```ts
 @Injectable()
@@ -314,9 +315,9 @@ export class CustomRouteReuseStrategy implements RouteReuseStrategy {
 }
 ```
 
-### Настройка маршрута для использования пользовательской стратегии повторного использования {#configuring-a-route-to-use-a-custom-route-reuse-strategy}
+### Configuring a route to use a custom route reuse strategy
 
-Маршруты могут подключаться к поведению повторного использования через метаданные конфигурации маршрута. Этот подход отделяет логику повторного использования от кода компонента, упрощая настройку поведения без изменения компонентов:
+Routes can opt into reuse behavior through route configuration metadata. This approach keeps the reuse logic separate from component code, making it easy to adjust behavior without modifying components:
 
 ```ts
 export const routes: Routes = [
@@ -338,7 +339,7 @@ export const routes: Routes = [
 ];
 ```
 
-Также можно настроить пользовательскую стратегию повторного использования маршрутов на уровне приложения через систему внедрения зависимостей Angular. В этом случае Angular создаёт единственный экземпляр стратегии, управляющей всеми решениями о повторном использовании маршрутов в приложении:
+You can also configure a custom route reuse strategy at the application level through Angular's dependency injection system. In this case, Angular creates a single instance of the strategy that manages all route reuse decisions throughout the application:
 
 ```ts
 export const appConfig: ApplicationConfig = {
@@ -349,20 +350,20 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-## Стратегия предварительной загрузки {#preloading-strategy}
+## Preloading strategy
 
-Стратегии предварительной загрузки определяют, когда Angular загружает лениво загружаемые модули маршрутов в фоновом режиме. Хотя ленивая загрузка улучшает время начальной загрузки за счёт отложенной загрузки модулей, пользователи всё равно испытывают задержку при первом переходе к ленивому маршруту. Стратегии предварительной загрузки устраняют эту задержку, загружая модули до того, как пользователи их запросят.
+Preloading strategies determine when Angular loads lazy-loaded route modules in the background. While lazy loading improves initial load time by deferring module downloads, users still experience a delay when first navigating to a lazy route. Preloading strategies eliminate this delay by loading modules before users request them.
 
-### Встроенные стратегии предварительной загрузки {#built-in-preloading-strategies}
+### Built-in preloading strategies
 
-Angular предоставляет две стратегии предварительной загрузки из коробки:
+Angular provides two preloading strategies out of the box:
 
-| Стратегия                                                   | Описание                                                                                                        |
-| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| [`NoPreloading`](api/router/NoPreloading)                   | Стратегия по умолчанию, отключающая все предварительные загрузки. Модули загружаются только при переходе к ним  |
-| [`PreloadAllModules`](api/router/PreloadAllModules)         | Загружает все лениво загружаемые модули сразу после первоначальной навигации                                     |
+| Strategy                                            | Description                                                                                                      |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| [`NoPreloading`](api/router/NoPreloading)           | The default strategy that disables all preloading. In other words, modules only load when users navigate to them |
+| [`PreloadAllModules`](api/router/PreloadAllModules) | Loads all lazy-loaded modules immediately after the initial navigation                                           |
 
-Стратегию `PreloadAllModules` можно настроить следующим образом:
+The `PreloadAllModules` strategy can be configured as follows:
 
 ```ts
 import {ApplicationConfig} from '@angular/core';
@@ -374,11 +375,11 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-Стратегия `PreloadAllModules` хорошо работает для небольших и средних приложений, где загрузка всех модулей не оказывает существенного влияния на производительность. Однако большие приложения со многими функциональными модулями могут получить пользу от более избирательной предварительной загрузки.
+The `PreloadAllModules` strategy works well for small to medium applications where downloading all modules doesn't significantly impact performance. However, larger applications with many feature modules might benefit from more selective preloading.
 
-### Создание пользовательской стратегии предварительной загрузки {#creating-a-custom-preloading-strategy}
+### Creating a custom preloading strategy
 
-Пользовательские стратегии предварительной загрузки реализуют интерфейс `PreloadingStrategy`, требующий единственного метода `preload`. Этот метод получает конфигурацию маршрута и функцию, запускающую фактическую загрузку модуля. Стратегия возвращает Observable, генерирующий значение при завершении предварительной загрузки, или пустой Observable для пропуска предварительной загрузки:
+Custom preloading strategies implement the `PreloadingStrategy` interface, which requires a single `preload` method. This method receives the route configuration and a function that triggers the actual module load. The strategy returns an Observable that emits when preloading completes or an empty Observable to skip preloading:
 
 ```ts
 import {Injectable} from '@angular/core';
@@ -398,7 +399,7 @@ export class SelectivePreloadingStrategy implements PreloadingStrategy {
 }
 ```
 
-Эта избирательная стратегия проверяет метаданные маршрута для определения поведения предварительной загрузки. Маршруты могут подключаться к предварительной загрузке через свою конфигурацию:
+This selective strategy checks route metadata to determine preloading behavior. Routes can opt into preloading through their configuration:
 
 ```ts
 import {Routes} from '@angular/router';
@@ -422,23 +423,23 @@ export const routes: Routes = [
 ];
 ```
 
-### Аспекты производительности при предварительной загрузке {#performance-considerations-for-preloading}
+### Performance considerations for preloading
 
-Предварительная загрузка влияет как на использование сети, так и на потребление памяти. Каждый предварительно загруженный модуль потребляет полосу пропускания и увеличивает объём памяти приложения. Мобильные пользователи с тарифицируемыми соединениями могут предпочесть минимальную предварительную загрузку, тогда как настольные пользователи с быстрыми сетями могут справиться с агрессивными стратегиями предварительной загрузки.
+Preloading impacts both network usage and memory consumption. Each preloaded module consumes bandwidth and increases the application's memory footprint. Mobile users on metered connections might prefer minimal preloading, while desktop users on fast networks can handle aggressive preloading strategies.
 
-Время предварительной загрузки также важно. Немедленная предварительная загрузка после первоначальной загрузки может конкурировать с другими критически важными ресурсами, такими как изображения или API-вызовы. Стратегии должны учитывать поведение приложения после загрузки и координировать работу с другими фоновыми задачами во избежание снижения производительности.
+The timing of preloading also matters. Immediate preloading after initial load might compete with other critical resources like images or API calls. Strategies should consider the application's post-load behavior and coordinate with other background tasks to avoid performance degradation.
 
-Ограничения браузера на ресурсы также влияют на поведение предварительной загрузки. Браузеры ограничивают количество одновременных HTTP-соединений, поэтому агрессивная предварительная загрузка может ставиться в очередь за другими запросами. Сервис-воркеры могут помочь, предоставляя точный контроль над кэшированием и сетевыми запросами в дополнение к стратегии предварительной загрузки.
+Browser resource limits also affect preloading behavior. Browsers limit concurrent HTTP connections, so aggressive preloading might queue behind other requests. Service workers can help by providing fine-grained control over caching and network requests, complementing the preloading strategy.
 
-## Стратегия обработки URL {#url-handling-strategy}
+## URL handling strategy
 
-Стратегии обработки URL определяют, какие URL обрабатывает Angular-маршрутизатор, а какие игнорирует. По умолчанию Angular пытается обрабатывать все события навигации в приложении, но реальные приложения часто должны сосуществовать с другими системами, обрабатывать внешние ссылки или интегрироваться с устаревшими приложениями, управляющими собственными маршрутами.
+URL handling strategies determine which URLs the Angular router processes versus which ones it ignores. By default, Angular attempts to handle all navigation events within the application, but real-world applications often need to coexist with other systems, handle external links, or integrate with legacy applications that manage their own routes.
 
-Класс `UrlHandlingStrategy` даёт управление этой границей между маршрутами Angular и внешними URL. Это становится необходимым при постепенной миграции приложений на Angular или когда Angular-приложения должны совместно использовать пространство URL с другими фреймворками.
+The `UrlHandlingStrategy` class gives you control over this boundary between Angular-managed routes and external URLs. This becomes essential when migrating applications to Angular incrementally or when Angular applications need to share URL space with other frameworks.
 
-### Реализация пользовательской стратегии обработки URL {#implementing-a-custom-url-handling-strategy}
+### Implementing a custom URL handling strategy
 
-Пользовательские стратегии обработки URL расширяют класс `UrlHandlingStrategy` и реализуют три метода. Метод `shouldProcessUrl` определяет, должен ли Angular обрабатывать данный URL, `extract` возвращает часть URL, которую Angular должен обработать, а `merge` объединяет фрагмент URL с остальным URL:
+Custom URL handling strategies extend the `UrlHandlingStrategy` class and implement three methods. The `shouldProcessUrl` method determines whether Angular should handle a given URL, `extract` returns the portion of the URL that Angular should process, and `merge` combines the URL fragment with the rest of the URL:
 
 ```ts
 import {Injectable} from '@angular/core';
@@ -463,11 +464,11 @@ export class CustomUrlHandlingStrategy implements UrlHandlingStrategy {
 }
 ```
 
-Эта стратегия создаёт чёткие границы в пространстве URL. Angular обрабатывает пути `/app` и `/admin`, игнорируя всё остальное. Этот паттерн хорошо работает при миграции устаревших приложений, где Angular контролирует определённые разделы, а устаревшая система управляет остальными.
+This strategy creates clear boundaries in the URL space. Angular handles `/app` and `/admin` paths while ignoring everything else. This pattern works well when migrating legacy applications where Angular controls specific sections while the legacy system maintains others.
 
-### Настройка пользовательской стратегии обработки URL {#configuring-a-custom-url-handling-strategy}
+### Configuring a custom URL handling strategy
 
-Зарегистрировать пользовательскую стратегию можно через систему внедрения зависимостей Angular:
+You can register a custom strategy through Angular's dependency injection system:
 
 ```ts
 import {ApplicationConfig} from '@angular/core';
@@ -482,17 +483,17 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-## Пользовательские сопоставители маршрутов {#custom-route-matchers}
+## Custom route matchers
 
-По умолчанию маршрутизатор Angular перебирает маршруты в порядке их определения, пытаясь сопоставить URL-путь с шаблоном пути каждого маршрута. Он поддерживает статические сегменты, параметризованные сегменты (`:id`) и подстановочные знаки (`**`). Первый совпавший маршрут выигрывает, и маршрутизатор прекращает поиск.
+By default, Angular's router iterates through routes in the order they're defined, attempting to match the URL path against each route's path pattern. It supports static segments, parameterized segments (`:id`), and wildcards (`**`). The first route that matches wins, and the router stops searching.
 
-Когда приложениям требуется более сложная логика сопоставления на основе условий выполнения, сложных URL-шаблонов или других пользовательских правил, пользовательские сопоставители обеспечивают эту гибкость без ущерба для простоты стандартных маршрутов.
+When applications require more sophisticated matching logic based on runtime conditions, complex URL patterns, or other custom rules, custom matchers provide this flexibility without compromising the simplicity of standard routes.
 
-Маршрутизатор оценивает пользовательские сопоставители в фазе сопоставления маршрутов, до сопоставления путей. Когда сопоставитель возвращает успешное совпадение, он также может извлекать параметры из URL, делая их доступными для активированного компонента так же, как стандартные параметры маршрута.
+The router evaluates custom matchers during the route matching phase, before path matching occurs. When a matcher returns a successful match, it can also extract parameters from the URL, making them available to the activated component just like standard route parameters.
 
-### Создание пользовательского сопоставителя {#creating-a-custom-matcher}
+### Creating a custom matcher
 
-Пользовательский сопоставитель — это функция, получающая сегменты URL и возвращающая либо результат совпадения с использованными сегментами и параметрами, либо `null` для указания отсутствия совпадения. Функция сопоставителя выполняется до того, как Angular оценивает свойство `path` маршрута:
+A custom matcher is a function that receives URL segments and returns either a match result with consumed segments and parameters, or null to indicate no match. The matcher function runs before Angular evaluates the route's path property:
 
 ```ts
 import {Route, UrlSegment, UrlSegmentGroup, UrlMatchResult} from '@angular/router';
@@ -515,9 +516,9 @@ export function customMatcher(
 }
 ```
 
-### Реализация маршрутизации на основе версий {#implementing-version-based-routing}
+### Implementing version-based routing
 
-Рассмотрим сайт документации API, которому нужна маршрутизация на основе номеров версий в URL. У разных версий могут быть разные структуры компонентов или наборы функций:
+Consider an API documentation site that needs to route based on version numbers in the URL. Different versions might have different component structures or feature sets:
 
 ```ts
 import {Routes, UrlSegment, UrlMatchResult} from '@angular/router';
@@ -549,7 +550,7 @@ export const routes: Routes = [
 ];
 ```
 
-Компонент получает извлечённые параметры через входные параметры маршрута:
+The component receives the extracted parameters through route inputs:
 
 ```angular-ts
 import {Component, input, inject} from '@angular/core';
@@ -591,9 +592,9 @@ export class Documentation {
 }
 ```
 
-### Маршрутизация с учётом локали {#locale-aware-routing}
+### Locale-aware routing
 
-Международные приложения часто кодируют информацию о локали в URL. Пользовательский сопоставитель может извлекать коды локали и направлять к соответствующим компонентам, делая локаль доступной как параметр:
+International applications often encode locale information in URLs. A custom matcher can extract locale codes and route to appropriate components while making the locale available as a parameter:
 
 ```ts
 // Supported locales
@@ -626,9 +627,9 @@ export function localeMatcher(segments: UrlSegment[]): UrlMatchResult | null {
 }
 ```
 
-### Сопоставление с использованием сложной бизнес-логики {#complex-business-logic-matching}
+### Complex business logic matching
 
-Пользовательские сопоставители превосходны в реализации бизнес-правил, которые трудно выразить в шаблонах путей. Рассмотрим сайт электронной коммерции, где URL продуктов следуют разным шаблонам в зависимости от типа продукта:
+Custom matchers excel at implementing business rules that would be awkward to express in path patterns. Consider an e-commerce site where product URLs follow different patterns based on product type:
 
 ```ts
 export function productMatcher(segments: UrlSegment[]): UrlMatchResult | null {
@@ -674,12 +675,12 @@ export function productMatcher(segments: UrlSegment[]): UrlMatchResult | null {
 }
 ```
 
-### Аспекты производительности для пользовательских сопоставителей {#performance-considerations-for-custom-matchers}
+### Performance considerations for custom matchers
 
-Пользовательские сопоставители выполняются при каждой попытке навигации до нахождения совпадения. В результате сложная логика сопоставления может влиять на производительность навигации, особенно в приложениях со многими маршрутами. Держите сопоставители сфокусированными и эффективными:
+Custom matchers run for every navigation attempt until a match is found. As a result, complex matching logic can impact navigation performance, especially in applications with many routes. Keep matchers focused and efficient:
 
-- Завершайте работу досрочно, когда совпадение невозможно
-- Избегайте затратных операций, таких как API-вызовы или сложные регулярные выражения
-- Рассмотрите кэширование результатов для повторяющихся URL-шаблонов
+- Return early when a match is impossible
+- Avoid expensive operations like API calls or complex regular expressions
+- Consider caching results for repeated URL patterns
 
-Хотя пользовательские сопоставители элегантно решают сложные задачи маршрутизации, их избыточное использование может затруднить понимание и поддержку конфигурации маршрутов. Оставляйте пользовательские сопоставители для сценариев, где стандартное сопоставление путей действительно не справляется.
+While custom matchers solve complex routing requirements elegantly, overuse can make route configuration harder to understand and maintain. Reserve custom matchers for scenarios where standard path matching genuinely falls short.

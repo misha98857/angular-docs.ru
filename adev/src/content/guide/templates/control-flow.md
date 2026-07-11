@@ -1,10 +1,10 @@
-# Управление потоком
+# Control flow
 
-Шаблоны Angular поддерживают блоки управления потоком, позволяющие условно отображать, скрывать и повторять элементы.
+Angular templates support control flow blocks that let you conditionally show, hide, and repeat elements.
 
-## Условное отображение с `@if`, `@else if` и `@else` {#conditionally-display-content-with-if-else-if-and-else}
+## Conditionally display content with `@if`, `@else if` and `@else`
 
-Блок `@if` условно отображает своё содержимое, когда его условное выражение истинно:
+The `@if` block conditionally displays its content when its condition expression is truthy:
 
 ```angular-html
 @if (a > b) {
@@ -12,7 +12,7 @@
 }
 ```
 
-Для отображения альтернативного содержимого можно добавить любое количество блоков `@else if` и один блок `@else`.
+If you want to display alternative content, you can do so by providing any number of `@else if` blocks and a singular `@else` block.
 
 ```angular-html
 @if (a > b) {
@@ -24,9 +24,9 @@
 }
 ```
 
-### Ссылка на результат условного выражения {#referencing-the-conditional-expressions-result}
+### Referencing the conditional expression's result
 
-Условный блок `@if` поддерживает сохранение результата условного выражения в переменную для повторного использования внутри блока.
+The `@if` conditional supports saving the result of the conditional expression into a variable for reuse inside of the block.
 
 ```angular-html
 @if (user.profile.settings.startDate; as startDate) {
@@ -34,13 +34,13 @@
 }
 ```
 
-Это может быть полезно для ссылок на длинные выражения, которые легче читать и поддерживать в шаблоне.
+This can be useful for referencing longer expressions that would be easier to read and maintain within the template.
 
-## Повторение содержимого с блоком `@for` {#repeat-content-with-the-for-block}
+## Repeat content with the `@for` block
 
-Блок `@for` перебирает коллекцию и многократно отображает содержимое блока. Коллекция может быть любым JavaScript-[итерируемым объектом](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Iteration_protocols), но Angular имеет дополнительные оптимизации производительности для значений типа `Array`.
+The `@for` block loops through a collection and repeatedly renders the content of a block. The collection can be any JavaScript [iterable](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Iteration_protocols), but Angular has additional performance optimizations for `Array` values.
 
-Типичный цикл `@for` выглядит следующим образом:
+A typical `@for` loop looks like:
 
 ```angular-html
 @for (item of items; track item.id) {
@@ -48,19 +48,19 @@
 }
 ```
 
-Блок `@for` в Angular не поддерживает операторы изменения потока выполнения, такие как `continue` или `break` из JavaScript.
+Angular's `@for` block does not support flow-modifying statements like JavaScript's `continue` or `break`.
 
-### Почему `track` в блоках `@for` важен? {#why-is-track-in-for-blocks-important}
+### Why is `track` in `@for` blocks important?
 
-Выражение `track` позволяет Angular поддерживать связь между данными и DOM-узлами на странице. Это позволяет Angular оптимизировать производительность, выполняя минимально необходимое количество DOM-операций при изменении данных.
+The `track` expression allows Angular to maintain a relationship between your data and the DOM nodes on the page. This allows Angular to optimize performance by executing the minimum necessary DOM operations when the data changes.
 
-Эффективное использование `track` может значительно улучшить производительность рендеринга приложения при переборе коллекций данных.
+Using track effectively can significantly improve your application's rendering performance when looping over data collections.
 
-Выбирайте свойство, уникально идентифицирующее каждый элемент в выражении `track`. Если модель данных содержит уникально идентифицирующее свойство, обычно `id` или `uuid`, используйте это значение. Если данные не содержат такого поля, настоятельно рекомендуется добавить его.
+Select a property that uniquely identifies each item in the `track` expression. If your data model includes a uniquely identifying property, commonly `id` or `uuid`, use this value. If your data does not include a field like this, strongly consider adding one.
 
-Для статических коллекций, которые никогда не изменяются, можно использовать `$index`, чтобы Angular отслеживал каждый элемент по его индексу в коллекции.
+For static collections that never change, you can use `$index` to tell Angular to track each item by its index in the collection.
 
-Если другие варианты недоступны, можно использовать сам элемент в качестве ключа отслеживания. Это указывает Angular отслеживать элемент по его ссылочной идентичности с помощью оператора тройного равенства (`===`). По возможности избегайте этого варианта, поскольку он может привести к значительно более медленным обновлениям рендеринга — Angular не может определить, какой элемент данных соответствует каким DOM-узлам.
+If no other option is available, you can use the item itself as a tracking key. This tells Angular to track the item by its reference identity using the triple-equals operator (`===`). Avoid this option whenever possible as it can lead to significantly slower rendering updates, as Angular has no way to map which data item corresponds to which DOM nodes.
 
 ```angular-html
 @for (item of items; track item) {
@@ -68,22 +68,22 @@
 }
 ```
 
-NOTE: В отличие от `*ngFor`, блок `@for` приоритизирует повторное использование представлений. Если отслеживаемое свойство изменяется, но ссылка на объект остаётся той же, Angular обновляет привязки представления (включая входные параметры компонента), вместо того чтобы уничтожать и пересоздавать весь элемент.
+NOTE: Unlike `*ngFor`, the `@for` block prioritizes view reuse. If a tracked property changes but the object reference remains the same, Angular updates the view's bindings (including component inputs) rather than destroying and recreating the entire element.
 
-### Контекстные переменные в блоках `@for` {#contextual-variables-in-for-blocks}
+### Contextual variables in `@for` blocks
 
-Внутри блоков `@for` всегда доступны несколько неявных переменных:
+Inside `@for` blocks, several implicit variables are always available:
 
-| Переменная | Значение                                        |
-| ---------- | ----------------------------------------------- |
-| `$count`   | Количество элементов в итерируемой коллекции    |
-| `$index`   | Индекс текущей строки                           |
-| `$first`   | Является ли текущая строка первой               |
-| `$last`    | Является ли текущая строка последней            |
-| `$even`    | Является ли индекс текущей строки чётным        |
-| `$odd`     | Является ли индекс текущей строки нечётным      |
+| Variable | Meaning                                       |
+| -------- | --------------------------------------------- |
+| `$count` | Number of items in a collection iterated over |
+| `$index` | Index of the current row                      |
+| `$first` | Whether the current row is the first row      |
+| `$last`  | Whether the current row is the last row       |
+| `$even`  | Whether the current row index is even         |
+| `$odd`   | Whether the current row index is odd          |
 
-Эти переменные всегда доступны под этими именами, но их можно переименовать с помощью сегмента `let`:
+These variables are always available with these names, but can be aliased via a `let` segment:
 
 ```angular-html
 @for (item of items; track item.id; let idx = $index, e = $even) {
@@ -91,11 +91,11 @@ NOTE: В отличие от `*ngFor`, блок `@for` приоритизиру�
 }
 ```
 
-Переименование полезно при вложенных блоках `@for`, позволяя читать переменные из внешнего блока `@for` во внутреннем.
+The aliasing is useful when nesting `@for` blocks, letting you read variables from the outer `@for` block from an inner `@for` block.
 
-### Запасное содержимое для блоков `@for` с блоком `@empty` {#providing-a-fallback-for-for-blocks-with-the-empty-block}
+### Providing a fallback for `@for` blocks with the `@empty` block
 
-Сразу после содержимого блока `@for` можно опционально добавить секцию `@empty`. Содержимое блока `@empty` отображается, когда элементы отсутствуют:
+You can optionally include an `@empty` section immediately after the `@for` block content. The content of the `@empty` block displays when there are no items:
 
 ```angular-html
 @for (item of items; track item.name) {
@@ -105,9 +105,9 @@ NOTE: В отличие от `*ngFor`, блок `@for` приоритизиру�
 }
 ```
 
-## Условное отображение с блоком `@switch` {#conditionally-display-content-with-the-switch-block}
+## Conditionally display content with the `@switch` block
 
-Хотя блок `@if` отлично подходит для большинства сценариев, блок `@switch` предоставляет альтернативный синтаксис для условного рендеринга данных. Его синтаксис близко напоминает оператор `switch` в JavaScript.
+While the `@if` block is great for most scenarios, the `@switch` block provides an alternate syntax to conditionally render data. Its syntax closely resembles JavaScript's `switch` statement.
 
 ```angular-html
 @switch (userPermissions) {
@@ -124,21 +124,21 @@ NOTE: В отличие от `*ngFor`, блок `@for` приоритизиру�
 }
 ```
 
-Значение условного выражения сравнивается с выражением в `@case` с помощью оператора тройного равенства (`===`).
+The value of the conditional expression is compared to the case expression using the triple-equals (`===`) operator.
 
-**`@switch` не имеет сквозного выполнения**, поэтому не нужен эквивалент операторов `break` или `return` в блоке.
+**`@switch` does not have a fallthrough**, so you do not need an equivalent to a `break` or `return` statement in the block.
 
-Для одного блока можно указать несколько условий, разместив последовательные операторы `@case`.
+You can specify multiple conditions for a single block by having consecutive `@case` statements.
 
-Можно опционально добавить блок `@default`. Содержимое блока `@default` отображается, если ни одно из предыдущих выражений `@case` не совпадает со значением `@switch`.
+You can optionally include a `@default` block. The content of the `@default` block displays if none of the preceding case expressions match the switch value.
 
-Если ни один `@case` не соответствует выражению и блока `@default` нет, ничего не отображается.
+If no `@case` matches the expression and there is no `@default` block, nothing is shown.
 
-### Исчерпывающая проверка типов {#exhaustive-type-checking}
+### Exhaustive type checking
 
-`@switch` поддерживает исчерпывающую проверку типов, позволяя Angular проверять на этапе компиляции, что все возможные значения объединённого типа обработаны.
+`@switch` supports exhaustive type checking, allowing Angular to verify at compile time that all possible values of a union type are handled.
 
-Используя `@default never;`, явно объявляется, что оставшихся случаев нет. Если объединённый тип позднее расширяется и новый случай не покрыт `@case`, проверка типов шаблона Angular сообщит об ошибке, помогая обнаружить пропущенные ветви на раннем этапе.
+By using `@default never;`, you explicitly declare that no remaining cases should exist. If the union type is later extended and a new case is not covered by an @case, Angular’s template type checker will report an error, helping you catch missing branches early.
 
 ```angular-html
 @Component({
@@ -158,5 +158,25 @@ NOTE: В отличие от `*ngFor`, блок `@for` приоритизиру�
 })
 export class AppComponent {
   state: 'loggedOut' | 'loading' | 'loggedIn' = 'loggedOut';
+}
+```
+
+When the switched expression is nested within a union, you must explicitly specify the expression to check for exhaustiveness.
+
+<!-- prettier-ignore -->
+```angular-ts
+@Component({
+  template: `
+    @switch (state.mode) {
+      @case ('show') {
+        {{ state.menu }};
+      }
+      @case ('hide') {}
+      @default never(state);
+    }
+  `,
+})
+export class App {
+  state!: {mode: 'hide'} | {mode: 'show'; menu: number};
 }
 ```

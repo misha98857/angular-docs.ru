@@ -5,7 +5,7 @@
 
 Компоненты Angular могут определять пользовательские события, присваивая свойству результат вызова функции `output`:
 
-```ts {highlight:[3]}
+```ts {highlight:[5]}
 @Component({
   /*...*/
 })
@@ -77,9 +77,7 @@ export class App {
 Функция `output` принимает параметр, который позволяет указать другое имя для события в шаблоне:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomSlider {
   changed = output({alias: 'valueChanged'});
 }
@@ -147,9 +145,7 @@ output-свойств.
 добавляя декоратор `@Output`:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class ExpandablePanel {
   @Output() panelClosed = new EventEmitter<void>();
 }
@@ -162,9 +158,7 @@ export class ExpandablePanel {
 Декоратор `@Output` принимает параметр, позволяющий указать другое имя для события в шаблоне:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomSlider {
   @Output('valueChanged') changed = new EventEmitter<number>();
 }

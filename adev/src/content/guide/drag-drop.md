@@ -2,7 +2,11 @@
 
 ## Обзор {#overview}
 
+<<<<<<< HEAD
 На этой странице описаны директивы drag and drop, позволяющие быстро создавать интерфейсы перетаскивания со следующими возможностями:
+=======
+This page describes the drag and drop directives which let you quickly create drag and drop interfaces with the following:
+>>>>>>> upstream/main
 
 - Свободное перетаскивание
 - Создание списка переупорядочиваемых перетаскиваемых элементов
@@ -227,7 +231,11 @@ export class DragDropExample {}
 
 ### Ограничение движения по оси {#restrict-movement-along-an-axis}
 
+<<<<<<< HEAD
 По умолчанию `cdkDrag` допускает свободное движение во всех направлениях. Чтобы ограничить перетаскивание по определённой оси, установите `cdkDragLockAxis` в "x" или "y" на `cdkDrag`. Чтобы ограничить перетаскивание для нескольких перетаскиваемых элементов внутри `cdkDropList`, установите `cdkDropListLockAxis` на `cdkDropList`.
+=======
+By default, `cdkDrag` allows free movement in all directions. To restrict dragging to a specific axis, set `cdkDragLockAxis` to either "x" or "y" on `cdkDrag`. To restrict dragging for multiple draggable elements within `cdkDropList`, set `cdkDropListLockAxis` on `cdkDropList` instead.
+>>>>>>> upstream/main
 
 <docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/axis-lock/app/app.ts">
   <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/axis-lock/app/app.html"/>
@@ -281,7 +289,11 @@ export class DragDropExample {}
 
 По умолчанию `cdkDropList` сортирует перетаскиваемые элементы, перемещая их с помощью CSS-трансформации. Это позволяет анимировать сортировку, что обеспечивает лучший пользовательский опыт. Однако это также имеет недостаток: drop list работает только в одном направлении: вертикальном или горизонтальном.
 
+<<<<<<< HEAD
 Если у вас есть сортируемый список, который должен переноситься на новые строки, установите атрибут `cdkDropListOrientation` в `mixed`. Это заставит список использовать другую стратегию сортировки элементов, включающую перемещение их в DOM. Однако список больше не может анимировать действие сортировки.
+=======
+If you have a sortable list that needs to wrap onto new lines, you can set `cdkDropListOrientation` attribute to `mixed`. This causes the list to use a different strategy of sorting the elements which involves moving them in the DOM. However, the list can no longer animate the sorting action.
+>>>>>>> upstream/main
 
 <docs-code-multifile preview path="adev/src/content/examples/drag-drop/src/mixed-sorting/app/app.ts">
   <docs-code header="app.html" path="adev/src/content/examples/drag-drop/src/mixed-sorting/app/app.html"/>

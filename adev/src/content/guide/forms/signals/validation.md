@@ -1,8 +1,8 @@
-# Валидация
+# Validation
 
-Формы нуждаются в валидации для обеспечения того, что пользователи предоставляют корректные и полные данные перед отправкой. Без валидации вам пришлось бы обрабатывать проблемы качества данных на сервере, предоставлять плохой пользовательский опыт с непонятными сообщениями об ошибках и вручную проверять каждое ограничение.
+Forms need validation to ensure users provide correct, complete data before submission. Without validation, you would need to handle data quality issues on the server, provide poor user experience with unclear error messages, and manually check every constraint.
 
-Signal Forms предоставляет подход к валидации на основе схемы. Правила валидации привязываются к полям с помощью функции схемы, запускаются автоматически при изменении значений и предоставляют ошибки через сигналы состояния поля. Это обеспечивает реактивную валидацию, которая обновляется по мере взаимодействия пользователей с формой.
+Signal Forms provides a schema-based validation approach. Validation rules bind to fields using a schema function, run automatically when values change, and expose errors through field state signals. This enables reactive validation that updates as users interact with the form.
 
 <docs-code-multifile preview hideCode path="adev/src/content/examples/signal-forms/src/login-validation-complete/app/app.ts">
   <docs-code header="app.ts" path="adev/src/content/examples/signal-forms/src/login-validation-complete/app/app.ts"/>
@@ -10,55 +10,55 @@ Signal Forms предоставляет подход к валидации на 
   <docs-code header="app.css" path="adev/src/content/examples/signal-forms/src/login-validation-complete/app/app.css"/>
 </docs-code-multifile>
 
-## Основы валидации {#validation-basics}
+## Validation basics
 
-Валидация в Signal Forms определяется через функцию схемы, передаваемую вторым аргументом в `form()`.
+Validation in Signal Forms is defined through a schema function passed as the second argument to `form()`.
 
-### Функция схемы {#the-schema-function}
+### The schema function
 
-Функция схемы получает объект `SchemaPathTree`, который позволяет определять правила валидации:
+The schema function receives a `SchemaPathTree` object that lets you define your validation rules:
 
 <docs-code
   header="app.ts"
   path="adev/src/content/examples/signal-forms/src/login-validation-complete/app/app.ts"
-  visibleLines="[21,22,23,24,25,26,27]"
-  highlight="[23,24,26]"
+  visibleLines="[29,30,31,32,33,34]"
+  highlight="[30,31,33]"
 />
 
-Функция схемы запускается один раз при инициализации формы. Правила валидации привязываются к полям с помощью параметра пути схемы (например, `schemaPath.email`, `schemaPath.password`), и валидация запускается автоматически при изменении значений полей.
+The schema function runs once during form initialization. Validation rules bind to fields using the schema path parameter (such as `schemaPath.email`, `schemaPath.password`), and validation runs automatically whenever field values change.
 
-NOTE: Параметр обратного вызова схемы (`schemaPath` в этих примерах) — это объект `SchemaPathTree`, предоставляющий пути ко всем полям вашей формы. Вы можете называть этот параметр как угодно.
+NOTE: The schema callback parameter (`schemaPath` in these examples) is a `SchemaPathTree` object that provides paths to all fields in your form. You can name this parameter anything you like.
 
-### Как работает валидация {#how-validation-works}
+### How validation works
 
-Валидация в Signal Forms следует этому паттерну:
+Validation in Signal Forms follows this pattern:
 
-1. **Определите правила валидации в схеме** — привяжите правила валидации к полям в функции схемы
-2. **Автоматическое выполнение** — правила валидации запускаются при изменении значений полей
-3. **Распространение ошибок** — ошибки валидации предоставляются через сигналы состояния поля
-4. **Реактивные обновления** — UI автоматически обновляется при изменении состояния валидации
+1. **Define validation rules in schema** - Bind validation rules to fields in the schema function
+2. **Automatic execution** - Validation rules run when field values change
+3. **Error propagation** - Validation errors are exposed through field state signals
+4. **Reactive updates** - UI automatically updates when validation state changes
 
-Валидация запускается при каждом изменении значения для интерактивных полей. Скрытые и отключённые поля не запускают валидацию — их правила валидации пропускаются до тех пор, пока поле снова не станет интерактивным.
+Validation runs on every value change for interactive fields. Hidden and disabled fields don't run validation - their validation rules are skipped until the field becomes interactive again.
 
-### Время валидации {#validation-timing}
+### Validation timing
 
-Правила валидации выполняются в следующем порядке:
+Validation rules execute in this order:
 
-1. **Синхронная валидация** — все синхронные правила валидации запускаются при изменении значения
-2. **Асинхронная валидация** — асинхронные правила валидации запускаются только после прохождения всех синхронных правил
-3. **Обновление состояния поля** — сигналы `valid()`, `invalid()`, `errors()` и `pending()` обновляются
+1. **Synchronous validation** - All synchronous validation rules run when value changes
+2. **Asynchronous validation** - Asynchronous validation rules run only after all synchronous validation rules pass
+3. **Field state updates** - The `valid()`, `invalid()`, `errors()`, and `pending()` signals update
 
-Синхронные правила валидации (например, `required()`, `email()`) завершаются немедленно. Асинхронные правила (например, `validateHttp()`) могут занимать время и устанавливают сигнал `pending()` в `true` во время выполнения.
+Synchronous validation rules (like `required()`, `email()`) complete immediately. Asynchronous validation rules (like `validateHttp()`) may take time and set the `pending()` signal to `true` while executing.
 
-Все правила валидации запускаются при каждом изменении — валидация не прерывается после первой ошибки. Если поле имеет правила `required()` и `email()`, оба запускаются и оба могут одновременно генерировать ошибки.
+All validation rules run on every change - validation doesn't short-circuit after the first error. If a field has both `required()` and `email()` validation rules, both run, and both can produce errors simultaneously.
 
-## Встроенные правила валидации {#built-in-validation-rules}
+## Built-in validation rules
 
-Signal Forms предоставляет правила валидации для распространённых сценариев. Все встроенные правила принимают объект параметров для пользовательских сообщений об ошибках и условной логики.
+Signal Forms provides validation rules for common validation scenarios. All built-in validation rules accept an options object for custom error messages and conditional logic.
 
-### required() {#required}
+### required()
 
-Правило валидации `required()` обеспечивает наличие значения в поле:
+The `required()` validation rule ensures a field has a value:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -96,14 +96,14 @@ export class RegistrationComponent {
 }
 ```
 
-Поле считается «пустым» когда:
+A field is considered "empty" when:
 
-| Условие                    | Пример  |
-| -------------------------- | ------- |
-| Значение равно `null`      | `null`, |
-| Значение — пустая строка   | `''`    |
+| Condition                | Example |
+| ------------------------ | ------- |
+| Value is `null`          | `null`, |
+| Value is an empty string | `''`    |
 
-Для условных требований используйте опцию `when`:
+For conditional requirements, use the `when` option:
 
 ```ts
 registrationForm = form(this.registrationModel, (schemaPath) => {
@@ -114,13 +114,13 @@ registrationForm = form(this.registrationModel, (schemaPath) => {
 });
 ```
 
-Правило валидации запускается только когда функция `when` возвращает `true`.
+The validation rule only runs when the `when` function returns `true`.
 
-NOTE: `required` вернёт `true` для пустого массива. Используйте [`minLength()`](#minlength-and-maxlength) для валидации массивов.
+Note: `required` treats an empty array as present (valid), so use [`minLength()`](#minlength-and-maxlength) to enforce a minimum number of array items; it treats `false` as missing (invalid), matching `<input type="checkbox" required>`.
 
-### email() {#email}
+### email()
 
-Правило валидации `email()` проверяет корректный формат email:
+The `email()` validation rule checks for valid email format:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -147,11 +147,11 @@ export class ContactComponent {
 }
 ```
 
-Правило валидации `email()` использует стандартное регулярное выражение для формата email. Оно принимает адреса вида `user@example.com`, но отклоняет неправильно сформированные адреса, например `user@` или `@example.com`.
+The `email()` validation rule uses a standard email format regex. It accepts addresses like `user@example.com` but rejects malformed addresses like `user@` or `@example.com`.
 
-### min() и max() {#min-and-max}
+### min() and max()
 
-Правила валидации `min()` и `max()` работают с числовыми значениями:
+The `min()` and `max()` validation rules work with numeric values:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -190,7 +190,7 @@ export class AgeFormComponent {
 }
 ```
 
-Для динамических ограничений можно использовать вычисляемые значения:
+You can use computed values for dynamic constraints:
 
 ```ts
 ageForm = form(this.ageModel, (schemaPath) => {
@@ -200,9 +200,9 @@ ageForm = form(this.ageModel, (schemaPath) => {
 });
 ```
 
-### minLength() и maxLength() {#minlength-and-maxlength}
+### minLength() and maxLength()
 
-Правила валидации `minLength()` и `maxLength()` работают со строками и массивами:
+The `minLength()` and `maxLength()` validation rules work with strings and arrays:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -240,11 +240,11 @@ export class PasswordFormComponent {
 }
 ```
 
-Для строк «длина» означает количество символов. Для массивов «длина» означает количество элементов.
+For strings, "length" means the number of characters. For arrays, "length" means the number of elements.
 
-### pattern() {#pattern}
+### pattern()
 
-Правило валидации `pattern()` проверяет соответствие регулярному выражению:
+The `pattern()` validation rule validates against a regular expression:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -285,18 +285,18 @@ export class PhoneFormComponent {
 }
 ```
 
-Распространённые паттерны:
+Common patterns:
 
-| Тип паттерна        | Регулярное выражение    | Пример       |
-| ------------------- | ----------------------- | ------------ |
-| Телефон             | `/^\d{3}-\d{3}-\d{4}$/` | 555-123-4567 |
-| Почтовый индекс (US) | `/^\d{5}$/`             | 12345        |
-| Буквенно-цифровой   | `/^[a-zA-Z0-9]+$/`      | abc123       |
-| URL-безопасный      | `/^[a-zA-Z0-9_-]+$/`    | my-url_123   |
+| Pattern Type     | Regular Expression      | Example      |
+| ---------------- | ----------------------- | ------------ |
+| Phone            | `/^\d{3}-\d{3}-\d{4}$/` | 555-123-4567 |
+| Postal code (US) | `/^\d{5}$/`             | 12345        |
+| Alphanumeric     | `/^[a-zA-Z0-9]+$/`      | abc123       |
+| URL-safe         | `/^[a-zA-Z0-9_-]+$/`    | my-url_123   |
 
-## Валидация элементов массива {#validation-of-array-items}
+## Validation of array items
 
-Формы могут содержать массивы вложенных объектов (например, список позиций заказа). Для применения правил валидации к каждому элементу массива используйте `applyEach()` внутри функции схемы. `applyEach()` перебирает путь массива и предоставляет путь для каждого элемента, где можно применять валидаторы так же, как и к полям верхнего уровня.
+Forms can include arrays of nested objects (for example, a list of order items). To apply validation rules to each item in an array, use `applyEach()` inside your schema function. `applyEach()` iterates the array path and supplies a path for each item where you can apply validators just like top-level fields.
 
 ```ts
 import {Component, signal} from '@angular/core';
@@ -332,28 +332,28 @@ export class OrderComponent {
 }
 ```
 
-## Ошибки валидации {#validation-errors}
+## Validation errors
 
-Когда правила валидации не проходят, они создают объекты ошибок, описывающие что пошло не так. Понимание структуры ошибок помогает предоставить пользователям чёткую обратную связь.
+When validation rules fail, they produce error objects that describe what went wrong. Understanding error structure helps you provide clear feedback to users.
 
 <!-- TODO: Uncomment when field state management guide is published
 
 NOTE: This section covers the errors that validation rules produce. For displaying and using validation errors in your UI, see the [Field State Management guide](guide/forms/signals/field-state-management). -->
 
-### Структура ошибки {#error-structure}
+### Error structure
 
-Каждый объект ошибки валидации содержит следующие свойства:
+Each validation error object contains these properties:
 
-| Свойство  | Описание                                                                            |
-| --------- | ----------------------------------------------------------------------------------- |
-| `kind`    | Правило валидации, которое не прошло (например, "required", "email", "minLength")  |
-| `message` | Необязательное человекочитаемое сообщение об ошибке                                 |
+| Property  | Description                                                              |
+| --------- | ------------------------------------------------------------------------ |
+| `kind`    | The validation rule that failed (e.g., "required", "email", "minLength") |
+| `message` | Optional human-readable error message                                    |
 
-Встроенные правила валидации автоматически устанавливают свойство `kind`. Свойство `message` необязательно — вы можете предоставить пользовательские сообщения через параметры правила валидации.
+Built-in validation rules automatically set the `kind` property. The `message` property is optional - you can provide custom messages through validation rule options.
 
-### Пользовательские сообщения об ошибках {#custom-error-messages}
+### Custom error messages
 
-Все встроенные правила валидации принимают опцию `message` для пользовательского текста ошибки:
+All built-in validation rules accept a `message` option for custom error text:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -397,11 +397,11 @@ export class SignupComponent {
 }
 ```
 
-Пользовательские сообщения должны быть чёткими, конкретными и объяснять пользователям, как исправить проблему. Вместо «Некорректный ввод» используйте «Пароль должен содержать не менее 12 символов».
+Custom messages should be clear, specific, and tell users how to fix the problem. Instead of "Invalid input", use "Password must be at least 12 characters for security".
 
-### Несколько ошибок для одного поля {#multiple-errors-per-field}
+### Multiple errors per field
 
-Когда у поля несколько правил валидации, каждое правило выполняется независимо и может создать ошибку:
+When a field has multiple validation rules, each validation rule runs independently and can produce an error:
 
 ```ts
 signupForm = form(this.signupModel, (schemaPath) => {
@@ -411,22 +411,22 @@ signupForm = form(this.signupModel, (schemaPath) => {
 });
 ```
 
-Если поле email пустое, появляется только ошибка `required()`. Если пользователь вводит "a@b", появляются ошибки как `email()`, так и `minLength()`. Все правила валидации выполняются — валидация не останавливается после первого сбоя.
+If the email field is empty, only the `required()` error appears. If the user types "a@b", both `email()` and `minLength()` errors appear. All validation rules run - validation doesn't stop after the first failure.
 
-TIP: Используйте паттерн `touched() && invalid()` в шаблонах, чтобы предотвратить появление ошибок до взаимодействия пользователей с полем. Подробное руководство по отображению ошибок валидации см. в [руководстве по управлению состоянием полей](guide/forms/signals/field-state-management#conditional-error-display).
+TIP: Use the `touched() && invalid()` pattern in your templates to prevent errors from appearing before users have interacted with a field. For comprehensive guidance on displaying validation errors, see the [Field State Management guide](guide/forms/signals/field-state-management#conditional-error-display).
 
-## Пользовательские правила валидации {#custom-validation-rules}
+## Custom validation rules
 
-Хотя встроенные правила валидации охватывают распространённые случаи, часто требуется пользовательская логика валидации для бизнес-правил, сложных форматов или специфичных для домена ограничений.
+While built-in validation rules handle common cases, you'll often need custom validation logic for business rules, complex formats, or domain-specific constraints.
 
-### Использование validate() {#using-validate}
+### Using validate()
 
-Функция `validate()` создаёт пользовательские правила валидации. Она получает функцию-валидатор, которая обращается к контексту поля и возвращает:
+The `validate()` function creates custom validation rules. It receives a validator function that accesses the field context and returns:
 
-| Возвращаемое значение   | Значение             |
-| ----------------------- | -------------------- |
-| Объект ошибки           | Значение недействительно |
-| `null` или `undefined`  | Значение действительно  |
+| Return Value          | Meaning          |
+| --------------------- | ---------------- |
+| Error object          | Value is invalid |
+| `null` or `undefined` | Value is valid   |
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -462,25 +462,25 @@ export class UrlFormComponent {
 }
 ```
 
-Функция-валидатор получает объект `FieldContext` со следующими свойствами:
+The validator function receives a `FieldContext` object with:
 
-| Свойство        | Тип        | Описание                                       |
-| --------------- | ---------- | ---------------------------------------------- |
-| `value`         | Signal     | Сигнал, содержащий текущее значение поля       |
-| `state`         | FieldState | Ссылка на состояние поля                       |
-| `field`         | FieldTree  | Ссылка на дерево полей                         |
-| `valueOf()`     | Метод      | Получить значение другого поля по пути         |
-| `stateOf()`     | Метод      | Получить состояние другого поля по пути        |
-| `fieldTreeOf()` | Метод      | Получить дерево полей другого поля по пути     |
-| `pathKeys`      | Signal     | Ключи пути от корня до текущего поля           |
+| Property        | Type       | Description                                 |
+| --------------- | ---------- | ------------------------------------------- |
+| `value`         | Signal     | Signal containing the current field value   |
+| `state`         | FieldState | The field state reference                   |
+| `field`         | FieldTree  | The field tree reference                    |
+| `valueOf()`     | Method     | Get the value of another field by path      |
+| `stateOf()`     | Method     | Get the state of another field by path      |
+| `fieldTreeOf()` | Method     | Get the field tree of another field by path |
+| `pathKeys`      | Signal     | Path keys from root to current field        |
 
-NOTE: Дочерние поля также имеют сигнал `key`, а поля элементов массива имеют как `key`, так и `index`.
+NOTE: Child fields also have a `key` signal, and array item fields have both `key` and `index` signals.
 
-Возвращайте объект ошибки с `kind` и `message` при сбое валидации. Возвращайте `null` или `undefined` при успешной валидации.
+Return an error object with `kind` and `message` when validation fails. Return `null` or `undefined` when validation passes.
 
-### Использование validateTree() {#using-validatetree}
+### Using validateTree()
 
-Функция `validateTree()` создаёт пользовательские правила валидации, которые могут целевым образом воздействовать на несколько полей или предоставлять сложную логику валидации для всего поддерева.
+The `validateTree()` function creates custom validation rules that can target multiple fields or provide complex validation logic for a whole subtree.
 
 ```angular-ts
 import {Component, model} from '@angular/core';
@@ -495,7 +495,7 @@ interface User {
   /* ... */
 })
 export class UserFormComponent {
-  readonly userModel = model<DTO>({
+  readonly userModel = model<User>({
     firstName: '',
     lastName: '',
   });
@@ -516,11 +516,11 @@ export class UserFormComponent {
 }
 ```
 
-Функция-валидатор `validateTree()` получает тот же объект `FieldContext`, что и `validate()`.
+The `validateTree()` validator function receives the same `FieldContext` object as `validate()`.
 
-### Переиспользуемые правила валидации {#reusable-validation-rules}
+### Reusable validation rules
 
-Создавайте переиспользуемые функции правил валидации, оборачивая `validate()`:
+Create reusable validation rule functions by wrapping `validate()`:
 
 ```ts
 function url(path: SchemaPath<string>, options?: {message?: string}) {
@@ -553,7 +553,7 @@ function phoneNumber(path: SchemaPath<string>, options?: {message?: string}) {
 }
 ```
 
-Пользовательские правила валидации можно использовать так же, как и встроенные:
+You can use custom validation rules just like built-in validation rules:
 
 ```ts
 urlForm = form(this.urlModel, (schemaPath) => {
@@ -562,11 +562,11 @@ urlForm = form(this.urlModel, (schemaPath) => {
 });
 ```
 
-## Кросс-поля валидация {#cross-field-validation}
+## Cross-field validation
 
-Кросс-поля валидация сравнивает или связывает значения нескольких полей.
+Cross-field validation compares or relates multiple field values.
 
-Распространённый сценарий кросс-поля валидации — подтверждение пароля:
+A common scenario for cross-field validation is password confirmation:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -620,22 +620,33 @@ export class PasswordChangeComponent {
 }
 ```
 
-Правило валидации подтверждения обращается к значению поля пароля с помощью `valueOf(schemaPath.password)` и сравнивает его со значением подтверждения. Это правило валидации работает реактивно — если изменится любой из паролей, валидация автоматически перезапускается.
+The confirmation validation rule accesses the password field value using `valueOf(schemaPath.password)` and compares it to the confirmation value. This validation rule runs reactively - if either password changes, validation reruns automatically.
 
-## Асинхронная валидация {#async-validation}
+## Conditional validation
 
-Асинхронная валидация обрабатывает валидацию, требующую внешних источников данных, например проверку доступности имени пользователя на сервере или валидацию через API.
+Sometimes a validation rule should apply only under certain conditions, such as validating a shipping address only when an order ships internationally, or applying a different set of rules to each variant of a union-typed field.
 
-### Использование validateHttp() {#using-validatehttp}
+Because validation rules live in the schema function, you apply them conditionally with the same structural functions that compose schemas:
 
-Функция `validateHttp()` выполняет HTTP-валидацию:
+- Use [`applyWhen()`](guide/forms/signals/form-logic#conditional-logic-with-applywhen) to activate a group of rules based on reactive form state, including the values of other fields.
+- Use [`applyWhenValue()`](guide/forms/signals/schemas#type-narrowing-with-applywhenvalue) to apply rules based on a field's own value. When the predicate is a type guard, the rules are typed to the narrowed value, which makes it the recommended way to validate discriminated unions and other variant types.
+
+For complete examples, including reusable schemas and discriminated unions, see the [Schemas and schema composability guide](guide/forms/signals/schemas).
+
+## Async validation
+
+Async validation handles validation that requires external data sources, like checking username availability on a server or validating against an API.
+
+### Using validateHttp()
+
+The `validateHttp()` function performs HTTP-based validation:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
 import {form, FormField, required, validateHttp} from '@angular/forms/signals';
 
 @Component({
-  selector: 'app-username-form',
+  selector: 'app-username-form',|
   imports: [FormField],
   template: `
     <form novalidate>
@@ -676,17 +687,17 @@ export class UsernameFormComponent {
 }
 ```
 
-Правило валидации `validateHttp()`:
+The `validateHttp()` validation rule:
 
-1. Вызывает URL или запрос, возвращённый функцией `request`
-2. Сопоставляет успешный ответ с ошибкой валидации или `null` с помощью `onSuccess`
-3. Обрабатывает сбои запроса (сетевые ошибки, HTTP-ошибки) с помощью `onError`
-4. Устанавливает `pending()` в `true` во время выполнения запроса
-5. Запускается только после прохождения всех синхронных правил валидации
+1. Calls the URL or request returned by the `request` function
+2. Maps the successful response to a validation error or `null` using `onSuccess`
+3. Handles request failures (network errors, HTTP errors) using `onError`
+4. Sets `pending()` to `true` while the request is in progress
+5. Only runs after all synchronous validation rules pass
 
-### Состояние ожидания {#pending-state}
+### Pending state
 
-Пока выполняется асинхронная валидация, сигнал `pending()` поля возвращает `true`. Используйте это для отображения индикаторов загрузки:
+While async validation runs, the field's `pending()` signal returns `true`. Use this to show loading indicators:
 
 ```angular-html
 @if (form.username().pending()) {
@@ -694,11 +705,11 @@ export class UsernameFormComponent {
 }
 ```
 
-Сигнал `valid()` возвращает `false` во время ожидания валидации, даже если ошибок ещё нет. Сигнал `invalid()` возвращает `true` только при наличии ошибок.
+The `valid()` signal returns `false` while validation is pending, even if there are no errors yet. The `invalid()` signal only returns `true` if errors exist.
 
-## Интеграция с библиотеками валидации схем {#integration-with-schema-validation-libraries}
+## Integration with schema validation libraries
 
-Signal Forms имеет встроенную поддержку библиотек, соответствующих [Standard Schema](https://standardschema.dev/), таких как [Zod](https://zod.dev/) или [Valibot](https://valibot.dev/). Интеграция обеспечивается через функцию `validateStandardSchema`. Это позволяет использовать существующие схемы, сохраняя преимущества реактивной валидации Signal Forms.
+Signal Forms have built-in support for libraries that conform to [Standard Schema](https://standardschema.dev/) like [Zod](https://zod.dev/) or [Valibot](https://valibot.dev/). The integration is provided via the `validateStandardSchema` function. This allows you to use existing schemas while maintaining Signal Forms' reactive validation benefits.
 
 ```ts
 import {form, validateStandardSchema} from '@angular/forms/signals';
@@ -716,9 +727,9 @@ const userForm = form(signal({email: '', password: ''}), (schemaPath) => {
 });
 ```
 
-### Динамические схемы {#dynamic-schemas}
+### Dynamic schemas
 
-Вместо статической схемы можно передать сигнал, чтобы схема валидации автоматически обновлялась при изменении зависимостей.
+You can pass a signal instead of a static schema so the validation schema updates automatically when its dependencies change.
 
 ```angular-ts
 import {Component, computed, signal} from '@angular/core';
@@ -745,14 +756,13 @@ export class DynamicSchema {
 }
 ```
 
-## Дальнейшие шаги {#next-steps}
+## Next steps
 
-В этом руководстве рассмотрено создание и применение правил валидации. Связанные руководства охватывают другие аспекты Signal Forms:
+This guide covered creating and applying validation rules. Related guides explore other aspects of Signal Forms:
 
-<!-- TODO: UNCOMMENT WHEN THE GUIDES ARE AVAILABLE -->
 <docs-pill-row>
-  <docs-pill href="guide/forms/signals/field-state-management" title="Управление состоянием полей" />
-  <docs-pill href="guide/forms/signals/models" title="Модели форм" />
-  <docs-pill href="guide/forms/signals/custom-controls" title="Пользовательские элементы управления" />
-  <!-- <docs-pill href="guide/forms/signals/arrays" title="Working with Arrays" /> -->
+  <docs-pill href="guide/forms/signals/field-state-management" title="Field state management" />
+  <docs-pill href="guide/forms/signals/models" title="Form models" />
+  <docs-pill href="guide/forms/signals/form-logic" title="Adding form logic" />
+  <docs-pill href="guide/forms/signals/schemas" title="Schemas and schema composability" />
 </docs-pill-row>

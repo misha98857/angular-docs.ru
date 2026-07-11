@@ -9,9 +9,9 @@
 Рассмотрим сервис `Calculator`, выполняющий базовые арифметические операции:
 
 ```ts { header: 'calculator.ts' }
-import {Injectable} from '@angular/core';
+import {Service} from '@angular/core';
 
-@Injectable({providedIn: 'root'})
+@Service()
 export class Calculator {
   add(a: number, b: number): number {
     return a + b;
@@ -58,9 +58,9 @@ describe('Calculator', () => {
 Рассмотрим сервис `OrderTotal`, который полагается на `TaxCalculator` для вычисления итоговой цены заказа:
 
 ```ts { header: 'tax-calculator.ts' }
-import {Injectable} from '@angular/core';
+import {Service} from '@angular/core';
 
-@Injectable({providedIn: 'root'})
+@Service()
 export class TaxCalculator {
   calculate(subtotal: number): number {
     return subtotal * 0.05;
@@ -69,10 +69,10 @@ export class TaxCalculator {
 ```
 
 ```ts { header: 'order-total.ts' }
-import {inject, Injectable} from '@angular/core';
+import {inject, Service} from '@angular/core';
 import {TaxCalculator} from './tax-calculator';
 
-@Injectable({providedIn: 'root'})
+@Service()
 export class OrderTotal {
   private taxCalculator = inject(TaxCalculator);
 
@@ -151,6 +151,10 @@ describe('OrderTotal', () => {
     service = TestBed.inject(OrderTotal);
   });
 
+  afterEach(() => {
+    taxCalculatorStub.calculate.mockClear();
+  });
+
   it('adds tax to the subtotal', () => {
     expect(service.total(100)).toBe(105);
   });
@@ -158,7 +162,7 @@ describe('OrderTotal', () => {
   // Verify the interaction with a spy
   it('calls the tax calculator', () => {
     service.total(100);
-    expect(taxCalculatorStub.calculate).toHaveBeenCalledExactlyOnce();
+    expect(taxCalculatorStub.calculate).toHaveBeenCalledExactlyOnceWith(100);
   });
 });
 ```

@@ -9,11 +9,12 @@
 import {untracked} from '@angular/core';
 import {NativeInputParseError, WithoutFieldTree} from '../api/rules';
 import type {ParseResult} from '../api/transformed_value';
+import type {InputValidityMonitor} from './input_validity_monitor';
 
 // Re-export shared native utilities from main forms package
 export {
   ɵisNativeFormElement as isNativeFormElement,
-  ɵisNumericFormElement as isNumericFormElement,
+  ɵelementAcceptsMinMax as elementAcceptsMinMax,
   ɵisTextualFormElement as isTextualFormElement,
   ɵsetNativeDomProperty as setNativeDomProperty,
   type ɵNativeFormControl as NativeFormControl,
@@ -36,10 +37,11 @@ import type {ɵNativeFormControl as NativeFormControl} from '@angular/forms';
 export function getNativeControlValue(
   element: NativeFormControl,
   currentValue: () => unknown,
+  validityMonitor: InputValidityMonitor,
 ): ParseResult<unknown> {
   let modelValue: unknown;
 
-  if (element.validity.badInput) {
+  if (isInput(element) && validityMonitor.isBadInput(element)) {
     return {
       error: new NativeInputParseError() as WithoutFieldTree<NativeInputParseError>,
     };
@@ -72,6 +74,21 @@ export function getNativeControlValue(
         return {value: element.valueAsNumber};
       }
       break;
+  }
+
+  // For text-like <input> elements, parse numeric values if the model is numeric.
+  if (element.tagName === 'INPUT' && element.type === 'text') {
+    modelValue ??= untracked(currentValue);
+    if (typeof modelValue === 'number' || modelValue === null) {
+      if (element.value === '') {
+        return {value: null};
+      }
+      const parsed = Number(element.value);
+      if (Number.isNaN(parsed)) {
+        return {error: new NativeInputParseError() as WithoutFieldTree<NativeInputParseError>};
+      }
+      return {value: parsed};
+    }
   }
 
   // Default to reading the value as a string.
@@ -121,6 +138,18 @@ export function setNativeControlValue(element: NativeFormControl, value: unknown
       }
   }
 
+  // For text-like <input> elements, handle numeric and null values.
+  if (element.tagName === 'INPUT' && element.type === 'text') {
+    if (typeof value === 'number') {
+      element.value = isNaN(value) ? '' : String(value);
+      return;
+    }
+    if (value === null) {
+      element.value = '';
+      return;
+    }
+  }
+
   // Default to setting the value as a string.
   element.value = value as string;
 }
@@ -134,4 +163,39 @@ export function setNativeNumberControlValue(element: HTMLInputElement, value: nu
   } else {
     element.valueAsNumber = value;
   }
+}
+export function isInput(element: HTMLElement): element is HTMLInputElement {
+  return element.tagName === 'INPUT';
+}
+
+export function inputRequiresValidityTracking(input: HTMLInputElement): boolean {
+  return (
+    input.type === 'date' ||
+    input.type === 'datetime-local' ||
+    input.type === 'month' ||
+    input.type === 'time' ||
+    input.type === 'week'
+  );
+}
+
+function formatDateForInput(date: Date, type: 'date' | 'month'): string {
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+
+  if (type === 'month') {
+    return `${year}-${month}`;
+  }
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+export function formatDateForMinMax(name: string, value: unknown, type: string): unknown {
+  if (
+    value instanceof Date &&
+    (name === 'min' || name === 'max') &&
+    (type === 'date' || type === 'month')
+  ) {
+    return formatDateForInput(value, type);
+  }
+  return value;
 }

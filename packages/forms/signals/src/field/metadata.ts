@@ -9,8 +9,10 @@
 import {
   computed,
   runInInjectionContext,
-  untracked,
   ɵRuntimeError as RuntimeError,
+  untracked,
+  ɵisInParamsFunction,
+  ɵsetInParamsFunction,
 } from '@angular/core';
 import {MetadataKey} from '../api/rules/metadata';
 import {RuntimeErrorCode} from '../errors';
@@ -23,19 +25,36 @@ export class FieldMetadataState {
   /** A map of all `MetadataKey` that have been defined for this field. */
   private readonly metadata = new Map<MetadataKey<unknown, unknown, unknown>, unknown>();
 
-  constructor(private readonly node: FieldNode) {
-    // Force eager creation of managed keys,
-    // as managed keys have a `create` function that needs to run during construction.
-    for (const key of this.node.logicNode.logic.getMetadataKeys()) {
-      if (key.create) {
-        const logic = this.node.logicNode.logic.getMetadata(key);
-        const result = untracked(() =>
-          runInInjectionContext(this.node.structure.injector, () =>
-            key.create!(computed(() => logic.compute(this.node.context))),
-          ),
-        );
-        this.metadata.set(key, result);
-      }
+  constructor(private readonly node: FieldNode) {}
+
+  /**
+   * Force eager creation of managed keys,
+   * as managed keys have a `create` function that needs to run during construction.
+   */
+  runMetadataCreateLifecycle(): void {
+    if (!this.node.logicNode.logic.hasMetadataKeys()) {
+      return;
+    }
+
+    const wasInParams = ɵisInParamsFunction();
+    if (wasInParams) ɵsetInParamsFunction(false);
+    try {
+      untracked(() =>
+        runInInjectionContext(this.node.structure.injector, () => {
+          for (const key of this.node.logicNode.logic.getMetadataKeys()) {
+            if (key.create) {
+              const logic = this.node.logicNode.logic.getMetadata(key);
+              const result = key.create!(
+                this.node,
+                computed(() => logic.compute(this.node.context)),
+              );
+              this.metadata.set(key, result);
+            }
+          }
+        }),
+      );
+    } finally {
+      if (wasInParams) ɵsetInParamsFunction(true);
     }
   }
 

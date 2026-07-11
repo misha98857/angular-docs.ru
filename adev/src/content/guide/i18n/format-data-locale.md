@@ -26,7 +26,7 @@ Angular предоставляет следующие встроенные [Pipe
 `CurrencyPipe`
 
 ```angular-html
-{{ amount | currency: 'en-US' }}
+{{ amount | currency: 'USD' : 'symbol' : '1.2-2' : 'en-US' }}
 ```
 
 HELPFUL: Локаль, указанная для `CurrencyPipe`, переопределяет глобальный токен `LOCALE_ID` вашего приложения.

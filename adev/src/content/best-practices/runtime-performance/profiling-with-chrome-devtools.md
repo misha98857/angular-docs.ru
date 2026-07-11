@@ -1,36 +1,36 @@
-# Профилирование с помощью Chrome DevTools
+# Profiling with the Chrome DevTools
 
-Angular интегрируется с [API расширяемости Chrome DevTools](https://developer.chrome.com/docs/devtools/performance/extension) для представления данных и аналитики, специфичных для фреймворка, непосредственно в [панели производительности Chrome DevTools](https://developer.chrome.com/docs/devtools/performance/overview).
+Angular integrates with the [Chrome DevTools extensibility API](https://developer.chrome.com/docs/devtools/performance/extension) to present framework-specific data and insights directly in the [Chrome DevTools performance panel](https://developer.chrome.com/docs/devtools/performance/overview).
 
-При включённой интеграции можно [записать профиль производительности](https://developer.chrome.com/docs/devtools/performance#record), содержащий два набора данных:
+With the integration enabled, you can [record a performance profile](https://developer.chrome.com/docs/devtools/performance#record) containing two sets of data:
 
-- Стандартные записи производительности на основе понимания Chrome того, как ваш код выполняется в браузере, и
-- Специфичные для Angular записи, предоставленные средой выполнения фреймворка.
+- Standard performance entries based on Chrome's understanding of your code executing in a browser, and
+- Angular-specific entries contributed by the framework's runtime.
 
-Оба набора данных представлены вместе на одной вкладке, но на отдельных дорожках:
+Both sets of data are presented together on the same tab, but on separate tracks:
 
 <img alt="Angular custom track in Chrome DevTools profiler" src="assets/images/best-practices/runtime-performance/angular-perf-in-chrome.png">
 
-Данные, специфичные для Angular, выражены в терминах концепций фреймворка (компоненты, обнаружение изменений, хуки жизненного цикла и т. д.) наряду с вызовами функций и методов более низкого уровня, захваченными браузером. Эти два набора данных взаимосвязаны, и между различными представлениями и уровнями детализации можно переключаться.
+Angular-specific data are expressed in terms of framework concepts (components, change detection, lifecycle hooks, etc.) alongside lower-level function and method calls captured by a browser. These two data sets are correlated, and you can switch between the different views and level of details.
 
-Дорожку Angular можно использовать для лучшего понимания работы кода в браузере, включая:
+You can use the Angular track to better understand how your code runs in the browser, including:
 
-- Определение того, является ли данный блок кода частью Angular-приложения или принадлежит другому скрипту, выполняющемуся на той же странице.
-- Выявление узких мест производительности и их связь с конкретными компонентами или сервисами.
-- Получение более глубокого понимания внутренней работы Angular с визуальной разбивкой каждого цикла обнаружения изменений.
+- Determining whether a given code block is part of the Angular application, or whether it belongs to another script running on the same page.
+- Identifying performance bottlenecks and attribute those to specific components or services.
+- Gaining deeper insight into Angular's inner working with a visual breakdown of each change detection cycle.
 
-## Запись профиля {#recording-a-profile}
+## Recording a profile
 
-### Включение интеграции {#enable-integration}
+### Enable integration
 
-Профилирование Angular можно включить одним из двух способов:
+You can enable Angular profiling in one of two ways:
 
-1. Выполните [`ng.enableProfiling()`](api/core/enableProfiling) в консоли Chrome, или
-1. Включите вызов [`enableProfiling()`](api/core/enableProfiling) в код запуска приложения (импортировав из `@angular/core`).
+1. Run [`ng.enableProfiling()`](api/core/enableProfiling) in Chrome's console panel, or
+1. Include a call to [`enableProfiling()`](api/core/enableProfiling) in your application startup code (imported from `@angular/core`).
 
-NOTE: Профилирование Angular работает исключительно в режиме разработки.
+NOTE: Angular profiling works exclusively in development mode.
 
-Вот пример того, как включить интеграцию при бутстрапинге приложения для захвата всех возможных событий:
+Here is an example of how you can enable the integration in the application bootstrap to capture all possible events:
 
 ```ts
 import {enableProfiling} from '@angular/core';
@@ -43,57 +43,69 @@ enableProfiling();
 bootstrapApplication(MyApp);
 ```
 
-### Запись профиля {#record-a-profile}
+### Record a profile
 
-Используйте кнопку **Record** в панели производительности Chrome DevTools:
+Use the **Record** button in the Chrome DevTools performance panel:
 
 <img alt="Recording a profile" src="assets/images/best-practices/runtime-performance/recording-profile-in-chrome.png">
 
-Дополнительные сведения о записи профилей см. в [документации Chrome DevTools](https://developer.chrome.com/docs/devtools/performance#record).
+See the [Chrome DevTools documentation](https://developer.chrome.com/docs/devtools/performance#record) for more details on recording profiles.
 
-## Интерпретация записанного профиля {#interpreting-a-recorded-profile}
+## Open a component in Angular DevTools
 
-Пользовательскую дорожку "Angular" можно использовать для быстрого выявления и диагностики проблем производительности. В следующих разделах описаны некоторые распространённые сценарии профилирования.
+After recording a profile, select a component event in the **Angular** track.
+The **Summary** tab can include a **Component** link that uses the `angular-devtools://component/...` URL scheme.
 
-### Различение Angular-приложения и других задач на той же странице {#differentiating-between-your-angular-application-and-other-tasks-on-the-same-page}
+<img alt="Chrome DevTools Performance panel showing an Angular custom track with a selected _MainComponent event. The Summary tab displays a Component link that uses the angular-devtools://component URL scheme." src="assets/images/best-practices/runtime-performance/chrome-performance-deep-link.png">
 
-Поскольку данные Angular и Chrome представлены на отдельных, но взаимосвязанных дорожках, можно видеть, когда выполняется код Angular-приложения в противовес другой обработке браузера (как правило, компоновка и отрисовка) или другим скриптам, выполняющимся на той же странице (в этом случае пользовательская дорожка Angular не имеет данных):
+Click the link to open Angular DevTools and select the matching component in the **Components** tab.
+This helps you move from a browser-level profile to the component state and metadata for a selected event.
+
+NOTE: Opening component links requires Angular DevTools for Chrome and Chrome's experimental `chrome://flags/#enable-devtools-deep-link-via-extensibility-api` flag.
+
+## Interpreting a recorded profile
+
+You can use the "Angular" custom track to quickly identify and diagnose performance issues. The following sections describe some common profiling scenarios.
+
+### Differentiating between your Angular application and other tasks on the same page
+
+As Angular and Chrome data are presented on the separate but correlated tracks, you can see when Angular's application code is executed as opposed to some other browser processing (typically layout and paint) or other scripts running on the same page (in this case the custom Angular track does not have any data):
 
 <img alt="Profile data: Angular vs. 3rd party scripts execution" src="assets/images/best-practices/runtime-performance/profile-angular-vs-3rd-party.png">
 
-Это позволяет определить, следует ли сосредоточить дальнейшее расследование на коде Angular-приложения или других частях кодовой базы или зависимостях.
+This allows you to determine whether further investigations should focus on the Angular application code or on other parts of your codebase or dependencies.
 
-### Цветовое кодирование {#color-coding}
+### Color-coding
 
-Angular использует цвета в графе flame chart для различения типов задач:
+Angular uses colors in the flame chart graph to distinguish tasks types:
 
-- 🟦 Синий представляет код TypeScript, написанный разработчиком приложения (например: сервисы, конструкторы компонентов и хуки жизненного цикла и т. д.).
-- 🟪 Фиолетовый представляет код шаблонов, написанный разработчиком приложения и преобразованный компилятором Angular.
-- 🟩 Зелёный представляет точки входа в код приложения и идентифицирует _причины_ выполнения кода.
+- 🟦 Blue represents TypeScript code written by the application developer (for example: services, component constructors and lifecycle hooks, etc.).
+- 🟪 Purple represents templates code written by the application developer and transformed by the Angular compiler.
+- 🟩 Green represents entry points to the application code and identifies _reasons_ for executing code.
 
-Следующие примеры иллюстрируют описанное цветовое кодирование на различных реальных записях.
+The following examples illustrate the described color-coding in various, real-life recordings.
 
-#### Пример: Бутстрапинг приложения {#example-application-bootstrapping}
+#### Example: Application bootstrapping
 
-Процесс бутстрапинга приложения обычно состоит из:
+The application bootstrap process usually consists of:
 
-- Триггеров, отмеченных синим, таких как вызов `bootstrapApplication`, создание корневого компонента и начальное обнаружение изменений
-- Различных DI-сервисов, создаваемых во время бутстрапинга, отмеченных зелёным.
+- Triggers marked in blue, such as the call to the `bootstrapApplication`, instantiation of the root component, and initial change detection
+- Various DI services instantiated during bootstrap, marked in green.
 
 <img alt="Profile data: bootstrap application" src="assets/images/best-practices/runtime-performance/profile-bootstrap-application.png">
 
-#### Пример: Выполнение компонента {#example-component-execution}
+#### Example: Component execution
 
-Обработка одного компонента обычно представлена как точка входа (синяя), за которой следует выполнение шаблона (фиолетовое). Шаблон, в свою очередь, может запускать создание экземпляров директив и выполнение хуков жизненного цикла (зелёных):
+One component processing is typically represented as an entry point (blue) followed by its template execution (purple). A template might, in turn, trigger instantiation of directives and execution of lifecycle hooks (green):
 
 <img alt="Profile data: component processing" src="assets/images/best-practices/runtime-performance/profile-component-processing.png">
 
-#### Пример: Обнаружение изменений {#example-change-detection}
+#### Example: Change detection
 
-Цикл обнаружения изменений обычно состоит из одного или нескольких проходов синхронизации данных (синих), где каждый проход обходит подмножество компонентов.
+A change detection cycle usually consists of one or more data synchronization passes (blue), where each pass traverses a subset of components.
 
 <img alt="Profile data: change detection" src="assets/images/best-practices/runtime-performance/profile-change-detection.png">
 
-С помощью этой визуализации данных можно сразу определить компоненты, участвовавшие в обнаружении изменений, и те, которые были пропущены (как правило, компоненты `OnPush`, не помеченные как «грязные»).
+With this data visualization, it is possible to immediately identify components that were involved in the change detection and which were skipped (typically the `OnPush` components that were not marked dirty).
 
-Кроме того, можно проверить количество проходов синхронизации для одного обнаружения изменений. Наличие более одного прохода синхронизации свидетельствует об обновлении состояния во время обнаружения изменений. Следует избегать этого, поскольку это замедляет обновление страницы и в худших случаях может даже приводить к бесконечным циклам.
+Additionally, you can inspect the number of synchronization passes for one change detection. Having more than one synchronization pass suggest that state is updated during change detection. You should avoid this, as it slows down page updates and can even result in infinite loops in the worst cases.

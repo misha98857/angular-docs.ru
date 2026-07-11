@@ -1132,7 +1132,7 @@ Angular всё это время создавал новые экземпляр�
 К счастью, `HeroDetailService` делегирует ответственность за удалённый доступ к данным внедрённому `HeroService`.
 
 ```ts
-@Injectable({providedIn: 'root'})
+@Service()
 export class HeroDetailService {
   private heroService = inject(HeroService);
 }

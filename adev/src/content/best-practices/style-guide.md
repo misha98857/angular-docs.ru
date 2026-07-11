@@ -191,9 +191,7 @@ export class UserProfile {
 установленное Angular, не будет перезаписано.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class UserProfile {
   readonly userId = input();
   readonly userSaved = output();
@@ -205,9 +203,7 @@ export class UserProfile {
 output-свойствам и запросам, но не к input-свойствам.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class UserProfile {
   @Output() readonly userSaved = new EventEmitter<void>();
   @ViewChildren(PaymentMethod) readonly paymentMethods?: QueryList<PaymentMethod>;
@@ -269,9 +265,7 @@ HTML. Это делает ваши шаблоны более легкими дл
 более конкретным поведениям на основе деталей события:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 class RichText {
   handleKeydown(event: KeyboardEvent) {
     if (event.ctrlKey) {
@@ -316,9 +310,7 @@ Angular предоставляет интерфейс TypeScript для кажд
 ```ts
 import {Component, OnInit} from '@angular/core';
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class UserProfile implements OnInit {
   // The `OnInit` interface ensures this method is named correctly.
   ngOnInit() {

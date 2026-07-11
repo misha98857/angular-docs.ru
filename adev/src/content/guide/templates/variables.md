@@ -1,14 +1,16 @@
-# Переменные в шаблонах
+# Variables in templates
 
-В Angular существует два типа объявления переменных в шаблонах: локальные переменные шаблона и переменные ссылки на шаблон.
+Angular has two types of variable declarations in templates: local template variables and template reference variables.
 
-## Локальные переменные шаблона с `@let` {#local-template-variables-with-let}
+HELPFUL: In this guide, “template” does not mean the entire HTML template file. It refers only to a specific template construct or expression within the file.
 
-Синтаксис `@let` в Angular позволяет определить локальную переменную и повторно использовать её в шаблоне, аналогично [синтаксису JavaScript `let`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let).
+## Local template variables with `@let`
 
-### Использование `@let` {#using-let}
+Angular's `@let` syntax allows you to define a local variable and re-use it across a template, similar to the [JavaScript `let` syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let).
 
-Используйте `@let` для объявления переменной, значение которой основано на результате выражения шаблона. Angular автоматически поддерживает значение переменной в актуальном состоянии относительно данного выражения, аналогично [привязкам](guide/templates/binding).
+### Using `@let`
+
+Use `@let` to declare a variable whose value is based on the result of a template expression. Angular automatically keeps the variable's value up-to-date with the given expression, similar to [bindings](/guide/templates/binding).
 
 ```angular-html
 @let name = user.name;
@@ -22,11 +24,11 @@
   'Ut enim ad minim veniam...';
 ```
 
-Каждый блок `@let` может объявлять ровно одну переменную. Нельзя объявлять несколько переменных в одном блоке через запятую.
+Each `@let` block can declare exactly one variable. You cannot declare multiple variables in the same block with a comma.
 
-### Ссылка на значение `@let` {#referencing-the-value-of-let}
+### Referencing the value of `@let`
 
-После объявления переменной с помощью `@let` её можно повторно использовать в том же шаблоне:
+Once you've declared a variable with `@let`, you can reuse it in the same template:
 
 ```angular-html
 @let user = user$ | async;
@@ -45,9 +47,9 @@
 }
 ```
 
-### Возможность присваивания {#assignability}
+### Assignability
 
-Ключевое отличие `@let` от JavaScript `let` состоит в том, что `@let` нельзя переприсваивать после объявления. Однако Angular автоматически поддерживает значение переменной в актуальном состоянии относительно данного выражения.
+A key difference between `@let` and JavaScript's `let` is that `@let` cannot be reassigned after declaration. However, Angular automatically keeps the variable's value up-to-date with the given expression.
 
 ```angular-html
 @let value = 1;
@@ -56,11 +58,11 @@
 <button (click)="value = value + 1">Increment the value</button>
 ```
 
-### Область видимости переменной {#variable-scope}
+### Variable scope
 
-Объявления `@let` ограничены текущим представлением и его потомками. Angular создаёт новое представление на границах компонентов и там, где шаблон может содержать динамический контент — в блоках управления потоком, блоках `@defer` или структурных директивах.
+`@let` declarations are scoped to the current view and its descendants. Angular creates a new view at component boundaries and wherever a template might contain dynamic content, such as control flow blocks, `@defer` blocks, or structural directives.
 
-Поскольку объявления `@let` не поднимаются (не hoisted), они **не могут** быть доступны из родительских представлений или соседних элементов:
+Since `@let` declarations are not hoisted, they **cannot** be accessed by parent views or siblings:
 
 ```angular-html
 @let topLevel = value;
@@ -90,50 +92,50 @@
 {{ nested }}
 ```
 
-### Полный синтаксис {#full-syntax}
+### Full syntax
 
-Синтаксис `@let` формально определяется как:
+The `@let` syntax is formally defined as:
 
-- Ключевое слово `@let`.
-- За которым следуют один или несколько пробелов, исключая переводы строк.
-- За которыми следуют допустимое JavaScript-имя и ноль или более пробелов.
-- За которыми следуют символ `=` и ноль или более пробелов.
-- За которыми следует выражение Angular, которое может быть многострочным.
-- Заканчивается символом `;`.
+- The `@let` keyword.
+- Followed by one or more whitespaces, not including new lines.
+- Followed by a valid JavaScript name and zero or more whitespaces.
+- Followed by the = symbol and zero or more whitespaces.
+- Followed by an Angular expression which can be multi-line.
+- Terminated by the `;` symbol.
 
-## Переменные ссылки на шаблон {#template-reference-variables}
+## Template reference variables
 
-Переменные ссылки на шаблон предоставляют способ объявить переменную, ссылающуюся на значение из элемента шаблона.
+Template reference variables give you a way to declare a variable that references a value from an element in your template.
 
-Переменная ссылки на шаблон может ссылаться на:
+A template reference variable can refer to the following:
 
-- DOM-элемент в шаблоне (включая [пользовательские элементы](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements))
-- Angular-компонент или директиву
-- [TemplateRef](api/core/TemplateRef) из [ng-template](api/core/ng-template)
+- a DOM element within a template (including [custom elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements))
+- an Angular component or directive
+- a [TemplateRef](/api/core/TemplateRef) from an [ng-template](/api/core/ng-template)
 
-Переменные ссылки на шаблон можно использовать для чтения информации из одной части шаблона в другой части того же шаблона.
+You can use template reference variables to read information from one part of the template in another part of the same template.
 
-### Объявление переменной ссылки на шаблон {#declaring-a-template-reference-variable}
+### Declaring a template reference variable
 
-Переменную на элементе шаблона можно объявить, добавив атрибут, начинающийся с символа решётки (`#`), за которым следует имя переменной.
+You can declare a variable on an element in a template by adding an attribute that starts with the hash character (`#`) followed by the variable name.
 
 ```angular-html
 <!-- Create a template reference variable named "taskInput", referring to the HTMLInputElement. -->
 <input #taskInput placeholder="Enter task name" />
 ```
 
-### Присваивание значений переменным ссылки на шаблон {#assigning-values-to-template-reference-variables}
+### Assigning values to template reference variables
 
-Angular присваивает значение переменным шаблона на основе элемента, на котором объявлена переменная.
+Angular assigns a value to template variables based on the element on which the variable is declared.
 
-Если переменная объявлена на Angular-компоненте, она ссылается на экземпляр компонента.
+If you declare the variable on a Angular component, the variable refers to the component instance.
 
 ```angular-html
 <!-- The `startDate` variable is assigned the instance of `MyDatepicker`. -->
 <my-datepicker #startDate />
 ```
 
-Если переменная объявлена на элементе `<ng-template>`, она ссылается на экземпляр TemplateRef, представляющий шаблон. Подробнее см. в разделе [Как Angular использует синтаксис звёздочки `*`](guide/directives/structural-directives#structural-directive-shorthand) в [Структурных директивах](guide/directives/structural-directives).
+If you declare the variable on an `<ng-template>` element, the variable refers to a TemplateRef instance which represents the template. For more information, see [How Angular uses the asterisk, \*, syntax](/guide/directives/structural-directives#structural-directive-shorthand) in [Structural directives](/guide/directives/structural-directives).
 
 ```angular-html
 <!-- The `myFragment` variable is assigned the `TemplateRef` instance corresponding to this template fragment. -->
@@ -142,16 +144,16 @@ Angular присваивает значение переменным шабло�
 </ng-template>
 ```
 
-Если переменная объявлена на любом другом отображаемом элементе, она ссылается на экземпляр `HTMLElement`.
+If you declare the variable on any other displayed element, the variable refers to the `HTMLElement` instance.
 
 ```angular-html
 <!-- The "taskInput" variable refers to the HTMLInputElement instance. -->
 <input #taskInput placeholder="Enter task name" />
 ```
 
-#### Присваивание ссылки на Angular-директиву {#assigning-a-reference-to-an-angular-directive}
+#### Assigning a reference to an Angular directive
 
-Angular-директивы могут иметь свойство `exportAs`, определяющее имя, по которому директива может быть указана в шаблоне:
+Angular directives may have an `exportAs` property that defines a name by which the directive can be referenced in a template:
 
 ```angular-ts
 @Directive({
@@ -163,20 +165,20 @@ export class DropZone {
 }
 ```
 
-При объявлении переменной шаблона на элементе можно присвоить этой переменной экземпляр директивы, указав имя `exportAs`:
+When you declare a template variable on an element, you can assign that variable a directive instance by specifying this `exportAs` name:
 
 ```angular-html
 <!-- The `firstZone` variable refers to the `DropZone` directive instance. -->
 <section dropZone #firstZone="dropZone">...</section>
 ```
 
-Нельзя ссылаться на директиву, не указавшую имя `exportAs`.
+You cannot refer to a directive that does not specify an `exportAs` name.
 
-### Использование переменных ссылки на шаблон с запросами {#using-template-reference-variables-with-queries}
+### Using template reference variables with queries
 
-Помимо использования переменных шаблона для чтения значений из другой части того же шаблона, этот стиль объявления переменных также можно использовать для «пометки» элемента для [запросов компонентов и директив](guide/components/queries).
+In addition to using template variables to read values from another part of the same template, you can also use this style of variable declaration to "mark" an element for [component and directive queries](/guide/components/queries).
 
-Если нужно запросить конкретный элемент в шаблоне, можно объявить переменную шаблона на этом элементе, а затем запросить элемент по имени переменной.
+When you want to query for a specific element in a template, you can declare a template variable on that element and then query for the element based on the variable name.
 
 ```angular-html
 <input #description value="Original description" />
@@ -193,4 +195,36 @@ export class AppComponent {
 }
 ```
 
-Подробнее о запросах см. в разделе [Ссылки на дочерние элементы с помощью запросов](guide/components/queries).
+See [Referencing children with queries](/guide/components/queries) for more information on queries.
+
+### Template variable scope
+
+Just like variables in JavaScript or TypeScript code, template variables are scoped to the template that declares them.
+
+Similarly, [Structural directives](guide/directives/structural-directives) or `<ng-template>` declarations create a new nested template scope, much like JavaScript's control flow statements like `if` and `for` create new lexical scopes. You cannot access template variables within one of these structural directives from outside of its boundaries.
+
+HELPFUL: Define a variable only once in the template so the runtime value remains predictable.
+
+#### Accessing in a nested template
+
+An inner template can access template variables that the outer template defines.
+
+In the following example, changing the text in the `<input>` changes the value in the `<span>` because Angular immediately updates changes through the template variable, `ref1`.
+
+```html
+<input #ref1 type="text" [(ngModel)]="firstExample" />
+
+<span *ngIf="true">Value: {{ ref1.value }}</span>
+```
+
+In this case, the `*ngIf` on `<span>` creates a new template scope, which includes the `ref1` variable from its parent scope.
+
+However, accessing a template variable from a child scope in the parent template doesn't work:
+
+```html {avoid}
+<input *ngIf="true" #ref2 type="text" [(ngModel)]="secondExample" />
+
+<span>Value: {{ ref2?.value }}</span>
+```
+
+Here, `ref2` is declared in the child scope created by `*ngIf`, and is not accessible from the parent template.

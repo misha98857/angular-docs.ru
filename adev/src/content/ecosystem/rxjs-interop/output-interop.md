@@ -12,9 +12,7 @@ TIP: Это руководство предполагает знакомство
 import {Directive} from '@angular/core';
 import {outputFromObservable} from '@angular/core/rxjs-interop';
 
-@Directive({
-  /*...*/
-})
+@Directive(/* ... */)
 class Draggable {
   pointerMoves$: Observable<PointerMovements> = listenToPointerMoves();
 
@@ -37,7 +35,7 @@ HELPFUL: Рассмотрите использование `output()` напря
 import {outputToObservable} from '@angular/core/rxjs-interop';
 
 @Component(/*...*/)
-    class CustomSlider {
+class CustomSlider {
     valueChange = output<number>();
 }
 

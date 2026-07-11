@@ -251,9 +251,7 @@ _представления_).
 ```ts
 import {Component, ElementRef, afterNextRender} from '@angular/core';
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class UserProfile {
   private prevPadding = 0;
   private elementHeight = 0;

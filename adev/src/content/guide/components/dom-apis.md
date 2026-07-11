@@ -8,9 +8,7 @@ Angular берет на себя большую часть задач по со�
 хост-элемент компонента:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class ProfilePhoto {
   constructor() {
     const elementRef = inject(ElementRef);
@@ -26,9 +24,7 @@ export class ProfilePhoto {
 рендеринга**, которая запускается после того, как Angular завершит рендеринг страницы.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class ProfilePhoto {
   constructor() {
     const elementRef = inject(ElementRef);

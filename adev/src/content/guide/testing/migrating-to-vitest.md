@@ -1,16 +1,16 @@
-# Миграция с Karma на Vitest
+# Migrating from Karma to Vitest
 
-Angular CLI использует [Vitest](https://vitest.dev/) в качестве средства запуска модульных тестов по умолчанию для новых проектов. Это руководство содержит инструкции по миграции существующего проекта с Karma и Jasmine на Vitest.
+The Angular CLI uses [Vitest](https://vitest.dev/) as the default unit test runner for new projects. This guide provides instructions for migrating an existing project from Karma and Jasmine to Vitest.
 
-ВАЖНО: Миграция существующего проекта на Vitest считается экспериментальной. Этот процесс также требует использования системы сборки `application`, которая является стандартной для всех новых проектов.
+IMPORTANT: Migrating an existing project to Vitest is considered experimental. This process also requires the use of the `application` build system, which is the default for all newly created projects.
 
-## Шаги ручной миграции {#manual-migration-steps}
+## Manual migration steps
 
-Перед использованием автоматизированного схематика рефакторинга необходимо вручную обновить проект для использования Vitest.
+Before using the automated refactoring schematic, you must manually update your project to use the Vitest test runner.
 
-### 1. Установка зависимостей {#1-install-dependencies}
+### 1. Install dependencies
 
-Установите `vitest` и библиотеку эмуляции DOM. Хотя браузерное тестирование по-прежнему возможно (см. [шаг 5](#5-configure-browser-mode-optional)), Vitest по умолчанию использует библиотеку эмуляции DOM для имитации среды браузера в Node.js, что обеспечивает более быстрое выполнение тестов. CLI автоматически обнаруживает и использует `happy-dom`, если он установлен; иначе использует `jsdom`. Один из этих пакетов должен быть установлен.
+Install `vitest` and a DOM emulation library. While browser testing is still possible (see [step 5](#5-configure-browser-mode-optional)), Vitest uses a DOM emulation library by default to simulate a browser environment within Node.js for faster test execution. The CLI automatically detects and uses `happy-dom` if it's installed; otherwise, it falls back to `jsdom`. You must have one of these packages installed.
 
 <docs-code-multifile>
   <docs-code header="npm" language="shell">
@@ -27,9 +27,9 @@ Angular CLI использует [Vitest](https://vitest.dev/) в качеств
   </docs-code>
 </docs-code-multifile>
 
-### 2. Обновление `angular.json` {#2-update-angularjson}
+### 2. Update `angular.json`
 
-В файле `angular.json` найдите цель `test` для своего проекта и измените `builder` на `@angular/build:unit-test`.
+In your `angular.json` file, find the `test` target for your project and change the `builder` to `@angular/build:unit-test`.
 
 ```json
 {
@@ -45,27 +45,27 @@ Angular CLI использует [Vitest](https://vitest.dev/) в качеств
 }
 ```
 
-Сборщик `unit-test` по умолчанию использует `"tsConfig": "tsconfig.spec.json"` и `"buildTarget": "::development"`. Эти параметры можно явно задать, если проект требует других значений. Например, если конфигурация сборки `development` отсутствует или нужны другие параметры для тестирования, можно создать и использовать конфигурацию сборки `testing` или с другим именем для `buildTarget`.
+The `unit-test` builder defaults to `"tsConfig": "tsconfig.spec.json"` and `"buildTarget": "::development"`. You can explicitly set these options if your project requires different values. For example, if the `development` build configuration is missing or you need different options for testing, you can create and use a `testing` or similarly named build configuration for `buildTarget`.
 
-Сборщик `@angular/build:karma` ранее позволял настраивать параметры сборки (такие как `polyfills`, `assets` или `styles`) непосредственно в цели `test`. Новый сборщик `@angular/build:unit-test` этого не поддерживает. Если специфичные для теста параметры сборки отличаются от существующей конфигурации сборки `development`, их необходимо перенести в отдельную конфигурацию цели сборки. Если параметры тестовой сборки уже совпадают с конфигурацией `development`, никаких действий не требуется.
+The `@angular/build:karma` builder previously allowed build options (like `polyfills`, `assets`, or `styles`) to be configured directly within the `test` target. The new `@angular/build:unit-test` builder does not support this. If your test-specific build options differ from your existing `development` build configuration, you must move them to a dedicated build target configuration. If your test build options already match your `development` build configuration, no action is needed.
 
-### 3. Обработка пользовательских конфигураций `karma.conf.js` {#3-handle-custom-karmaconfjs-configurations}
+### 3. Handle custom `karma.conf.js` configurations
 
-Пользовательские конфигурации в `karma.conf.js` не переносятся автоматически. Перед удалением файла `karma.conf.js` просмотрите его на наличие пользовательских настроек, которые необходимо перенести.
+Custom configurations in `karma.conf.js` are not automatically migrated. Before deleting your `karma.conf.js` file, review it for any custom settings that need to be migrated.
 
-Многие параметры Karma имеют эквиваленты в Vitest, которые можно задать в пользовательском файле конфигурации Vitest (например, `vitest.config.ts`) и связать с `angular.json` через параметр `runnerConfig`.
+Many Karma options have equivalents in Vitest that can be set in a custom Vitest configuration file (e.g., `vitest.config.ts`) and linked to your `angular.json` via the `runnerConfig` option.
 
-Общие пути миграции:
+Common migration paths include:
 
-- **Репортёры**: репортёры Karma необходимо заменить совместимыми с Vitest. Их зачастую можно настроить напрямую в `angular.json` в свойстве `test.options.reporters`. Для более сложных конфигураций используйте пользовательский файл `vitest.config.ts`.
-- **Плагины**: плагины Karma могут иметь эквиваленты в Vitest, которые нужно найти и установить. Обратите внимание, что покрытие кода является встроенной функцией Angular CLI и может быть включено с помощью `ng test --coverage`.
-- **Пользовательские запуска браузеров**: они заменяются параметром `browsers` в `angular.json` и установкой провайдера браузера, такого как `@vitest/browser-playwright`.
+- **Reporters**: Karma reporters must be replaced with Vitest-compatible reporters. These can often be configured directly in your `angular.json` under the `test.options.reporters` property. For more advanced configurations, use a custom `vitest.config.ts` file.
+- **Plugins**: Karma plugins may have Vitest equivalents that you will need to find and install. Note that code coverage is a first-class feature in the Angular CLI and can be enabled with `ng test --coverage`.
+- **Custom Browser Launchers**: These are replaced by the `browsers` option in `angular.json` and the installation of a browser provider like `@vitest/browser-playwright`.
 
-Для других настроек обратитесь к официальной [документации Vitest](https://vitest.dev/config/).
+For other settings, consult the official [Vitest documentation](https://vitest.dev/config/).
 
-### 4. Удаление Karma и файлов `test.ts` {#4-remove-karma-and-testts-files}
+### 4. Remove Karma and `test.ts` files
 
-Теперь можно удалить `karma.conf.js` и `src/test.ts` из проекта и удалить пакеты, связанные с Karma. Следующие команды основаны на пакетах, установленных в новом проекте Angular CLI; ваш проект может содержать другие связанные с Karma пакеты для удаления.
+You can now delete `karma.conf.js` and `src/test.ts` from your project and uninstall the Karma-related packages. The following commands are based on the packages installed in a new Angular CLI project; your project may have other Karma-related packages to remove.
 
 <docs-code-multifile>
   <docs-code header="npm" language="shell">
@@ -82,17 +82,17 @@ Angular CLI использует [Vitest](https://vitest.dev/) в качеств
   </docs-code>
 </docs-code-multifile>
 
-### 5. Настройка браузерного режима (необязательно) {#5-configure-browser-mode-optional}
+### 5. Configure browser mode (optional)
 
-Если нужно запускать тесты в реальном браузере, установите провайдер браузера и настройте `angular.json`.
+If you need to run tests in a real browser, you must install a browser provider and configure your `angular.json`.
 
-**Установите провайдер браузера:**
+**Install a browser provider:**
 
-Выберите один из следующих провайдеров браузера в зависимости от ваших потребностей:
+Choose one of the following browser providers based on your needs:
 
-- **Playwright**: `@vitest/browser-playwright` для Chromium, Firefox и WebKit.
-- **WebdriverIO**: `@vitest/browser-webdriverio` для Chrome, Firefox, Safari и Edge.
-- **Preview**: `@vitest/browser-preview` для сред Webcontainer (например, StackBlitz).
+- **Playwright**: `@vitest/browser-playwright` for Chromium, Firefox, and WebKit.
+- **WebdriverIO**: `@vitest/browser-webdriverio` for Chrome, Firefox, Safari, and Edge.
+- **Preview**: `@vitest/browser-preview` for WebContainer environments (like StackBlitz).
 
 <docs-code-multifile>
   <docs-code header="npm" language="shell">
@@ -109,9 +109,9 @@ Angular CLI использует [Vitest](https://vitest.dev/) в качеств
   </docs-code>
 </docs-code-multifile>
 
-**Обновите `angular.json` для браузерного режима:**
+**Update `angular.json` for browser mode:**
 
-Добавьте параметр `browsers` в параметры цели `test`. Имя браузера зависит от установленного провайдера (например, `chromium` для Playwright, `chrome` для WebdriverIO).
+Add the `browsers` option to your `test` target's options. The browser name depends on the provider you installed (e.g., `chromium` for Playwright, `chrome` for WebdriverIO).
 
 ```json
 {
@@ -130,82 +130,80 @@ Angular CLI использует [Vitest](https://vitest.dev/) в качеств
 }
 ```
 
-Безголовый режим включается автоматически, если установлена переменная окружения `CI` или если имя браузера включает «Headless» (например, `ChromeHeadless`). В противном случае тесты будут запускаться в видимом браузере.
+Headless mode is enabled automatically if the `CI` environment variable is set or if a browser name includes "Headless" (e.g., `ChromeHeadless`). Otherwise, tests will run in a headed browser.
 
-ПРИМЕЧАНИЕ: Отладка с помощью `ng test --debug` не поддерживается в браузерном режиме.
+## Automated test refactoring with schematics
 
-## Автоматизированный рефакторинг тестов с помощью схематиков {#automated-test-refactoring-with-schematics}
+IMPORTANT: The `refactor-jasmine-vitest` schematic is experimental and may not cover all possible test patterns. Always review the changes made by the schematic.
 
-ВАЖНО: Схематик `refactor-jasmine-vitest` является экспериментальным и может не охватывать все возможные паттерны тестов. Всегда проверяйте изменения, внесённые схематиком.
+The Angular CLI provides the `refactor-jasmine-vitest` schematic to automatically refactor your Jasmine tests to use Vitest.
 
-Angular CLI предоставляет схематик `refactor-jasmine-vitest` для автоматического рефакторинга тестов Jasmine под Vitest.
+### Overview
 
-### Обзор {#overview}
+The schematic automates the following transformations in your test files (`.spec.ts`):
 
-Схематик автоматизирует следующие преобразования в тестовых файлах (`.spec.ts`):
+- Converts `fit` and `fdescribe` to `it.only` and `describe.only`.
+- Converts `xit` and `xdescribe` to `it.skip` and `describe.skip`.
+- Converts `spyOn` calls to the equivalent `vi.spyOn`.
+- Replaces `jasmine.objectContaining` with `expect.objectContaining`.
+- Replaces `jasmine.any` with `expect.any`.
+- Replaces `jasmine.createSpy` with `vi.fn`.
+- Updates `beforeAll`, `beforeEach`, `afterAll`, and `afterEach` to their Vitest equivalents.
+- Converts `fail()` to Vitest's `vi.fail()`.
+- Adjusts expectations to match Vitest APIs
+- Adds TODO comments for code that cannot be automatically converted
 
-- Преобразует `fit` и `fdescribe` в `it.only` и `describe.only`.
-- Преобразует `xit` и `xdescribe` в `it.skip` и `describe.skip`.
-- Преобразует вызовы `spyOn` в эквивалентные `vi.spyOn`.
-- Заменяет `jasmine.objectContaining` на `expect.objectContaining`.
-- Заменяет `jasmine.any` на `expect.any`.
-- Заменяет `jasmine.createSpy` на `vi.fn`.
-- Обновляет `beforeAll`, `beforeEach`, `afterAll` и `afterEach` до эквивалентов Vitest.
-- Преобразует `fail()` в `vi.fail()` Vitest.
-- Корректирует ожидания для соответствия API Vitest.
-- Добавляет TODO-комментарии для кода, который не может быть преобразован автоматически.
+The schematic **does not** perform the following actions:
 
-Схематик **не** выполняет следующие действия:
+- It does not install `vitest` or other related dependencies.
+- It does not change your `angular.json` to use the Vitest builder or migrate any build options (like `polyfills` or `styles`) from the `test` target.
+- It does not remove `karma.conf.js` or `test.ts` files.
+- It does not handle complex or nested spy scenarios, which may require manual refactoring.
 
-- Не устанавливает `vitest` или другие связанные зависимости.
-- Не изменяет `angular.json` для использования сборщика Vitest и не переносит параметры сборки (например, `polyfills` или `styles`) из цели `test`.
-- Не удаляет файлы `karma.conf.js` или `test.ts`.
-- Не обрабатывает сложные или вложенные сценарии шпионов, которые могут потребовать ручного рефакторинга.
+### Running the schematic
 
-### Запуск схематика {#running-the-schematic}
+Once your project is configured for Vitest, you can run the schematic to refactor your test files.
 
-После настройки проекта для Vitest можно запустить схематик для рефакторинга тестовых файлов.
-
-Для рефакторинга **всех** тестовых файлов в проекте по умолчанию выполните:
+To refactor **all** test files in your default project, run:
 
 ```bash
 ng g @schematics/angular:refactor-jasmine-vitest
 ```
 
-### Параметры {#options}
+### Options
 
-Для настройки поведения схематика можно использовать следующие параметры:
+You can use the following options to customize the schematic's behavior:
 
-| Параметр                 | Описание                                                                                                                       |
-| :----------------------- | :----------------------------------------------------------------------------------------------------------------------------- |
-| `--project <name>`       | Укажите проект для рефакторинга в рабочей области с несколькими проектами. <br> Пример: `--project=my-lib`                    |
-| `--include <path>`       | Выполнить рефакторинг только конкретного файла или директории. <br> Пример: `--include=src/app/app.component.spec.ts`         |
-| `--file-suffix <suffix>` | Укажите другой суффикс для тестовых файлов. <br> Пример: `--file-suffix=.test.ts`                                             |
-| `--add-imports`          | Добавьте явные импорты `vitest`, если вы отключили глобальные настройки в конфигурации Vitest.                                 |
-| `--verbose`              | Подробное журналирование всех применённых преобразований.                                                                      |
-| `--browser-mode`         | Если планируется запуск тестов в браузерном режиме.                                                                            |
+| Option                   | Description                                                                                         |
+| :----------------------- | :-------------------------------------------------------------------------------------------------- |
+| `--project <name>`       | Specify the project to refactor in a multi-project workspace. <br> Example: `--project=my-lib`      |
+| `--include <path>`       | Refactor only a specific file or directory. <br> Example: `--include=src/app/app.component.spec.ts` |
+| `--file-suffix <suffix>` | Specify a different file suffix for test files. <br> Example: `--file-suffix=.test.ts`              |
+| `--add-imports`          | Add explicit `vitest` imports if you have disabled globals in your Vitest configuration.            |
+| `--verbose`              | See detailed logging of all transformations applied.                                                |
+| `--browser-mode`         | If you intend to run the tests in browser mode.                                                     |
 
-### После миграции {#after-migrating}
+### After migrating
 
-После завершения схематика рекомендуется:
+After the schematic completes, it's a good practice to:
 
-1.  **Запустить тесты**: выполните `ng test`, чтобы убедиться, что все тесты по-прежнему проходят после рефакторинга.
-2.  **Проверить изменения**: просмотрите изменения, внесённые схематиком, уделив особое внимание сложным тестам, особенно с замысловатыми шпионами или моками, которые могут потребовать дополнительной ручной корректировки.
+1.  **Run your tests**: Execute `ng test` to ensure that all tests still pass after the refactoring.
+2.  **Review the changes**: Look over the changes made by the schematic, paying close attention to any complex tests, especially those with intricate spies or mocks, as they may require further manual adjustments.
 
-Команда `ng test` собирает приложение в _режиме наблюдения_ и запускает настроенное средство запуска. Режим наблюдения включён по умолчанию при использовании интерактивного терминала и при отсутствии CI-среды.
+The `ng test` command builds the application in _watch mode_ and launches the configured runner. Watch mode is enabled by default when using an interactive terminal and not running on CI.
 
-## Конфигурация {#configuration}
+## Configuration
 
-Angular CLI берёт на себя конфигурацию Vitest, строя полную конфигурацию в памяти на основе параметров в `angular.json`.
+The Angular CLI takes care of the Vitest configuration for you, constructing the full configuration in memory based on options in `angular.json`.
 
-### Пользовательская конфигурация Vitest {#custom-vitest-configuration}
+### Custom Vitest configuration
 
-ВАЖНО: Хотя использование пользовательской конфигурации открывает расширенные возможности, команда Angular не предоставляет прямую поддержку конкретного содержимого конфигурационного файла или каких-либо сторонних плагинов. CLI также переопределит некоторые свойства (`test.projects`, `test.include`) для обеспечения корректной работы.
+IMPORTANT: While using a custom configuration enables advanced options, the Angular team does not provide direct support for the specific contents of the configuration file or for any third-party plugins used within it. The CLI will also override certain properties (`test.projects`, `test.include`) to ensure proper operation.
 
-Можно предоставить пользовательский файл конфигурации Vitest для переопределения настроек по умолчанию. Полный список доступных параметров см. в официальной [документации Vitest](https://vitest.dev/config/).
+You can provide a custom Vitest configuration file to override the default settings. For a full list of available options, see the official [Vitest documentation](https://vitest.dev/config/).
 
-**1. Прямой путь:**
-Укажите прямой путь к файлу конфигурации Vitest в `angular.json`:
+**1. Direct path:**
+Provide a direct path to a Vitest configuration file in your `angular.json`:
 
 ```json
 {
@@ -222,16 +220,19 @@ Angular CLI берёт на себя конфигурацию Vitest, строя
 }
 ```
 
-**2. Автоматический поиск базовой конфигурации:**
-Если задать `runnerConfig` в значение `true`, сборщик автоматически будет искать общий файл `vitest-base.config.*` в корнях проекта и рабочей области.
+**2. Automatic search for base configuration:**
+If you set `runnerConfig` to `true`, the builder will automatically search for a shared `vitest-base.config.*` file in your project and workspace roots.
 
-## Вспомогательные функции на основе `zone.js` не поддерживаются {#zonejs-based-helpers-are-not-supported}
+## `zone.js` Vitest patch
 
-Патчи zone.js не применяются при запуске тестов с Vitest, поэтому нельзя использовать функции `fakeAsync`, `flush` или `waitForAsync`.
-Для миграции на Vitest также потребуется перевести тесты на нативный async и поддельные таймеры Vitest. Пример использования поддельных таймеров с Vitest см. [здесь](/guide/testing/components-scenarios#async-test-with-a-vitest-fake-timers).
+In order to use functions like `fakeAsync`, `flush` or `waitForAsync`, or to enable your existing tests to work with them, you can add `zone.js/plugins/vitest-patch` to your test target polyfills in `angular.json`.
 
-## Сообщения об ошибках {#bug-reports}
+Regardless, we strongly recommend you start planning to convert your existing test suites to native `async` and Vitest fake timers, since this is the established approach.
 
-Сообщайте о проблемах и запросах новых функций на [GitHub](https://github.com/angular/angular-cli/issues).
+See [an example here](/guide/testing/components-scenarios#async-test-with-a-vitest-fake-timers) for fake timers usage with Vitest.
 
-По возможности предоставляйте минимальный воспроизводящий пример, чтобы помочь команде в решении проблем.
+## Bug reports
+
+Report issues and feature requests on [GitHub](https://github.com/angular/angular-cli/issues).
+
+Please provide a minimal reproduction where possible to aid the team in addressing issues.

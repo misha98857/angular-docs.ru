@@ -18,7 +18,6 @@ const mockIndexedNode: IndexedNode = {
     id: 0,
     isElement: false,
   },
-  hydration: null,
   directives: [
     {
       id: 1,
@@ -30,9 +29,10 @@ const mockIndexedNode: IndexedNode = {
     },
   ],
   controlFlowBlock: null,
+  static: false,
   hasNativeElement: true,
   children: [],
-  element: 'foo',
+  tagName: 'foo',
   position: [0],
 };
 

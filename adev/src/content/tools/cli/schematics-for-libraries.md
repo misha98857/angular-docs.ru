@@ -1,97 +1,104 @@
-# Схематики для библиотек
+# Schematics for libraries
 
-При создании Angular-библиотеки вы можете предоставить и упаковать её со схематиками, которые интегрируют её с Angular CLI.
-С вашими схематиками пользователи смогут использовать `ng add` для установки начальной версии вашей библиотеки,
-`ng generate` для создания артефактов, определённых в вашей библиотеке, и `ng update` для адаптации своего проекта к новой версии библиотеки, вводящей критические изменения.
+When you create an Angular library, you can provide and package it with schematics that integrate it with the Angular CLI.
+With your schematics, your users can use `ng add` to install an initial version of your library,
+`ng generate` to create artifacts defined in your library, and `ng update` to adjust their project for a new version of your library that introduces breaking changes.
 
-Все три типа схематиков могут быть частью коллекции, которую вы упаковываете вместе с библиотекой.
+All three types of schematics can be part of a collection that you package with your library.
 
-## Создание коллекции схематиков {#creating-a-schematics-collection}
+## Creating a schematics collection
 
-Для начала работы с коллекцией необходимо создать файлы схематика.
-Следующие шаги показывают, как добавить начальную поддержку без изменения файлов проекта.
+To start a collection, you need to create the schematic files.
+The following steps show you how to add initial support without modifying any project files.
 
-1. В корневой папке вашей библиотеки создайте папку `schematics`.
-1. В папке `schematics/` создайте папку `ng-add` для первого схематика.
-1. На корневом уровне папки `schematics` создайте файл `collection.json`.
-1. Отредактируйте файл `collection.json`, чтобы определить начальную схему для вашей коллекции.
+1. In your library's root folder, create a `schematics` folder.
+1. In the `schematics/` folder, create an `ng-add` folder for your first schematic.
+1. At the root level of the `schematics` folder, create a `collection.json` file.
+1. Edit the `collection.json` file to define the initial schema for your collection.
 
    <docs-code header="projects/my-lib/schematics/collection.json (Schematics Collection)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/collection.1.json"/>
-   - Путь `$schema` является относительным относительно схемы коллекции Angular Devkit.
-   - Объект `schematics` описывает именованные схематики, входящие в эту коллекцию.
-   - Первая запись предназначена для схематика с именем `ng-add`.
-     Она содержит описание и указывает на фабричную функцию, которая вызывается при выполнении схематика.
+   - The `$schema` path is relative to the Angular Devkit collection schema.
+   - The `schematics` object describes the named schematics that are part of this collection.
+   - The first entry is for a schematic named `ng-add`.
+     It contains the description, and points to the factory function that is called when your schematic is executed.
 
-1. В файле `package.json` вашего проекта библиотеки добавьте запись "schematics" с путём к файлу схемы.
-   Angular CLI использует эту запись для поиска именованных схематиков в вашей коллекции при выполнении команд.
+1. In your library project's `package.json` file, add a "schematics" entry with the path to your schema file.
+   The Angular CLI uses this entry to find named schematics in your collection when it runs commands.
 
 <docs-code header="projects/my-lib/package.json (Schematics Collection Reference)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/package.json" region="collection"/>
 
-Начальная схема, которую вы создали, сообщает CLI, где найти схематик, поддерживающий команду `ng add`.
-Теперь вы готовы создать этот схематик.
+The initial schema that you have created tells the CLI where to find the schematic that supports the `ng add` command.
+Now you are ready to create that schematic.
 
-## Обеспечение поддержки установки {#providing-installation-support}
+## Providing installation support
 
-Схематик для команды `ng add` может улучшить процесс начальной установки для ваших пользователей.
-Следующие шаги определяют этот тип схематика.
+A schematic for the `ng add` command can enhance the initial installation process for your users.
+The following steps define this type of schematic.
 
-1. Перейдите в папку `<lib-root>/schematics/ng-add`.
-1. Создайте основной файл `index.ts`.
-1. Откройте `index.ts` и добавьте исходный код для фабричной функции вашего схематика.
+1. Go to the `<lib-root>/schematics/ng-add` folder.
+1. Create a `schema.json` file to define the options that the schematic accepts.
 
-<docs-code header="projects/my-lib/schematics/ng-add/index.ts (ng-add Rule Factory)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/ng-add/index.ts"/>
+   <docs-code header="projects/my-lib/schematics/ng-add/schema.json (ng-add Schema)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/ng-add/schema.json"/>
 
-Angular CLI автоматически установит последнюю версию библиотеки, и этот пример идёт дальше, добавляя `MyLibModule` в корень приложения. Функция `addRootImport` принимает callback, который должен возвращать блок кода. Вы можете писать любой код внутри строки, помеченной функцией `code`, а любые внешние символы должны быть обёрнуты функцией `external`, чтобы гарантировать генерацию соответствующих операторов import.
+1. Create a `schema.ts` file to define an interface for the options defined in the `schema.json` file.
 
-### Определение типа зависимости {#define-dependency-type}
+   <docs-code header="projects/my-lib/schematics/ng-add/schema.ts (ng-add Schema Interface)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/ng-add/schema.ts"/>
 
-Используйте параметр `save` команды `ng-add`, чтобы настроить, должна ли библиотека быть добавлена в `dependencies`, `devDependencies` или вообще не сохраняться в файле конфигурации `package.json` проекта.
+1. Create the main file, `index.ts`, and add the source code for your schematic factory function.
+
+   <docs-code header="projects/my-lib/schematics/ng-add/index.ts (ng-add Rule Factory)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/ng-add/index.ts"/>
+
+The Angular CLI will install the latest version of the library automatically, and this example is taking it a step further by adding the `MyLibModule` to the root of the application. The `addRootImport` function accepts a callback that needs to return a code block. You can write any code inside of the string tagged with the `code` function and any external symbol have to be wrapped with the `external` function to ensure that the appropriate import statements are generated.
+
+### Define dependency type
+
+Use the `save` option of `ng-add` to configure if the library should be added to the `dependencies`, the `devDependencies`, or not saved at all in the project's `package.json` configuration file.
 
 <docs-code header="projects/my-lib/package.json (ng-add Reference)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/package.json" region="ng-add"/>
 
-Возможные значения:
+Possible values are:
 
-| Значения            | Подробности                                         |
-| :------------------ | :-------------------------------------------------- |
-| `false`             | Не добавлять пакет в `package.json`                 |
-| `true`              | Добавить пакет в dependencies                       |
-| `"dependencies"`    | Добавить пакет в dependencies                       |
-| `"devDependencies"` | Добавить пакет в devDependencies                    |
+| Values              | Details                                 |
+| :------------------ | :-------------------------------------- |
+| `false`             | Don't add the package to `package.json` |
+| `true`              | Add the package to the dependencies     |
+| `"dependencies"`    | Add the package to the dependencies     |
+| `"devDependencies"` | Add the package to the devDependencies  |
 
-## Сборка схематиков {#building-your-schematics}
+## Building your schematics
 
-Чтобы упаковать схематики вместе с библиотекой, необходимо настроить библиотеку для отдельной сборки схематиков, а затем добавить их в бандл.
-Схематики нужно собирать _после_ сборки библиотеки, чтобы они были помещены в правильную директорию.
+To bundle your schematics together with your library, you must configure the library to build the schematics separately, then add them to the bundle.
+You must build your schematics _after_ you build your library, so they are placed in the correct directory.
 
-- Вашей библиотеке нужен пользовательский файл конфигурации TypeScript с инструкциями по компиляции схематиков в распространяемую библиотеку
-- Чтобы добавить схематики в бандл библиотеки, добавьте скрипты в файл `package.json` библиотеки
+- Your library needs a custom TypeScript configuration file with instructions on how to compile your schematics into your distributed library
+- To add the schematics to the library bundle, add scripts to the library's `package.json` file
 
-Предположим, что у вас есть проект библиотеки `my-lib` в вашем Angular-рабочем пространстве.
-Чтобы сообщить библиотеке, как собирать схематики, добавьте файл `tsconfig.schematics.json` рядом со сгенерированным файлом `tsconfig.lib.json`, который настраивает сборку библиотеки.
+Assume you have a library project `my-lib` in your Angular workspace.
+To tell the library how to build the schematics, add a `tsconfig.schematics.json` file next to the generated `tsconfig.lib.json` file that configures the library build.
 
-1. Отредактируйте файл `tsconfig.schematics.json`, добавив следующее содержимое.
+1. Edit the `tsconfig.schematics.json` file to add the following content.
 
    <docs-code header="projects/my-lib/tsconfig.schematics.json (TypeScript Config)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/tsconfig.schematics.json"/>
 
-   | Параметры | Подробности                                                                                                                   |
-   | :-------- | :---------------------------------------------------------------------------------------------------------------------------- |
-   | `rootDir` | Указывает, что ваша папка `schematics` содержит входные файлы для компиляции.                                                 |
-   | `outDir`  | Соответствует выходной папке библиотеки. По умолчанию это папка `dist/my-lib` в корне рабочего пространства.                  |
+   | Options   | Details                                                                                                          |
+   | :-------- | :--------------------------------------------------------------------------------------------------------------- |
+   | `rootDir` | Specifies that your `schematics` folder contains the input files to be compiled.                                 |
+   | `outDir`  | Maps to the library's output folder. By default, this is the `dist/my-lib` folder at the root of your workspace. |
 
-1. Чтобы убедиться, что исходные файлы схематиков компилируются в бандл библиотеки, добавьте следующие скрипты в файл `package.json` в корневой папке вашего проекта библиотеки (`projects/my-lib`).
+1. To make sure your schematics source files get compiled into the library bundle, add the following scripts to the `package.json` file in your library project's root folder \(`projects/my-lib`\).
 
    <docs-code header="projects/my-lib/package.json (Build Scripts)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/package.json"/>
-   - Скрипт `build` компилирует ваш схематик, используя пользовательский файл `tsconfig.schematics.json`
-   - Скрипт `postbuild` копирует файлы схематика после завершения скрипта `build`
-   - Оба скрипта `build` и `postbuild` требуют зависимостей `copyfiles` и `typescript`.
-     Для установки зависимостей перейдите к пути, определённому в `devDependencies`, и выполните `npm install` перед запуском скриптов.
+   - The `build` script compiles your schematic using the custom `tsconfig.schematics.json` file
+   - The `postbuild` script copies the schematic files after the `build` script completes
+   - Both the `build` and the `postbuild` scripts require the `copyfiles` and `typescript` dependencies.
+     To install the dependencies, navigate to the path defined in `devDependencies` and run `npm install` before you run the scripts.
 
-## Обеспечение поддержки генерации {#providing-generation-support}
+## Providing generation support
 
-Вы можете добавить именованный схематик в вашу коллекцию, который позволит пользователям использовать команду `ng generate` для создания артефакта, определённого в вашей библиотеке.
+You can add a named schematic to your collection that lets your users use the `ng generate` command to create an artifact that is defined in your library.
 
-Предположим, что ваша библиотека определяет сервис `my-service`, требующий определённой настройки.
-Вы хотите, чтобы пользователи могли генерировать его с помощью следующей команды CLI.
+We'll assume that your library defines a service, `my-service`, that requires some setup.
+You want your users to be able to generate it using the following CLI command.
 
 ```shell
 
@@ -99,167 +106,165 @@ ng generate my-lib:my-service
 
 ```
 
-Для начала создайте новую подпапку `my-service` в папке `schematics`.
+To begin, create a new subfolder, `my-service`, in the `schematics` folder.
 
-### Настройка нового схематика {#configure-the-new-schematic}
+### Configure the new schematic
 
-При добавлении схематика в коллекцию необходимо указать на него в схеме коллекции и предоставить файлы конфигурации, определяющие параметры, которые пользователь может передать команде.
+When you add a schematic to the collection, you have to point to it in the collection's schema, and provide configuration files to define options that a user can pass to the command.
 
-1. Отредактируйте файл `schematics/collection.json`, чтобы указать на новую подпапку схематика и включить указатель на файл схемы, определяющий входные данные для нового схематика.
+1. Edit the `schematics/collection.json` file to point to the new schematic subfolder, and include a pointer to a schema file that specifies inputs for the new schematic.
 
    <docs-code header="projects/my-lib/schematics/collection.json (Schematics Collection)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/collection.json"/>
 
-1. Перейдите в папку `<lib-root>/schematics/my-service`.
-1. Создайте файл `schema.json` и определите доступные параметры для схематика.
+1. Go to the `<lib-root>/schematics/my-service` folder.
+1. Create a `schema.json` file and define the available options for the schematic.
 
    <docs-code header="projects/my-lib/schematics/my-service/schema.json (Schematic JSON Schema)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/schema.json"/>
-   - _id_: Уникальный ID для схемы в коллекции.
-   - _title_: Понятное человеку описание схемы.
-   - _type_: Дескриптор для типа, предоставляемого свойствами.
-   - _properties_: Объект, определяющий доступные параметры для схематика.
+   - _id_: A unique ID for the schema in the collection.
+   - _title_: A human-readable description of the schema.
+   - _type_: A descriptor for the type provided by the properties.
+   - _properties_: An object that defines the available options for the schematic.
 
-   Каждый параметр связывает ключ с типом, описанием и опциональным псевдонимом.
-   Тип определяет форму ожидаемого значения, а описание отображается, когда пользователь запрашивает справку по использованию схематика.
+   Each option associates key with a type, description, and optional alias.
+   The type defines the shape of the value you expect, and the description is displayed when the user requests usage help for your schematic.
 
-   Дополнительные настройки параметров схематика см. в схеме рабочего пространства.
+   See the workspace schema for additional customizations for schematic options.
 
-1. Создайте файл `schema.ts` и определите интерфейс, хранящий значения параметров, определённых в файле `schema.json`.
+1. Create a `schema.ts` file and define an interface that stores the values of the options defined in the `schema.json` file.
 
    <docs-code header="projects/my-lib/schematics/my-service/schema.ts (Schematic Interface)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/schema.ts"/>
 
-   | Параметры | Подробности                                                                                                                                               |
-   | :-------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   | name      | Имя, которое вы хотите присвоить создаваемому сервису.                                                                                                    |
-   | path      | Переопределяет путь, переданный схематику. Значение пути по умолчанию основано на текущей рабочей директории.                                             |
-   | project   | Указывает конкретный проект для запуска схематика. В схематике вы можете задать значение по умолчанию, если пользователь не указал параметр.               |
+   | Options | Details                                                                                                                                     |
+   | :------ | :------------------------------------------------------------------------------------------------------------------------------------------ |
+   | name    | The name you want to provide for the created service.                                                                                       |
+   | path    | Overrides the path provided to the schematic. The default path value is based on the current working directory.                             |
+   | project | Provides a specific project to run the schematic on. In the schematic, you can provide a default if the option is not provided by the user. |
 
-### Добавление файлов шаблонов {#add-template-files}
+### Add template files
 
-Для добавления артефактов в проект схематику необходимы собственные файлы шаблонов.
-Шаблоны схематиков поддерживают специальный синтаксис для выполнения кода и подстановки переменных.
+To add artifacts to a project, your schematic needs its own template files.
+Schematic templates support special syntax to execute code and variable substitution.
 
-1. Создайте папку `files/` внутри папки `schematics/my-service/`.
-1. Создайте файл с именем `__name@dasherize__.service.ts.template`, определяющий шаблон для генерации файлов.
-   Этот шаблон сгенерирует сервис, в котором уже внедрён `HttpClient` Angular в свойство `http`.
+1. Create a `files/` folder inside the `schematics/my-service/` folder.
+1. Create a file named `__name@dasherize__.service.ts.template` that defines a template to use for generating files.
+   This template will generate a service that already has Angular's `HttpClient` injected into an `http` property.
 
    ```ts {header:projects/my-lib/schematics/my-service/files/__name@dasherize__.service.ts.template (Schematic Template)}
 
-   import { Injectable } from '@angular/core';
+   import { Service } from '@angular/core';
    import { HttpClient } from '@angular/common/http';
 
-   @Injectable({
-      providedIn: 'root'
-   })
+   @Service()
    export class <%= classify(name) %>Service {
       private http = inject(HttpClient);
    }
 
    ```
 
-   - Методы `classify` и `dasherize` — это вспомогательные функции, которые схематик использует для преобразования исходного шаблона и имени файла.
-   - `name` предоставляется как свойство вашей фабричной функции.
-     Это то же `name`, которое вы определили в схеме.
+   - The `classify` and `dasherize` methods are utility functions that your schematic uses to transform your source template and filename.
+   - The `name` is provided as a property from your factory function.
+     It is the same `name` you defined in the schema.
 
-### Добавление фабричной функции {#add-the-factory-function}
+### Add the factory function
 
-Теперь, когда инфраструктура готова, вы можете определить основную функцию, выполняющую необходимые изменения в проекте пользователя.
+Now that you have the infrastructure in place, you can define the main function that performs the modifications you need in the user's project.
 
-Фреймворк Schematics предоставляет систему шаблонов файлов, поддерживающую как шаблоны путей, так и шаблоны содержимого.
-Система работает с заполнителями, определёнными внутри файлов или путей, загруженных во входное дерево `Tree`.
-Она заполняет их значениями, переданными в `Rule`.
+The Schematics framework provides a file templating system, which supports both path and content templates.
+The system operates on placeholders defined inside files or paths that loaded in the input `Tree`.
+It fills these in using values passed into the `Rule`.
 
-Подробности о структурах данных и синтаксисе см. в [README Schematics](https://github.com/angular/angular-cli/blob/main/packages/angular_devkit/schematics/README.md).
+For details of these data structures and syntax, see the [Schematics README](https://github.com/angular/angular-cli/blob/main/packages/angular_devkit/schematics/README.md).
 
-1. Создайте основной файл `index.ts` и добавьте исходный код для фабричной функции схематика.
-1. Сначала импортируйте определения схематиков, которые вам понадобятся.
-   Фреймворк Schematics предоставляет множество вспомогательных функций для создания и использования правил при выполнении схематика.
+1. Create the main file `index.ts` and add the source code for your schematic factory function.
+1. First, import the schematics definitions you will need.
+   The Schematics framework offers many utility functions to create and use rules when running a schematic.
 
    <docs-code header="projects/my-lib/schematics/my-service/index.ts (Imports)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" region="schematics-imports"/>
 
-1. Импортируйте определённый интерфейс схемы, предоставляющий информацию о типах для параметров схематика.
+1. Import the defined schema interface that provides the type information for your schematic's options.
 
    <docs-code header="projects/my-lib/schematics/my-service/index.ts (Schema Import)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" region="schema-imports"/>
 
-1. Для создания схематика генерации начните с пустой фабрики правил.
+1. To build up the generation schematic, start with an empty rule factory.
 
    <docs-code header="projects/my-lib/schematics/my-service/index.ts (Initial Rule)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.1.ts" region="factory"/>
 
-Эта фабрика правил возвращает дерево без изменений.
-Параметры — это значения, переданные командой `ng generate`.
+This rule factory returns the tree without modification.
+The options are the option values passed through from the `ng generate` command.
 
-## Определение правила генерации {#define-a-generation-rule}
+## Define a generation rule
 
-Теперь у вас есть инфраструктура для создания кода, который фактически изменяет приложение пользователя, настраивая его для использования сервиса, определённого в вашей библиотеке.
+You now have the framework in place for creating the code that actually modifies the user's application to set it up for the service defined in your library.
 
-Рабочее пространство Angular, в котором пользователь установил вашу библиотеку, содержит несколько проектов (приложений и библиотек).
-Пользователь может указать проект в командной строке или использовать проект по умолчанию.
-В любом случае ваш код должен определить конкретный проект, к которому применяется схематик, чтобы получить информацию из конфигурации проекта.
+The Angular workspace where the user installed your library contains multiple projects \(applications and libraries\).
+The user can specify the project on the command line, or let it default.
+In either case, your code needs to identify the specific project to which this schematic is being applied, so that you can retrieve information from the project configuration.
 
-Это делается с помощью объекта `Tree`, передаваемого в фабричную функцию.
-Методы `Tree` дают доступ к полному файловому дереву в рабочем пространстве, позволяя читать и записывать файлы во время выполнения схематика.
+Do this using the `Tree` object that is passed in to the factory function.
+The `Tree` methods give you access to the complete file tree in your workspace, letting you read and write files during the execution of the schematic.
 
-### Получение конфигурации проекта {#get-the-project-configuration}
+### Get the project configuration
 
-1. Чтобы определить проект назначения, используйте метод `workspaces.readWorkspace` для чтения содержимого файла конфигурации рабочего пространства `angular.json`.
-   Для использования `workspaces.readWorkspace` необходимо создать `workspaces.WorkspaceHost` из `Tree`.
-   Добавьте следующий код в вашу фабричную функцию.
+1. To determine the destination project, use the `workspaces.readWorkspace` method to read the contents of the workspace configuration file, `angular.json`.
+   To use `workspaces.readWorkspace` you need to create a `workspaces.WorkspaceHost` from the `Tree`.
+   Add the following code to your factory function.
 
    <docs-code header="projects/my-lib/schematics/my-service/index.ts (Schema Import)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" region="workspace"/>
 
-   Обязательно проверьте наличие контекста и выбросьте соответствующую ошибку.
+   Be sure to check that the context exists and throw the appropriate error.
 
-1. Теперь, имея имя проекта, используйте его для получения конфигурационной информации, специфичной для проекта.
+1. Now that you have the project name, use it to retrieve the project-specific configuration information.
 
    <docs-code header="projects/my-lib/schematics/my-service/index.ts (Project)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" region="project-info"/>
 
-   Объект `workspace.projects` содержит всю конфигурационную информацию, специфичную для проекта.
+   The `workspace.projects` object contains all the project-specific configuration information.
 
-1. `options.path` определяет, куда перемещаются файлы шаблонов схематика после применения схематика.
+1. The `options.path` determines where the schematic template files are moved to once the schematic is applied.
 
-   Параметр `path` в схеме схематика по умолчанию заменяется текущей рабочей директорией.
-   Если `path` не определён, используйте `sourceRoot` из конфигурации проекта вместе с `projectType`.
+   The `path` option in the schematic's schema is substituted by default with the current working directory.
+   If the `path` is not defined, use the `sourceRoot` from the project configuration along with the `projectType`.
 
    <docs-code header="projects/my-lib/schematics/my-service/index.ts (Project Info)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" region="path"/>
 
-### Определение правила {#define-the-rule}
+### Define the rule
 
-`Rule` может использовать внешние файлы шаблонов, преобразовывать их и возвращать другой объект `Rule` с преобразованным шаблоном.
-Используйте шаблонизацию для генерации любых пользовательских файлов, необходимых для вашего схематика.
+A `Rule` can use external template files, transform them, and return another `Rule` object with the transformed template.
+Use the templating to generate any custom files required for your schematic.
 
-1. Добавьте следующий код в вашу фабричную функцию.
+1. Add the following code to your factory function.
 
    <docs-code header="projects/my-lib/schematics/my-service/index.ts (Template transform)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" region="template"/>
 
-   | Методы             | Подробности                                                                                                                                                                                                                                                                              |
-   | :----------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   | `apply()`          | Применяет несколько правил к источнику и возвращает преобразованный источник. Принимает 2 аргумента: источник и массив правил.                                                                                                                                                            |
-   | `url()`            | Читает исходные файлы из вашей файловой системы, относительно схематика.                                                                                                                                                                                                                 |
-   | `applyTemplates()` | Получает аргумент с методами и свойствами, которые вы хотите сделать доступными в шаблоне схематика и именах файлов схематика. Возвращает `Rule`. Здесь вы определяете методы `classify()` и `dasherize()`, а также свойство `name`.                                                     |
-   | `classify()`       | Принимает значение и возвращает его в title case. Например, если переданное имя — `my service`, оно возвращается как `MyService`.                                                                                                                                                         |
-   | `dasherize()`      | Принимает значение и возвращает его в виде строки с дефисами в нижнем регистре. Например, если переданное имя — MyService, оно возвращается как `my-service`.                                                                                                                            |
-   | `move()`           | Перемещает предоставленные исходные файлы в место назначения при применении схематика.                                                                                                                                                                                                   |
+   | Methods            | Details                                                                                                                                                                                                                                          |
+   | :----------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | `apply()`          | Applies multiple rules to a source and returns the transformed source. It takes 2 arguments, a source and an array of rules.                                                                                                                     |
+   | `url()`            | Reads source files from your filesystem, relative to the schematic.                                                                                                                                                                              |
+   | `applyTemplates()` | Receives an argument of methods and properties you want make available to the schematic template and the schematic filenames. It returns a `Rule`. This is where you define the `classify()` and `dasherize()` methods, and the `name` property. |
+   | `classify()`       | Takes a value and returns the value in title case. For example, if the provided name is `my service`, it is returned as `MyService`.                                                                                                             |
+   | `dasherize()`      | Takes a value and returns the value in dashed and lowercase. For example, if the provided name is MyService, it is returned as `my-service`.                                                                                                     |
+   | `move()`           | Moves the provided source files to their destination when the schematic is applied.                                                                                                                                                              |
 
-1. Наконец, фабрика правил должна возвращать правило.
+1. Finally, the rule factory must return a rule.
 
    <docs-code header="projects/my-lib/schematics/my-service/index.ts (Chain Rule)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" region="chain"/>
 
-   Метод `chain()` позволяет объединять несколько правил в одно, чтобы выполнять несколько операций в одном схематике.
-   Здесь вы просто объединяете правила шаблона с кодом, выполняемым схематиком.
+   The `chain()` method lets you combine multiple rules into a single rule, so that you can perform multiple operations in a single schematic.
+   Here you are only merging the template rules with any code executed by the schematic.
 
-См. полный пример следующей функции правила схематика.
+See a complete example of the following schematic rule function.
 
 <docs-code header="projects/my-lib/schematics/my-service/index.ts" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts"/>
 
-Дополнительную информацию о правилах и вспомогательных методах см. в [Предоставляемые правила](https://github.com/angular/angular-cli/tree/main/packages/angular_devkit/schematics#provided-rules).
+For more information about rules and utility methods, see [Provided Rules](https://github.com/angular/angular-cli/tree/main/packages/angular_devkit/schematics#provided-rules).
 
-## Запуск схематика библиотеки {#running-your-library-schematic}
+## Running your library schematic
 
-После сборки библиотеки и схематиков вы можете установить коллекцию схематиков для запуска в вашем проекте.
-Следующие шаги показывают, как сгенерировать сервис с помощью созданного ранее схематика.
+After you build your library and schematics, you can install the schematics collection to run against your project.
+The following steps show you how to generate a service using the schematic you created earlier.
 
-### Сборка библиотеки и схематиков {#build-your-library-and-schematics}
+### Build your library and schematics
 
-Из корня рабочего пространства выполните команду `ng build` для вашей библиотеки.
+From the root of your workspace, run the `ng build` command for your library.
 
 ```shell
 
@@ -267,7 +272,7 @@ ng build my-lib
 
 ```
 
-Затем перейдите в директорию библиотеки для сборки схематика
+Then, you change into your library directory to build the schematic
 
 ```shell
 
@@ -276,11 +281,11 @@ npm run build
 
 ```
 
-### Линковка библиотеки {#link-the-library}
+### Link the library
 
-Ваша библиотека и схематики упакованы и помещены в папку `dist/my-lib` в корне рабочего пространства.
-Для запуска схематика необходимо слинковать библиотеку с папкой `node_modules`.
-Из корня рабочего пространства выполните команду `npm link` с путём к распространяемой библиотеке.
+Your library and schematics are packaged and placed in the `dist/my-lib` folder at the root of your workspace.
+For running the schematic, you need to link the library into your `node_modules` folder.
+From the root of your workspace, run the `npm link` command with the path to your distributable library.
 
 ```shell
 
@@ -288,9 +293,9 @@ npm link dist/my-lib
 
 ```
 
-### Запуск схематика {#run-the-schematic}
+### Run the schematic
 
-Теперь, когда библиотека установлена, запустите схематик с помощью команды `ng generate`.
+Now that your library is installed, run the schematic using the `ng generate` command.
 
 ```shell
 
@@ -298,7 +303,7 @@ ng generate my-lib:my-service --name my-data
 
 ```
 
-В консоли вы увидите, что схематик был запущен и файл `my-data.service.ts` был создан в папке вашего приложения.
+In the console, you see that the schematic was run and the `my-data.service.ts` file was created in your application folder.
 
 ```shell {hideCopy}
 

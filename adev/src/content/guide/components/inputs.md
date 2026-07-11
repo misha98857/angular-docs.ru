@@ -6,12 +6,10 @@
 
 При использовании компонента зачастую требуется передать ему какие-то данные. Компонент объявляет принимаемые данные через **inputs**:
 
-```ts {highlight:[8]}
+```ts {highlight:[6]}
 import {Component, input} from '@angular/core';
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomSlider {
   // Declare an input named 'value' with a default value of zero.
   value = input(0);
@@ -27,9 +25,7 @@ export class CustomSlider {
 Если Input имеет значение по умолчанию, TypeScript выводит тип из этого значения:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomSlider {
   // TypeScript infers that this input is a number, returning InputSignal<number>.
   value = input(0);
@@ -41,9 +37,7 @@ export class CustomSlider {
 Если Input без значения по умолчанию не установлен, его значение равно `undefined`:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomSlider {
   // Produces an InputSignal<number | undefined> because `value` may not be set.
   value = input<number>();
@@ -62,12 +56,10 @@ export class CustomSlider {
 
 Функция `input` возвращает `InputSignal`. Значение можно прочитать, вызвав сигнал:
 
-```ts {highlight:[11]}
+```ts {highlight:[9]}
 import {Component, input, computed} from '@angular/core';
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomSlider {
   // Declare an input named 'value' with a default value of zero.
   value = input(0);
@@ -83,10 +75,8 @@ export class CustomSlider {
 
 Можно объявить Input как `required`, вызвав `input.required` вместо `input`:
 
-```ts {highlight:[6]}
-@Component({
-  /*...*/
-})
+```ts {highlight:[4]}
+@Component(/* ... */)
 export class CustomSlider {
   // Declare a required input named value. Returns an `InputSignal<number>`.
   value = input.required<number>();
@@ -136,9 +126,7 @@ function trimString(value: string | undefined): string {
 При указании трансформации Input тип параметра функции трансформации определяет допустимые типы значений, которые можно передать Input в шаблоне.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomSlider {
   widthPx = input('', {transform: appendPx});
 }
@@ -157,9 +145,7 @@ Angular включает две встроенные функции трансф
 ```ts
 import {Component, input, booleanAttribute, numberAttribute} from '@angular/core';
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomSlider {
   disabled = input(false, {transform: booleanAttribute});
   value = input(0, {transform: numberAttribute});
@@ -175,10 +161,8 @@ _наличие_ атрибута означает значение «true». О
 
 Можно указать опцию `alias` для изменения имени Input в шаблонах.
 
-```ts {highlight:[5]}
-@Component({
-  /*...*/
-})
+```ts {highlight:[3]}
+@Component(/* ... */)
 export class CustomSlider {
   value = input(0, {alias: 'sliderValue'});
 }
@@ -201,9 +185,7 @@ export class CustomSlider {
 Оба типа Input позволяют привязывать значение к свойству. Однако **model inputs позволяют автору компонента записывать значения в свойство**. Если свойство привязано двусторонней привязкой, новое значение распространяется в эту привязку.
 
 ```ts
-@Component({
-  /* ... */
-})
+@Component(/* ... */)
 export class CustomSlider {
   // Define a model input named "value".
   value = model(0);
@@ -256,9 +238,7 @@ export class MediaControls {
 При объявлении model input в компоненте или директиве Angular автоматически создаёт соответствующий [output](guide/components/outputs) для этой модели. Имя output формируется как имя model input с суффиксом "Change".
 
 ```ts
-@Directive({
-  /* ... */
-})
+@Directive(/* ... */)
 export class CustomCheckbox {
   // This automatically creates an output named "checkedChange".
   // Can be subscribed to using `(checkedChange)="handler()"` in the template.
@@ -292,10 +272,8 @@ Model inputs не поддерживают трансформации Input.
 
 Можно объявлять inputs компонента альтернативным способом — добавляя декоратор `@Input` к свойству:
 
-```ts {highlight:[5]}
-@Component({
-  /*...*/
-})
+```ts {highlight:[3]}
+@Component(/* ... */)
 export class CustomSlider {
   @Input() value = 0;
 }
@@ -315,10 +293,8 @@ export class CustomSlider {
 
 Можно указать опцию `required`, чтобы гарантировать, что данный Input всегда имеет значение.
 
-```ts {highlight:[5]}
-@Component({
-  /*...*/
-})
+```ts {highlight:[3]}
+@Component(/* ... */)
 export class CustomSlider {
   @Input({required: true}) value = 0;
 }
@@ -348,10 +324,8 @@ function trimString(value: string | undefined) {
 
 Можно указать опцию `alias` для изменения имени Input в шаблонах.
 
-```ts {highlight:[5]}
-@Component({
-  /*...*/
-})
+```ts {highlight:[3]}
+@Component(/* ... */)
 export class CustomSlider {
   @Input({alias: 'sliderValue'}) value = 0;
 }

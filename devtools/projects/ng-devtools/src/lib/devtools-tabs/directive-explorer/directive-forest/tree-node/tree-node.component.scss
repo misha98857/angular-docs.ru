@@ -8,7 +8,7 @@
   white-space: nowrap;
   display: block;
 
-  &:hover {
+  &:not(.static):hover {
     background-color: var(--color-tree-node-hovered);
 
     .tree-node-info > .hydration {
@@ -33,11 +33,15 @@
     }
   }
 
-  .non-element {
-    color: var(--color-tree-node-non-element-name);
+  &.static {
+    .element-name {
+      color: var(--quaternary-contrast);
+      pointer-events: none;
+    }
   }
 
   .tree-node-info {
+    position: relative;
     display: flex;
     align-items: center;
 
@@ -50,7 +54,9 @@
       padding: 0;
       position: absolute;
       background-color: transparent;
-      margin-left: 3px;
+      margin-left: -$size;
+      top: calc(50% - $size / 2);
+      left: 0;
 
       mat-icon {
         font-size: $size;
@@ -62,6 +68,10 @@
 
     .node-name {
       position: relative;
+
+      .non-element {
+        color: var(--color-tree-node-non-element-name);
+      }
 
       .angular-element {
         content: '';

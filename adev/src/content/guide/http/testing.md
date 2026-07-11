@@ -1,22 +1,19 @@
-# Тестирование запросов
+# Test requests
 
-Как и для любой внешней зависимости, необходимо заглушить HTTP-бэкенд, чтобы тесты могли имитировать взаимодействие с удалённым сервером. Библиотека `@angular/common/http/testing` предоставляет инструменты для перехвата запросов приложения, формулирования утверждений о них и имитации ответов для эмуляции поведения бэкенда.
+As for any external dependency, you must mock the HTTP backend so your tests can simulate interaction with a remote server. The `@angular/common/http/testing` library provides tools to capture requests made by the application, make assertions about them, and mock the responses to emulate your backend's behavior.
 
-Библиотека тестирования разработана по паттерну, при котором приложение сначала выполняет код и отправляет запросы. Затем тест проверяет, что определённые запросы были или не были выполнены, формулирует утверждения об этих запросах и, наконец, предоставляет ответы путём "flush" каждого ожидаемого запроса.
+The testing library is designed for a pattern where the app executes code and makes requests first. The test then expects that certain requests have or have not been made, performs assertions against those requests, and finally provides responses by "flushing" each expected request.
 
-В конце тесты могут проверить, что приложение не выполнило никаких неожиданных запросов.
+Finally, tests can verify that the app made no unexpected requests.
 
-## Настройка тестирования {#setup-for-testing}
+## Setup for testing
 
-Для начала тестирования использования `HttpClient` настройте `TestBed` и включите `provideHttpClient()` и `provideHttpClientTesting()` в конфигурацию теста. Это настраивает `HttpClient` для использования тестового бэкенда вместо реальной сети. Также предоставляется `HttpTestingController`, который используется для взаимодействия с тестовым бэкендом, установки ожиданий о выполненных запросах и передачи ответов на эти запросы. `HttpTestingController` можно внедрить из `TestBed` после настройки.
-
-IMPORTANT: Не забывайте предоставлять `provideHttpClient()` **перед** `provideHttpClientTesting()`, так как `provideHttpClientTesting()` перезаписывает части `provideHttpClient()`. Выполнение в обратном порядке потенциально может сломать тесты.
+To begin testing usage of `HttpClient`, configure `TestBed` and include `provideHttpClientTesting()` in your test's setup. `HttpClient` is provided by Angular's test environment, and `provideHttpClientTesting()` configures it to use a test backend instead of the real network. It also provides `HttpTestingController`, which you'll use to interact with the test backend, set expectations about which requests have been made, and flush responses to those requests. `HttpTestingController` can be injected from `TestBed` once configured.
 
 ```ts
 TestBed.configureTestingModule({
   providers: [
     // ... other test providers
-    provideHttpClient(),
     provideHttpClientTesting(),
   ],
 });
@@ -24,15 +21,26 @@ TestBed.configureTestingModule({
 const httpTesting = TestBed.inject(HttpTestingController);
 ```
 
-Теперь, когда тесты выполняют запросы, они попадают в тестовый бэкенд, а не в обычный. Для формулирования утверждений об этих запросах можно использовать `httpTesting`.
+Now when your tests make requests, they will hit the testing backend instead of the normal one. You can use `httpTesting` to make assertions about those requests.
 
-## Ожидание и ответ на запросы {#expecting-and-answering-requests}
+### Configuring `HttpClient` in tests
 
-Например, можно написать тест, ожидающий выполнения GET-запроса и предоставляющий имитированный ответ:
+If a test needs to configure `HttpClient` features, such as interceptors, include `provideHttpClient(...)` before `provideHttpClientTesting()`.
+IMPORTANT: Keep in mind to provide `provideHttpClient()` **before** `provideHttpClientTesting()`, as `provideHttpClientTesting()` will overwrite parts of `provideHttpClient()`. Doing it the other way around can potentially break your tests.
 
 ```ts
 TestBed.configureTestingModule({
-  providers: [ConfigService, provideHttpClient(), provideHttpClientTesting()],
+  providers: [provideHttpClient(withInterceptors([authInterceptor])), provideHttpClientTesting()],
+});
+```
+
+## Expecting and answering requests
+
+For example, you can write a test that expects a GET request to occur and provides a mock response:
+
+```ts
+TestBed.configureTestingModule({
+  providers: [ConfigService, provideHttpClientTesting()],
 });
 
 const httpTesting = TestBed.inject(HttpTestingController);
@@ -62,9 +70,9 @@ expect(await configPromise).toEqual(DEFAULT_CONFIG);
 httpTesting.verify();
 ```
 
-NOTE: `expectOne` завершится неудачей, если тест выполнил более одного запроса, соответствующего заданным критериям.
+NOTE: `expectOne` will fail if the test has made more than one request which matches the given criteria.
 
-В качестве альтернативы утверждению через `req.method` можно использовать расширенную форму `expectOne` для одновременного сопоставления метода запроса:
+As an alternative to asserting on `req.method`, you could instead use an expanded form of `expectOne` to also match the request method:
 
 ```ts
 const req = httpTesting.expectOne(
@@ -76,9 +84,9 @@ const req = httpTesting.expectOne(
 );
 ```
 
-HELPFUL: API ожиданий сопоставляются с полным URL запросов, включая любые параметры запроса.
+HELPFUL: The expectation APIs match against the full URL of requests, including any query parameters.
 
-Последний шаг — проверка отсутствия незавершённых запросов — достаточно типичен, чтобы вынести его в шаг `afterEach()`:
+The last step, verifying that no requests remain outstanding, is common enough for you to move it into an `afterEach()` step:
 
 ```ts
 afterEach(() => {
@@ -87,9 +95,9 @@ afterEach(() => {
 });
 ```
 
-## Обработка нескольких запросов одновременно {#handling-more-than-one-request-at-once}
+## Handling more than one request at once
 
-Если нужно ответить на дублирующиеся запросы в тесте, используйте API `match()` вместо `expectOne()`. Он принимает те же аргументы, но возвращает массив совпадающих запросов. После возврата эти запросы исключаются из дальнейшего сопоставления, и вы отвечаете за их flush и проверку.
+If you need to respond to duplicate requests in your test, use the `match()` API instead of `expectOne()`. It takes the same arguments but returns an array of matching requests. Once returned, these requests are removed from future matching and you are responsible for flushing and verifying them.
 
 ```ts
 const allGetRequests = httpTesting.match({method: 'GET'});
@@ -98,29 +106,29 @@ for (const req of allGetRequests) {
 }
 ```
 
-## Расширенное сопоставление {#advanced-matching}
+## Advanced matching
 
-Все функции сопоставления принимают функцию-предикат для пользовательской логики сопоставления:
+All matching functions accept a predicate function for custom matching logic:
 
 ```ts
 // Look for one request that has a request body.
 const requestsWithBody = httpTesting.expectOne((req) => req.body !== null);
 ```
 
-Функция `expectNone` утверждает, что ни один запрос не соответствует заданным критериям.
+The `expectNone` function asserts that no requests match the given criteria.
 
 ```ts
 // Assert that no mutation requests have been issued.
 httpTesting.expectNone((req) => req.method !== 'GET');
 ```
 
-## Тестирование обработки ошибок {#testing-error-handling}
+## Testing error handling
 
-Следует тестировать реакцию приложения на сбои HTTP-запросов.
+You should test your app's responses when HTTP requests fail.
 
-### Ошибки бэкенда {#backend-errors}
+### Backend errors
 
-Для тестирования обработки ошибок бэкенда (когда сервер возвращает неуспешный код состояния) выполните flush запросов с ответом об ошибке, имитирующим то, что возвращал бы бэкенд при неудачном запросе.
+To test handling of backend errors (when the server returns a non-successful status code), flush requests with an error response that emulates what your backend would return when a request fails.
 
 ```ts
 const req = httpTesting.expectOne('/api/config');
@@ -129,9 +137,9 @@ req.flush('Failed!', {status: 500, statusText: 'Internal Server Error'});
 // Assert that the application successfully handled the backend error.
 ```
 
-### Сетевые ошибки {#network-errors}
+### Network errors
 
-Запросы также могут завершаться неудачей из-за сетевых ошибок, которые проявляются как ошибки `ProgressEvent`. Их можно передать с помощью метода `error()`:
+Requests can also fail due to network errors, which surface as `ProgressEvent` errors. These can be delivered with the `error()` method:
 
 ```ts
 const req = httpTesting.expectOne('/api/config');
@@ -140,11 +148,12 @@ req.error(new ProgressEvent('network error!'));
 // Assert that the application successfully handled the network error.
 ```
 
-## Тестирование interceptor {#testing-an-interceptor}
+## Testing an Interceptor
 
-Следует тестировать корректность работы interceptors при нужных условиях.
+You should test that your interceptors work under the desired circumstances.
 
-Например, приложению может потребоваться добавлять токен аутентификации, генерируемый сервисом, к каждому исходящему запросу. Это поведение можно обеспечить с помощью interceptor:
+For example, an application may be required to add an authentication token generated by a service to each outgoing request.
+This behavior can be enforced with the use of an interceptor:
 
 ```ts
 export function authInterceptor(
@@ -160,7 +169,7 @@ export function authInterceptor(
 }
 ```
 
-Конфигурация `TestBed` для этого interceptor должна использовать функцию `withInterceptors`.
+The `TestBed` configuration for this interceptor should rely on the `withInterceptors` feature.
 
 ```ts
 TestBed.configureTestingModule({
@@ -173,7 +182,7 @@ TestBed.configureTestingModule({
 });
 ```
 
-`HttpTestingController` может получить экземпляр запроса, который затем можно проверить для подтверждения того, что запрос был изменён.
+The `HttpTestingController` can retrieve the request instance that can then be inspected to ensure that the request was modified.
 
 ```ts
 const service = TestBed.inject(AuthService);
@@ -182,7 +191,7 @@ const req = httpTesting.expectOne('/api/config');
 expect(req.request.headers.get('X-Authentication-Token')).toEqual(service.getAuthToken());
 ```
 
-Аналогичный interceptor можно реализовать с помощью interceptors на основе классов:
+A similar interceptor could be implemented with class-based interceptors:
 
 ```ts
 @Injectable()
@@ -198,7 +207,7 @@ export class AuthInterceptor implements HttpInterceptor {
 }
 ```
 
-Для его тестирования конфигурация `TestBed` должна быть такой:
+In order to test it, the `TestBed` configuration should instead be:
 
 ```ts
 TestBed.configureTestingModule({

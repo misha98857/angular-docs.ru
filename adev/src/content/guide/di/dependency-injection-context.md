@@ -1,30 +1,26 @@
-# Контекст внедрения
+# Injection context
 
-Система внедрения зависимостей (DI) внутренне полагается на контекст времени выполнения, в котором доступен текущий
-инжектор.
+The dependency injection (DI) system relies on a runtime context where the current injector is available.
 
-Это означает, что инжекторы могут работать только тогда, когда код выполняется в таком контексте.
+This means that injectors only work when you execute code within this context.
 
-Контекст внедрения доступен в следующих ситуациях:
+You have an injection context available in the following situations:
 
-- Во время создания (через `constructor`) класса, создаваемого системой DI, например, `@Injectable` или `@Component`.
-- В инициализаторе полей таких классов.
-- В фабричной функции, указанной для `useFactory` в `Provider` или `@Injectable`.
-- В функции `factory`, указанной для `InjectionToken`.
-- В рамках стека вызовов (stack frame), который выполняется в контексте внедрения.
+- During construction (via the `constructor`) of a class instantiated by the DI system, such as an `@Injectable` or `@Component`.
+- In field initializers of such classes.
+- In the factory function specified for `useFactory` of a `Provider` or an `@Injectable`.
+- In the `factory` function specified for an `InjectionToken`.
+- Within a stack frame that runs in an injection context.
 
-Понимание того, когда вы находитесь в контексте внедрения, позволит вам использовать функцию [`inject`](api/core/inject)
-для внедрения экземпляров.
+Knowing when you are in an injection context allows you to use the [`inject`](api/core/inject) function to retrieve dependencies.
 
-NOTE: Основные примеры использования `inject()` в конструкторах классов и инициализаторах полей см.
-в [обзорном руководстве](/guide/di#where-can-inject-be-used).
+NOTE: For basic examples of using `inject()` in class constructors and field initializers, see the [overview guide](/guide/di#where-can-inject-be-used).
 
-## Стек вызовов в контексте {#stack-frame-in-context}
+## Stack frame in context
 
-Некоторые API спроектированы для выполнения в контексте внедрения. Это относится, например, к Guard'ам маршрутизатора.
-Это позволяет использовать [`inject`](api/core/inject) внутри функции Guard для доступа к сервису.
+Some APIs are designed to run within an injection context. This is the case, for example, with router guards. This allows you to use [`inject`](api/core/inject) within the guard function to access services.
 
-Вот пример для `CanActivateFn`:
+Here is an example for `CanActivateFn`
 
 ```ts {highlight: [3]}
 const canActivateTeam: CanActivateFn = (
@@ -35,13 +31,12 @@ const canActivateTeam: CanActivateFn = (
 };
 ```
 
-## Запуск внутри контекста внедрения {#run-within-an-injection-context}
+## Run within an injection context
 
-Если вы хотите выполнить определенную функцию в контексте внедрения, не находясь в нем изначально, вы можете сделать это
-с помощью `runInInjectionContext`.
-Для этого требуется доступ к определенному инжектору, например, к `EnvironmentInjector`:
+If you need to run a function within an injection context without already being in one, you can use `runInInjectionContext`.
+This requires access to an injector, such as the `EnvironmentInjector`:
 
-```ts {highlight: [9], header"hero.service.ts"}
+```ts {highlight: [9], header:"hero.service.ts"}
 @Injectable({
   providedIn: 'root',
 })
@@ -50,20 +45,17 @@ export class HeroService {
 
   someMethod() {
     runInInjectionContext(this.environmentInjector, () => {
-      inject(SomeService); // Делайте то, что нужно, с внедренным сервисом
+      inject(SomeService); // Do what you need with the injected service
     });
   }
 }
 ```
 
-Обратите внимание, что [`inject`](/api/core/inject) вернет экземпляр только в том случае, если инжектор сможет разрешить требуемый токен.
+Note that [`inject`](/api/core/inject) returns an instance only if the injector can resolve the requested token.
 
-## Проверка контекста {#asserts-the-context}
+## Asserts the context
 
-Angular предоставляет вспомогательную функцию `assertInInjectionContext`, чтобы подтвердить, что текущий контекст
-является контекстом внедрения, и выбросить понятную ошибку, если это не так. Передайте ссылку на вызывающую функцию,
-чтобы сообщение об ошибке указывало на правильную точку входа API. Это создает более понятное и полезное сообщение, чем
-стандартная общая ошибка внедрения.
+Angular provides the `assertInInjectionContext` helper function to verify that the current context is an injection context and throw a clear error if it is not. Pass a reference to the calling function so the error message points to the correct API entry point. This produces a clearer, more actionable message than the default generic injection error.
 
 ```ts
 import {ElementRef, assertInInjectionContext, inject} from '@angular/core';
@@ -74,8 +66,7 @@ export function injectNativeElement<T extends Element>(): T {
 }
 ```
 
-Затем вы можете вызвать этот помощник **из контекста внедрения** (конструктор, инициализатор поля, фабрика провайдера
-или код, выполняемый через `runInInjectionContext`):
+You can then call this helper **from an injection context** (constructor, field initializer, provider factory, or code executed via `runInInjectionContext`):
 
 ```ts
 import {Component, inject} from '@angular/core';
@@ -85,15 +76,14 @@ import {injectNativeElement} from './dom-helpers';
   /* … */
 })
 export class PreviewCard {
-  readonly hostEl = injectNativeElement<HTMLElement>(); // Инициализатор поля выполняется в контексте внедрения.
+  readonly hostEl = injectNativeElement<HTMLElement>(); // Field initializer runs in an injection context.
 
   onAction() {
-    const anotherRef = injectNativeElement<HTMLElement>(); // Ошибка: выполняется вне контекста внедрения.
+    const anotherRef = injectNativeElement<HTMLElement>(); // Fails: runs outside an injection context.
   }
 }
 ```
 
-## Использование DI вне контекста {#using-di-outside-of-a-context}
+## Using DI outside of a context
 
-Вызов [`inject`](api/core/inject) или `assertInInjectionContext` вне контекста внедрения приведет к
-ошибке [NG0203](/errors/NG0203).
+If you call [`inject`](api/core/inject) or `assertInInjectionContext` outside of an injection context, Angular throws [error NG0203](/errors/NG0203).

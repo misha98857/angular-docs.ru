@@ -46,8 +46,7 @@ export class App {
 
 Пример, где `App` отвечает за установку начального состояния счётчика, но логика обновления и рендеринга UI для счётчика преимущественно находится в дочернем компоненте `Counter`.
 
-```angular-ts
-// ./app.ts
+```angular-ts {header: 'app.ts'}
 import {Component} from '@angular/core';
 import {Counter} from './counter';
 
@@ -66,8 +65,7 @@ export class App {
 }
 ```
 
-```angular-ts
-// './counter.ts';
+```angular-ts {header: 'counter.ts'}
 import {Component, model} from '@angular/core';
 
 @Component({
@@ -95,8 +93,7 @@ export class Counter {
 
 Упрощённый пример:
 
-```angular-ts
-// './counter.ts';
+```angular-ts {header: 'counter.ts'}
 import {Component, model} from '@angular/core';
 
 @Component({
@@ -118,8 +115,7 @@ export class Counter {
 
 Упрощённый пример:
 
-```angular-ts
-// ./app.ts
+```angular-ts {header: 'app.ts'}
 import {Component} from '@angular/core';
 import {Counter} from './counter';
 

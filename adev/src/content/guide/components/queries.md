@@ -146,9 +146,7 @@ export class UserProfile {}
 В ряде случаев, особенно для `viewChild`, вы точно знаете, что конкретный дочерний элемент всегда присутствует. В других случаях может потребоваться строго обеспечить наличие конкретного дочернего элемента. Для таких случаев можно использовать _обязательный запрос_.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomCard {
   header = viewChild.required(CustomCardHeader);
   body = contentChild.required(CustomCardBody);
@@ -198,9 +196,7 @@ const SUB_ITEM = new InjectionToken<string>('sub-item');
 })
 export class SpecialItem {}
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomList {
   subItemType = contentChild(SUB_ITEM);
 }
@@ -217,9 +213,7 @@ export class CustomList {
 По умолчанию локатор запроса определяет как искомый элемент, так и извлекаемое значение. Можно дополнительно указать опцию `read` для получения другого значения из элемента, найденного по локатору.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomExpando {
   toggle = contentChild(ExpandoContent, {read: TemplateRef});
 }
