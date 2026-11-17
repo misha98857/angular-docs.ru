@@ -9,7 +9,7 @@
 import {DOCUMENT} from '@angular/common';
 import {inject, Service} from '@angular/core';
 
-const ANGULAR_DEV = 'https://angular.dev';
+const SITE_ORIGIN = 'https://angular-docs.ru';
 
 /**
  * Information about the deployment of this application.
@@ -22,12 +22,13 @@ export class HeaderService {
    * Sets the canonical link in the header.
    * It supposes the header link is already present in the index.html
    *
-   * The function behave invariably and will always point to angular.dev,
+   * The function behave invariably and will always point to angular-docs.ru
+   * (the Russian translation is its own site, not a copy of angular.dev),
    * no matter if it's a specific version build
    */
   setCanonical(absolutePath: string): void {
     const pathWithoutFragment = this.normalizePath(absolutePath).split('#')[0];
-    const fullPath = `${ANGULAR_DEV}/${pathWithoutFragment}`;
+    const fullPath = `${SITE_ORIGIN}/${pathWithoutFragment}`;
     this.document.querySelector('link[rel=canonical]')?.setAttribute('href', fullPath);
   }
 
