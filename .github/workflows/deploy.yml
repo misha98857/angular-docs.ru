@@ -1,26 +1,35 @@
-# Builds adev (Russian docs) and publishes it to GitHub Pages at https://angular-docs.ru/.
+# Builds adev (Russian docs) and uploads it to the hub server, which serves https://angular-docs.ru/.
 #
 # Upstream builds adev on large runners with Angular's remote build cache; this fork
 # builds on a regular runner and keeps a Bazel disk cache between runs instead.
-# Pull requests that touch the deploy setup only build (no publish).
+# Headers (COOP/COEP for the WebContainers editor), the SPA fallback and caching are
+# configured in nginx on the server. Pull requests that touch this file only build.
+#
+# The `production` environment holds DEPLOY_SSH_KEY (secret) and DEPLOY_KNOWN_HOSTS
+# (variable) and is limited to `main`. On the server that key may only run rrsync
+# into the site directory.
 
-name: Deploy to GitHub Pages
+name: Deploy angular-docs.ru
 
 on:
   push:
     branches: [main]
   pull_request:
     paths:
-      - '.github/workflows/gh-pages.yml'
-      - 'scripts/gh-pages/**'
+      - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: gh-pages-${{ github.ref }}
+  group: deploy-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  DEPLOY_HOST: 31.129.57.175
+  DEPLOY_USER: angular-docs-deploy
+  SITE_DOMAIN: angular-docs.ru
 
 jobs:
   build:
@@ -99,23 +108,65 @@ jobs:
             ~/.cache/bazel-ci
           key: ${{ steps.bazel-cache.outputs.cache-primary-key }}
 
-      - name: Prepare site for GitHub Pages
-        run: node scripts/gh-pages/prepare-site.mjs dist/bin/adev/dist/browser _site
+      - name: Pack site
+        # -h: Bazel output is full of symlinks, pack the files they point to.
+        run: |
+          out=dist/bin/adev/dist/browser
+          test -f "$out/index.html"
+          test -f "$out/index.csr.html"
+          tar -C "$out" -czhf site.tar.gz .
+          echo "$(tar -tzf site.tar.gz | grep -c '\.html$') html files, $(du -h site.tar.gz | cut -f1) packed"
 
-      - uses: actions/upload-pages-artifact@v5
+      - uses: actions/upload-artifact@v7
         with:
-          path: _site
+          name: site
+          path: site.tar.gz
+          compression-level: 0
+          retention-days: 7
 
   deploy:
     needs: build
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
+    timeout-minutes: 30
     environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      name: production
+      url: https://angular-docs.ru/
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
     steps:
-      - id: deployment
-        uses: actions/deploy-pages@v5
+      - uses: actions/download-artifact@v8
+        with:
+          name: site
+
+      - name: Unpack
+        run: |
+          mkdir site
+          tar -xzf site.tar.gz -C site
+          test -f site/index.html
+
+      - name: Upload to server
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ vars.DEPLOY_KNOWN_HOSTS }}
+        # --checksum: Bazel rewrites mtimes on every build; only changed files go over the
+        # wire and unchanged ones keep their Last-Modified. --delay-updates swaps files in
+        # at the end, --delete-after removes old chunks only after the new ones are in place.
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          rsync -rcz --delete-after --delay-updates --chmod=D755,F644 --stats \
+            -e "ssh -i $HOME/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes" \
+            site/ "$DEPLOY_USER@$DEPLOY_HOST:"
+          rm -f ~/.ssh/deploy_key
+
+      - name: Smoke check
+        # Resolves the domain to the server directly, so it works before DNS and TLS are switched.
+        run: |
+          resolve="--resolve $SITE_DOMAIN:80:$DEPLOY_HOST --resolve $SITE_DOMAIN:443:$DEPLOY_HOST"
+          curl -fsSL $resolve "http://$SITE_DOMAIN/guide/signals" | grep -q '<title>'
+          curl -fsSIL $resolve "http://$SITE_DOMAIN/" | grep -qi '^cross-origin-embedder-policy: require-corp'
+          echo "OK: page and COOP/COEP headers served by $DEPLOY_HOST"
