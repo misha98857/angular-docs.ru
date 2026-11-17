@@ -1,0 +1,96 @@
+# Builds adev (Russian docs) and publishes it to GitHub Pages at https://angular-docs.ru/.
+#
+# Upstream builds adev on large runners with Angular's remote build cache; this fork
+# builds on a regular runner and keeps a Bazel disk cache between runs instead.
+# Pull requests that touch the deploy setup only build (no publish).
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - '.github/workflows/gh-pages.yml'
+      - 'scripts/gh-pages/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gh-pages-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    if: github.repository == 'misha98857/angular-docs.ru'
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost /opt/hostedtoolcache/CodeQL
+          df -h /
+
+      - uses: actions/checkout@v7
+        with:
+          # Version stamping (--config=snapshot-build) reads git history; blobs are fetched lazily.
+          fetch-depth: 0
+          filter: blob:none
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install node modules
+        run: pnpm install --frozen-lockfile
+
+      - name: Restore Bazel cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cache/bazelisk
+            ~/.cache/bazel-ci
+          key: bazel-adev-${{ runner.os }}-${{ hashFiles('.bazelversion', 'MODULE.bazel.lock', 'pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            bazel-adev-${{ runner.os }}-${{ hashFiles('.bazelversion', 'MODULE.bazel.lock', 'pnpm-lock.yaml') }}-
+            bazel-adev-${{ runner.os }}-
+
+      - name: Configure Bazel for CI
+        run: |
+          cat >> .bazelrc.user <<EOF
+          build --announce_rc
+          build --verbose_failures
+          build --disk_cache=$HOME/.cache/bazel-ci/disk
+          build --repository_cache=$HOME/.cache/bazel-ci/repo
+          common --color=yes
+          EOF
+
+      - name: Build adev
+        # `snapshot-build` stamps the exact version with sha in the footer.
+        run: pnpm bazel build //adev:build.production --config=snapshot-build
+
+      - name: Prepare site for GitHub Pages
+        run: node scripts/gh-pages/prepare-site.mjs dist/bin/adev/dist/browser _site
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
