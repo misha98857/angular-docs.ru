@@ -3,11 +3,11 @@
 # Upstream builds adev on large runners with Angular's remote build cache; this fork
 # builds on a regular runner and keeps a Bazel disk cache between runs instead.
 # Headers (COOP/COEP for the WebContainers editor), the SPA fallback and caching are
-# configured in nginx on the server. Pull requests that touch this file only build.
+# configured in Caddy on the server. Pull requests that touch this file only build.
 #
 # The `production` environment holds DEPLOY_SSH_KEY (secret) and DEPLOY_KNOWN_HOSTS
-# (variable) and is limited to `main`. On the server that key may only run rrsync
-# into the site directory.
+# (variable) and is limited to `main`. On the server (Caddy) that key may only run
+# `rrsync -wo -munge` into the site directory.
 
 name: Deploy angular-docs.ru
 
@@ -168,5 +168,8 @@ jobs:
         run: |
           resolve="--resolve $SITE_DOMAIN:80:$DEPLOY_HOST --resolve $SITE_DOMAIN:443:$DEPLOY_HOST"
           curl -fsSL $resolve "http://$SITE_DOMAIN/guide/signals" | grep -q '<title>'
-          curl -fsSIL $resolve "http://$SITE_DOMAIN/" | grep -qi '^cross-origin-embedder-policy: require-corp'
+          headers=$(curl -fsSIL $resolve "http://$SITE_DOMAIN/")
+          # Same values as adev/firebase.json.
+          grep -qi '^cross-origin-opener-policy: same-origin' <<<"$headers"
+          grep -qi '^cross-origin-embedder-policy: credentialless' <<<"$headers"
           echo "OK: page and COOP/COEP headers served by $DEPLOY_HOST"
