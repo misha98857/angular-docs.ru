@@ -17,7 +17,7 @@
  *   e.g. node scripts/gh-pages/prepare-site.mjs dist/bin/adev/dist/browser _site
  */
 
-import {copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync} from 'node:fs';
+import {chmodSync, copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync} from 'node:fs';
 import {dirname, join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
@@ -71,13 +71,18 @@ if (bytes > PAGES_SIZE_LIMIT) fail(`site is ${mb} MB, over the 1 GB GitHub Pages
 // fs.cpSync({dereference: true}) only resolves the top-level path and keeps nested
 // symlinks as links, so writing to a copied page would modify Bazel's output.
 // statSync follows links, so everything below ends up as real files and directories.
+// Bazel outputs are read-only and copyFileSync keeps the mode, so make copies writable.
 function copyDereferenced(from, to) {
   mkdirSync(to, {recursive: true});
   for (const name of readdirSync(from)) {
     const source = join(from, name);
     const target = join(to, name);
-    if (statSync(source).isDirectory()) copyDereferenced(source, target);
-    else copyFileSync(source, target);
+    if (statSync(source).isDirectory()) {
+      copyDereferenced(source, target);
+    } else {
+      copyFileSync(source, target);
+      chmodSync(target, 0o644);
+    }
   }
 }
 

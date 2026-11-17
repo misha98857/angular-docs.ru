@@ -56,7 +56,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Restore Bazel cache
-        uses: actions/cache@v6
+        id: bazel-cache
+        uses: actions/cache/restore@v6
         with:
           path: |
             ~/.cache/bazelisk
@@ -87,6 +88,16 @@ jobs:
       - name: Show OOM kills
         if: failure() || cancelled()
         run: sudo dmesg | grep -iE 'out of memory|oom-kill|killed process' | tail -20 || true
+
+      # Saved right after the build (even a failed one), so later steps can't cost a cold rebuild.
+      - name: Save Bazel cache
+        if: always() && steps.bazel-cache.outputs.cache-matched-key != steps.bazel-cache.outputs.cache-primary-key
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            ~/.cache/bazelisk
+            ~/.cache/bazel-ci
+          key: ${{ steps.bazel-cache.outputs.cache-primary-key }}
 
       - name: Prepare site for GitHub Pages
         run: node scripts/gh-pages/prepare-site.mjs dist/bin/adev/dist/browser _site
