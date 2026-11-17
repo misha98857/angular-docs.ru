@@ -44,7 +44,7 @@ export const REQUIRED_FILES = new Set([
   'src/app/app.component.ts',
 ]);
 
-const ANGULAR_DEV = 'https://angular.dev';
+const SITE_ORIGIN = 'https://angular-docs.ru';
 
 @Component({
   selector: 'docs-tutorial-code-editor',
@@ -191,8 +191,8 @@ export class CodeEditor {
     const title = this.title.getTitle();
 
     const path = this.location.path();
-    const editorUrl = `${ANGULAR_DEV}${path}`;
-    const description = `Angular.dev example generated from [${editorUrl}](${editorUrl})`;
+    const editorUrl = `${SITE_ORIGIN}${path}`;
+    const description = `angular-docs.ru example generated from [${editorUrl}](${editorUrl})`;
 
     await this.stackblitzOpener.openCurrentSolutionInStackBlitz({title, description});
   }
