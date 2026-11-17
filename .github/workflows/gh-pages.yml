@@ -28,10 +28,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 330
     steps:
-      - name: Free disk space
+      - name: Free disk space, add swap
+        # The regular runner has 16 GB RAM; the cold build peaks above that.
         run: |
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost /opt/hostedtoolcache/CodeQL
+          sudo fallocate -l 12G /swapfile-ci
+          sudo chmod 600 /swapfile-ci
+          sudo mkswap /swapfile-ci
+          sudo swapon /swapfile-ci
           df -h /
+          free -h
 
       - uses: actions/checkout@v7
         with:
@@ -63,6 +69,8 @@ jobs:
       - name: Configure Bazel for CI
         run: |
           cat >> .bazelrc.user <<EOF
+          startup --host_jvm_args=-Xmx4g
+          build --jobs=3
           build --announce_rc
           build --verbose_failures
           build --disk_cache=$HOME/.cache/bazel-ci/disk
@@ -72,7 +80,13 @@ jobs:
 
       - name: Build adev
         # `snapshot-build` stamps the exact version with sha in the footer.
-        run: pnpm bazel build //adev:build.production --config=snapshot-build
+        run: |
+          (while sleep 60; do free -m | awk 'NR==2{printf "[mem] used %sM, available %sM", $3, $7} NR==3{printf ", swap used %sM\n", $3}'; done) &
+          pnpm bazel build //adev:build.production --config=snapshot-build
+
+      - name: Show OOM kills
+        if: failure() || cancelled()
+        run: sudo dmesg | grep -iE 'out of memory|oom-kill|killed process' | tail -20 || true
 
       - name: Prepare site for GitHub Pages
         run: node scripts/gh-pages/prepare-site.mjs dist/bin/adev/dist/browser _site
